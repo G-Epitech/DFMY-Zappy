@@ -26,9 +26,10 @@ class SocketClient:
     """
 
     def __init__(self, host: str, port: int):
-        self.host = host
-        self.port = port
-        self.sock = None
+        self.host: str = host
+        self.port: int = port
+        self.sock: socket.socket = None
+        self.buffer: str = ""
 
     def connect(self):
         """
@@ -57,7 +58,7 @@ class SocketClient:
         else:
             print("Connection not established.")
 
-    def receive(self, buffer_size: int = 1024) -> str:
+    def receive(self, buffer_size: int = 2048) -> str | None:
         """
         Receive a message from the server.
 
@@ -67,11 +68,17 @@ class SocketClient:
         Returns:
             str: The received message, decoded from bytes to string.
         """
+        pending_data = self.pending_data()
+        if pending_data:
+            return pending_data
 
         if self.sock:
             try:
-                response = self.sock.recv(buffer_size)
-                return response.decode()
+                data = self.sock.recv(buffer_size)
+                if data:
+                    self.buffer += data.decode()
+                    return self.pending_data()
+                return None
             except socket.error as e:
                 print(f"Error receiving message: {e}")
                 return None
@@ -93,6 +100,16 @@ class SocketClient:
                 print(f"Error closing connection: {e}")
         else:
             print("Connection not established.")
+    
+    def pending_data(self) -> str | None:
+        if "\n" in self.buffer:
+            line, self.buffer = self.buffer.split("\n", 1)
+            return line
+        return None
+
+    def __del__(self):
+        if self.sock:
+            self.close()
 
 # Example usage
 if __name__ == "__main__":

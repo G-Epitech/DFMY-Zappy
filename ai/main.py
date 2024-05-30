@@ -8,6 +8,8 @@
 from classes.client import SocketClient
 import getopt
 import sys
+from classes.process import SubProcess
+from classes.app import App
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 84
@@ -54,22 +56,9 @@ def main(argv) -> int:
 
     print(f"Starting client with name: {name}")
 
-    try:
-        client = SocketClient(host, port)
-        client.connect()
-        client.send(f"Hello, Server! This is {name}")
+    app = App(host, port, name)
 
-        response = client.receive()
-        if response:
-            print(f"Received: {response}")
-        else:
-            print("No data received")
-
-        client.close()
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return EXIT_FAILURE
-    return EXIT_SUCCESS
+    return app.run()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
