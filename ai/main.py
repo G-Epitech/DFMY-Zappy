@@ -54,8 +54,6 @@ def main(argv) -> int:
         print("Port must be between 0 and 65535")
         return EXIT_FAILURE
 
-    print(f"Starting client with name: {name}")
-
     app = App(host, port, name)
 
     return app.run()

@@ -41,7 +41,7 @@ class SocketClient:
         self.sock.setblocking(False)
         print(f"Connected to {self.host}:{self.port}")
 
-    def send(self, message: str):
+    def send(self, message: str, debug: bool = False) -> None:
         """
         Send a message to the server.
 
@@ -52,13 +52,16 @@ class SocketClient:
         if self.sock:
             try:
                 self.sock.sendall(message.encode())
-                print(f"Sent: {message}")
+                if debug:
+                    print(f"Sent: {message}")
             except socket.error as e:
-                print(f"Error sending message: {e}")
+                if debug:
+                    print(f"Error sending message: {e}")
         else:
-            print("Connection not established.")
+            if debug:
+                print("Connection not established.")
 
-    def receive(self, buffer_size: int = 2048) -> str | None:
+    def receive(self, buffer_size: int = 2048, debug: bool = False) -> str | None:
         """
         Receive a message from the server.
 
@@ -80,10 +83,12 @@ class SocketClient:
                     return self.pending_data()
                 return None
             except socket.error as e:
-                print(f"Error receiving message: {e}")
+                if debug:
+                    print(f"Error receiving message: {e}")
                 return None
         else:
-            print("Connection not established.")
+            if debug:
+                print("Connection not established.")
             return None
 
     def close(self):
