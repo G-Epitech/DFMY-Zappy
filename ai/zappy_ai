@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+#
+# EPITECH PROJECT, 2024
+# zappy
+# File description:
+# This file start the ai client
+#
+
+import sys
+from main import *
+
+if __name__ == "__main__":
+    exit(main())
