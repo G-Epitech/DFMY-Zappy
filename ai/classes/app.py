@@ -18,14 +18,12 @@ class App:
         self.list_processes: list[SubProcess] = []
 
     def add_process(self):
-        process = SubProcess(self.host, self.port, self.name, self.add_process)
-        process.start()
+        process = SubProcess(self.host, self.port, self.name, self.add_process, len(self.list_processes) + 1)
         self.list_processes.append(process)
-        print(f"Process {self.name} started")
+        process.start()
 
     def run(self) -> int:
         self.add_process()
-        # self.add_process()
         for process in self.list_processes:
             process.join()
         return EXIT_SUCCESS
