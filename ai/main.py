@@ -12,7 +12,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 84
 
-def print_usage():
+def print_usage() -> int:
     usage = """
     USAGE: ./zappy_ai -p port -n name [-h host]
 
@@ -26,17 +26,17 @@ def print_usage():
         python zappy_ai.py -p 65432 -n my_client_name  # Uses default host 'localhost'
     """
     print(usage)
-    sys.exit(EXIT_SUCCESS)
+    return EXIT_SUCCESS
 
-def main(argv):
+def main(argv) -> int:
     port = 0
     name = ''
-    host = '127.0.0.1'
+    host = 'localhost'
 
     try:
         opts, args = getopt.getopt(argv, "p:n:h:", ["port=", "name=", "host="])
     except getopt.GetoptError:
-        print_usage()
+        return print_usage()
 
     for opt, arg in opts:
         if opt in ("-p", "--port"):
@@ -47,10 +47,10 @@ def main(argv):
             host = arg
 
     if not port or not name:
-        print_usage()
+        return print_usage()
     if port < 0 or port > 65535:
         print("Port must be between 0 and 65535")
-        sys.exit(EXIT_FAILURE)
+        return EXIT_FAILURE
 
     print(f"Starting client with name: {name}")
 
@@ -59,7 +59,6 @@ def main(argv):
         client.connect()
         client.send(f"Hello, Server! This is {name}")
 
-        # Attempt to receive data in a non-blocking manner
         response = client.receive()
         if response:
             print(f"Received: {response}")
@@ -69,7 +68,8 @@ def main(argv):
         client.close()
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-        sys.exit(EXIT_FAILURE)
+        return EXIT_FAILURE
+    return EXIT_SUCCESS
 
 if __name__ == "__main__":
     main(sys.argv[1:])
