@@ -25,7 +25,6 @@ class SubProcess(multiprocessing.Process):
         self.ID: int = ID
 
     def run(self):
-        time.sleep(1)
         self.debug(f"Starting player in team {self.name}")
         try:
             self.client.connect()
@@ -33,7 +32,7 @@ class SubProcess(multiprocessing.Process):
             response = None
             while not response:
                 response = self.client.receive()
-            
+
             if response != "WELCOME":
                 self.debug(f"Server did not send WELCOME, received: {response}")
                 self.client.close()
@@ -64,8 +63,6 @@ class SubProcess(multiprocessing.Process):
             hamster = Hamster(self.client, self.name, map_size, self.add_subprocess, self.ID)
 
             hamster.run()
-
-            time.sleep(6)
 
             self.client.close()
         except Exception as e:

@@ -11,6 +11,13 @@ from typing import Callable
 import json
 from datetime import datetime
 
+HAMSTER_NEW = "NEW_HAMSTER"
+HAMSTER_ASSERT_AUTHORITY = "I_AM_THE_MOTHER"
+HAMSTER_CANNIBALISM = "I_WILL_EAT_YOU_"
+HAMSTER_INCANTATION = "INCANTATION"
+HAMSTER_OK = "OK"
+HAMSTER_RUN = "RUN"
+
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
         self.client: SocketClient = client
@@ -19,7 +26,7 @@ class Hamster:
         self.add_hamster: Callable[[], None] = add_hamster
         self.ID: int = ID
         self.inventory = {
-            "food": 0,
+            "food": 9,
             "linemate": 0,
             "deraumere": 0,
             "sibur": 0,
@@ -29,6 +36,7 @@ class Hamster:
         }
         self.pending_broadcast: list[tuple[int, str]] = []
         self.starting_timestamp = 0
+        self.mother = True
 
     def get_response_from_last_command(self) -> str:
         response = None
@@ -41,7 +49,7 @@ class Hamster:
                     if len(response) <= len("message "):
                         raise Exception("Invalid message format")
                     response = response[len("message "):]
-                    response = response.split(",")
+                    response = response.split(",", 1)
                     if len(response) != 2:
                         raise Exception("Invalid message format")
                     direction = int(response[0].strip())
@@ -88,36 +96,62 @@ class Hamster:
 
     def send_broadcast(self, message: str):
         self.client.send(f"Broadcast {message}\n")
-        response = None
-        while not response:
-            response = self.client.receive()
+        response = self.get_response_from_last_command()
         if response == "ko":
-            self.debug(f"Server did not accept broadcast message: {message}")
+            self.debug(f"Server did not accept broadcast message: |{message}|")
         else:
             self.debug(f"Messaged successfully broadcasted")
-    
+
     def get_current_time_nano(self) -> int:
         return int(datetime.now().timestamp() * 1000000000)
     
     def create_broadcast_message(self, message: str) -> str:
-        message = {
+        json_message = {
             "starting_timestamp": self.starting_timestamp,
             "current_timestamp": self.get_current_time_nano(),
             "inventory": self.inventory,
             "message": message
         }
-        return json.dumps(message)
+        message = json.dumps(json_message)
+        message = message.replace(" ", "").replace("\"", "'")
+        return message
+    
+    def manage_broadcast_message(self, message: str):
+        self.debug(f"Received broadcast message: {message}")
+        message = message.replace("'", "\"")
+        message = json.loads(message)
+        if not message:
+            self.debug("Error parsing message")
+            return
+        print(message)
+        if message["message"] == HAMSTER_NEW:
+            if self.mother:
+                if message["starting_timestamp"] > self.starting_timestamp:
+                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ASSERT_AUTHORITY)}\n")
+                else:
+                    self.mother = False
+
+    def manage_broadcast(self):
+        for message in self.pending_broadcast:
+            try:
+                self.manage_broadcast_message(message[1])
+            except Exception as e:
+                self.debug(f"Error managing broadcast message: {e}")
+        self.pending_broadcast = []
 
     def run(self):
         self.debug(f"Hamster {self.name} is running")
         self.starting_timestamp = self.get_current_time_nano()
-        print(self.create_broadcast_message("Hello"))
+        new_message = self.create_broadcast_message(HAMSTER_NEW)
+        print(new_message)
+        self.send_broadcast(new_message)
         while True:
-            if self.ID == 1:
-                self.update_inventory()
-                # self.debug(f"Inventory: {self.inventory}")
+            self.update_inventory()
+            self.manage_broadcast()
+            if self.mother:
+                self.debug("I'm the mother")
             else:
-                self.send_broadcast("Hello")
+                self.debug("I'm not the mother")
 
     def debug(self, string: str):
         print(f"[{time.strftime('%H:%M:%S')}] Hamster {self.ID}: {string}")
