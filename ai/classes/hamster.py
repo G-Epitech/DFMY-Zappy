@@ -8,6 +8,8 @@
 import time
 from classes.client import SocketClient
 from typing import Callable
+import json
+from datetime import datetime
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -26,6 +28,7 @@ class Hamster:
             "thystame": 0
         }
         self.pending_broadcast: list[tuple[int, str]] = []
+        self.starting_timestamp = 0
 
     def get_response_from_last_command(self) -> str:
         response = None
@@ -92,9 +95,23 @@ class Hamster:
             self.debug(f"Server did not accept broadcast message: {message}")
         else:
             self.debug(f"Messaged successfully broadcasted")
+    
+    def get_current_time_nano(self) -> int:
+        return int(datetime.now().timestamp() * 1000000000)
+    
+    def create_broadcast_message(self, message: str) -> str:
+        message = {
+            "starting_timestamp": self.starting_timestamp,
+            "current_timestamp": self.get_current_time_nano(),
+            "inventory": self.inventory,
+            "message": message
+        }
+        return json.dumps(message)
 
     def run(self):
-        print(f"Hamster {self.name} is running")
+        self.debug(f"Hamster {self.name} is running")
+        self.starting_timestamp = self.get_current_time_nano()
+        print(self.create_broadcast_message("Hello"))
         while True:
             if self.ID == 1:
                 self.update_inventory()
