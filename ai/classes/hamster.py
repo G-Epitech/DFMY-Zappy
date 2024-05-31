@@ -25,12 +25,33 @@ class Hamster:
             "phiras": 0,
             "thystame": 0
         }
+        self.pending_broadcast: list[tuple[int, str]] = []
 
-    def update_inventory(self):
-        self.client.send("Inventory\n")
+    def get_response_from_last_command(self) -> str:
         response = None
         while not response:
             response = self.client.receive()
+            if not response:
+                continue
+            if response.startswith("message "):
+                try:
+                    if len(response) <= len("message "):
+                        raise Exception("Invalid message format")
+                    response = response[len("message "):]
+                    response = response.split(",")
+                    if len(response) != 2:
+                        raise Exception("Invalid message format")
+                    direction = int(response[0].strip())
+                    message = response[1].strip()
+                    self.pending_broadcast.append((direction, message))
+                except Exception as e:
+                    self.debug(f"Error parsing broadcast message: {e}")
+                response = None
+        return response
+
+    def update_inventory(self):
+        self.client.send("Inventory\n")
+        response = self.get_response_from_last_command()
         try:
             if response == "ko":
                 raise Exception("Server responded with ko")
@@ -62,11 +83,24 @@ class Hamster:
         except Exception as e:
             self.debug(f"Error updating inventory: {e}")
 
+    def send_broadcast(self, message: str):
+        self.client.send(f"Broadcast {message}\n")
+        response = None
+        while not response:
+            response = self.client.receive()
+        if response == "ko":
+            self.debug(f"Server did not accept broadcast message: {message}")
+        else:
+            self.debug(f"Messaged successfully broadcasted")
+
     def run(self):
         print(f"Hamster {self.name} is running")
         while True:
-            self.update_inventory()
-            self.debug(f"Inventory: {self.inventory}")
+            if self.ID == 1:
+                self.update_inventory()
+                # self.debug(f"Inventory: {self.inventory}")
+            else:
+                self.send_broadcast("Hello")
 
     def debug(self, string: str):
         print(f"[{time.strftime('%H:%M:%S')}] Hamster {self.ID}: {string}")
