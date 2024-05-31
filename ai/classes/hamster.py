@@ -37,6 +37,7 @@ class Hamster:
         self.pending_broadcast: list[tuple[int, str]] = []
         self.starting_timestamp = 0
         self.mother = True
+        self.encryption_key = "MOTHER_HAMSTER_IS_THE_BEST"
 
     def get_response_from_last_command(self) -> str:
         response = None
@@ -95,16 +96,18 @@ class Hamster:
             self.debug(f"Error updating inventory: {e}")
 
     def send_broadcast(self, message: str):
-        self.client.send(f"Broadcast {message}\n")
+        self.client.send(f"Broadcast {self.encrypt_message(message)}\n")
         response = self.get_response_from_last_command()
         if response == "ko":
             self.debug(f"Server did not accept broadcast message: |{message}|")
-        else:
+        elif response == "ok":
             self.debug(f"Messaged successfully broadcasted")
+        else:
+            self.debug(f"Server responded with unknown message: {response}")
 
     def get_current_time_nano(self) -> int:
         return int(datetime.now().timestamp() * 1000000000)
-    
+
     def create_broadcast_message(self, message: str) -> str:
         json_message = {
             "starting_timestamp": self.starting_timestamp,
@@ -115,15 +118,13 @@ class Hamster:
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
         return message
-    
+
     def manage_broadcast_message(self, message: str):
-        self.debug(f"Received broadcast message: {message}")
+        message = self.decrypt_message(message)
         message = message.replace("'", "\"")
         message = json.loads(message)
         if not message:
-            self.debug("Error parsing message")
-            return
-        print(message)
+            raise Exception(f"Invalid message format: {message}")
         if message["message"] == HAMSTER_NEW:
             if self.mother:
                 if message["starting_timestamp"] > self.starting_timestamp:
@@ -143,7 +144,6 @@ class Hamster:
         self.debug(f"Hamster {self.name} is running")
         self.starting_timestamp = self.get_current_time_nano()
         new_message = self.create_broadcast_message(HAMSTER_NEW)
-        print(new_message)
         self.send_broadcast(new_message)
         while True:
             self.update_inventory()
@@ -152,6 +152,38 @@ class Hamster:
                 self.debug("I'm the mother")
             else:
                 self.debug("I'm not the mother")
+
+    def encrypt_message(self, message: str) -> str:
+        encrypted_message = ""
+        key_index = 0
+        for char in message:
+            if char.isalpha():
+                key_char = self.encryption_key[key_index % len(self.encryption_key)]
+                if char.isupper():
+                    encrypted_char = chr((ord(char) + ord(key_char) - 2 * ord('A')) % 26 + ord('A'))
+                else:
+                    encrypted_char = chr((ord(char) + ord(key_char) - 2 * ord('a')) % 26 + ord('a'))
+                encrypted_message += encrypted_char
+                key_index += 1
+            else:
+                encrypted_message += char
+        return encrypted_message
+    
+    def decrypt_message(self, message: str) -> str:
+        decrypted_message = ""
+        key_index = 0
+        for char in message:
+            if char.isalpha():
+                key_char = self.encryption_key[key_index % len(self.encryption_key)]
+                if char.isupper():
+                    decrypted_char = chr((ord(char) - ord(key_char) + 26) % 26 + ord('A'))
+                else:
+                    decrypted_char = chr((ord(char) - ord(key_char) + 26) % 26 + ord('a'))
+                decrypted_message += decrypted_char
+                key_index += 1
+            else:
+                decrypted_message += char
+        return decrypted_message
 
     def debug(self, string: str):
         print(f"[{time.strftime('%H:%M:%S')}] Hamster {self.ID}: {string}")
