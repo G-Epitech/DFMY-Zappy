@@ -25,7 +25,7 @@ class SubProcess(multiprocessing.Process):
         self.ID: int = ID
 
     def run(self):
-        time.sleep(4)
+        time.sleep(1)
         self.debug(f"Starting player in team {self.name}")
         try:
             self.client.connect()
@@ -61,7 +61,7 @@ class SubProcess(multiprocessing.Process):
 
             map_size = tuple(map(int, response.split()))
 
-            hamster = Hamster(self.client, self.name, map_size, self.add_subprocess)
+            hamster = Hamster(self.client, self.name, map_size, self.add_subprocess, self.ID)
 
             hamster.run()
 
