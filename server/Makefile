@@ -36,7 +36,7 @@ re:
 			@$(MAKE) all
 
 tests_run:
-			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON -DBUILD_TESTS=ON
+			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
 			@./../$(TESTS_NAME)
 

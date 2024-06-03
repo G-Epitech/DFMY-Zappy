@@ -7,7 +7,7 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
-#include "foo.h"
+#include "sub/foo.h"
 
 Test(nothing, nothing)
 {
