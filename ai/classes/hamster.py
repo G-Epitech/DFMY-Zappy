@@ -93,6 +93,21 @@ class Hamster:
                     self.pending_broadcast.append(broadcast_message)
                 response = None
         return response
+    
+    def response_get_array(self, response: str) -> list[str] | None:
+        try:
+            response = response.strip()
+            if response.startswith("[") and response.endswith("]"):
+                response = response[1:-1]
+            else:
+                raise Exception("Invalid array format, must be in format [item1, item2, ...]")
+            list = response.split(",")
+            if not response:
+                raise Exception("Empty array")
+            return list
+        except Exception as e:
+            self.debug(f"Error parsing array: {e}")
+        return None
 
     def update_inventory(self):
         try:
@@ -100,14 +115,9 @@ class Hamster:
             response = self.response_get_last_command()
             if response == "ko":
                 raise Exception("Server responded with ko")
-            response = response.strip()
-            if response.startswith("[") and response.endswith("]"):
-                response = response[1:-1]
-            else:
-                raise Exception("Invalid inventory format, must be in format [item_name item_quantity, ...]")
-            inventory = response.split(",")
+            inventory = self.response_get_array(response)
             if not inventory:
-                raise Exception("Empty inventory")
+                raise Exception("Invalid inventory format")
             for item in inventory:
                 if not item:
                     self.debug("Item is defined as None")
@@ -315,53 +325,49 @@ class Hamster:
                 find_my_child = True
             else:
                 self.debug(f"Cannibalism refused by child {child_hamster}")
-        
+
         attempt = 0
-        
+
         while True:
-            food_on_ground = 0
-            self.client.send(f"Look\n")
-            response = self.response_get_last_command()
-            if response == "ko":
-                self.debug("Server did not accept look")
-                return
-            self.debug(f"Look response: {response}")
-            response = response.strip()
-            if response.startswith("[") and response.endswith("]"):
-                response = response[1:-1]
-            else:
-                self.debug("Invalid look format")
-                return
-            response = response.split(",")
-            if not response:
-                self.debug("Empty look")
-                return
-            first = response[0].strip()
-            first = first.split(" ")
-            if not first:
-                self.debug("Empty first")
-                return
-            for item in first:
-                if item == "food":
-                    food_on_ground += 1
-            self.debug(f"Food on ground: {food_on_ground}")
-            if food_on_ground > 0:
-                while food_on_ground > 0:
-                    self.client.send(f"Take food\n")
-                    response = self.response_get_last_command()
-                    if response == "ko":
-                        self.debug("Server did not accept take food")
-                    elif response == "ok":
-                        self.debug("Took food")
-                    else:
-                        self.debug(f"Server responded with unknown message: {response}")
-                        return
-                    food_on_ground -= 1
-            else:
-                self.debug("No food on ground")
-                if attempt > 2:
-                    break
-                attempt += 1
+            try:
+                food_on_ground = 0
+                self.client.send(f"Look\n")
+                response = self.response_get_last_command()
+                if response == "ko":
+                    self.error("Server did not accept look")
+                    return
+                self.debug(f"Look response: {response}")
+                vision = self.response_get_array(response)
+                if not vision:
+                    raise Exception("Invalid vision format")         
+                first_case = vision[0].strip()
+                first_case_list = first_case.split(" ")
+                if not first_case_list:
+                    raise Exception("Invalid first element in vision")
+                self.debug(f"First case: {first_case_list}", COLOR_BLUE)
+                for item in first_case_list:
+                    if item == "food":
+                        food_on_ground += 1
+                self.debug(f"Food on ground: {food_on_ground}")
+                if food_on_ground > 0:
+                    while food_on_ground > 0:
+                        self.client.send(f"Take food\n")
+                        response = self.response_get_last_command()
+                        if response == "ko":
+                            self.debug("Server did not accept take food")
+                        elif response == "ok":
+                            self.debug("Took food")
+                        else:
+                            self.debug(f"Server responded with unknown message: {response}")
+                            return
+                        food_on_ground -= 1
+                else:
+                    self.debug("No food on ground")
+                    if attempt > 2:
+                        break
+                    attempt += 1
+            except Exception as e:
+                self.error(f"Error cannibalism: {e}")
 
     def run(self):
         self.debug(f"Hamster {self.name} is running")
@@ -395,8 +401,8 @@ class Hamster:
                         self.debug("I'm hungry")
                         for _ in range(10):
                             self.cannibalism()
-                            self.update_inventory()
-                            self.debug(f"Inventory: {self.inventory}")
+                            # self.update_inventory()
+                            # self.debug(f"Inventory: {self.inventory}")
                             self.manage_broadcast()
                             self.error("Less hungry")
                         self.error("I'm not hungry anymore!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
