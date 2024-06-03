@@ -48,7 +48,9 @@ class SubProcess(multiprocessing.Process):
 
                 if response == "ko":
                     # self.debug(f"Server did not accept me, received: {response}")
+                    # self.debug(f"Server did not accept me")
                     self.client.close()
+                    # time.sleep(0.2)
                     continue
 
                 available_clients = int(response)
@@ -73,9 +75,10 @@ class SubProcess(multiprocessing.Process):
                 self.debug(f"An error occured: {e}")
                 time.sleep(1)
             self.debug(f"I'm leaving the team")
+            exit(EXIT_SUCCESS)
 
     def debug(self, string: str):
         now = datetime.now()
         timestamp = now.strftime('%H:%M:%S') + f".{now.microsecond // 10:05d}"
-        id_formate = f"{self.ID:02d}"
+        id_formate = f"{self.ID:03d}"
         print(f"[{timestamp}] Hamster {id_formate}: {string}")

@@ -20,7 +20,7 @@ class App:
 
 
     def add_process(self):
-        number = random.randint(1, 100)
+        number = random.randint(0, 999)
 
         process = SubProcess(self.host, self.port, self.name, self.add_process, number)
         self.list_processes.append(process)
