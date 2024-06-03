@@ -15,6 +15,14 @@ from classes.hamster import Hamster
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 84
 
+COLOR_GREEN = "\033[1;32m"
+COLOR_RED = "\033[1;31m"
+COLOR_YELLOW = "\033[1;33m"
+COLOR_BLUE = "\033[1;34m"
+COLOR_MAGENTA = "\033[1;35m"
+COLOR_CYAN = "\033[1;36m"
+COLOR_RESET = "\033[0m"
+
 class SubProcess(multiprocessing.Process):
     def __init__(self, host: str, port: int, name: str, add_subprocess: Callable[[], None], ID: int):
         super(SubProcess, self).__init__()
@@ -74,11 +82,12 @@ class SubProcess(multiprocessing.Process):
             except Exception as e:
                 self.debug(f"An error occured: {e}")
                 time.sleep(1)
-            self.debug(f"I'm leaving the team")
+            self.debug(f"I'm leaving the team", COLOR_MAGENTA)
             exit(EXIT_SUCCESS)
 
-    def debug(self, string: str):
+    def debug(self, string: str, color: str = COLOR_RESET):
         now = datetime.now()
         timestamp = now.strftime('%H:%M:%S') + f".{now.microsecond // 10:05d}"
         id_formate = f"{self.ID:03d}"
-        print(f"[{timestamp}] Hamster {id_formate}: {string}")
+        print(f"{color}[{timestamp}] Hamster {id_formate}: {string}{COLOR_RESET}")
+
