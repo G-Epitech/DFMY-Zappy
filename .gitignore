@@ -1,0 +1,4 @@
+.idea
+cmake-build-debug
+server/build
+zappy_server
