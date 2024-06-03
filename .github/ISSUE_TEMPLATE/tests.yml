@@ -1,0 +1,32 @@
+name: Tests
+description: Add, update or delete tests
+labels: ["tests"]
+
+body:
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe why you need this Issue
+      placeholder: I need it because my project reacts strangely to instructions and I need to run some tests to find out the cause of my problem....
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of tests will you be doing?
+      options:
+        - "Unit Tests"
+        - "Functional Tests"
+        - "Unit Tests and Functional Tests"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Put here any additionnal content like screenshots or videos (optional)
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this issue!
