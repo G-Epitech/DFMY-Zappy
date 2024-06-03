@@ -7,7 +7,7 @@
 
 import time
 from classes.client import SocketClient
-from typing import Callable
+from typing import Any, Callable
 import json
 from datetime import datetime
 import random
@@ -63,8 +63,22 @@ class Hamster:
             self.send_broadcast(new_message)
         except Exception as e:
             self.debug(f"Error running hamster: {e}")
+    
+    def response_get_broadcast_message(self, response: str) -> tuple[int, str] | None:
+        if response.startswith("message "):
+            try:
+                if len(response) <= len("message "):
+                    raise Exception("Invalid message format")
+                response = response[len("message "):]
+                direction, message = response.split(",", 1)
+                direction_int = int(direction.strip())
+                message = message.strip()
+                return (direction_int, message)
+            except Exception as e:
+                self.debug(f"Error parsing broadcast message: {e}")
+        return None
 
-    def get_response_from_last_command(self) -> str:
+    def response_get_last_command(self) -> str:
         response = None
         while not response:
             response = self.client.receive()
@@ -74,25 +88,16 @@ class Hamster:
                 self.dead = True
                 return response
             if response.startswith("message "):
-                try:
-                    if len(response) <= len("message "):
-                        raise Exception("Invalid message format")
-                    response = response[len("message "):]
-                    response = response.split(",", 1)
-                    if len(response) != 2:
-                        raise Exception("Invalid message format")
-                    direction = int(response[0].strip())
-                    message = response[1].strip()
-                    self.pending_broadcast.append((direction, message))
-                except Exception as e:
-                    self.debug(f"Error parsing broadcast message: {e}")
+                broadcast_message = self.response_get_broadcast_message(response)
+                if broadcast_message:
+                    self.pending_broadcast.append(broadcast_message)
                 response = None
         return response
 
     def update_inventory(self):
         try:
             self.client.send("Inventory\n")
-            response = self.get_response_from_last_command()
+            response = self.response_get_last_command()
             if response == "ko":
                 raise Exception("Server responded with ko")
             response = response.strip()
@@ -127,7 +132,7 @@ class Hamster:
 
     def send_broadcast(self, message: str):
         self.client.send(f"Broadcast {self.encrypt_message(message)}\n")
-        response = self.get_response_from_last_command()
+        response = self.response_get_last_command()
         if response == "ko":
             self.debug(f"Server did not accept broadcast message: |{message}|")
         elif response == "ok":
@@ -183,51 +188,68 @@ class Hamster:
             except Exception as e:
                 self.debug(f"Error managing broadcast message: {e}")
         self.pending_broadcast = []
+
+    def message_get_json(self, message: str) -> Any | None:
+        try:
+            unparsed_message = self.decrypt_message(message).replace("'", "\"")
+            json_message = json.loads(unparsed_message)
+            return json_message
+        except Exception as e:
+            self.debug(f"Error parsing broadcast message: {e}")
+        return None
     
-    def canniablism_find_new_hamster_from_pending_broadcast(self) -> int:
-        child_hamster: int = 0
+    def json_get_sender(self, json_message: Any) -> int | None:
+        try:
+            return json_message["starting_timestamp"]
+        except Exception as e:
+            self.debug(f"Error getting sender from json message: {e}")
+        return None
+    
+    def canniablism_get_new_hamster_id(self, message: str) -> int | None:
+        json_message = self.message_get_json(message)
+        if not json_message:
+            return None
+        sender_id = self.json_get_sender(json_message)
+        if not sender_id:
+            return None
+        if json_message["message"] == HAMSTER_NEW:
+            return sender_id
+        return None
+
+    def canniablism_find_new_hamster_from_pending_broadcast(self) -> int | None:
         for message in self.pending_broadcast:
             try:
-                unparsed_message = self.decrypt_message(message[1]).replace("'", "\"")
-                json_message = json.loads(unparsed_message)
-                if json_message["message"] == HAMSTER_NEW:
-                    child_hamster = json_message["starting_timestamp"]
+                child_hamster = self.canniablism_get_new_hamster_id(message[1])
+                if child_hamster:
                     self.pending_broadcast.remove(message)
-                    break
+                    return child_hamster
             except Exception as e:
                 self.debug(f"Error parsing broadcast message: {e}")
-        return child_hamster
+        return None
 
     def cannibalism_fetch_new_hamster_id(self) -> int:
-        child_hamster: int = 0
-        response = None
-        while not response or child_hamster == 0:
+
+        while True:
             response = self.client.receive()
             if not response:
                 continue
             if response.startswith("message "):
                 try:
-                    if len(response) <= len("message "):
-                        raise Exception("Invalid message format")
-                    response = response[len("message "):]
-                    response = response.split(",", 1)
-                    if len(response) != 2:
-                        raise Exception("Invalid message format")
-                    direction = int(response[0].strip())
-                    message = response[1].strip()
-                    try:
-                        unparsed_message = self.decrypt_message(message).replace("'", "\"")
-                        json_message = json.loads(unparsed_message)
-                        if json_message["message"] == HAMSTER_NEW:
-                            child_hamster = json_message["starting_timestamp"]
-                            break
-                    except Exception as e:
-                        self.debug(f"Error parsing broadcast message: {e}")
-                    self.pending_broadcast.append((direction, message))
+                    broadcast_message = self.response_get_broadcast_message(response)
+                    if broadcast_message:    
+                        try:
+                            json_message = self.message_get_json(broadcast_message[1])
+                            if not json_message:
+                                raise Exception("Invalid json message")
+                            if json_message["message"] == HAMSTER_NEW:
+                                child_hamster = json_message["starting_timestamp"]
+                                return child_hamster
+                        except Exception as e:
+                            self.debug(f"Error parsing broadcast message: {e}")
+                        self.pending_broadcast.append(broadcast_message)
                 except Exception as e:
                     self.debug(f"Error parsing broadcast message: {e}")
                 response = None
-        return child_hamster
 
     def cannibalism_accepted(self) -> bool:
         response = None
@@ -239,27 +261,20 @@ class Hamster:
                 continue
             if response.startswith("message "):
                 try:
-                    if len(response) <= len("message "):
-                        raise Exception("Invalid message format")
-                    response = response[len("message "):]
-                    response = response.split(",", 1)
-                    if len(response) != 2:
-                        raise Exception("Invalid message format")
-                    direction = int(response[0].strip())
-                    message = response[1].strip()
-                    try:
-                        unparsed_message = self.decrypt_message(message).replace("'", "\"")
-                        json_message = json.loads(unparsed_message)
-                        if json_message["recipient"] == self.starting_timestamp:
-                            if json_message["message"] == HAMSTER_OK:
-                                accepted = True
-                                break
-                            elif json_message["message"] == HAMSTER_KO:
-                                accepted = False
-                                break
-                    except Exception as e:
-                        self.debug(f"Error parsing broadcast message: {e}")
-                    self.pending_broadcast.append((direction, message))
+                    broadcast_message = self.response_get_broadcast_message(response)
+                    if broadcast_message:
+                        try:
+                            json_message = self.message_get_json(broadcast_message[1])
+                            if json_message and json_message["recipient"] == self.starting_timestamp:
+                                if json_message["message"] == HAMSTER_OK:
+                                    accepted = True
+                                    break
+                                elif json_message["message"] == HAMSTER_KO:
+                                    accepted = False
+                                    break
+                        except Exception as e:
+                            self.debug(f"Error parsing broadcast message: {e}")
+                        self.pending_broadcast.append(broadcast_message)
                 except Exception as e:
                     self.debug(f"Error parsing broadcast message: {e}")
                 response = None
@@ -269,7 +284,7 @@ class Hamster:
         self.cannibal_parent = self.starting_timestamp
 
         self.client.send(f"Fork\n")
-        response = self.get_response_from_last_command()
+        response = self.response_get_last_command()
         if response == "ko":
             self.debug("Server did not accept fork")
             return
@@ -286,7 +301,7 @@ class Hamster:
         while not find_my_child:
             child_hamster = 0
             child_hamster = self.canniablism_find_new_hamster_from_pending_broadcast()
-            if child_hamster == 0:
+            if not child_hamster:
                 child_hamster = self.cannibalism_fetch_new_hamster_id()
 
             self.debug(f"Child hamster: {child_hamster}")
@@ -306,7 +321,7 @@ class Hamster:
         while True:
             food_on_ground = 0
             self.client.send(f"Look\n")
-            response = self.get_response_from_last_command()
+            response = self.response_get_last_command()
             if response == "ko":
                 self.debug("Server did not accept look")
                 return
@@ -331,19 +346,20 @@ class Hamster:
                     food_on_ground += 1
             self.debug(f"Food on ground: {food_on_ground}")
             if food_on_ground > 0:
-                self.client.send(f"Take food\n")
-                response = self.get_response_from_last_command()
-                if response == "ko":
-                    self.debug("Server did not accept take food")
-                    return
-                elif response == "ok":
-                    self.debug("Took food")
-                else:
-                    self.debug(f"Server responded with unknown message: {response}")
-                    return
+                while food_on_ground > 0:
+                    self.client.send(f"Take food\n")
+                    response = self.response_get_last_command()
+                    if response == "ko":
+                        self.debug("Server did not accept take food")
+                    elif response == "ok":
+                        self.debug("Took food")
+                    else:
+                        self.debug(f"Server responded with unknown message: {response}")
+                        return
+                    food_on_ground -= 1
             else:
                 self.debug("No food on ground")
-                if attempt > 5:
+                if attempt > 2:
                     break
                 attempt += 1
 
@@ -367,7 +383,7 @@ class Hamster:
                 if self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp:
                     self.debug(f"Parent cannibal: {self.cannibal_parent}")
                     self.client.send(f"Set food\n")
-                    response = self.get_response_from_last_command()
+                    response = self.response_get_last_command()
                     if response == "ko":
                         self.debug("Server did not accept set food")
                     elif response == "dead":
