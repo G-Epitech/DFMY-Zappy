@@ -6,9 +6,10 @@
 */
 
 #include <stdio.h>
+#include "foo.h"
 
 int main(void)
 {
-    printf("Hello World!\n");
+    printf("FOO 3 + 5 = %d\n", foo(3, 5));
     return 0;
 }

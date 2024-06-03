@@ -28,17 +28,17 @@ clean:
 			@rm -rf $(BUILD_PATH)
 
 fclean:		clean
-			@rm -f $(NAME)
-			@rm -f $(TESTS_NAME)
+			@rm -f ../$(NAME)
+			@rm -f ../$(TESTS_NAME)
 
 re:
 			@$(MAKE) fclean
 			@$(MAKE) all
 
 tests_run:
-			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
+			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON -DBUILD_TESTS=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
-			@./$(TESTS_NAME) --gtest_brief=1
+			@./../$(TESTS_NAME)
 
 coverage:
 			@gcovr $(COVERAGE_IGNORE)

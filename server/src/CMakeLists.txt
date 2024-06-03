@@ -1,8 +1,16 @@
-add_executable(zappy_server main.c)
+set(SOURCE_FILES
+        foo.c
+)
 
-target_include_directories(zappy_server PUBLIC ${PROJECT_SOURCE_DIR}/include)
+add_library(${PROJECT_NAME}_core STATIC ${SOURCE_FILES})
+
+target_include_directories(${PROJECT_NAME}_core PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME}_core PUBLIC ${PROJECT_SOURCE_DIR})
+
+add_executable(${PROJECT_NAME} main.c)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_core)
 
 if (COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
-    target_link_libraries(raytracer_server gcov)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage")
+    target_link_libraries(${PROJECT_NAME}_core gcov)
 endif()
