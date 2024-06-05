@@ -7,12 +7,21 @@
 
 import time
 import multiprocessing
+from datetime import datetime
 from classes.client import SocketClient
 from typing import Callable
 from classes.hamster import Hamster
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 84
+
+COLOR_GREEN = "\033[1;32m"
+COLOR_RED = "\033[1;31m"
+COLOR_YELLOW = "\033[1;33m"
+COLOR_BLUE = "\033[1;34m"
+COLOR_MAGENTA = "\033[1;35m"
+COLOR_CYAN = "\033[1;36m"
+COLOR_RESET = "\033[0m"
 
 class SubProcess(multiprocessing.Process):
     def __init__(self, host: str, port: int, name: str, add_subprocess: Callable[[], None], ID: int):
@@ -25,53 +34,60 @@ class SubProcess(multiprocessing.Process):
         self.ID: int = ID
 
     def run(self):
-        time.sleep(4)
         self.debug(f"Starting player in team {self.name}")
-        try:
-            self.client.connect()
+        while True:
+            try:
+                self.client.connect()
 
-            response = None
-            while not response:
-                response = self.client.receive()
-            
-            if response != "WELCOME":
-                self.debug(f"Server did not send WELCOME, received: {response}")
+                response = None
+                while not response:
+                    response = self.client.receive()
+
+                if response != "WELCOME":
+                    self.debug(f"Server did not send WELCOME, received: {response}")
+                    self.client.close()
+                    continue
+
+                self.client.send(f"{self.name}\n")
+
+                response = None
+                while not response:
+                    response = self.client.receive()
+
+                if response == "ko":
+                    # self.debug(f"Server did not accept me, received: {response}")
+                    # self.debug(f"Server did not accept me")
+                    self.client.close()
+                    # time.sleep(0.2)
+                    continue
+
+                available_clients = int(response)
+
+                if available_clients > 0:
+                    self.add_subprocess()
+
+                response = None
+                while not response:
+                    response = self.client.receive()
+                
+                self.debug(f"Successfully joined team {self.name}")
+
+                map_size = tuple(map(int, response.split()))
+
+                hamster = Hamster(self.client, self.name, map_size, self.add_subprocess, self.ID)
+
+                hamster.run()
+
                 self.client.close()
-                return
+            except Exception as e:
+                self.debug(f"An error occured: {e}")
+                time.sleep(1)
+            self.debug(f"I'm leaving the team", COLOR_MAGENTA)
+            exit(EXIT_SUCCESS)
 
-            self.client.send(f"{self.name}\n")
+    def debug(self, string: str, color: str = COLOR_RESET):
+        now = datetime.now()
+        timestamp = now.strftime('%H:%M:%S') + f".{now.microsecond // 10:05d}"
+        id_formate = f"{self.ID:03d}"
+        print(f"{color}[{timestamp}] Hamster {id_formate}: {string}{COLOR_RESET}")
 
-            response = None
-            while not response:
-                response = self.client.receive()
-
-            if response == "ko":
-                self.debug(f"Server did not accept me, received: {response}")
-                self.client.close()
-                return
-
-            available_clients = int(response)
-
-            if available_clients > 0:
-                self.add_subprocess()
-
-            response = None
-            while not response:
-                response = self.client.receive()
-
-            map_size = tuple(map(int, response.split()))
-
-            hamster = Hamster(self.client, self.name, map_size, self.add_subprocess)
-
-            hamster.run()
-
-            time.sleep(6)
-
-            self.client.close()
-        except Exception as e:
-            self.debug(f"An error occured: {e}")
-            exit(EXIT_FAILURE)
-        self.debug(f"I'm leaving the team")
-
-    def debug(self, string: str):
-        print(f"[{time.strftime('%H:%M:%S')}] Process {self.ID}: {string}")

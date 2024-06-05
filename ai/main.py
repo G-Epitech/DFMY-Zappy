@@ -5,10 +5,8 @@
 ## main
 ##
 
-from classes.client import SocketClient
 import getopt
 import sys
-from classes.process import SubProcess
 from classes.app import App
 
 EXIT_SUCCESS = 0
