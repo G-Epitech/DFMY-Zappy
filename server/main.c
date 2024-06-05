@@ -6,10 +6,31 @@
 */
 
 #include <stdio.h>
-#include "sub/foo.h"
+#include "options/options.h"
 
-int main(void)
+static void print_server_options(options_t *options)
 {
-    printf("FOO 3 + 5 = %d\n", foo(3, 5));
+    printf("Port: %d\n", options->port);
+    printf("Width: %d\n", options->width);
+    printf("Height: %d\n", options->height);
+    printf("ClientsNb: %d\n", options->clientsNb);
+    printf("Freq: %d\n", options->freq);
+    if (options->teams == NULL)
+        return;
+    for (int i = 0; options->teams[i] != NULL; i++) {
+        printf("Team %d: %s\n", i, options->teams[i]);
+    }
+}
+
+int main(int ac, char **av)
+{
+    options_t *options = parse_options(ac, av);
+
+    if (options == NULL) {
+        print_usage();
+        return 84;
+    }
+    print_server_options(options);
+    options_destroy(options);
     return 0;
 }
