@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include "options/options.h"
 
 void print_usage(void)
@@ -83,7 +82,7 @@ static char *options_are_valid(options_t *options)
         return "ClientsNb value must be between 1 and 200\n";
     if (options->freq < 2 || options->freq > 10000)
         return "Freq value must be between 2 and 10000\n";
-    if (options->teams == NULL)
+    if (options->teams == NULL || options->teams[0] == NULL)
         return "You must provide at least one team\n";
     return NULL;
 }
