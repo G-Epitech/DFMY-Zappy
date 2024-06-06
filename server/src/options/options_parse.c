@@ -64,38 +64,47 @@ static void fill_int_options(int opt, options_t *options)
     }
 }
 
-static bool options_are_valid(options_t *options)
+static void fill_options(int opt, options_t *options, int ac, char **av)
+{
+    fill_int_options(opt, options);
+    if (opt == 'n')
+        fill_teams(options, ac, av);
+}
+
+static char *options_are_valid(options_t *options)
 {
     if (options->port < 1024 || options->port > 65535)
-        return false;
+        return "Port value must be between 1024 and 65535\n";
     if (options->width < 10 || options->width > 30)
-        return false;
+        return "Width value must be between 10 and 30\n";
     if (options->height < 10 || options->height > 30)
-        return false;
+        return "Height value must be between 10 and 30\n";
     if (options->clientsNb < 1 || options->clientsNb > 200)
-        return false;
+        return "ClientsNb value must be between 1 and 200\n";
     if (options->freq < 2 || options->freq > 10000)
-        return false;
+        return "Freq value must be between 2 and 10000\n";
     if (options->teams == NULL)
-        return false;
-    return true;
+        return "You must provide at least one team\n";
+    return NULL;
 }
 
 options_t *options_parse(int argc, char **argv)
 {
     options_t *options = options_create();
     int opt = 0;
+    char *error = NULL;
 
     if (options == NULL)
         return NULL;
     opt = getopt(argc, argv, "p:x:y:n:c:f:");
     while (opt != -1) {
-        fill_int_options(opt, options);
-        if (opt == 'n')
-            fill_teams(options, argc, argv);
+        fill_options(opt, options, argc, argv);
         opt = getopt(argc, argv, "p:x:y:n:c:f:");
     }
-    if (!options_are_valid(options)) {
+    error = options_are_valid(options);
+    if (error != NULL) {
+        fprintf(stderr, "%s", error);
+        print_usage();
         options_destroy(options);
         return NULL;
     }
