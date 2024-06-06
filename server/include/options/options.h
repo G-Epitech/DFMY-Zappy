@@ -10,6 +10,17 @@
 #include "type.h"
 
 /**
+ * @brief Free the options structure
+ */
+void options_destroy(options_t *options);
+
+/**
+ * @brief Create the options structure
+ * @return options_t* The options structure
+ */
+options_t *options_create(void);
+
+/**
  * @brief Parse the options of the server
  * @param argc Number of arguments
  * @param argv Arguments
@@ -21,8 +32,3 @@ options_t *parse_options(int argc, char **argv);
  * @brief Print the usage of the server
  */
 void print_usage(void);
-
-/**
- * @brief Free the options structure
- */
-void options_destroy(options_t *options);
