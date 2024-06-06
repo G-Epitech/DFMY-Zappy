@@ -26,7 +26,7 @@ options_t *options_create(void);
  * @param argv Arguments
  * @return options_t* The options of the server (NULL if an error occured)
  */
-options_t *parse_options(int argc, char **argv);
+options_t *options_parse(int argc, char **argv);
 
 /**
  * @brief Print the usage of the server

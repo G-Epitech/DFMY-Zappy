@@ -24,7 +24,7 @@ static void print_server_options(options_t *options)
 
 int main(int ac, char **av)
 {
-    options_t *options = parse_options(ac, av);
+    options_t *options = options_parse(ac, av);
 
     if (options == NULL) {
         print_usage();

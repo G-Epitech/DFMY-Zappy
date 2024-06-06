@@ -15,11 +15,11 @@ options_t *options_create(void)
 
     if (options == NULL)
         return NULL;
-    options->port = 0;
-    options->width = 0;
-    options->height = 0;
-    options->clientsNb = 0;
-    options->freq = 0;
+    options->port = -1;
+    options->width = -1;
+    options->height = -1;
+    options->clientsNb = -1;
+    options->freq = -1;
     options->teams = NULL;
     return options;
 }
