@@ -60,11 +60,56 @@ Test(options_parse, options_parse)
     cr_assert_str_eq(options.teams[1], "team2");
 }
 
-Test(options_parse, options_parse_error, .init = redirect_all_stdout)
+Test(options_parse, options_teams_parse_error, .init = redirect_all_stdout)
 {
     char *argv[] = {"./zappy_server", "-p", "4242", "-x", "10", "-y", "10", "-n", "-c", "10", "-f", "100"};
     options_t options = {0};
 
 
     cr_assert_eq(options_parse(12, argv, &options), false);
+}
+
+Test(options_parse, options_freq_parse_error, .init = redirect_all_stdout)
+{
+    char *argv[] = {"./zappy_server", "-p", "4242", "-x", "10", "-y", "10", "-n", "team1", "-c", "10", "-f", "1"};
+    options_t options = {0};
+
+
+    cr_assert_eq(options_parse(13, argv, &options), false);
+}
+
+Test(options_parse, options_port_parse_error, .init = redirect_all_stdout)
+{
+    char *argv[] = {"./zappy_server", "-p", "1", "-x", "10", "-y", "10", "-n", "team1", "-c", "10", "-f", "100"};
+    options_t options = {0};
+
+
+    cr_assert_eq(options_parse(13, argv, &options), false);
+}
+
+Test(options_parse, options_height_parse_error, .init = redirect_all_stdout)
+{
+    char *argv[] = {"./zappy_server", "-p", "4444", "-x", "10", "-y", "1", "-n", "team1", "-c", "10", "-f", "100"};
+    options_t options = {0};
+
+
+    cr_assert_eq(options_parse(13, argv, &options), false);
+}
+
+Test(options_parse, options_width_parse_error, .init = redirect_all_stdout)
+{
+    char *argv[] = {"./zappy_server", "-p", "4444", "-x", "1", "-y", "10", "-n", "team1", "-c", "10", "-f", "100"};
+    options_t options = {0};
+
+
+    cr_assert_eq(options_parse(13, argv, &options), false);
+}
+
+Test(options_parse, options_clients_nb_parse_error, .init = redirect_all_stdout)
+{
+    char *argv[] = {"./zappy_server", "-p", "4444", "-x", "10", "-y", "10", "-n", "team1", "-c", "300", "-f", "100"};
+    options_t options = {0};
+
+
+    cr_assert_eq(options_parse(13, argv, &options), false);
 }
