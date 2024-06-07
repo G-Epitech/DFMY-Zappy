@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <stddef.h>
 #include <stdbool.h>
 
 // @brief Structure containing the options of the server

@@ -30,7 +30,7 @@ static void fill_teams(options_t *options, int argc, char **argv)
     int i = 0;
 
     optind--;
-    options->teams = malloc(sizeof(char *) * (argc - optind + 1));
+    options->teams = calloc((argc - optind + 1), sizeof(char *));
     if (options->teams == NULL)
         return;
     while (optind < argc && argv[optind][0] != '-') {
@@ -99,8 +99,9 @@ bool options_parse(int argc, char **argv, options_t *options)
         opt = getopt(argc, argv, "p:x:y:n:c:f:");
     }
     error = options_have_errors(options);
-    if (error != NULL) {
-        fprintf(stderr, "%s", error);
+    if (error != NULL || optopt != 0) {
+        if (error != NULL)
+            fprintf(stderr, "%s", error);
         print_usage();
         options_destroy(options);
         return false;
