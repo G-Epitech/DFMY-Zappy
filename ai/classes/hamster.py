@@ -22,8 +22,6 @@ HAMSTER_OK = "OK"
 HAMSTER_KO = "KO"
 HAMSTER_RUN = "RUN"
 
-ENCRYPTION_KEY= "MOTHER_HAMSTER_IS_THE_BEST"
-
 COLOR_GREEN = "\033[1;32m"
 COLOR_RED = "\033[1;31m"
 COLOR_YELLOW = "\033[1;33m"
@@ -55,6 +53,7 @@ class Hamster:
         self.cannibal_parent: int = 0
         self.dead: bool = False
         self.sync_with_other_hamsters: bool = False
+        self.encrypting_key: str = "I_AM_THE_MOTHER_OF_" + self.name
 
     def init_hamster(self):
         try:
@@ -369,6 +368,100 @@ class Hamster:
             except Exception as e:
                 self.error(f"Error cannibalism: {e}")
 
+    def walk_take_object(self, items: list[str]):
+        for item in items:
+            if len(item) == 0:
+                continue
+            if item == "player":
+                continue
+            self.client.send(f"Take {item}\n")
+            response = self.response_get_last_command()
+            if response == "ko":
+                self.debug(f"Server did not accept take {item}", COLOR_CYAN)
+            elif response == "ok":
+                self.debug(f"Took {item}", COLOR_CYAN)
+            else:
+                self.debug(f"Server responded with unknown message: {response}", COLOR_CYAN)
+    
+    def walk_forward(self):
+        self.client.send("Forward\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept forward", COLOR_YELLOW)
+        elif response == "ok":
+            self.debug("Moved forward", COLOR_YELLOW)
+        else:
+            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+
+    def walk_rotate_right(self):
+        self.client.send(f"Right\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept right", COLOR_YELLOW)
+        elif response == "ok":
+            self.debug("Rotated right", COLOR_YELLOW)
+        else:
+            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+    
+    def walk_rotate_left(self):
+        self.client.send(f"Left\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept left", COLOR_YELLOW)
+        elif response == "ok":
+            self.debug("Rotated left", COLOR_YELLOW)
+        else:
+            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+
+    def walk(self):
+        try:
+            self.client.send("Look\n")
+            response = self.response_get_last_command()
+            if response == "ko":
+                self.error("Server did not accept look")
+                return
+            self.debug(f"Look response: {response}")
+            vision = self.response_get_array(response)
+            if not vision:
+                raise Exception("Invalid vision format")
+            first_case = vision[0].strip()
+            first_case_list = first_case.split(" ")
+            if not first_case_list:
+                raise Exception("Invalid first element in vision")
+            self.debug(f"First case: {first_case_list}", COLOR_BLUE)
+            self.walk_take_object(first_case_list)
+            self.walk_forward()
+            third_case = vision[2].strip()
+            third_case_list = third_case.split(" ")
+            if not third_case_list:
+                raise Exception("Invalid third element in vision")
+            self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
+            self.walk_take_object(third_case_list)
+            second_case = vision[1].strip()
+            second_case_list = second_case.split(" ")
+            second_case_list = [item for item in second_case_list if item != "player"]
+            fourth_case = vision[3].strip()
+            fourth_case_list = fourth_case.split(" ")
+            fourth_case_list = [item for item in fourth_case_list if item != "player"]
+            if not second_case_list:
+                raise Exception("Invalid second element in vision")
+            self.debug(f"Second case: {second_case_list}", COLOR_BLUE)
+            if not fourth_case_list:
+                raise Exception("Invalid fourth element in vision")
+            self.debug(f"Fourth case: {fourth_case_list}", COLOR_BLUE)
+            if len(second_case_list) > len(fourth_case_list):
+                self.walk_rotate_left()
+            else:
+                self.walk_rotate_right()
+            self.walk_forward()
+            if len(second_case_list) > len(fourth_case_list):
+                self.walk_take_object(second_case_list)
+            else:
+                self.walk_take_object(fourth_case_list)
+            self.walk_forward()
+        except Exception as e:
+            self.error(f"Error walking: {e}")
+
     def run(self):
         self.debug(f"Hamster {self.name} is running")
         self.init_hamster()
@@ -387,7 +480,7 @@ class Hamster:
             try:
                 self.manage_broadcast()
                 if self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp:
-                    self.debug(f"Parent cannibal: {self.cannibal_parent}")
+                    # self.debug(f"Parent cannibal: {self.cannibal_parent}")
                     self.client.send(f"Set food\n")
                     response = self.response_get_last_command()
                     if response == "ko":
@@ -406,16 +499,17 @@ class Hamster:
                             self.manage_broadcast()
                             self.error("Less hungry")
                         self.error("I'm not hungry anymore!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    self.walk()
                 self.manage_broadcast()
             except Exception as e:
-                self.debug(f"An error occured in the main loop: {e}")
+                self.error(f"An error occured in the main loop: {e}")
 
     def encrypt_message(self, message: str) -> str:
         encrypted_message = ""
         key_index = 0
         for char in message:
             if char.isalpha():
-                key_char = ENCRYPTION_KEY[key_index % len(ENCRYPTION_KEY)]
+                key_char = self.encrypting_key[key_index % len(self.encrypting_key)]
                 if char.isupper():
                     encrypted_char = chr((ord(char) + ord(key_char) - 2 * ord('A')) % 26 + ord('A'))
                 else:
@@ -431,7 +525,7 @@ class Hamster:
         key_index = 0
         for char in message:
             if char.isalpha():
-                key_char = ENCRYPTION_KEY[key_index % len(ENCRYPTION_KEY)]
+                key_char = self.encrypting_key[key_index % len(self.encrypting_key)]
                 if char.isupper():
                     decrypted_char = chr((ord(char) - ord(key_char) + 26) % 26 + ord('A'))
                 else:
