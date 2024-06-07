@@ -2,12 +2,27 @@
 ** EPITECH PROJECT, 2024
 ** DFMY-Zappy
 ** File description:
-** Options type.h
+** Options
 */
 
 #pragma once
 
-#include "type.h"
+// @brief Structure containing the options of the server
+typedef struct s_options {
+    // @brief The port of the server
+    int port;
+    // @brief The width of the map
+    size_t width;
+    // @brief The height of the map
+    size_t height;
+    // @brief The number of clients allowed to connect
+    size_t clients_nb;
+    // @brief The frequency of the server
+    size_t freq;
+    // @brief The names of the teams
+    char **teams;
+} options_t;
+
 
 /**
  * @brief Free the options structure
@@ -16,7 +31,7 @@ void options_destroy(options_t *options);
 
 /**
  * @brief Create the options structure
- * @return options_t* The options structure
+ * @return The options structure
  */
 options_t *options_create(void);
 
@@ -24,7 +39,7 @@ options_t *options_create(void);
  * @brief Parse the options of the server
  * @param argc Number of arguments
  * @param argv Arguments
- * @return options_t* The options of the server (NULL if an error occured)
+ * @return The options of the server (NULL if an error occured)
  */
 options_t *options_parse(int argc, char **argv);
 

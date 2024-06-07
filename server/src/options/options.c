@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "options/type.h"
+#include "options/options.h"
 
 options_t *options_create(void)
 {
@@ -18,7 +18,7 @@ options_t *options_create(void)
     options->port = -1;
     options->width = -1;
     options->height = -1;
-    options->clientsNb = -1;
+    options->clients_nb = -1;
     options->freq = -1;
     options->teams = NULL;
     return options;
