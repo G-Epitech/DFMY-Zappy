@@ -17,22 +17,15 @@ void redirect_all_stdout(void)
 
 Test(options_create, options_create)
 {
-    options_t *options = options_create();
+    options_t options = {0};
 
-    cr_assert_not_null(options);
-    cr_assert_eq(options->port, -1);
-    cr_assert_eq(options->width, -1);
-    cr_assert_eq(options->height, -1);
-    cr_assert_eq(options->clients_nb, -1);
-    cr_assert_eq(options->freq, -1);
-    cr_assert_null(options->teams);
-}
-
-Test(options_destroy, options_destroy)
-{
-    options_t *options = options_create();
-
-    options_destroy(options);
+    options_init(&options);
+    cr_assert_eq(options.port, 0);
+    cr_assert_eq(options.width, 0);
+    cr_assert_eq(options.height, 0);
+    cr_assert_eq(options.clients_nb, 0);
+    cr_assert_eq(options.freq, 0);
+    cr_assert_null(options.teams);
 }
 
 Test(options_usage, options_usage, .init = cr_redirect_stdout)
@@ -55,23 +48,23 @@ Test(options_usage, options_usage, .init = cr_redirect_stdout)
 Test(options_parse, options_parse)
 {
     char *argv[] = {"./zappy_server", "-p", "4242", "-x", "10", "-y", "10", "-n", "team1", "team2", "-c", "10", "-f", "100"};
-    options_t *options = options_parse(14, argv);
+    options_t options = {0};
 
-    cr_assert_not_null(options);
-    cr_assert_eq(options->port, 4242);
-    cr_assert_eq(options->width, 10);
-    cr_assert_eq(options->height, 10);
-    cr_assert_eq(options->clients_nb, 10);
-    cr_assert_eq(options->freq, 100);
-    cr_assert_str_eq(options->teams[0], "team1");
-    cr_assert_str_eq(options->teams[1], "team2");
-    options_destroy(options);
+    cr_assert_eq(options_parse(14, argv, &options), true);
+    cr_assert_eq(options.port, 4242);
+    cr_assert_eq(options.width, 10);
+    cr_assert_eq(options.height, 10);
+    cr_assert_eq(options.clients_nb, 10);
+    cr_assert_eq(options.freq, 100);
+    cr_assert_str_eq(options.teams[0], "team1");
+    cr_assert_str_eq(options.teams[1], "team2");
 }
 
 Test(options_parse, options_parse_error, .init = redirect_all_stdout)
 {
     char *argv[] = {"./zappy_server", "-p", "4242", "-x", "10", "-y", "10", "-n", "-c", "10", "-f", "100"};
-    options_t *options = options_parse(12, argv);
+    options_t options = {0};
 
-    cr_assert_null(options);
+
+    cr_assert_eq(options_parse(12, argv, &options), false);
 }

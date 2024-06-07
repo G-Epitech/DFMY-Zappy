@@ -13,16 +13,16 @@
 void print_usage(void)
 {
     printf("USAGE: ./zappy_server -p port -x width -y height"
-    " -n team1 team2 ... -c clients_nb -f freq\n");
+           " -n team1 team2 ... -c clients_nb -f freq\n");
     printf("option description\n");
     printf("-p port        port number (1024 <-> 65535)\n");
     printf("-x width       width of the world (10 <-> 30)\n");
     printf("-y height      height of the world (10 <-> 30)\n");
     printf("-n [teams]     name of the team (at least one)\n");
     printf("-c clients_nb   number of authorized clients per team"
-    " (1 <-> 200)\n");
+           " (1 <-> 200)\n");
     printf("-f freq        reciprocal of time unit for"
-    " execution of actions (2 <-> 10000)\n");
+           " execution of actions (2 <-> 10000)\n");
 }
 
 static void fill_teams(options_t *options, int argc, char **argv)
@@ -88,14 +88,12 @@ static char *options_have_errors(options_t *options)
     return NULL;
 }
 
-options_t *options_parse(int argc, char **argv)
+bool options_parse(int argc, char **argv, options_t *options)
 {
-    options_t *options = options_create();
     int opt = getopt(argc, argv, "p:x:y:n:c:f:");
     char *error = NULL;
 
-    if (options == NULL)
-        return NULL;
+    options_init(options);
     while (opt != -1) {
         fill_options(opt, options, argc, argv);
         opt = getopt(argc, argv, "p:x:y:n:c:f:");
@@ -105,7 +103,7 @@ options_t *options_parse(int argc, char **argv)
         fprintf(stderr, "%s", error);
         print_usage();
         options_destroy(options);
-        return NULL;
+        return false;
     }
-    return options;
+    return true;
 }

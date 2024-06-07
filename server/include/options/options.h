@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 // @brief Structure containing the options of the server
 typedef struct s_options {
     // @brief The port of the server
@@ -30,18 +32,18 @@ typedef struct s_options {
 void options_destroy(options_t *options);
 
 /**
- * @brief Create the options structure
+ * @brief Initialize the values of options structure
  * @return The options structure
  */
-options_t *options_create(void);
+void options_init(options_t *options);
 
 /**
  * @brief Parse the options of the server
  * @param argc Number of arguments
  * @param argv Arguments
- * @return The options of the server (NULL if an error occured)
+ * @return The options of the server (NULL if an error occurred)
  */
-options_t *options_parse(int argc, char **argv);
+bool options_parse(int argc, char **argv, options_t *options);
 
 /**
  * @brief Print the usage of the server
