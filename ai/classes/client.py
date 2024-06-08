@@ -39,7 +39,7 @@ class SocketClient:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((self.host, self.port))
         self.sock.setblocking(False)
-        print(f"Connected to {self.host}:{self.port}")
+        # print(f"Connected to {self.host}:{self.port}")
 
     def send(self, message: str, debug: bool = False) -> None:
         """
@@ -100,7 +100,7 @@ class SocketClient:
             try:
                 self.sock.close()
                 self.sock = None
-                print("Connection closed.")
+                # print("Connection closed.")
             except socket.error as e:
                 print(f"Error closing connection: {e}")
         else:
