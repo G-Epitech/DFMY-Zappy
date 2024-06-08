@@ -7,7 +7,7 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
-#include "options/options.h"
+#include "types/options/options.h"
 
 void redirect_all_stdout(void)
 {

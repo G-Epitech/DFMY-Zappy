@@ -5,8 +5,7 @@
 ** Options new
 */
 
-#include <stdlib.h>
-#include "options/options.h"
+#include "types/options/options.h"
 
 void options_init(options_t *options)
 {

@@ -6,9 +6,9 @@
 */
 
 #include <stdlib.h>
-#include "options/options.h"
+#include "types/options/options.h"
 
-void options_destroy(options_t *options)
+void options_free(options_t *options)
 {
     if (options->teams != NULL)
         free(options->teams);

@@ -30,7 +30,7 @@ typedef struct s_options {
 /**
  * @brief Free the options structure
  */
-void options_destroy(options_t *options);
+void options_free(options_t *options);
 
 /**
  * @brief Initialize the values of options structure

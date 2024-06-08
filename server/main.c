@@ -5,7 +5,7 @@
 ** main.c
 */
 
-#include "options/options.h"
+#include "types/options/options.h"
 
 int main(int ac, char **av)
 {
@@ -13,5 +13,6 @@ int main(int ac, char **av)
 
     if (!options_parse(ac, av, &options))
         return 84;
+    options_free(&options);
     return 0;
 }

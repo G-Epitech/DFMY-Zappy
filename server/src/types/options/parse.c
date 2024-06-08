@@ -8,21 +8,21 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <stdlib.h>
-#include "options/options.h"
+#include "types/options/options.h"
 
 void print_usage(void)
 {
     printf("USAGE: ./zappy_server -p port -x width -y height"
-           " -n team1 team2 ... -c clients_nb -f freq\n");
+    " -n team1 team2 ... -c clients_nb -f freq\n");
     printf("option description\n");
     printf("-p port        port number (1024 <-> 65535)\n");
     printf("-x width       width of the world (10 <-> 30)\n");
     printf("-y height      height of the world (10 <-> 30)\n");
     printf("-n [teams]     name of the team (at least one)\n");
     printf("-c clients_nb   number of authorized clients per team"
-           " (1 <-> 200)\n");
+    " (1 <-> 200)\n");
     printf("-f freq        reciprocal of time unit for"
-           " execution of actions (2 <-> 10000)\n");
+    " execution of actions (2 <-> 10000)\n");
 }
 
 static void fill_teams(options_t *options, int argc, char **argv)
@@ -103,7 +103,7 @@ bool options_parse(int argc, char **argv, options_t *options)
         if (error != NULL)
             fprintf(stderr, "%s", error);
         print_usage();
-        options_destroy(options);
+        options_free(options);
         return false;
     }
     return true;
