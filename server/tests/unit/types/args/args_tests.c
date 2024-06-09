@@ -146,3 +146,90 @@ Test(args_parse_tests, parse_several_flags_with_error, .init = cr_redirect_stder
     cr_assert_stderr_eq_str("Invalid number of clients\n");
     args_free(&args);
 }
+
+Test(args_valid_tests, all_args_are_valid)
+{
+    args_t args = { 0 };
+    char *teams[] = { "team1", "team2", "team3", NULL };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    args.height = 10;
+    args.clients_nb = 10;
+    args.frequency = 10;
+    args.teams = teams;
+    cr_assert_eq(args_are_valid(&args), true);
+}
+
+Test(args_valid_tests, invalid_port, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+    char *teams[] = { "team1", "team2", "team3", NULL };
+
+    args_init(&args);
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Missing server port\n");
+}
+
+Test(args_valid_tests, invalid_map_width, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+
+    args_init(&args);
+    args.port = 4242;
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Missing map width\n");
+}
+
+Test(args_valid_tests, invalid_map_height, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Missing map height\n");
+}
+
+Test(args_valid_tests, invalid_clients_nb, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    args.height = 10;
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Missing clients number\n");
+}
+
+Test(args_valid_tests, invalid_teams, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    args.height = 10;
+    args.clients_nb = 10;
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Missing teams names\n");
+}
+
+Test(args_valid_tests, all_args_are_valid_with_help)
+{
+    args_t args = { 0 };
+    char *teams[] = { "team1", "team2", "team3", NULL };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    args.height = 10;
+    args.clients_nb = 10;
+    args.frequency = 10;
+    args.teams = teams;
+    args.help = true;
+    cr_assert_eq(args_are_valid(&args), true);
+}
