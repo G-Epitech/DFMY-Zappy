@@ -20,10 +20,10 @@ int app_run(int argc, char **argv)
 
     args_init(&args);
     if (!args_parse(argc, argv, &args) || !args_are_valid(&args))
-        return app_exit(&args, 84);
+        return app_exit(&args, APP_EXIT_FAILURE);
     if (args.help) {
         app_print_usage();
-        return app_exit(&args, 0);
+        return app_exit(&args, APP_EXIT_SUCCESS);
     }
-    return app_exit(&args, 0);
+    return app_exit(&args, APP_EXIT_SUCCESS);
 }

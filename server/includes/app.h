@@ -7,6 +7,9 @@
 
 #pragma once
 
+#define APP_EXIT_SUCCESS 0
+#define APP_EXIT_FAILURE 84
+
 /**
  * @brief Main function of server
  * @param argc Number of arguments
