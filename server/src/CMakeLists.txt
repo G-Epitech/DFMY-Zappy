@@ -1,3 +1,2 @@
-target_sources(zappy_server_core PUBLIC
-        foo.c
-)
+add_subdirectory(types)
+add_subdirectory(app)

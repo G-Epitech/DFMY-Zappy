@@ -8,12 +8,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..)
 
 # Project targets
 add_library(zappy_server_core STATIC)
-target_include_directories(zappy_server_core PUBLIC include)
+target_include_directories(zappy_server_core PUBLIC includes)
 add_subdirectory(src)
 
 add_executable(zappy_server main.c)
 target_link_libraries(zappy_server zappy_server_core)
-target_include_directories(zappy_server PUBLIC include)
+target_include_directories(zappy_server PUBLIC includes)
 
 # Tests
 if (COVERAGE)

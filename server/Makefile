@@ -30,12 +30,15 @@ clean:
 fclean:		clean
 			@rm -f ../$(NAME)
 			@rm -f ../$(TESTS_NAME)
+			@rm -rf cmake-build-*
+			@rm -rf build
 
 re:
 			@$(MAKE) fclean
 			@$(MAKE) all
 
-tests_run:
+tests_run:	fclean
+			@$(MAKE) -C tests/libs
 			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
 			@./../$(TESTS_NAME)

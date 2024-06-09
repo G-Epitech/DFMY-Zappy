@@ -5,11 +5,9 @@
 ** main.c
 */
 
-#include <stdio.h>
-#include "sub/foo.h"
+#include "app.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-    printf("FOO 3 + 5 = %d\n", foo(3, 5));
-    return 0;
+    return app_run(argc, argv);
 }
