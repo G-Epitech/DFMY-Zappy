@@ -4,3 +4,15 @@ server/build
 zappy_server
 zappy_server_tests
 *.log
+*.a
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.dSYM
+*.gcno
+*.gcda
+*.gcov

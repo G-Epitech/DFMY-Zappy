@@ -38,6 +38,7 @@ re:
 			@$(MAKE) all
 
 tests_run:	fclean
+			@$(MAKE) -C tests/libs
 			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
 			@./../$(TESTS_NAME)

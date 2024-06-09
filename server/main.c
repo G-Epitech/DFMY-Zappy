@@ -5,14 +5,9 @@
 ** main.c
 */
 
-#include "types/options/options.h"
+#include "app.h"
 
-int main(int ac, char **av)
+int main(int argc, char **argv)
 {
-    options_t options = {0};
-
-    if (!options_parse(ac, av, &options))
-        return 84;
-    options_free(&options);
-    return 0;
+    return app_run(argc, argv);
 }
