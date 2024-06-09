@@ -1,0 +1,14 @@
+main.c
+tmp
+*.o
+*.so
+*.a
+*.out
+.vscode
+*_tests
+*.gcno
+*.gcna
+*.gcda
+.idea
+cmake-build-debug*
+build*
