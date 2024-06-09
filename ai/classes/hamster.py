@@ -16,8 +16,9 @@ import time
 HAMSTER_NEW = "NEW_HAMSTER"
 HAMSTER_ASSERT_AUTHORITY = "I_AM_THE_MOTHER"
 HAMSTER_CANNIBALISM = "I_WILL_EAT_YOU"
-HAMSTER_REQUEST_CANNIBALISM = "MAY_I_EAT_YOU?"
 HAMSTER_INCANTATION = "INCANTATION"
+HAMSTER_CALL_FAMILY = "CALL_FAMILY"
+HAMSTER_COMMING = "COMMING"
 HAMSTER_OK = "OK"
 HAMSTER_KO = "KO"
 HAMSTER_RUN = "RUN"
@@ -54,6 +55,8 @@ class Hamster:
         self.dead: bool = False
         self.sync_with_other_hamsters: bool = False
         self.encrypting_key: str = "I_AM_THE_MOTHER_OF_" + self.name
+        self.called_by_mother: bool = False
+        self.direction_called_by_mother: int = 0
 
     def init_hamster(self):
         """
@@ -272,23 +275,30 @@ class Hamster:
         if json_message["message"] == HAMSTER_NEW:
             if self.mother:
                 if json_message["starting_timestamp"] > self.starting_timestamp:
+                    self.error(f"New hamster {json_message['starting_timestamp']} is a mother")
                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ASSERT_AUTHORITY, json_message['starting_timestamp'])}")
                     self.sync_with_other_hamsters = True
                 else:
                     self.mother = False
+                    self.error(f"New hamster {json_message['starting_timestamp']} is not a mother")
                     self.sync_with_other_hamsters = True
         if json_message["message"] == HAMSTER_ASSERT_AUTHORITY:
             self.mother = False
             self.sync_with_other_hamsters = True
+            self.error(f"New hamster {json_message['starting_timestamp']} is not a mother")
         if json_message["message"] == HAMSTER_CANNIBALISM:
             if json_message["recipient"] == self.starting_timestamp:
                 if self.cannibal_parent == 0 and dir == 0:
+                    self.mother = False
                     self.sync_with_other_hamsters = True
                     self.cannibal_parent = json_message["starting_timestamp"]
                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_OK, json_message['starting_timestamp'])}")
                     self.debug(f"Accepted cannibalism from {json_message['starting_timestamp']}")
                 else:
                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_KO, json_message['starting_timestamp'])}")
+        if json_message["message"] == HAMSTER_CALL_FAMILY:
+            self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, json_message['starting_timestamp'])}")
+            self.called_by_mother = True
 
     def manage_broadcast(self):
         """
@@ -749,6 +759,25 @@ class Hamster:
             self.walk_forward()
         except Exception as e:
             self.error(f"Error walking: {e}")
+    
+    def family_gathering(self):
+        if self.direction_called_by_mother == 0:
+            self.debug("I arrived to the mother", COLOR_GREEN)
+            self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
+            return
+        possible_moves = [
+            [self.walk_forward()]
+            [self.walk_forward(), self.walk_rotate_left(), self.walk_forward()],
+            [self.walk_rotate_left(), self.walk_forward()],
+            [self.walk_rotate_left(), self.walk_forward(), self.walk_rotate_left(), self.walk_forward()],
+            [self.walk_rotate_right(), self.walk_rotate_right(), self.walk_forward()],
+            [self.walk_rotate_right(), self.walk_forward(), self.walk_rotate_right(), self.walk_forward()],
+            [self.walk_rotate_right(), self.walk_forward()],
+            [self.walk_forward(), self.walk_rotate_right(), self.walk_forward()]
+        ]
+        for move in possible_moves[self.direction_called_by_mother]:
+            move()
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
 
     def run(self):
         """
@@ -775,6 +804,9 @@ class Hamster:
 
         self.debug(f"Hamster {self.name} is now synchronized! Am I ? { self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp } ; ID: { self.starting_timestamp }", COLOR_GREEN)
 
+        if self.mother:
+            self.error("I'm the mother")
+
         while not self.dead:
             try:
                 self.manage_broadcast()
@@ -798,7 +830,15 @@ class Hamster:
                             self.manage_broadcast()
                             self.error("Less hungry")
                         self.error("I'm not hungry anymore!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    self.walk()
+                    if self.mother:
+                        self.debug("I'm the mother", COLOR_GREEN)
+                        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
+                    else:
+                        if self.called_by_mother:
+                            self.debug("Mother called me", COLOR_GREEN)
+                            self.family_gathering()
+                        else:
+                            self.walk()
                 self.manage_broadcast()
             except Exception as e:
                 self.error(f"An error occurred in the main loop: {e}")
