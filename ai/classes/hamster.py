@@ -299,6 +299,7 @@ class Hamster:
         if json_message["message"] == HAMSTER_CALL_FAMILY:
             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, json_message['starting_timestamp'])}")
             self.called_by_mother = True
+            self.direction_called_by_mother = dir
 
     def manage_broadcast(self):
         """
@@ -762,7 +763,7 @@ class Hamster:
     
     def family_gathering(self):
         if self.direction_called_by_mother == 0:
-            self.debug("I arrived to the mother", COLOR_GREEN)
+            self.debug("I arrived to the mother!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_GREEN)
             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
             return
         possible_moves = [
