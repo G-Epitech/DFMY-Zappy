@@ -16,7 +16,7 @@ static size_t count_teams(args_parser_t *parser)
     int first_team_index = parser->current;
     size_t teams_len = 0;
 
-    while (arg != NULL && arg[0] != '-') {
+    while (parser->current < parser->argc && arg[0] != '-') {
         teams_len += 1;
         parser->current += 1;
         arg = ARGS_PARSER_CURRENT(parser);
