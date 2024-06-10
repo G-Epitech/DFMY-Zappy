@@ -63,7 +63,6 @@ static void read_teams_names(args_parser_t *parser, args_t *args)
         parser->current += (i + 1) < teams_len ? 1 : 0;
         arg = ARGS_PARSER_CURRENT(parser);
     }
-
 }
 
 bool args_parse_teams(args_parser_t *parser, args_t *args)

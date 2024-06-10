@@ -29,3 +29,15 @@ typedef struct team_s {
  * @return team structure
  */
 team_t *team_new(char *name, size_t min_slots);
+
+/**
+ * @brief Free a team
+ * @param team The team to free
+ */
+void team_free(team_t *team);
+
+/**
+ * @brief Free a team as node data
+ * @param data The team to free
+ */
+void team_free_as_node_data(void *data);

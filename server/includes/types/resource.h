@@ -43,3 +43,9 @@ typedef struct resource_manager_s {
  * @return resource manager
  */
 resource_manager_t *resource_manager_new(void);
+
+/**
+ * @brief Free a resource manager
+ * @param manager The resource manager to free
+ */
+void resource_manager_free(resource_manager_t *manager);

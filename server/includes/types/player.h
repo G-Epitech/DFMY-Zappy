@@ -39,5 +39,16 @@ typedef struct player_s {
  * @return
  */
 player_t *player_new(player_controller_t *controller, team_t *team,
-                     vector2u_t position);
+    vector2u_t position);
 
+/**
+ * @brief Free a player
+ * @param player Player structure to free
+ */
+void player_free(player_t *player);
+
+/**
+ * @brief Free a player as node data
+ * @param data Player structure to free
+ */
+void player_free_as_node_data(void *data);

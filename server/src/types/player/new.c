@@ -9,7 +9,7 @@
 #include "types/player.h"
 
 player_t *player_new(player_controller_t *controller, team_t *team,
-                     vector2u_t position)
+    vector2u_t position)
 {
     player_t *player = calloc(1, sizeof(player_t));
 

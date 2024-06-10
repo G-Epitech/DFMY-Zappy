@@ -56,3 +56,10 @@ typedef struct world_s {
  * @return world structure
  */
 world_t *world_new(int width, int height, float frequency);
+
+// TODO : Add free of incantations list in the world free function
+/**
+ * @brief Free a trantorian world
+ * @param world
+ */
+void world_free(world_t *world);
