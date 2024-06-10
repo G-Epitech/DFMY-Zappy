@@ -14,3 +14,13 @@ void list_init(list_t *list)
     list->last = NULL;
     list->len = 0;
 }
+
+list_t *list_new(void)
+{
+    list_t *list = malloc(sizeof(list_t));
+
+    if (!list)
+        return (NULL);
+    list_init(list);
+    return (list);
+}

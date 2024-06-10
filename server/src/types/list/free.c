@@ -13,10 +13,16 @@ void list_clear(list_t *list, node_freer_t freer)
     node_t *node = list ? list->first : NULL;
     node_t *next = NULL;
 
-    while (node) {
+    while (node && list) {
         next = node->next;
         node_free(node, freer);
         list->len -= 1;
         node = next;
     }
+}
+
+void list_free(list_t *list, node_freer_t freer)
+{
+    list_clear(list, freer);
+    free(list);
 }
