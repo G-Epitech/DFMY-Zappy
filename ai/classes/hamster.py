@@ -7,7 +7,7 @@
 
 import time
 from classes.client import SocketClient
-from typing import Any, Callable
+from typing import Any, Callable, NamedTuple
 import json
 from datetime import datetime
 import random
@@ -16,6 +16,8 @@ import time
 HAMSTER_NEW = "NEW_HAMSTER"
 HAMSTER_ASSERT_AUTHORITY = "I_AM_THE_MOTHER"
 HAMSTER_CANNIBALISM = "I_WILL_EAT_YOU"
+HAMSTER_ACCEPT_CANNIBALISM = "ACCEPT_CANNIBALISM"
+HAMSSTER_REJECT_CANNIBALISM = "REJECT_CANNIBALISM"
 HAMSTER_INCANTATION = "INCANTATION"
 HAMSTER_CALL_FAMILY = "CALL_FAMILY"
 HAMSTER_COMMING = "COMMING"
@@ -30,6 +32,12 @@ COLOR_BLUE = "\033[1;34m"
 COLOR_MAGENTA = "\033[1;35m"
 COLOR_CYAN = "\033[1;36m"
 COLOR_RESET = "\033[0m"
+
+class HamsterEntity(NamedTuple):
+    starting_timestamp: int
+    current_timestamp: int
+    inventory: dict
+    cooldown_before_declared_dead: int
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -50,13 +58,13 @@ class Hamster:
         self.pending_broadcast: list[tuple[int, str]] = []
         self.starting_timestamp: int = 0
         self.mother: bool = True
-        self.hamsters: list[int] = []
         self.cannibal_parent: int = 0
         self.dead: bool = False
         self.sync_with_other_hamsters: bool = False
         self.encrypting_key: str = "I_AM_THE_MOTHER_OF_" + self.name
         self.called_by_mother: bool = False
         self.direction_called_by_mother: int = 0
+        self.hamsters: list[HamsterEntity] = []
 
     def init_hamster(self):
         """
@@ -185,6 +193,7 @@ class Hamster:
         Args:
             message (str): The message to be broadcasted.
         """
+        self.hamsters_decrement_cooldown()
         self.client.send(f"Broadcast {self.encrypt_message(message)}\n")
         response = self.response_get_last_command()
         if response == "ko":
@@ -224,6 +233,63 @@ class Hamster:
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
         return message
+    
+    def hamsters_remove_dead(self):
+        """
+        Removes dead hamsters from the list of hamsters.
+
+        This method iterates over the list of hamsters and removes any hamster
+        that has a cooldown before being declared dead greater than 0.
+        """
+        for hamster in self.hamsters:
+            if hamster.cooldown_before_declared_dead <= 0:
+                self.hamsters.remove(hamster)
+    
+    def hamsters_decrement_cooldown(self):
+        """
+        Decrements the cooldown before being declared dead for each hamster.
+
+        This method iterates over the list of hamsters and decrements the
+        cooldown before being declared dead for each hamster.
+        """
+        for hamster in self.hamsters:
+            hamster._replace(cooldown_before_declared_dead=hamster.cooldown_before_declared_dead - 1)
+
+    def hamsters_manager_message(self, message: str):
+        """
+        Manages living hamsters based on the received message.
+
+        Args:
+            message (str): The message to process.
+        """
+        if not self.mother:
+            return
+        try:
+            message = self.decrypt_message(message).replace("'", "\"")
+            json_message = json.loads(message)
+            if not json_message:
+                raise Exception("Invalid json message")
+            hamster_starting_timestamp = json_message["starting_timestamp"]
+            hamster_current_timestamp = json_message["current_timestamp"]
+            hamster_inventory = json_message["inventory"]
+            hamster_message = json_message["message"]
+            if hamster_starting_timestamp == self.starting_timestamp:
+                return
+            if hamster_starting_timestamp not in [hamster.starting_timestamp for hamster in self.hamsters]:
+                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 800))
+            else:
+                for hamster in self.hamsters:
+                    if hamster.starting_timestamp == hamster_starting_timestamp:
+                        hamster._replace(cooldown_before_declared_dead=0)
+                        break
+            if hamster_message == HAMSTER_ACCEPT_CANNIBALISM or hamster_message == HAMSSTER_REJECT_CANNIBALISM:
+                for hamster in self.hamsters:
+                    if hamster.starting_timestamp == hamster_starting_timestamp:
+                        self.hamsters.remove(hamster)
+                        break
+
+        except Exception as e:
+            self.debug(f"Error managing living hamsters: {e}")
 
     def manage_broadcast_message(self, dir: int, message: str):
         """
@@ -272,30 +338,31 @@ class Hamster:
         json_message = json.loads(message)
         if not message:
             raise Exception(f"Invalid message format: {message}")
+
         if json_message["message"] == HAMSTER_NEW:
             if self.mother:
                 if json_message["starting_timestamp"] > self.starting_timestamp:
-                    self.error(f"New hamster {json_message['starting_timestamp']} is a mother")
                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ASSERT_AUTHORITY, json_message['starting_timestamp'])}")
                     self.sync_with_other_hamsters = True
                 else:
                     self.mother = False
-                    self.error(f"New hamster {json_message['starting_timestamp']} is not a mother")
                     self.sync_with_other_hamsters = True
+
         if json_message["message"] == HAMSTER_ASSERT_AUTHORITY:
             self.mother = False
             self.sync_with_other_hamsters = True
-            self.error(f"New hamster {json_message['starting_timestamp']} is not a mother")
+
         if json_message["message"] == HAMSTER_CANNIBALISM:
             if json_message["recipient"] == self.starting_timestamp:
                 if self.cannibal_parent == 0 and dir == 0:
                     self.mother = False
                     self.sync_with_other_hamsters = True
                     self.cannibal_parent = json_message["starting_timestamp"]
-                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_OK, json_message['starting_timestamp'])}")
+                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ACCEPT_CANNIBALISM, json_message['starting_timestamp'])}")
                     self.debug(f"Accepted cannibalism from {json_message['starting_timestamp']}")
                 else:
-                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_KO, json_message['starting_timestamp'])}")
+                    self.send_broadcast(f"{self.create_broadcast_message(HAMSSTER_REJECT_CANNIBALISM, json_message['starting_timestamp'])}")
+
         if json_message["message"] == HAMSTER_CALL_FAMILY:
             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, json_message['starting_timestamp'])}")
             self.called_by_mother = True
@@ -316,9 +383,12 @@ class Hamster:
         for message in self.pending_broadcast:
             try:
                 self.manage_broadcast_message(message[0], message[1])
+                self.hamsters_manager_message(message[1])
             except Exception as e:
                 self.debug(f"Error managing broadcast message: {e}")
         self.pending_broadcast = []
+        if self.mother:
+            self.debug(f"Number of hamsters: {len(self.hamsters)}", COLOR_MAGENTA)
 
     def message_get_json(self, message: str) -> Any | None:
         """
@@ -498,10 +568,10 @@ class Hamster:
                         try:
                             json_message = self.message_get_json(broadcast_message[1])
                             if json_message and json_message["recipient"] == self.starting_timestamp:
-                                if json_message["message"] == HAMSTER_OK:
+                                if json_message["message"] == HAMSTER_ACCEPT_CANNIBALISM:
                                     accepted = True
                                     break
-                                elif json_message["message"] == HAMSTER_KO:
+                                elif json_message["message"] == HAMSSTER_REJECT_CANNIBALISM:
                                     accepted = False
                                     break
                         except Exception as e:
@@ -762,21 +832,25 @@ class Hamster:
             self.error(f"Error walking: {e}")
     
     def family_gathering(self):
+        self.error(f"Called by mother: {self.direction_called_by_mother}########################################################################")
+        if self.direction_called_by_mother < 0 or self.direction_called_by_mother > 8:
+            self.error("Invalid direction")
+            return
         if self.direction_called_by_mother == 0:
             self.debug("I arrived to the mother!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_GREEN)
             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
             return
         possible_moves = [
-            [self.walk_forward()]
-            [self.walk_forward(), self.walk_rotate_left(), self.walk_forward()],
-            [self.walk_rotate_left(), self.walk_forward()],
-            [self.walk_rotate_left(), self.walk_forward(), self.walk_rotate_left(), self.walk_forward()],
-            [self.walk_rotate_right(), self.walk_rotate_right(), self.walk_forward()],
-            [self.walk_rotate_right(), self.walk_forward(), self.walk_rotate_right(), self.walk_forward()],
-            [self.walk_rotate_right(), self.walk_forward()],
-            [self.walk_forward(), self.walk_rotate_right(), self.walk_forward()]
+            [self.walk_forward],
+            [self.walk_forward, self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_left, self.walk_forward, self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_right, self.walk_rotate_right, self.walk_forward],
+            [self.walk_rotate_right, self.walk_forward, self.walk_rotate_right, self.walk_forward],
+            [self.walk_rotate_right, self.walk_forward],
+            [self.walk_forward, self.walk_rotate_right, self.walk_forward]
         ]
-        for move in possible_moves[self.direction_called_by_mother]:
+        for move in possible_moves[self.direction_called_by_mother - 1]:
             move()
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
 
@@ -840,9 +914,10 @@ class Hamster:
                             self.family_gathering()
                         else:
                             self.walk()
+                self.error("End of loop")
                 self.manage_broadcast()
             except Exception as e:
-                self.error(f"An error occurred in the main loop: {e}")
+                self.error(f"\n=========================\nAn error occurred in the main loop: {e}\n=========================")
 
     def encrypt_message(self, message: str) -> str:
         """
