@@ -10,10 +10,10 @@
 #include "list.h"
 
 // TODO: Temporary player definition
-typedef void * player_t;
+typedef void *player_t;
 
 // TODO: Temporary time_unit definition
-typedef void * time_unit_t;
+typedef void *time_unit_t;
 
 // Frozen state of a player
 typedef enum frozen_state_e {
