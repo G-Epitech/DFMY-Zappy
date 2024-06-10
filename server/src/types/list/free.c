@@ -19,6 +19,8 @@ void list_clear(list_t *list, node_freer_t freer)
         list->len -= 1;
         node = next;
     }
+    if (list)
+        list_init(list);
 }
 
 void list_free(list_t *list, node_freer_t freer)

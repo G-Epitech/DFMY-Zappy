@@ -56,3 +56,17 @@ Test(shared_event_tests, free_null_shared_event)
 {
     shared_event_free(NULL);
 }
+
+Test(shared_event_tests, free_list_of_events)
+{
+    shared_event_t *shared_event1 = shared_event_new(strdup("Hello World"), 11);
+    shared_event_t *shared_event2 = shared_event_new(strdup("Hello World"), 11);
+    list_t *list = list_new();
+
+    list_push(list, NODE_DATA_FROM_PTR(shared_event1));
+    list_push(list, NODE_DATA_FROM_PTR(shared_event2));
+    cr_assert_eq(list->len, 2);
+    list_clear(list, &shared_event_free_as_node_data);
+    cr_assert_eq(list->len, 0);
+    list_free(list, NULL);
+}

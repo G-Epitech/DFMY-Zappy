@@ -93,3 +93,9 @@ controller_t *controller_new(int socket);
  * @param controller Controller to free
  */
 void controller_free(controller_t *controller);
+
+/**
+ * @brief Free a controller
+ * @param data Node data to free as controller
+ */
+void controller_free_as_node_data(node_data_t data);

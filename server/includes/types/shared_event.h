@@ -36,3 +36,9 @@ shared_event_t *shared_event_new(char *buffer, size_t buffer_size);
  * @param event Shared event to free
  */
 void shared_event_free(shared_event_t *event);
+
+/**
+ * @brief Free given shared event as node data
+ * @param data Shared event to free
+ */
+void shared_event_free_as_node_data(node_data_t data);

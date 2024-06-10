@@ -60,3 +60,20 @@ Test(controller_tests, free_controller)
 {
     controller_free(NULL);
 }
+
+Test(controller_tests, free_list_of_controllers)
+{
+    list_t list;
+    controller_t *controller1 = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+
+    list_init(&list);
+    cr_assert_eq(list.len, 0);
+    list_push(&list, NODE_DATA_FROM_PTR(controller1));
+    list_push(&list, NODE_DATA_FROM_PTR(controller2));
+    list_push(&list, NODE_DATA_FROM_PTR(controller3));
+    cr_assert_eq(list.len, 3);
+    list_clear(&list, &controller_free_as_node_data);
+    cr_assert_eq(list.len, 0);
+}

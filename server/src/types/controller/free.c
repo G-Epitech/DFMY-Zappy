@@ -18,3 +18,8 @@ void controller_free(controller_t *controller)
     list_free(controller->generic.emissions, NULL);
     free(controller);
 }
+
+void controller_free_as_node_data(node_data_t data)
+{
+    controller_free(NODE_DATA_TO_PTR(data, controller_t *));
+}

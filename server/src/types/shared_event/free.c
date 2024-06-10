@@ -16,3 +16,8 @@ void shared_event_free(shared_event_t *event)
     list_free(event->subscribers, NULL);
     free(event);
 }
+
+void shared_event_free_as_node_data(node_data_t data)
+{
+    shared_event_free(NODE_DATA_TO_PTR(data, shared_event_t *));
+}
