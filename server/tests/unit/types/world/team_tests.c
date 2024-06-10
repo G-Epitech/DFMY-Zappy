@@ -42,6 +42,11 @@ Test(team_tests, simple_free)
     team_free(team);
 }
 
+Test(team_tests, free_null_team)
+{
+    team_free(NULL);
+}
+
 Test(team_tests, free_list_of_eggs)
 {
     team_t *team = NULL;

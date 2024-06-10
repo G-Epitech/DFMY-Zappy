@@ -33,3 +33,22 @@ Test(emission_tests, free_null_emission)
 {
     emission_free(NULL);
 }
+
+Test(emission_tests, free_emission_as_node_data)
+{
+    emission_t *emission = NULL;
+    char *buffer = NULL;
+    list_t *emissions = list_new();
+
+    cr_assert_eq(emissions->len, 0);
+    for (int i = 0; i < 10; i++) {
+        buffer = strdup("Hello");
+        emission = emission_new(buffer, 6);
+        list_push(emissions, NODE_DATA_FROM_PTR(emission));
+        cr_assert_eq(emissions->len, i + 1);
+    }
+    cr_assert_eq(emissions->len, 10);
+    list_clear(emissions, &emission_free_as_node_data);
+    cr_assert_eq(emissions->len, 0);
+    list_free(emissions, NULL);
+}

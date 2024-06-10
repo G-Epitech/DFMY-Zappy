@@ -9,7 +9,11 @@
 
 static void map_free_cells(map_t *map)
 {
+    if (!map->cells)
+        return;
     for (int i = 0; i < map->size.y; i++) {
+        if (!map->cells[i])
+            return;
         for (int j = 0; j < map->size.x; j++) {
             map_cell_free(&(map->cells[i][j]));
         }
@@ -19,7 +23,7 @@ static void map_free_cells(map_t *map)
 
 void map_free(map_t *map)
 {
-    if (!map || !map->cells)
+    if (!map)
         return;
     map_free_cells(map);
     free(map);

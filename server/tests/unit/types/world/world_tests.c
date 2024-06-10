@@ -76,3 +76,8 @@ Test(world_free_tests, free_null_world)
 {
     world_free(NULL);
 }
+
+Test(world_free_tests, free_null_map_cell)
+{
+    map_cell_free(NULL);
+}
