@@ -31,8 +31,7 @@ private:
     /**
      * @brief Load resources of the application
      */
-    void _loadResources();
+    static void _loadResources();
 
-    Ogre::SceneManager *sceneManager;
     OgreBites::TrayManager *trayManager;
 };
