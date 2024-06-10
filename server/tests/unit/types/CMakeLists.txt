@@ -8,3 +8,4 @@ target_sources(zappy_server_tests PUBLIC
         server_tests.c
 )
 add_subdirectory(args)
+add_subdirectory(world)
