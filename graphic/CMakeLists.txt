@@ -10,5 +10,8 @@ find_package(OGRE REQUIRED COMPONENTS Bites CONFIG)
 # add the source files as usual
 add_executable(0_Bootstrap Bootstrap.cpp)
 
+add_executable(1_Bootstrap BasicTutorial2.cpp)
+
 # this also sets the includes and pulls third party dependencies
 target_link_libraries(0_Bootstrap OgreBites)
+target_link_libraries(1_Bootstrap OgreBites)
