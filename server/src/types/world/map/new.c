@@ -27,7 +27,7 @@ map_t *map_new(vector2u_t size)
     map->size = size;
     map->cells = calloc(size.y, sizeof(map_cell_t *));
     if (!map->cells || !map_create_rows_cells(map->cells, size)) {
-        map_free(map);
+        free(map);
         return NULL;
     }
     return map;

@@ -13,10 +13,11 @@ void player_init(player_t *player, player_controller_t *controller,
 {
     player->controller = controller;
     player->team = team;
-    player->level = 0;
-    player->lives = 0;
+    player->level = 1;
+    player->lives = 160;
     player->position = position;
     memset(player->inventory, 0, RES_LEN * sizeof(size_t));
+    player->inventory[RES_FOOD] = 10;
 }
 
 player_t *player_new(player_controller_t *controller, team_t *team,

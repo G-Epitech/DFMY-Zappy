@@ -29,5 +29,6 @@ Test(resources_manager_new_tests, simple_new)
     cr_assert_eq(resources_manager.stats[RES_PHIRAS].actual, 0);
     cr_assert_eq(resources_manager.stats[RES_THYSTAME].limit, 1);
     cr_assert_eq(resources_manager.stats[RES_THYSTAME].actual, 0);
-    cr_assert_eq(resources_manager.next_generation, 0);
+    cr_assert_eq(resources_manager.next_generation,
+    RES_MANAGER_NEXT_GENERATION_DELAY);
 }
