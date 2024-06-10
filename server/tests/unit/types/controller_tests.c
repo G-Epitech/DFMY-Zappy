@@ -10,11 +10,26 @@
 #include "types/list.h"
 #include "types/controller.h"
 
+Test(controller_tests, init_controller)
+{
+    controller_t controller;
+
+    controller_init(&controller, 12);
+    cr_assert_eq(controller.generic.type, CTRL_UNKNOWN);
+    cr_assert_eq(controller.generic.socket, 12);
+    cr_assert_null(controller.generic.requests);
+    cr_assert_null(controller.generic.emissions);
+}
+
 Test(controller_tests, new_controller)
 {
     controller_t *controller = controller_new(0);
 
     cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
+    cr_assert_eq(controller->generic.socket, 0);
+    cr_assert_not_null(controller->generic.requests);
+    cr_assert_not_null(controller->generic.emissions);
     controller_free(controller);
 }
 
