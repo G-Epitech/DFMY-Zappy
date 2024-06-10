@@ -21,3 +21,11 @@ typedef struct team_s {
     // @brief Minimum number of slots in the team
     size_t min_slots;
 } team_t;
+
+/**
+ * @brief Create a new team
+ * @param name Name of the team
+ * @param min_slots Minimum number of slots in the team
+ * @return team structure
+ */
+team_t *team_new(char *name, size_t min_slots);

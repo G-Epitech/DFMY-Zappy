@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include "chrono.h"
 #include "list.h"
-#include "resources.h"
+#include "resource.h"
 
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
@@ -47,3 +47,12 @@ typedef struct world_s {
     // @brief List of incantations in the world
     list_t *incantations;
 } world_t;
+
+/**
+ * @brief Create a new trantorian world
+ * @param width Width of the world
+ * @param height Height of the world
+ * @param frequency Frequency of the world clock
+ * @return world structure
+ */
+world_t *world_new(int width, int height, float frequency);

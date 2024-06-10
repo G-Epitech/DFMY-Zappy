@@ -37,3 +37,9 @@ typedef struct resource_manager_s {
     // @brief Time before next generation of resources
     time_unit_t next_generation;
 } resource_manager_t;
+
+/**
+ * @brief Create a new resource manager
+ * @return resource manager
+ */
+resource_manager_t *resource_manager_new(void);
