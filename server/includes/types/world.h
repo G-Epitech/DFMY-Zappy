@@ -8,7 +8,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "clock.h"
+#include "chrono.h"
 #include "list.h"
 #include "resources.h"
 
@@ -39,7 +39,7 @@ typedef struct world_s {
     // @brief List of players in the world
     list_t *players;
     // @brief Clock of the world
-    clock_t clock;
+    chrono_t clock;
     // @brief Resources manager of the world
     resource_manager_t *resources_manager;
     // @brief Delay before next predictable event in world

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "clock.h"
+#include "chrono.h"
 
 // @brief The enum representing the type of resource
 typedef enum resource_e {
