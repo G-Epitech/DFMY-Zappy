@@ -11,11 +11,6 @@
 #include <stdlib.h>
 #include "node.h"
 
-typedef struct vector2u_s {
-    size_t x;
-    size_t y;
-} vector2u_t;
-
 // Represent linked list
 typedef struct s_list {
     node_t *first;  //First node of list

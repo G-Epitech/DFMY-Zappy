@@ -35,12 +35,22 @@ Test(player_new_tests, new_player_with_malloc_fail)
     clcc_disable_control(calloc);
 }
 
-Test(player_free_tests, player_free_as_node_data)
+Test(player_new_tests, free_list_of_players)
 {
     vector2u_t position = { 10, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = NULL;
+    list_t *players = list_new();
 
-    player_free_as_node_data(player);
+    cr_assert_eq(players->len, 0);
+    for (int i = 0; i < 10; i++) {
+        player = player_new(NULL, team, position);
+        list_push(players, NODE_DATA_FROM_PTR(player));
+        cr_assert_eq(players->len, i + 1);
+    }
+    cr_assert_eq(players->len, 10);
+    list_clear(players, &player_free_as_node_data);
+    cr_assert_eq(players->len, 0);
+    list_free(players, NULL);
     team_free(team);
 }

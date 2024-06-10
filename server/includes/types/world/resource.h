@@ -9,6 +9,23 @@
 
 #include <stddef.h>
 #include "chrono.h"
+#include "types/vector2.h"
+
+// @brief Default next generation delay
+#define RES_MANAGER_NEXT_GENERATION_DELAY 20
+
+#define RES_MANAGER_SET_LIM(m, r) ()
+
+
+#define RES_FOOD_DENSITY 0.5f
+#define RES_LINEMATE_DENSITY 0.3f
+#define RES_DERAUMERE_DENSITY 0.15f
+#define RES_SIBUR_DENSITY 0.1f
+#define RES_MENDIANE_DENSITY 0.1f
+#define RES_PHIRAS_DENSITY 0.08f
+#define RES_THYSTAME_DENSITY 0.05f
+
+#define RES
 
 // @brief The enum representing the type of resource
 typedef enum resource_e {
@@ -31,21 +48,17 @@ typedef struct resource_stat_s {
 } resource_stat_t;
 
 // @brief Represent all data relative to Trantor resources management
-typedef struct resource_manager_s {
+typedef struct resources_manager_s {
     // @brief Statistics of resources in the world
     resource_stat_t stats[RES_LEN];
     // @brief Time before next generation of resources
     time_unit_t next_generation;
-} resource_manager_t;
+} resources_manager_t;
 
 /**
- * @brief Create a new resource manager
- * @return resource manager
+ * @brief Initialize a resources manager
+ * @param manager Resources manager to initialize
+ * @param map_size Size of the map to compute resources proportions
  */
-resource_manager_t *resource_manager_new(void);
-
-/**
- * @brief Free a resource manager
- * @param manager The resource manager to free
- */
-void resource_manager_free(resource_manager_t *manager);
+void resources_manager_init(resources_manager_t *manager,
+    vector2u_t map_size);

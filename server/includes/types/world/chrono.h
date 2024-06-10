@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <stddef.h>
 #include <sys/time.h>
 
 // @brief Represent a time unit of Trantor world
@@ -18,8 +19,12 @@ typedef struct chrono_s {
     // @brief Stopped time of chrono
     struct timeval stopped_at;
     // @brief Frequency of world
-    float frequency;
+    size_t frequency;
 } chrono_t;
 
-// @brief Initialize a chrono with a frequency
-void chrono_init(chrono_t *chrono, float frequency);
+/**
+ * @brief Initialize a chrono
+ * @param chrono Chrono to initialize
+ * @param frequency Frequency of the chrono
+ */
+void chrono_init(chrono_t *chrono, size_t frequency);

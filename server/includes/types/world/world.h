@@ -8,27 +8,10 @@
 #pragma once
 
 #include <stddef.h>
+#include "map.h"
 #include "chrono.h"
-#include "../list.h"
 #include "resource.h"
-
-// @brief Structure representing a Trantorian map cell
-typedef struct map_cell_s {
-    // @brief List of players references currently on the cell
-    list_t *players;
-    // @brief List of resources on the cell
-    size_t resources[RES_LEN];
-    // @brief List of eggs on the cell
-    list_t *eggs;
-} map_cell_t;
-
-// @brief Structure representing a Trantorian map
-typedef struct map_s {
-    // @brief Size of the map
-    vector2u_t size;
-    // @brief Cells of the map
-    map_cell_t **cells;
-} map_t;
+#include "types/list.h"
 
 // @brief Structure representing a Trantorian world
 typedef struct world_s {
@@ -39,9 +22,9 @@ typedef struct world_s {
     // @brief List of players in the world
     list_t *players;
     // @brief Clock of the world
-    chrono_t clock;
+    chrono_t chrono;
     // @brief Resources manager of the world
-    resource_manager_t *resources_manager;
+    resources_manager_t resources_manager;
     // @brief Delay before next predictable event in world
     time_unit_t next_event_delay;
     // @brief List of incantations in the world
@@ -50,16 +33,14 @@ typedef struct world_s {
 
 /**
  * @brief Create a new trantorian world
- * @param width Width of the world
- * @param height Height of the world
+ * @param map_size Size of the world map
  * @param frequency Frequency of the world clock
  * @return world structure
  */
-world_t *world_new(int width, int height, float frequency);
+world_t *world_new(vector2u_t map_size, size_t frequency);
 
-// TODO : Add free of incantations list in the world free function
 /**
  * @brief Free a trantorian world
- * @param world
+ * @param world World to free
  */
 void world_free(world_t *world);

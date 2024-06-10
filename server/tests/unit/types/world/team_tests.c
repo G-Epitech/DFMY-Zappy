@@ -9,7 +9,7 @@
 #include "clcc/modules/stdlib.h"
 #include "types/world/team.h"
 
-Test(team_new_tests, simple_new)
+Test(team_tests, simple_new)
 {
     team_t *team = team_new("Team1", 1);
 
@@ -20,14 +20,14 @@ Test(team_new_tests, simple_new)
     team_free(team);
 }
 
-Test(team_new_tests, new_team_with_team_struct_malloc_fail)
+Test(team_tests, new_team_with_team_struct_malloc_fail)
 {
     clcc_return_now(calloc, NULL);
     cr_assert_null(team_new("Team1", 1));
     clcc_disable_control(calloc);
 }
 
-Test(team_new_tests, new_team_with_team_list_malloc_fail)
+Test(team_tests, new_team_with_team_list_malloc_fail)
 {
     clcc_return_value_after(malloc, NULL, 1);
     clcc_enable_control(malloc);
@@ -35,16 +35,26 @@ Test(team_new_tests, new_team_with_team_list_malloc_fail)
     clcc_disable_control(malloc);
 }
 
-Test(team_free_tests, simple_free)
+Test(team_tests, simple_free)
 {
     team_t *team = team_new("Team1", 1);
 
     team_free(team);
 }
 
-Test(team_free_tests, free_as_node_data)
+Test(team_tests, free_list_of_eggs)
 {
-    team_t *team = team_new("Team1", 1);
+    team_t *team = NULL;
+    list_t *teams = list_new();
 
-    team_free_as_node_data(team);
+    cr_assert_eq(teams->len, 0);
+    for (int i = 0; i < 10; i++) {
+        team = team_new("Team1", 2);
+        list_push(teams, NODE_DATA_FROM_PTR(team));
+        cr_assert_eq(teams->len, i + 1);
+    }
+    cr_assert_eq(teams->len, 10);
+    list_clear(teams, &team_free_as_node_data);
+    cr_assert_eq(teams->len, 0);
+    list_free(teams, NULL);
 }

@@ -11,7 +11,8 @@
 
 Test(world_new_tests, simple_new)
 {
-    world_t *world = world_new(10, 10, 5.0f);
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
 
     cr_assert_eq(world->map->size.x, 10);
     cr_assert_eq(world->map->size.y, 10);
@@ -24,40 +25,50 @@ Test(world_new_tests, simple_new)
 
 Test(world_new_tests, world_structure_alloc_fail)
 {
+    vector2u_t size = { 10, 10 };
+
     clcc_return_now(calloc, NULL);
-    cr_assert_null(world_new(10, 10, 5.0f));
+    cr_assert_null(world_new(size, 100));
     clcc_disable_control(calloc);
 }
 
 Test(world_new_tests, map_structure_alloc_fail)
 {
+    vector2u_t size = { 10, 10 };
+
     clcc_return_value_after(calloc, NULL, 1);
     clcc_enable_control(calloc);
-    cr_assert_null(world_new(10, 10, 5.0f));
+    cr_assert_null(world_new(size, 100));
     clcc_disable_control(calloc);
 }
 
 Test(world_new_tests, map_cell_structure_alloc_fail)
 {
+    vector2u_t size = { 10, 10 };
+
     clcc_return_value_after(calloc, NULL, 2);
     clcc_enable_control(calloc);
-    cr_assert_null(world_new(10, 10, 5.0f));
+    cr_assert_null(world_new(size, 100));
     clcc_disable_control(calloc);
 }
 
 Test(world_new_tests, map_cell_row_alloc_fail)
 {
+    vector2u_t size = { 10, 10 };
+
     clcc_return_value_after(calloc, NULL, 3);
     clcc_enable_control(calloc);
-    cr_assert_null(world_new(10, 10, 5.0f));
+    cr_assert_null(world_new(size, 100));
     clcc_disable_control(calloc);
 }
 
 Test(world_new_tests, map_single_cell_lists_alloc_fail)
 {
+    vector2u_t size = { 10, 10 };
+
     clcc_return_now(malloc, NULL);
     clcc_enable_control(malloc);
-    cr_assert_null(world_new(10, 10, 5.0f));
+    cr_assert_null(world_new(size, 100));
     clcc_disable_control(malloc);
 }
 

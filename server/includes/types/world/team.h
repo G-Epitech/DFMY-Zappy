@@ -40,4 +40,4 @@ void team_free(team_t *team);
  * @brief Free a team as node data
  * @param data The team to free
  */
-void team_free_as_node_data(void *data);
+void team_free_as_node_data(node_data_t data);

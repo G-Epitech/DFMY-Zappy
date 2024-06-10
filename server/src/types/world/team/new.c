@@ -18,7 +18,9 @@ team_t *team_new(char *name, size_t min_slots)
     team->name = strdup(name);
     team->players = list_new();
     team->eggs = list_new();
-    if (!team->players || !team->eggs || !team->name)
+    if (!team->players || !team->eggs || !team->name) {
+        team_free(team);
         return NULL;
+    }
     return team;
 }

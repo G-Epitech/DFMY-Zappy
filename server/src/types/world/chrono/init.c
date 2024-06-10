@@ -7,7 +7,7 @@
 
 #include "types/world/chrono.h"
 
-void chrono_init(chrono_t *chrono, float frequency)
+void chrono_init(chrono_t *chrono, size_t frequency)
 {
     chrono->started_at = (struct timeval){0};
     chrono->stopped_at = (struct timeval){0};

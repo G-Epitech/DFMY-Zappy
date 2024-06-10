@@ -13,7 +13,7 @@ void player_free(player_t *player)
         free(player);
 }
 
-void player_free_as_node_data(void *data)
+void player_free_as_node_data(node_data_t data)
 {
-    player_free((player_t *)data);
+    player_free(NODE_DATA_TO_PTR(data, player_t *));
 }

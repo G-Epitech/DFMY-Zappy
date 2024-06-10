@@ -3,9 +3,10 @@ target_sources(zappy_server_core PUBLIC
         free.c
 )
 
-add_subdirectory(eggs)
-add_subdirectory(players)
-add_subdirectory(teams)
+add_subdirectory(egg)
+add_subdirectory(player)
+add_subdirectory(team)
 add_subdirectory(chrono)
-add_subdirectory(resource)
 add_subdirectory(incantation)
+add_subdirectory(resources_manager)
+add_subdirectory(map)

@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "types/list.h"
+
 // @brief Buffer writing section size for emission
 #define EMISSION_BUFF_SIZE 4096
 
@@ -32,3 +34,9 @@ emission_t *emission_new(char *buffer, size_t buffer_size);
  * @param emission Emission to free
  */
 void emission_free(emission_t *emission);
+
+/**
+ * @brief Free given emission as node data
+ * @param data Data to free as node data
+ */
+void emission_free_as_node_data(node_data_t data);

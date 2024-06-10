@@ -13,7 +13,7 @@ void egg_free(egg_t *egg)
         free(egg);
 }
 
-void egg_free_as_node_data(void *data)
+void egg_free_as_node_data(node_data_t data)
 {
-    egg_free((egg_t *)data);
+    egg_free(NODE_DATA_TO_PTR(data, egg_t *));
 }

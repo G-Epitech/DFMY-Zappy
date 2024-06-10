@@ -8,12 +8,10 @@
 #pragma once
 
 #include "list.h"
+#include "types/world/chrono.h"
 
-// TODO: Temporary player definition
-typedef void *player_t;
-
-// TODO: Temporary time_unit definition
-typedef void *time_unit_t;
+// Forward declaration
+typedef struct player_s player_t;
 
 // Frozen state of a player
 typedef enum frozen_state_e {

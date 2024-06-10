@@ -8,12 +8,11 @@
 #pragma once
 
 #include <stddef.h>
-#include "../list.h"
 #include "team.h"
 #include "resource.h"
-
-// TODO: remove once the player controller is implemented
-typedef float player_controller_t;
+#include "types/list.h"
+#include "types/vector2.h"
+#include "types/controller.h"
 
 // @brief Structure representing a Trantorian player
 typedef struct player_s {
@@ -51,4 +50,4 @@ void player_free(player_t *player);
  * @brief Free a player as node data
  * @param data Player structure to free
  */
-void player_free_as_node_data(void *data);
+void player_free_as_node_data(node_data_t data);
