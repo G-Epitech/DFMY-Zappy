@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2024
 ** DFMY-Zappy
 ** File description:
-** List
+** list
 */
 
 #pragma once
@@ -29,6 +29,19 @@ typedef struct s_list {
  * @return Created list
  */
 void list_init(list_t *list);
+
+/**
+ * @brief Create a new list
+ * @return Created list
+ */
+list_t *list_new(void);
+
+/**
+ * @brief Free given list and all its nodes with given freer if specified.
+ * @param list List to free
+ * @param freer freer to call on each node
+ */
+void list_free(list_t *list, node_freer_t freer);
 
 /**
  * @brief Free given list and all its nodes with given freer if specified.

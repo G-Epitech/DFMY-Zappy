@@ -14,7 +14,7 @@ static void free_ptr_from_node_data(node_data_t data)
     free(data.ptr);
 }
 
-Test(types_list, new_list)
+Test(types_list, init_list)
 {
     list_t list;
 
@@ -194,4 +194,24 @@ Test(types_list, list_push_new_node_fail)
     cr_assert(list.len == 0);
     list_clear(&list, NULL);
     clcc_disable_control(malloc);
+}
+
+Test(types_list, new_list)
+{
+    list_t *list = list_new();
+
+    cr_assert(list != NULL);
+    list_free(list, NULL);
+}
+
+Test(types_list, new_list_with_malloc_fail)
+{
+    clcc_return_now(malloc, NULL);
+    cr_assert_null(list_new());
+    clcc_disable_control(malloc);
+}
+
+Test(types_list, free_list)
+{
+    list_free(NULL, NULL);
 }
