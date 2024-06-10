@@ -12,7 +12,7 @@
 
 Test(controller_tests, init_controller)
 {
-    controller_t controller;
+    controller_t controller = { 0 };
 
     controller_init(&controller, 12);
     cr_assert_eq(controller.generic.type, CTRL_UNKNOWN);
