@@ -6,7 +6,7 @@
 */
 
 #include <string.h>
-#include "types/team.h"
+#include "types/world/team.h"
 
 team_t *team_new(char *name, size_t min_slots)
 {

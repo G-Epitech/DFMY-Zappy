@@ -7,7 +7,7 @@
 
 #include <criterion/criterion.h>
 #include "clcc/modules/stdlib.h"
-#include "types/player.h"
+#include "types/world/player.h"
 
 Test(player_new_tests, simple_new)
 {

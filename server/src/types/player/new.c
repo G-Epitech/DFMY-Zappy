@@ -6,7 +6,7 @@
 */
 
 #include <memory.h>
-#include "types/player.h"
+#include "types/world/player.h"
 
 player_t *player_new(player_controller_t *controller, team_t *team,
     vector2u_t position)

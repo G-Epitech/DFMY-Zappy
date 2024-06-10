@@ -7,7 +7,7 @@
 
 #include <criterion/criterion.h>
 #include "clcc/modules/stdlib.h"
-#include "types/team.h"
+#include "types/world/team.h"
 
 Test(team_new_tests, simple_new)
 {

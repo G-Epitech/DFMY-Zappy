@@ -8,7 +8,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "list.h"
+#include "../list.h"
 #include "team.h"
 #include "resource.h"
 

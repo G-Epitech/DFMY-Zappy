@@ -9,7 +9,7 @@
 
 #include <stddef.h>
 #include "chrono.h"
-#include "list.h"
+#include "../list.h"
 #include "resource.h"
 
 // @brief Structure representing a Trantorian map cell

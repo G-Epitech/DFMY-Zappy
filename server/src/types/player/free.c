@@ -5,7 +5,7 @@
 ** Player new
 */
 
-#include "types/player.h"
+#include "types/world/player.h"
 
 void player_free(player_t *player)
 {

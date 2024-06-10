@@ -5,7 +5,7 @@
 ** Team free
 */
 
-#include "types/team.h"
+#include "types/world/team.h"
 
 void team_free(team_t *team)
 {

@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <memory.h>
-#include "types/resource.h"
+#include "types/world/resource.h"
 
 static void resource_manager_init_stats(resource_manager_t *manager)
 {

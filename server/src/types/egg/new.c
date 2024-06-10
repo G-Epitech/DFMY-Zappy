@@ -5,7 +5,7 @@
 ** Egg new
 */
 
-#include "types/egg.h"
+#include "types/world/egg.h"
 
 egg_t *egg_new(team_t *team, vector2u_t position)
 {

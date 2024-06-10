@@ -6,7 +6,7 @@
 */
 
 #include <stdlib.h>
-#include "types/resource.h"
+#include "types/world/resource.h"
 
 void resource_manager_free(resource_manager_t *manager)
 {

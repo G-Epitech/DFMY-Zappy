@@ -6,7 +6,7 @@
 */
 
 #include <memory.h>
-#include "types/world.h"
+#include "types/world/world.h"
 
 static bool map_cell_init(map_cell_t *cell)
 {

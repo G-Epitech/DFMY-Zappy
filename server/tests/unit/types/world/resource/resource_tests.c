@@ -7,7 +7,7 @@
 
 #include <criterion/criterion.h>
 #include "clcc/modules/stdlib.h"
-#include "types/resource.h"
+#include "types/world/resource.h"
 
 Test(resource_manager_new_tests, simple_new)
 {

@@ -5,9 +5,9 @@
 ** World free
 */
 
-#include "types/team.h"
-#include "types/player.h"
-#include "types/world.h"
+#include "types/world/team.h"
+#include "types/world/player.h"
+#include "types/world/world.h"
 
 static void map_cell_free(map_cell_t cell)
 {

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "list.h"
+#include "../list.h"
 
 // @brief Structure representing a Trantorian team
 typedef struct team_s {

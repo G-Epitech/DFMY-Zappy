@@ -7,8 +7,8 @@
 
 #include <criterion/criterion.h>
 #include "clcc/modules/stdlib.h"
-#include "types/egg.h"
-#include "types/team.h"
+#include "types/world/egg.h"
+#include "types/world/team.h"
 
 Test(egg_new_tests, simple_new)
 {

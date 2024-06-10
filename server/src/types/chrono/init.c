@@ -5,7 +5,7 @@
 ** chrono.c
 */
 
-#include "types/chrono.h"
+#include "types/world/chrono.h"
 
 void chrono_init(chrono_t *chrono, float frequency)
 {

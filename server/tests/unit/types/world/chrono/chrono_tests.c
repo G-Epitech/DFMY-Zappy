@@ -6,7 +6,7 @@
 */
 
 #include <criterion/criterion.h>
-#include "types/chrono.h"
+#include "types/world/chrono.h"
 
 Test(chrono_init_tests, simple_init)
 {

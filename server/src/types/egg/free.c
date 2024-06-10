@@ -5,7 +5,7 @@
 ** Egg free
 */
 
-#include "types/egg.h"
+#include "types/world/egg.h"
 
 void egg_free(egg_t *egg)
 {
