@@ -736,7 +736,7 @@ class Hamster:
                         food_on_ground -= 1
                 else:
                     self.debug("No food on ground")
-                    if attempt > 2:
+                    if attempt > 5:
                         break
                     attempt += 1
             except Exception as e:
@@ -850,6 +850,7 @@ class Hamster:
             if not third_case_list:
                 raise Exception("Invalid third element in vision")
             self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
+            self.walk_forward()
             self.walk_take_object(third_case_list)
             second_case = vision[1].strip()
             second_case_list = second_case.split(" ")
@@ -863,8 +864,7 @@ class Hamster:
             if not fourth_case_list:
                 fourth_case_list = []
             self.debug(f"Fourth case: {fourth_case_list}", COLOR_BLUE)
-            if len(second_case_list) == len(fourth_case_list):
-                self.walk_forward()
+            if (len(second_case_list) == len(fourth_case_list)) or (len(third_case_list) > len(second_case_list) and len(third_case_list) > len(fourth_case_list)):
                 return
             if len(second_case_list) > len(fourth_case_list):
                 self.walk_rotate_left()
@@ -957,7 +957,7 @@ class Hamster:
         self.init_hamster()
         max_number_of_hamsters = 6
 
-        while not self.dead and (max_number_of_hamsters > 0 or not self.sync_with_other_hamsters):
+        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0):
             try:
                 for _ in range(10):
                     self.update_inventory()
@@ -1005,7 +1005,7 @@ class Hamster:
                         self.debug("I'm the mother", COLOR_GREEN)
                         if self.fill_empty_slots():
                             self.debug("Filled empty slots")
-                        elif attemps < 1:
+                        elif len(self.hamsters) < 6:
                             self.debug("I'm the mother and I need to reproduce")
                             self.reproduce()
                             attemps += 1
