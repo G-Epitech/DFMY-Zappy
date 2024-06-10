@@ -1,8 +1,0 @@
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/CMakeFiles/edit_cache.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/CMakeFiles/rebuild_cache.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/CMakeFiles/zappy_gui_src.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/CMakeFiles/zappy_gui.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/CMakeFiles/edit_cache.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/CMakeFiles/rebuild_cache.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/app/CMakeFiles/edit_cache.dir
-/Users/math/Documents/Work/Epitech/tek2/zappy/graphic/src/app/CMakeFiles/rebuild_cache.dir
