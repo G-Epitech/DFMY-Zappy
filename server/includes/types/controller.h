@@ -97,3 +97,19 @@ void controller_free(controller_t *controller);
  * @param data Node data to free as controller
  */
 void controller_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Emit the first emission of the controller
+ * @param controller Controller to emit
+ */
+void controller_emit(controller_t *controller);
+
+/**
+ * @brief Add an emission to the controller
+ * @param controller Controller to add the emission to
+ * @param buffer Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_add_emission(controller_t *controller, char *buffer,
+    size_t buffer_size);

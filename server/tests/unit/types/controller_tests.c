@@ -6,9 +6,13 @@
 */
 
 #include <criterion/criterion.h>
+#include <criterion/redirect.h>
+#include <unistd.h>
 #include "clcc/modules/stdlib.h"
 #include "types/list.h"
 #include "types/controller.h"
+#include "types/emission.h"
+
 
 Test(controller_tests, init_controller)
 {
@@ -76,4 +80,43 @@ Test(controller_tests, free_list_of_controllers)
     cr_assert_eq(list.len, 3);
     list_clear(&list, &controller_free_as_node_data);
     cr_assert_eq(list.len, 0);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    controller_add_emission(controller, buffer, 13);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    list_free(controller->generic.emissions, &emission_free_as_node_data);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    clcc_return_now(calloc, NULL);
+    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    clcc_disable_control(calloc);
+}
+
+Test(controller_emissions_tests, controller_emit)
+{
+    controller_t *controller = controller_new(STDOUT_FILENO);
+    char *buffer = strdup("Hello World");
+    FILE* local_stdout = cr_get_redirected_stdout();
+    char buffer_stdout[10000];
+
+    controller_add_emission(controller, buffer, 13);
+    memset(buffer_stdout, 0, sizeof(buffer_stdout));
+    controller_emit(controller);
+    fflush(local_stdout);
+    fflush(stdout);
+    fread(buffer_stdout, sizeof(char), sizeof(buffer), local_stdout);
+    cr_assert_str_eq(buffer_stdout, "Hello World");
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    list_free(controller->generic.emissions, &emission_free_as_node_data);
 }
