@@ -14,28 +14,47 @@
 // @brief Default next generation delay
 #define RES_MANAGER_NEXT_GENERATION_DELAY 20
 
-#define RES_MANAGER_SET_LIM(m, r) ()
+// @brief Imprecision limit for resource generation
+#define RES_LIMIT_IMPRECISION 1e-3f
 
-
+// @brief Density of food
 #define RES_FOOD_DENSITY 0.5f
-#define RES_LINEMATE_DENSITY 0.3f
-#define RES_DERAUMERE_DENSITY 0.15f
-#define RES_SIBUR_DENSITY 0.1f
-#define RES_MENDIANE_DENSITY 0.1f
-#define RES_PHIRAS_DENSITY 0.08f
-#define RES_THYSTAME_DENSITY 0.05f
 
-#define RES
+// @brief Density of linemate resource
+#define RES_LINEMATE_DENSITY 0.3f
+
+// @brief Density of deraumere resource
+#define RES_DERAUMERE_DENSITY 0.15f
+
+// @brief Density of sibur resource
+#define RES_SIBUR_DENSITY 0.1f
+
+// @brief Density of mendiane resource
+#define RES_MENDIANE_DENSITY 0.1f
+
+// @brief Density of phiras resource
+#define RES_PHIRAS_DENSITY 0.08f
+
+// @brief Density of thystame resource
+#define RES_THYSTAME_DENSITY 0.05f
 
 // @brief The enum representing the type of resource
 typedef enum resource_e {
+    // @brief Food resource
     RES_FOOD,
+    // @brief Linemate resource
     RES_LINEMATE,
+    // @brief Deraumere resource
     RES_DERAUMERE,
+    // @brief Sibur resource
     RES_SIBUR,
+    // @brief Mendiane resource
     RES_MENDIANE,
+    // @brief Phiras resource
     RES_PHIRAS,
+    // @brief Thystame resource
     RES_THYSTAME,
+    // @brief Number of resources
     RES_LEN
 } resource_t;
 

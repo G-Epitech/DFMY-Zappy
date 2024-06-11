@@ -6,11 +6,6 @@
 */
 
 #include "app.h"
-#include "types/controller.h"
-#include "types/request.h"
-#include "types/emission.h"
-#include "types/server.h"
-#include "types/world/incantation.h"
 
 int main(int argc, char **argv)
 {

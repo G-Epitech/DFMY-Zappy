@@ -6,4 +6,5 @@ target_sources(zappy_server_tests PUBLIC
         team_tests.c
         resource_tests.c
         incantation_tests.c
+        map_tests.c
 )

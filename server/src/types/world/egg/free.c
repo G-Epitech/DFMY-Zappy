@@ -9,8 +9,7 @@
 
 void egg_free(egg_t *egg)
 {
-    if (egg)
-        free(egg);
+    free(egg);
 }
 
 void egg_free_as_node_data(node_data_t data)

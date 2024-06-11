@@ -20,10 +20,15 @@ static const float resources_limits[RES_LEN] = {
 
 static size_t get_resource_limit(resource_t resource, vector2u_t map_size)
 {
-    return (size_t) ceilf((float)
-        (map_size.x * map_size.y)
-        * resources_limits[resource]
-    );
+    float map_factor = (float) (map_size.x * map_size.y);
+    float limit = map_factor * resources_limits[resource];
+    float rounded_limit = roundf(limit);
+
+    if (fabsf(limit - rounded_limit) < RES_LIMIT_IMPRECISION) {
+        return (size_t) rounded_limit;
+    } else {
+        return (size_t) ceilf(limit);
+    }
 }
 
 void resources_manager_init(resources_manager_t *manager, vector2u_t map_size)

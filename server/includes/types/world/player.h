@@ -14,6 +14,9 @@
 #include "types/vector2.h"
 #include "types/controller.h"
 
+// @brief Number of life units per food collected
+#define PLAYER_LIFE_UNITS_PER_FOOD 126
+
 // @brief Structure representing a Trantorian player
 typedef struct player_s {
     // @brief Inventory of player resources
@@ -35,7 +38,7 @@ typedef struct player_s {
  * @param controller Player controller
  * @param team Player team
  * @param position Player position
- * @return
+ * @return Created player or NULL if an error occurred
  */
 player_t *player_new(player_controller_t *controller, team_t *team,
     vector2u_t position);

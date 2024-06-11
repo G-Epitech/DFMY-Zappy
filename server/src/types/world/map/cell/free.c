@@ -11,8 +11,6 @@ void map_cell_free(map_cell_t *cell)
 {
     if (!cell)
         return;
-    if (cell->players)
-        list_free(cell->players, NULL);
-    if (cell->eggs)
-        list_free(cell->eggs, NULL);
+    list_free(cell->players, NULL);
+    list_free(cell->eggs, NULL);
 }

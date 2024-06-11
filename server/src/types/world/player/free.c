@@ -9,8 +9,7 @@
 
 void player_free(player_t *player)
 {
-    if (player)
-        free(player);
+    free(player);
 }
 
 void player_free_as_node_data(node_data_t data)

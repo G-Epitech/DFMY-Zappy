@@ -18,7 +18,7 @@ Test(player_new_tests, simple_new)
     cr_assert_eq(player->team, team);
     cr_assert_eq(player->position.x, 10);
     cr_assert_eq(player->position.y, 5);
-    cr_assert_eq(player->lives, 160);
+    cr_assert_eq(player->lives, 1260);
     cr_assert_eq(player->level, 1);
     cr_assert_null(player->controller);
     player_free(player);
