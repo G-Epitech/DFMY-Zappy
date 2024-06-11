@@ -41,13 +41,47 @@ static void log_current_time(void)
     printf("\033[3;90m%s\033[0m ", buf);
 }
 
-void log_message(log_level_t level, const char *format, ...)
+static void log_message(log_level_t level, const char *format,
+    va_list args)
+{
+    log_current_time();
+    log_handle_level(level);
+    vfprintf(stdout, format, args);
+    fflush(stdout);
+}
+
+void log_debug(const char *format, ...)
 {
     va_list args;
 
-    log_current_time();
-    log_handle_level(level);
     va_start(args, format);
-    vfprintf(stdout, format, args);
+    log_message(DEBUG, format, args);
+    va_end(args);
+}
+
+void log_info(const char *format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    log_message(INFO, format, args);
+    va_end(args);
+}
+
+void log_warn(const char *format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    log_message(WARN, format, args);
+    va_end(args);
+}
+
+void log_error(const char *format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    log_message(ERROR, format, args);
     va_end(args);
 }

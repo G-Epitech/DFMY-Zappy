@@ -120,11 +120,3 @@ bool args_parse_frequency_option(args_parser_t *parser, args_t *args);
  * @return true if the option was parsed, false otherwise
  */
 bool args_parse_help_option(args_parser_t *parser, args_t *args);
-
-/**
- * @brief Parse verbose option
- * @param parser Parser instance
- * @param args Arguments to fill
- * @return true if the option was parsed, false otherwise
- */
-bool args_parse_verbose_option(args_parser_t *parser, args_t *args);
