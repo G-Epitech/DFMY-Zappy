@@ -12,6 +12,12 @@ target_include_directories(zappy_server_core PUBLIC includes)
 target_link_libraries(zappy_server_core m)
 add_subdirectory(src)
 
+add_library(zappy_server_common STATIC)
+target_include_directories(zappy_server_common PUBLIC common/includes)
+add_subdirectory(common)
+
+target_link_libraries(zappy_server_core zappy_server_common)
+
 add_executable(zappy_server main.c)
 target_link_libraries(zappy_server zappy_server_core)
 target_include_directories(zappy_server PUBLIC includes)
