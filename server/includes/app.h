@@ -7,8 +7,22 @@
 
 #pragma once
 
+#include <stdbool.h>
+
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
+#define APP_RUNNING (*app_stopped() == false)
+
+/**
+ * @brief Provide access to the application state
+ * @return Current value of the application state
+ */
+bool *app_stopped(void);
+
+/**
+ * @brief Stop the application
+ */
+void app_stop(void);
 
 /**
  * @brief Main function of server

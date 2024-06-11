@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** DFMY-Zappy
+** zappy_server
 ** File description:
 ** main.c
 */

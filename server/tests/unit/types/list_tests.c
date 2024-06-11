@@ -215,3 +215,16 @@ Test(types_list, free_list)
 {
     list_free(NULL, NULL);
 }
+
+Test(types_list, clear_list)
+{
+    list_t list;
+    char *str = "HELLO";
+
+    list_init(&list);
+    cr_assert_eq(list.len, 0);
+    list_push(&list, NODE_DATA_FROM_PTR(str));
+    cr_assert_eq(list.len, 1);
+    list_clear(&list, NULL);
+    cr_assert_eq(list.len, 0);
+}
