@@ -6,6 +6,7 @@
 */
 
 #include <unistd.h>
+#include <memory.h>
 #include "types/controller.h"
 #include "types/emission.h"
 #include "types/list.h"
@@ -27,7 +28,8 @@ void controller_emit(controller_t *controller)
     node_t *node = NULL;
     size_t written = 0;
 
-    if (!controller || controller->generic.emissions->len == 0)
+    if (!controller || !controller->generic.emissions ||
+        controller->generic.emissions->len == 0)
         return;
     node = controller->generic.emissions->first;
     emission = NODE_DATA_TO_PTR(node->data, emission_t *);
@@ -37,9 +39,9 @@ void controller_emit(controller_t *controller)
         return;
     if (written == emission->buffer_size) {
         list_erase(controller->generic.emissions, node,
-    &emission_free_as_node_data);
+        &emission_free_as_node_data);
     } else {
-        emission->buffer += written;
+        memmove(emission->buffer, emission->buffer + written, emission->buffer_size - written);
         emission->buffer_size -= written;
     }
 }

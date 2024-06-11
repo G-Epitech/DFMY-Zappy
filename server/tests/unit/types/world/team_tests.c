@@ -44,12 +44,12 @@ Test(team_tests, new_team_with_egg_list_malloc_fail)
     clcc_disable_control(malloc);
 }
 
-/*Test(team_tests, new_team_with_team_name_dup_fail)
+Test(team_tests, new_team_with_team_name_dup_fail)
 {
     clcc_return_now(strdup, NULL);
     cr_assert_null(team_new("Team1", 1));
     clcc_disable_control(strdup);
-}*/
+}
 
 Test(team_tests, simple_free)
 {

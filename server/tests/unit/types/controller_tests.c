@@ -9,6 +9,7 @@
 #include <criterion/redirect.h>
 #include <unistd.h>
 #include "clcc/modules/stdlib.h"
+#include "clcc/modules/unistd.h"
 #include "types/list.h"
 #include "types/controller.h"
 #include "types/emission.h"
@@ -103,7 +104,7 @@ Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail)
     clcc_disable_control(calloc);
 }
 
-Test(controller_emissions_tests, controller_emit)
+Test(controller_emissions_tests, controller_emit, .init = cr_redirect_stdout)
 {
     controller_t *controller = controller_new(STDOUT_FILENO);
     char *buffer = strdup("Hello World");
@@ -113,10 +114,45 @@ Test(controller_emissions_tests, controller_emit)
     controller_add_emission(controller, buffer, 13);
     memset(buffer_stdout, 0, sizeof(buffer_stdout));
     controller_emit(controller);
-    fflush(local_stdout);
     fflush(stdout);
-    fread(buffer_stdout, sizeof(char), sizeof(buffer), local_stdout);
+    fflush(local_stdout);
+    fread(buffer_stdout, sizeof(char), sizeof(buffer_stdout), local_stdout);
     cr_assert_str_eq(buffer_stdout, "Hello World");
     cr_assert_eq(controller->generic.emissions->len, 0);
     list_free(controller->generic.emissions, &emission_free_as_node_data);
+    free(controller);
+}
+
+Test(controller_emissions_tests, null_controller)
+{
+    controller_emit(NULL);
+}
+
+Test(controller_emissions_tests, null_emissions)
+{
+    controller_t *controller = controller_new(0);
+
+    controller->generic.emissions = NULL;
+    controller_emit(controller);
+    free(controller);
+}
+
+Test(controller_emissions_tests, no_emissions)
+{
+    controller_t *controller = controller_new(0);
+
+    controller_emit(controller);
+    free(controller);
+}
+
+Test(controller_emissions_tests, write_error)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    controller_add_emission(controller, buffer, 13);
+    clcc_return_now(write, -1);
+    controller_emit(controller);
+    clcc_disable_control(write);
+    free(controller);
 }
