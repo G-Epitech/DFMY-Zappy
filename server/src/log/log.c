@@ -47,6 +47,7 @@ static void log_message(log_level_t level, const char *format,
     log_current_time();
     log_handle_level(level);
     vfprintf(stdout, format, args);
+    fputc('\n', stdout);
     fflush(stdout);
 }
 

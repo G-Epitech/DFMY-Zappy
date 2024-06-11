@@ -5,7 +5,6 @@
 ** main.c
 */
 
-#include "log.h"
 #include "app.h"
 
 int main(int argc, char **argv)

@@ -30,8 +30,6 @@ typedef struct args_s {
     char **teams;
     // @brief Help requested
     bool help;
-    // @brief Verbose mode
-    bool verbose;
 } args_t;
 
 // @brief Function pointer to parse the options
