@@ -8,10 +8,7 @@
 #include "app/App.hpp"
 #include <iostream>
 
-int main(int ac, char **av) {
-    for (int i = 0; i < ac; i++) {
-        std::cout << av[i] << std::endl;
-    }
+int main() {
     try {
         App app;
         app.initApp();
