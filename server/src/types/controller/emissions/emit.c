@@ -15,16 +15,9 @@
 static void controller_handle_emit_write(controller_t *controller,
     node_t *node, emission_t *emission)
 {
-    ssize_t written;
+    ssize_t written = controller_write(controller, emission->buffer,
+        emission->buffer_size);
 
-    written = write(controller->generic.socket, emission->buffer,
-                    emission->buffer_size);
-    if (written == -1) {
-        log_error("Failed to write to %d", controller->generic.socket);
-        return;
-    }
-    log_debug("-> sent %ld of %ld bytes to %d", written, emission->buffer_size,
-              controller->generic.socket);
     if (written == emission->buffer_size) {
         list_erase(controller->generic.emissions, node,
             &emission_free_as_node_data);

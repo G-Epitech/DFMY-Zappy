@@ -26,25 +26,29 @@ static void server_event_handle_propagate_fail(controller_t *controller,
     controller_add_emission(controller, buffer, buffer_size);
 }
 
+static void server_event_handle_write(controller_t *controller,
+    shared_event_t *event, fd_states_t actual)
+{
+    ssize_t write_size;
+
+    if (FD_ISSET(controller->generic.socket, &actual.writable)) {
+        write_size = controller_write(controller,
+            event->buffer, event->buffer_size);
+        if (write_size != event->buffer_size) {
+            server_event_handle_propagate_fail(controller, event, write_size);
+        }
+    }
+}
+
 void server_event_propagate(fd_states_t actual, shared_event_t *event)
 {
     list_t *subscribers = event->subscribers;
     node_t *node = subscribers->first;
     controller_t *controller = NULL;
-    ssize_t write_size;
 
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        write_size = 0;
-        if (FD_ISSET(controller->generic.socket, &actual.writable)) {
-            write_size = write(controller->generic.socket,
-                event->buffer, event->buffer_size);
-        }
-        log_debug("-> sent %ld of %ld bytes to %d", write_size,
-            event->buffer_size, controller->generic.socket);
-        if (write_size != event->buffer_size) {
-            server_event_handle_propagate_fail(controller, event, write_size);
-        }
+        server_event_handle_write(controller, event, actual);
         node = node->next;
     }
 }

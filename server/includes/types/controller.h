@@ -99,6 +99,16 @@ void controller_free(controller_t *controller);
 void controller_free_as_node_data(node_data_t data);
 
 /**
+ * @brief Write to the controller (wrapper around write(2))
+ * @param controller Controller to write to
+ * @param msg Message to write
+ * @param len Message length
+ * @return Number of bytes written or -1 if an error occurred
+ */
+ssize_t controller_write(controller_t *controller, const char *msg,
+    size_t len);
+
+/**
  * @brief Emit the first emission of the controller
  * @param controller Controller to emit
  */
