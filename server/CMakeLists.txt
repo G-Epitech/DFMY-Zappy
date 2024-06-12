@@ -1,5 +1,5 @@
 # Global settings
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
 project(zappy_server C)
 
 set(CMAKE_C_STANDARD 17)
