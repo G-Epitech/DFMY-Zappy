@@ -187,13 +187,16 @@ Test(shared_event_tests, subscribe_all, .init = redirect_all_std)
     controller_t *controller1 = controller_new(0);
     controller_t *controller2 = controller_new(0);
     controller_t *controller3 = controller_new(0);
+    controller_t *controller4 = controller_new(0);
 
     controller1->generic.type = CTRL_PLAYER;
     controller2->generic.type = CTRL_GRAPHIC;
     controller3->generic.type = CTRL_GRAPHIC;
+    controller4->generic.type = CTRL_UNKNOWN;
     list_push(controllers, NODE_DATA_FROM_PTR(controller1));
     list_push(controllers, NODE_DATA_FROM_PTR(controller2));
     list_push(controllers, NODE_DATA_FROM_PTR(controller3));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller4));
     shared_event_subscribe_all(shared_event, controllers);
     cr_assert_eq(shared_event->subscribers->len, 3);
     shared_event_free(shared_event);
