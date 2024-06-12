@@ -11,44 +11,48 @@
 #include <stdbool.h>
 #include "log.h"
 
-static void log_handle_level(log_level_t level)
+static void log_handle_level(log_level_t level, FILE *stream)
 {
     switch (level) {
-        case INFO:
-            printf("\033[1;32m[INFO] \033[0m");
-            break;
         case WARN:
-            printf("\033[1;33m[WARN] \033[0m");
+            fprintf(stream, "\033[1;33m[WARN] \033[0m");
             break;
         case ERROR:
-            printf("\033[1;31m[ERROR] \033[0m");
+            fprintf(stream, "\033[1;31m[ERROR] \033[0m");
             break;
         case DEBUG:
-            printf("\033[1;34m[DEBUG] \033[0m");
+            fprintf(stream, "\033[1;34m[DEBUG] \033[0m");
+            break;
+        default:
+            fprintf(stream, "\033[1;32m[INFO] \033[0m");
             break;
     }
 }
 
-static void log_current_time(void)
+static void log_current_time(FILE *stream)
 {
     time_t now = 0;
-    char buf[20] = {0};
     struct tm *local = NULL;
 
     time(&now);
     local = localtime(&now);
-    strftime(buf, sizeof(buf), "%H:%M:%S", local);
-    printf("\033[3;90m%s\033[0m ", buf);
+    fprintf(stream, "\033[3;90m%02d:%02d:%02d\033[0m ",
+        local->tm_hour,
+        local->tm_min,
+        local->tm_sec
+    );
 }
 
 static void log_message(log_level_t level, const char *format,
     va_list args)
 {
-    log_current_time();
-    log_handle_level(level);
-    vfprintf(stdout, format, args);
-    fputc('\n', stdout);
-    fflush(stdout);
+    FILE *stream = level == ERROR ? stderr : stdout;
+
+    log_current_time(stream);
+    log_handle_level(level, stream);
+    vfprintf(stream, format, args);
+    fputc('\n', stream);
+    fflush(stream);
 }
 
 void log_debug(const char *format, ...)

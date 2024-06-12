@@ -10,6 +10,9 @@
 #include <netinet/in.h>
 #include "list.h"
 
+// @brief Cast a pointer to a sockaddr structure
+#define AS_SOCKADDR(x) ((struct sockaddr*) x)
+
 // @brief Set of file descriptors
 typedef fd_set fd_set_t;
 
@@ -64,6 +67,40 @@ server_t *server_new(void);
  * @param server Server to free
  */
 void server_free(server_t *server);
+
+/**
+ * @brief Setup server socket
+ * @param server Server structure to initialize
+ * @return true If setup was successful
+ * @return false  If an error occurred
+ */
+bool server_setup_socket(server_t *server);
+
+/**
+ * @brief Setup server address
+ * @param server Server structure to initialize
+ * @param port Port to bind to
+ * @return true If setup was successful
+ * @return false  If an error occurred
+ */
+bool server_setup_address(server_t *server, uint16_t port);
+
+/**
+ * @brief Setup server listener
+ * @param server Server structure of which setup listener
+ * @return true If setup was successful
+ * @return false If an error occurred
+ */
+bool server_setup_listener(server_t *server);
+
+/**
+ * @brief Start server
+ * @param server Server to start
+ * @param port Port to bind to
+ * @return true If server was started successfully
+ * @return false If an error occurred
+ */
+bool server_start(server_t *server, uint16_t port);
 
 /**
  * @brief Initialize given file descriptors states
