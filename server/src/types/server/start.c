@@ -50,7 +50,9 @@ bool server_setup_address(server_t *server, uint16_t port)
 
 bool server_setup_listener(server_t *server)
 {
-    if (!server || listen(server->socket, SOMAXCONN) < 0) {
+    if (!server)
+        return false;
+    if (listen(server->socket, SOMAXCONN) < 0) {
         log_error("Unable to listen for connections: %s", strerror(errno));
         return false;
     }
@@ -59,6 +61,8 @@ bool server_setup_listener(server_t *server)
 
 bool server_start(server_t *server, uint16_t port)
 {
+    if (!server)
+        return false;
     if (!server_setup_socket(server) ||
         !server_setup_address(server, port) ||
         !server_setup_listener(server)
