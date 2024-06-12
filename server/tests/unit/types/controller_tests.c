@@ -14,6 +14,11 @@
 #include "types/controller.h"
 #include "types/emission.h"
 
+static void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
 
 Test(controller_tests, init_controller)
 {
@@ -83,7 +88,7 @@ Test(controller_tests, free_list_of_controllers)
     cr_assert_eq(list.len, 0);
 }
 
-Test(controller_emissions_tests, add_emission_to_controller)
+Test(controller_emissions_tests, add_emission_to_controller, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
@@ -94,7 +99,7 @@ Test(controller_emissions_tests, add_emission_to_controller)
     list_free(controller->generic.emissions, &emission_free_as_node_data);
 }
 
-Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail)
+Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
@@ -104,17 +109,17 @@ Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail)
     clcc_disable_control(calloc);
 }
 
-Test(controller_emissions_tests, controller_emit, .init = cr_redirect_stdout)
+Test(controller_emissions_tests, controller_emit, .init = redirect_all_std)
 {
-    controller_t *controller = controller_new(STDOUT_FILENO);
+    controller_t *controller = controller_new(STDERR_FILENO);
     char *buffer = strdup("Hello World");
-    FILE* local_stdout = cr_get_redirected_stdout();
+    FILE* local_stdout = cr_get_redirected_stderr();
     char buffer_stdout[10000];
 
     controller_add_emission(controller, buffer, 13);
     memset(buffer_stdout, 0, sizeof(buffer_stdout));
     controller_emit(controller);
-    fflush(stdout);
+    fflush(stderr);
     fflush(local_stdout);
     fread(buffer_stdout, sizeof(char), sizeof(buffer_stdout), local_stdout);
     cr_assert_str_eq(buffer_stdout, "Hello World");
@@ -128,7 +133,7 @@ Test(controller_emissions_tests, null_controller)
     controller_emit(NULL);
 }
 
-Test(controller_emissions_tests, null_emissions)
+Test(controller_emissions_tests, null_emissions, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
 
@@ -137,7 +142,7 @@ Test(controller_emissions_tests, null_emissions)
     free(controller);
 }
 
-Test(controller_emissions_tests, no_emissions)
+Test(controller_emissions_tests, no_emissions, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
 
@@ -145,7 +150,7 @@ Test(controller_emissions_tests, no_emissions)
     free(controller);
 }
 
-Test(controller_emissions_tests, write_error)
+Test(controller_emissions_tests, write_error, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");

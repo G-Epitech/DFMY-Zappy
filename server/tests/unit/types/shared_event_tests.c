@@ -6,8 +6,15 @@
 */
 
 #include <criterion/criterion.h>
+#include <criterion/redirect.h>
 #include "clcc/modules/stdlib.h"
 #include "types/shared_event.h"
+
+static void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
 
 Test(shared_event_tests, new_shared_event)
 {
@@ -69,4 +76,182 @@ Test(shared_event_tests, free_list_of_events)
     list_clear(list, &shared_event_free_as_node_data);
     cr_assert_eq(list->len, 0);
     list_free(list, NULL);
+}
+
+Test(shared_event_tests, subscribe_to_shared_event)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller = controller_new(0);
+
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    cr_assert_eq(shared_event_subscribe(shared_event, controller), true);
+    cr_assert_eq(shared_event->subscribers->len, 1);
+    controller_free(controller);
+}
+
+Test(shared_event_tests, subscribe_to_shared_event_with_null_shared_event)
+{
+    controller_t *controller = controller_new(0);
+
+    cr_assert_eq(shared_event_subscribe(NULL, controller), false);
+    controller_free(controller);
+}
+
+Test(shared_event_tests, subscribe_to_shared_event_with_null_controller)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+
+    cr_assert_eq(shared_event_subscribe(shared_event, NULL), false);
+    shared_event_free(shared_event);
+}
+
+Test(shared_event_tests, subscribe_all_players, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    controller1->generic.type = CTRL_PLAYER;
+    controller2->generic.type = CTRL_PLAYER;
+    controller3->generic.type = CTRL_GRAPHIC;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller2));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller3));
+    shared_event_subscribe_players(shared_event, controllers);
+    cr_assert_eq(shared_event->subscribers->len, 2);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, subscribe_all_players_fail, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+
+    controller1->generic.type = CTRL_PLAYER;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    clcc_return_now(malloc, NULL);
+    shared_event_subscribe_players(shared_event, controllers);
+    clcc_disable_control(malloc);
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, subscribe_all_grahpics, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    controller1->generic.type = CTRL_PLAYER;
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_GRAPHIC;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller2));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller3));
+    shared_event_subscribe_graphics(shared_event, controllers);
+    cr_assert_eq(shared_event->subscribers->len, 2);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, subscribe_all_grahpics_fail, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    controller1->generic.type = CTRL_GRAPHIC;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    clcc_return_now(malloc, NULL);
+    shared_event_subscribe_graphics(shared_event, controllers);
+    clcc_disable_control(malloc);
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, subscribe_all, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+
+    controller1->generic.type = CTRL_PLAYER;
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_GRAPHIC;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller2));
+    list_push(controllers, NODE_DATA_FROM_PTR(controller3));
+    shared_event_subscribe_all(shared_event, controllers);
+    cr_assert_eq(shared_event->subscribers->len, 3);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, subscribe_all_fail, .init = redirect_all_std)
+{
+    list_t *controllers = list_new();
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+
+    controller1->generic.type = CTRL_PLAYER;
+    list_push(controllers, NODE_DATA_FROM_PTR(controller1));
+    clcc_return_now(malloc, NULL);
+    shared_event_subscribe_all(shared_event, controllers);
+    clcc_disable_control(malloc);
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    shared_event_free(shared_event);
+    list_free(controllers, &controller_free_as_node_data);
+}
+
+Test(shared_event_tests, unsubscribe)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+
+    shared_event_subscribe(shared_event, controller1);
+    cr_assert_eq(shared_event->subscribers->len, 1);
+    shared_event_unsubscribe(shared_event, controller1);
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    shared_event_free(shared_event);
+    controller_free(controller1);
+}
+
+Test(shared_event_tests, unsubscribe_with_null_shared_event)
+{
+    controller_t *controller1 = controller_new(0);
+
+    cr_assert_eq(shared_event_unsubscribe(NULL, controller1), false);
+    controller_free(controller1);
+}
+
+Test(shared_event_tests, unsubscribe_with_null_controller)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+
+    cr_assert_eq(shared_event_unsubscribe(shared_event, NULL), false);
+    shared_event_free(shared_event);
+}
+
+Test(shared_event_tests, unsubscribe_with_no_subscribers)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+
+    cr_assert_eq(shared_event->subscribers->len, 0);
+    cr_assert_eq(shared_event_unsubscribe(shared_event, controller1), false);
+    shared_event_free(shared_event);
+    controller_free(controller1);
 }

@@ -80,4 +80,4 @@ void shared_event_subscribe_all(shared_event_t *event, list_t *controllers);
  * @param event Shared event to remove subscriber
  * @param controller Controller to remove as subscriber
  */
-void shared_event_unsubscribe(shared_event_t *event, controller_t *controller);
+bool shared_event_unsubscribe(shared_event_t *event, controller_t *controller);

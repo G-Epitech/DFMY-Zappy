@@ -9,19 +9,20 @@
 #include "types/controller.h"
 #include "types/shared_event.h"
 
-void shared_event_unsubscribe(shared_event_t *event, controller_t *controller)
+bool shared_event_unsubscribe(shared_event_t *event, controller_t *controller)
 {
     node_t *node = NULL;
     controller_t *sub = NULL;
 
     if (!event || !controller)
-        return;
+        return false;
     node = event->subscribers->first;
     while (node) {
         sub = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (sub == controller) {
             list_pop(event->subscribers, node);
-            return;
+            return true;
         }
     }
+    return false;
 }
