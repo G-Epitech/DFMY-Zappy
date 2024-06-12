@@ -35,7 +35,9 @@ pipeline {
             parallel {
                 stage('Server') {
                     steps {
-                        sh 'docker run --rm -v "$PWD:/mnt/delivery" ghcr.io/epitech/coding-style-checker:latest /mnt/delivery /mnt/reports'
+                        dir('server') {
+                            sh 'docker run --rm -v "$PWD:/mnt/delivery" ghcr.io/epitech/coding-style-checker:latest /mnt/delivery /mnt/reports'
+                        }
                     }
                 }
             }
