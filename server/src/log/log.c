@@ -14,9 +14,6 @@
 static void log_handle_level(log_level_t level, FILE *stream)
 {
     switch (level) {
-        case INFO:
-            fprintf(stream,"\033[1;32m[INFO] \033[0m");
-            break;
         case WARN:
             fprintf(stream, "\033[1;33m[WARN] \033[0m");
             break;
@@ -25,6 +22,9 @@ static void log_handle_level(log_level_t level, FILE *stream)
             break;
         case DEBUG:
             fprintf(stream,"\033[1;34m[DEBUG] \033[0m");
+            break;
+        default:
+            fprintf(stream,"\033[1;32m[INFO] \033[0m");
             break;
     }
 }

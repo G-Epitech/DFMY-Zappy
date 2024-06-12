@@ -6,6 +6,7 @@ enable_testing()
 add_executable(zappy_server_tests)
 
 add_subdirectory(app)
+add_subdirectory(log)
 add_subdirectory(types)
 
 add_library(clcc STATIC IMPORTED)
