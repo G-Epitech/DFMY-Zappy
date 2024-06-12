@@ -34,13 +34,8 @@ pipeline {
         stage('Project linting') {
             parallel {
                 stage('Server') {
-                    agent {
-                        docker {
-                            image 'ghcr.io/epitech/coding-style-checker:latest'
-                        }
-                    }
                     steps {
-                        sh 'check.sh $(pwd)/server $(pwd)'
+                        sh 'docker run --rm -v "$PWD:/mnt/delivery" ghcr.io/epitech/coding-style-checker:latest /mnt/delivery /mnt/reports'
                     }
                 }
             }
