@@ -23,6 +23,7 @@ bool shared_event_unsubscribe(shared_event_t *event, controller_t *controller)
             list_pop(event->subscribers, node);
             return true;
         }
+        node = node->next;
     }
     return false;
 }

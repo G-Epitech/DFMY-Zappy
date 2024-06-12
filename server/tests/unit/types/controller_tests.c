@@ -176,3 +176,11 @@ Test(controller_write_tests, null_controller)
 {
     cr_assert_eq(controller_write(NULL, "Hello World", 11), -1);
 }
+
+Test(controller_write_tests, null_msg)
+{
+    controller_t *controller = controller_new(0);
+
+    cr_assert_eq(controller_write(controller, NULL, 11), -1);
+    free(controller);
+}

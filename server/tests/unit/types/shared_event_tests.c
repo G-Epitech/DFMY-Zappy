@@ -223,7 +223,7 @@ Test(shared_event_tests, unsubscribe)
 
     shared_event_subscribe(shared_event, controller1);
     cr_assert_eq(shared_event->subscribers->len, 1);
-    shared_event_unsubscribe(shared_event, controller1);
+    cr_assert(shared_event_unsubscribe(shared_event, controller1));
     cr_assert_eq(shared_event->subscribers->len, 0);
     shared_event_free(shared_event);
     controller_free(controller1);
@@ -254,4 +254,18 @@ Test(shared_event_tests, unsubscribe_with_no_subscribers)
     cr_assert_eq(shared_event_unsubscribe(shared_event, controller1), false);
     shared_event_free(shared_event);
     controller_free(controller1);
+}
+
+Test(shared_event_tests, unsubscribe_a_non_subscriber)
+{
+    shared_event_t *shared_event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller1 = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+
+    shared_event_subscribe(shared_event, controller1);
+    shared_event_unsubscribe(shared_event, controller2);
+    cr_assert_eq(shared_event->subscribers->len, 1);
+    shared_event_free(shared_event);
+    controller_free(controller1);
+    controller_free(controller2);
 }

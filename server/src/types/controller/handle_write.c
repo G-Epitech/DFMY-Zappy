@@ -20,7 +20,7 @@ ssize_t controller_write(controller_t *controller, const char *msg, size_t len)
         log_error("Failed to write to %d", controller->generic.socket);
     } else {
         log_debug("-> sent %ld of %ld bytes to %d", written, len,
-                  controller->generic.socket);
+            controller->generic.socket);
     }
     return written;
 }

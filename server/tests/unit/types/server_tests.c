@@ -10,7 +10,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include "clcc/modules/sys/socket.h"
+#include "clcc/modules/unistd.h"
 #include "clcc/modules/stdlib.h"
+#include "clcc/modules/string.h"
 #include "types/server.h"
 
 Test(server_tests, init_server)
@@ -323,20 +325,84 @@ Test(server_event_tests, register_event_fail_due_to_list_push, .init = cr_redire
     server_free(server);
 }
 
-Test(server_tests, propagate_event)
+Test(server_tests, propagate_event, .init = cr_redirect_stdout)
 {
     server_t *server = server_new();
     shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
-    controller_t *controller = controller_new(0);
+    controller_t *controller = NULL;
+    int pipefd[2];
 
-    FD_SET(server->socket, &server->fd_actual.writable);
-    cr_assert_not_null(server);
-    cr_assert_not_null(server->events);
+    cr_assert(pipe(pipefd) == 0);
+    controller = controller_new(pipefd[1]);
+    FD_ZERO(&server->fd_actual.writable);
+    FD_SET(controller->generic.socket, &server->fd_actual.writable);
+    server->fd_actual.max = controller->generic.socket;
     cr_assert(shared_event_subscribe(event, controller));
     cr_assert(server_event_register(server, event));
     cr_assert_eq(server->events->len, 1);
-    server_event_propagate(server->fd_actual, event);
-    cr_assert_eq(server->events->len, 0);
+    select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
     fflush(stdout);
+    server_event_propagate_first(server);
+    cr_assert_eq(server->events->len, 0);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    close(pipefd[0]);
+    close(pipefd[1]);
     server_free(server);
 }
+
+Test(server_tests, propagate_event_fail, .init = cr_redirect_stdout)
+{
+    server_t *server = server_new();
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller = NULL;
+    int pipefd[2];
+
+    cr_assert(pipe(pipefd) == 0);
+    controller = controller_new(pipefd[1]);
+    FD_ZERO(&server->fd_actual.writable);
+    FD_SET(controller->generic.socket, &server->fd_actual.writable);
+    server->fd_actual.max = controller->generic.socket;
+    cr_assert(shared_event_subscribe(event, controller));
+    cr_assert(server_event_register(server, event));
+    cr_assert_eq(server->events->len, 1);
+    select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
+    fflush(stdout);
+    clcc_return_now(write, 10);
+    server_event_propagate_first(server);
+    clcc_disable_control(write);
+    cr_assert_eq(server->events->len, 0);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    close(pipefd[0]);
+    close(pipefd[1]);
+    server_free(server);
+}
+
+Test(server_tests, propagate_event_fail_strdup_fail, .init = cr_redirect_stdout)
+{
+    server_t *server = server_new();
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller = NULL;
+    int pipefd[2];
+
+    cr_assert(pipe(pipefd) == 0);
+    controller = controller_new(pipefd[1]);
+    FD_ZERO(&server->fd_actual.writable);
+    FD_SET(controller->generic.socket, &server->fd_actual.writable);
+    server->fd_actual.max = controller->generic.socket;
+    cr_assert(shared_event_subscribe(event, controller));
+    cr_assert(server_event_register(server, event));
+    cr_assert_eq(server->events->len, 1);
+    select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
+    fflush(stdout);
+    clcc_return_now(write, 10);
+    clcc_return_now(strdup, NULL);
+    server_event_propagate_first(server);
+    clcc_disable_control(write);
+    clcc_disable_control(strdup);
+    cr_assert_eq(server->events->len, 0);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    close(pipefd[0]);
+    close(pipefd[1]);
+    server_free(server);
+}
+

@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "types/list.h"
 
 void list_pop(list_t *list, node_t *node)
