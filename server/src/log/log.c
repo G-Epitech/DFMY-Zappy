@@ -21,10 +21,10 @@ static void log_handle_level(log_level_t level, FILE *stream)
             fprintf(stream, "\033[1;31m[ERROR] \033[0m");
             break;
         case DEBUG:
-            fprintf(stream,"\033[1;34m[DEBUG] \033[0m");
+            fprintf(stream, "\033[1;34m[DEBUG] \033[0m");
             break;
         default:
-            fprintf(stream,"\033[1;32m[INFO] \033[0m");
+            fprintf(stream, "\033[1;32m[INFO] \033[0m");
             break;
     }
 }
