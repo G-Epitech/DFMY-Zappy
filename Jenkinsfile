@@ -5,7 +5,9 @@ pipeline {
             stages {
                 stage('Project compilation') {
                     agent {
-                        image 'epitechcontent/epitest-docker'
+                        docker {
+                            image 'epitechcontent/epitest-docker'
+                        }
                     }
                     steps {
                         sh 'make'
@@ -15,7 +17,9 @@ pipeline {
                 }
                 stage('Project linting') {
                     agent {
-                        image 'ghcr.io/epitech/coding-style-checker:latest'
+                        docker {
+                            image 'ghcr.io/epitech/coding-style-checker:latest'
+                        }
                     }
                     steps {
                         sh 'check.sh $(pwd) $(pwd)'
@@ -23,7 +27,9 @@ pipeline {
                 }
                 stage('Project tests') {
                     agent {
-                        image 'epitechcontent/epitest-docker'
+                        docker {
+                            image 'epitechcontent/epitest-docker'
+                        }
                     }
                     steps {
                         sh 'make tests_run'
