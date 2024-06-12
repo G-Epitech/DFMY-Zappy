@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include "log.h"
 #include "types/emission.h"
 #include "types/server.h"
 #include "types/controller.h"
@@ -20,6 +21,8 @@ static void server_event_handle_propagate_fail(controller_t *controller,
     shared_event_unsubscribe(event, controller);
     if (!buffer)
         return;
+    log_info("Failed to propagate event to %d... converting to emission",
+        controller->generic.socket);
     controller_add_emission(controller, buffer, buffer_size);
 }
 
@@ -37,6 +40,8 @@ void server_event_propagate(fd_states_t actual, shared_event_t *event)
             write_size = write(controller->generic.socket,
                 event->buffer, event->buffer_size);
         }
+        log_debug("-> sent %ld of %ld bytes to %d", write_size,
+            event->buffer_size, controller->generic.socket);
         if (write_size != event->buffer_size) {
             server_event_handle_propagate_fail(controller, event, write_size);
         }
@@ -49,6 +54,7 @@ void server_event_propagate_first(server_t *server)
     node_t *node = server->events->first;
     shared_event_t *event = NODE_DATA_TO_PTR(node->data, shared_event_t *);
 
+    log_info("Propagating event: %s", event->buffer);
     server_event_propagate(server->fd_actual, event);
     list_erase(server->events, node, &shared_event_free_as_node_data);
 }
