@@ -1,5 +1,5 @@
 # Project Setup
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.27)
 project(zappy_gui)
 
 # Set Flags

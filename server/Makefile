@@ -28,8 +28,8 @@ clean:
 			@rm -rf $(BUILD_PATH)
 
 fclean:		clean
-			@rm -f ../$(NAME)
-			@rm -f ../$(TESTS_NAME)
+			@rm -f $(NAME)
+			@rm -f $(TESTS_NAME)
 			@rm -rf cmake-build-*
 			@rm -rf build
 
@@ -41,7 +41,7 @@ tests_run:	fclean
 			@$(MAKE) -C tests/libs
 			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
-			@./../$(TESTS_NAME) -j1
+			@./$(TESTS_NAME) -j1
 
 coverage:
 			@gcovr $(COVERAGE_IGNORE)

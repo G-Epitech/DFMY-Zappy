@@ -3,7 +3,9 @@ cmake-build-debug
 server/build
 zappy_server
 zappy_server_tests
+graphic/build
 zappy_gui
+zappy_ai
 *.log
 *.a
 *.o
