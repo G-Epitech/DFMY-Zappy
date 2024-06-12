@@ -65,7 +65,9 @@ void shared_event_subscribe_all(shared_event_t *event, list_t *controllers)
 
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        success = shared_event_subscribe(event, controller);
+        if (controller->generic.type != CTRL_UNKNOWN) {
+            success = shared_event_subscribe(event, controller);
+        }
         node = node->next;
     }
     if (!success) {
