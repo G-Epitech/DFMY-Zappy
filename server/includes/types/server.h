@@ -9,6 +9,7 @@
 
 #include <netinet/in.h>
 #include "list.h"
+#include "shared_event.h"
 
 // @brief Set of file descriptors
 typedef fd_set fd_set_t;
@@ -70,3 +71,23 @@ void server_free(server_t *server);
  * @param states File descriptors states to initialize
  */
 void fd_states_init(fd_states_t *states);
+
+/**
+ * @brief Register given event to server
+ * @param event Event to register
+ * @return Register success status
+ */
+bool server_event_register(server_t *server, shared_event_t *event);
+
+/**
+ * @brief Propagate given event to subscribers
+ * @param actual Actual file descriptor states
+ * @param event Event to propagate
+ */
+void server_event_propagate(fd_states_t actual, shared_event_t *event);
+
+/**
+ * @brief Propagate first event of server
+ * @param server Server to propagate event
+ */
+void server_event_propagate_first(server_t *server);

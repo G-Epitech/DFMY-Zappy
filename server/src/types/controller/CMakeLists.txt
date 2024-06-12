@@ -1,5 +1,6 @@
 target_sources(zappy_server_core PUBLIC
         new.c
         free.c
-        emissions.c
+        emissions/add.c
+        emissions/emit.c
 )

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "list.h"
+#include "controller.h"
 
 // @brief Buffer writing section size for shared event
 #define SHARED_EVENT_BUFF_SIZE 4096
@@ -42,3 +43,41 @@ void shared_event_free(shared_event_t *event);
  * @param data Shared event to free
  */
 void shared_event_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Add a subscriber to given shared event
+ * @param event Shared event to add subscriber
+ * @param controller Controller to add as subscriber
+ * @return Subscribe success status
+ */
+bool shared_event_subscribe(shared_event_t *event, controller_t *controller);
+
+/**
+ * @brief Subscribe all graphical controllers to given shared event
+ * @param event Shared event to subscribe
+ * @param controllers List of controllers
+ */
+void shared_event_subscribe_graphics(shared_event_t *event,
+    list_t *controllers);
+
+/**
+ * @brief Subscribe all player controllers to given shared event
+ * @param event Shared event to subscribe
+ * @param controllers List of controllers
+ */
+void shared_event_subscribe_players(shared_event_t *event,
+    list_t *controllers);
+
+/**
+ * @brief Subscribe all controllers to given shared event
+ * @param event Shared event to subscribe
+ * @param controllers List of controllers
+ */
+void shared_event_subscribe_all(shared_event_t *event, list_t *controllers);
+
+/**
+ * @brief Remove a subscriber from given shared event
+ * @param event Shared event to remove subscriber
+ * @param controller Controller to remove as subscriber
+ */
+void shared_event_unsubscribe(shared_event_t *event, controller_t *controller);

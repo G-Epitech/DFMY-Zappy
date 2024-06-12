@@ -32,6 +32,7 @@ fclean:		clean
 			@rm -f ../$(TESTS_NAME)
 			@rm -rf cmake-build-*
 			@rm -rf build
+			@rm -rf *.log
 
 re:
 			@$(MAKE) fclean
