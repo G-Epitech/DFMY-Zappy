@@ -17,9 +17,9 @@ bool server_event_register(server_t *server, shared_event_t *event)
         return false;
     success = list_push(server->events, NODE_DATA_FROM_PTR(event));
     if (!success) {
-        log_error("Failed to register event \"%s\" to server", event->buffer);
+        log_error("Failed to register event [%s] to server", event->buffer);
     } else {
-        log_info("Registered event \"%s\" to server", event->buffer);
+        log_info("Registered event [%s] to server", event->buffer);
     }
     return success;
 }

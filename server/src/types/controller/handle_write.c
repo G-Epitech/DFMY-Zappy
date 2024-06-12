@@ -19,7 +19,7 @@ ssize_t controller_write(controller_t *controller, const char *msg, size_t len)
     if (written == -1) {
         log_error("Failed to write to %d", controller->generic.socket);
     } else {
-        log_debug("-> sent %ld of %ld bytes to %d", written, len,
+        log_debug("%ldb / %ldb bytes sent to %d", written, len,
             controller->generic.socket);
     }
     return written;

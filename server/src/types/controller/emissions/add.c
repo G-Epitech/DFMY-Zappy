@@ -22,10 +22,10 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     success = list_push(controller->generic.emissions,
         NODE_DATA_FROM_PTR(emission));
     if (!success) {
-        log_error("Failed to add emission %s to controller %d", buffer,
+        log_error("Failed to add emission [%s] to controller %d", buffer,
             controller->generic.socket);
     } else {
-        log_info("Added emission %s to controller %d", buffer,
+        log_info("Added emission [%s] to controller %d", buffer,
             controller->generic.socket);
     }
     return success;

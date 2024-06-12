@@ -58,7 +58,7 @@ void server_event_propagate_first(server_t *server)
     node_t *node = server->events->first;
     shared_event_t *event = NODE_DATA_TO_PTR(node->data, shared_event_t *);
 
-    log_info("Propagating event: %s", event->buffer);
+    log_info("Propagating event [%s]", event->buffer);
     server_event_propagate(server->fd_actual, event);
     list_erase(server->events, node, &shared_event_free_as_node_data);
 }

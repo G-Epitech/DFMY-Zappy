@@ -31,9 +31,10 @@ void shared_event_subscribe_graphics(shared_event_t *event,
         node = node->next;
     }
     if (!success) {
-        log_error("Failed to subscribe graphics to event: %s", event->buffer);
+        log_error("Failed to subscribe graphics to event: [%s]",
+            event->buffer);
     } else {
-        log_info("Subscribed graphics to event: %s", event->buffer);
+        log_info("Subscribed graphics to event: [%s]", event->buffer);
     }
 }
 
@@ -51,9 +52,9 @@ void shared_event_subscribe_players(shared_event_t *event, list_t *controllers)
         node = node->next;
     }
     if (!success) {
-        log_error("Failed to subscribe players to event: %s", event->buffer);
+        log_error("Failed to subscribe players to event: [%s]", event->buffer);
     } else {
-        log_info("Subscribed players to event: %s", event->buffer);
+        log_info("Subscribed players to event: [%s]", event->buffer);
     }
 }
 
@@ -71,8 +72,8 @@ void shared_event_subscribe_all(shared_event_t *event, list_t *controllers)
         node = node->next;
     }
     if (!success) {
-        log_error("Failed to subscribe all to event: %s", event->buffer);
+        log_error("Failed to subscribe all to event: [%s]", event->buffer);
     } else {
-        log_info("Subscribed all to event: %s", event->buffer);
+        log_info("Subscribed all to event: [%s]", event->buffer);
     }
 }
