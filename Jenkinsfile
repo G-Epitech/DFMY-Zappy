@@ -10,9 +10,11 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'make'
-                        sh 'make clean'
-                        sh 'make fclean'
+                        dir('server') {
+                            sh 'make'
+                            sh 'make clean'
+                            sh 'make fclean'
+                        }
                     }
                 }
                 stage('Graphic') {
@@ -20,9 +22,11 @@ pipeline {
                         dockerfile true
                     }
                     steps {
-                        sh 'make'
-                        sh 'make clean'
-                        sh 'make fclean'
+                        dir('graphic') {
+                            sh 'make'
+                            sh 'make clean'
+                            sh 'make fclean'
+                        }
                     }
                 }
             }
