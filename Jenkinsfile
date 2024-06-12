@@ -40,7 +40,9 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'make tests_run'
+                        dir('server') {
+                            sh 'make tests_run'
+                        }
                     }
                 }
                 stage('Graphic') {
@@ -48,7 +50,9 @@ pipeline {
                         dockerfile true
                     }
                     steps {
-                        sh 'make tests_run'
+                        dir('graphic') {
+                            sh 'make tests_run'
+                        }
                     }
                 }
             }
