@@ -121,7 +121,7 @@ bool server_event_register(server_t *server, shared_event_t *event);
  * @param actual Actual file descriptor states
  * @param event Event to propagate
  */
-void server_event_propagate(fd_states_t actual, shared_event_t *event);
+void server_propagate_event(server_t *server, shared_event_t *event);
 
 /**
  * @brief Propagate first event of server

@@ -3,6 +3,6 @@ target_sources(zappy_server_core PUBLIC
         free.c
         start.c
         fd_states.c
-        event/register.c
-        event/propagate.c
+        events/register.c
+        events/propagate.c
 )

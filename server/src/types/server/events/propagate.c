@@ -40,7 +40,7 @@ static void server_event_handle_write(controller_t *controller,
     }
 }
 
-void server_event_propagate(fd_states_t actual, shared_event_t *event)
+void server_propagate_event(server_t *server, shared_event_t *event)
 {
     list_t *subscribers = event->subscribers;
     node_t *node = subscribers->first;
@@ -48,7 +48,7 @@ void server_event_propagate(fd_states_t actual, shared_event_t *event)
 
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        server_event_handle_write(controller, event, actual);
+        server_event_handle_write(controller, event, server->fd_actual);
         node = node->next;
     }
 }
@@ -59,6 +59,6 @@ void server_event_propagate_first(server_t *server)
     shared_event_t *event = NODE_DATA_TO_PTR(node->data, shared_event_t *);
 
     log_info("Propagating event [%s]", event->buffer);
-    server_event_propagate(server->fd_actual, event);
+    server_propagate_event(server, event);
     list_erase(server->events, node, &shared_event_free_as_node_data);
 }
