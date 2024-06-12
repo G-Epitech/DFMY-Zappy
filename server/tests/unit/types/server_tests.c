@@ -284,3 +284,59 @@ Test(server_start_tests, setup_error_du_to_listen, .init=cr_redirect_stderr)
     // Cleanup
     clcc_disable_control(listen);
 }
+
+Test(server_event_tests, register_event, .init = cr_redirect_stdout)
+{
+    server_t *server = server_new();
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+
+    cr_assert_not_null(server);
+    cr_assert_not_null(server->events);
+    cr_assert(server_event_register(server, event));
+    cr_assert_eq(server->events->len, 1);
+    server_free(server);
+}
+
+Test(server_event_tests, register_event_fail_due_to_null_server)
+{
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+
+    cr_assert_not(server_event_register(NULL, event));
+}
+
+Test(server_event_tests, register_event_fail_due_to_null_event)
+{
+    server_t *server = server_new();
+
+    cr_assert_not(server_event_register(server, NULL));
+    server_free(server);
+}
+
+Test(server_event_tests, register_event_fail_due_to_list_push, .init = cr_redirect_stderr)
+{
+    server_t *server = server_new();
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+
+    clcc_return_now(malloc, NULL);
+    cr_assert_not(server_event_register(server, event));
+    clcc_disable_control(malloc);
+    server_free(server);
+}
+
+Test(server_tests, propagate_event)
+{
+    server_t *server = server_new();
+    shared_event_t *event = shared_event_new(strdup("Hello World"), 11);
+    controller_t *controller = controller_new(0);
+
+    FD_SET(server->socket, &server->fd_actual.writable);
+    cr_assert_not_null(server);
+    cr_assert_not_null(server->events);
+    cr_assert(shared_event_subscribe(event, controller));
+    cr_assert(server_event_register(server, event));
+    cr_assert_eq(server->events->len, 1);
+    server_event_propagate(server->fd_actual, event);
+    cr_assert_eq(server->events->len, 0);
+    fflush(stdout);
+    server_free(server);
+}

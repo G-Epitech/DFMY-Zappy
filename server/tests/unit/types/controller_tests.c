@@ -99,7 +99,7 @@ Test(controller_emissions_tests, add_emission_to_controller, .init = redirect_al
     list_free(controller->generic.emissions, &emission_free_as_node_data);
 }
 
-Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std)
+Test(controller_emissions_tests, add_emission_to_controller_with_calloc_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
@@ -107,6 +107,16 @@ Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .i
     clcc_return_now(calloc, NULL);
     cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
     clcc_disable_control(calloc);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    clcc_return_now(malloc, NULL);
+    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    clcc_disable_control(malloc);
 }
 
 Test(controller_emissions_tests, controller_emit, .init = redirect_all_std)
@@ -160,4 +170,9 @@ Test(controller_emissions_tests, write_error, .init = redirect_all_std)
     controller_emit(controller);
     clcc_disable_control(write);
     free(controller);
+}
+
+Test(controller_write_tests, null_controller)
+{
+    cr_assert_eq(controller_write(NULL, "Hello World", 11), -1);
 }
