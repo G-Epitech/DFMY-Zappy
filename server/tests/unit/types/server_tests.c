@@ -576,3 +576,44 @@ Test(fd_states_tests, clear_max_present_in_r_and_w)
     cr_assert(FD_ISSET(42, &states.except));
     cr_assert_eq(states.max, 64);
 }
+
+Test(server_has_pending_connections_tests, no_pending_connections)
+{
+    // Arrange
+    server_t server;
+
+    server_init(&server);
+
+    // Act and assert
+    cr_assert_not(server_has_pending_connections(&server));
+}
+
+Test(server_has_pending_connections_tests, has_no_pending_connections)
+{
+    // Arrange
+    server_t server;
+
+    server_init(&server);
+    FD_SET(server.socket, &server.fd_actual.readable);
+
+    // Act and assert
+    cr_assert(server_has_pending_connections(&server));
+}
+
+Test(server_has_pending_connections_tests, null_server)
+{
+    // Act and assert
+    cr_assert_not(server_has_pending_connections(NULL));
+}
+
+Test(server_has_pending_connections_tests, has_pending_connection)
+{
+    // Arrange
+    server_t server;
+
+    server_init(&server);
+    FD_SET(server.socket, &server.fd_actual.readable);
+
+    // Act and assert
+    cr_assert(server_has_pending_connections(&server));
+}
