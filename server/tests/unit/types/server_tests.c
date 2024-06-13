@@ -342,7 +342,7 @@ Test(server_tests, propagate_event, .init = cr_redirect_stdout)
     cr_assert_eq(server->events->len, 1);
     select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
     fflush(stdout);
-    server_event_propagate_first(server);
+    server_propagate_events(server);
     cr_assert_eq(server->events->len, 0);
     cr_assert_eq(controller->generic.emissions->len, 0);
     close(pipefd[0]);
@@ -368,7 +368,7 @@ Test(server_tests, propagate_event_fail, .init = cr_redirect_stdout)
     select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
     fflush(stdout);
     clcc_return_now(write, 10);
-    server_event_propagate_first(server);
+    server_propagate_events(server);
     clcc_disable_control(write);
     cr_assert_eq(server->events->len, 0);
     cr_assert_eq(controller->generic.emissions->len, 1);
@@ -396,7 +396,7 @@ Test(server_tests, propagate_event_fail_strdup_fail, .init = cr_redirect_stdout)
     fflush(stdout);
     clcc_return_now(write, 10);
     clcc_return_now(strdup, NULL);
-    server_event_propagate_first(server);
+    server_propagate_events(server);
     clcc_disable_control(write);
     clcc_disable_control(strdup);
     cr_assert_eq(server->events->len, 0);

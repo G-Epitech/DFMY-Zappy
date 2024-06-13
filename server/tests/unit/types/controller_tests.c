@@ -123,16 +123,16 @@ Test(controller_emissions_tests, controller_emit, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(STDERR_FILENO);
     char *buffer = strdup("Hello World");
-    FILE* local_stdout = cr_get_redirected_stderr();
-    char buffer_stdout[10000];
+    FILE* local_stderr = cr_get_redirected_stderr();
+    char buffer_stderr[10000];
 
     controller_add_emission(controller, buffer, 13);
-    memset(buffer_stdout, 0, sizeof(buffer_stdout));
+    memset(buffer_stderr, 0, sizeof(buffer_stderr));
     controller_emit(controller);
     fflush(stderr);
-    fflush(local_stdout);
-    fread(buffer_stdout, sizeof(char), sizeof(buffer_stdout), local_stdout);
-    cr_assert_str_eq(buffer_stdout, "Hello World");
+    fflush(local_stderr);
+    fread(buffer_stderr, sizeof(char), sizeof(buffer_stderr), local_stderr);
+    cr_assert_str_eq(buffer_stderr, "Hello World");
     cr_assert_eq(controller->generic.emissions->len, 0);
     list_free(controller->generic.emissions, &emission_free_as_node_data);
     free(controller);

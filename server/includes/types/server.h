@@ -127,4 +127,4 @@ void server_propagate_event(server_t *server, shared_event_t *event);
  * @brief Propagate first event of server
  * @param server Server to propagate event
  */
-void server_event_propagate_first(server_t *server);
+void server_propagate_events(server_t *server);

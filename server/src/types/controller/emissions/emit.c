@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <memory.h>
+#include "log.h"
 #include "types/controller.h"
 #include "types/emission.h"
 #include "types/list.h"
@@ -36,6 +37,9 @@ void controller_emit(controller_t *controller)
         controller->generic.emissions->len == 0)
         return;
     node = controller->generic.emissions->first;
-    emission = NODE_DATA_TO_PTR(node->data, emission_t *);
-    controller_handle_emit_write(controller, node, emission);
+    while (node) {
+        emission = NODE_DATA_TO_PTR(node->data, emission_t *);
+        controller_handle_emit_write(controller, node, emission);
+        node = node->next;
+    }
 }

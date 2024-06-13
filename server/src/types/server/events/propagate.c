@@ -15,7 +15,7 @@
 static void server_event_handle_propagate_fail(controller_t *controller,
     shared_event_t *event, ssize_t write_size)
 {
-    char *buffer = strdup(event->buffer - write_size + 1);
+    char *buffer = strndup(event->buffer - write_size + 1, write_size);
     size_t buffer_size = event->buffer_size - write_size;
 
     shared_event_unsubscribe(event, controller);
@@ -34,7 +34,7 @@ static void server_event_handle_write(controller_t *controller,
     if (FD_ISSET(controller->generic.socket, &actual.writable)) {
         write_size = controller_write(controller,
             event->buffer, event->buffer_size);
-        if (write_size != event->buffer_size) {
+        if (write_size != event->buffer_size  && write_size != 0) {
             server_event_handle_propagate_fail(controller, event, write_size);
         }
     }
@@ -46,6 +46,7 @@ void server_propagate_event(server_t *server, shared_event_t *event)
     node_t *node = subscribers->first;
     controller_t *controller = NULL;
 
+    log_info("Propagating event [%s]", event->buffer);
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         server_event_handle_write(controller, event, server->fd_actual);
@@ -53,12 +54,15 @@ void server_propagate_event(server_t *server, shared_event_t *event)
     }
 }
 
-void server_event_propagate_first(server_t *server)
+void server_propagate_events(server_t *server)
 {
     node_t *node = server->events->first;
-    shared_event_t *event = NODE_DATA_TO_PTR(node->data, shared_event_t *);
+    shared_event_t *event = NULL;
 
-    log_info("Propagating event [%s]", event->buffer);
-    server_propagate_event(server, event);
-    list_erase(server->events, node, &shared_event_free_as_node_data);
+    while (node) {
+        event = NODE_DATA_TO_PTR(node->data, shared_event_t *);
+        server_propagate_event(server, event);
+        list_erase(server->events, node, &shared_event_free_as_node_data);
+        node = server->events->first;
+    }
 }
