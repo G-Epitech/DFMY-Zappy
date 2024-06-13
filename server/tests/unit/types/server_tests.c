@@ -737,6 +737,7 @@ Test(server_accept_connection_tests, null_server, .init = cr_redirect_stderr)
 {
     // Act and assert
     cr_assert_null(server_accept_connection(NULL));
+    cr_assert(true);
 }
 
 Test(server_accept_connection_tests, accept_fail_due_to_accept, .init = cr_redirect_stderr)
