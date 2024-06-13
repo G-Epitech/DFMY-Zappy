@@ -130,3 +130,10 @@ void fd_states_set(fd_states_t *states, int fd, int flags);
  * @param flags State to unset
  */
 void fd_states_unset(fd_states_t *states, int fd, int flags);
+
+/**
+ * @brief Clear given file descriptor states
+ * @param states File descriptors states to clear
+ * @param flags States to clear
+ */
+void fd_states_clear(fd_states_t *states, int flags);

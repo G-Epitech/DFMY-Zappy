@@ -7,20 +7,20 @@
 
 #include "types/server.h"
 
-static void fd_states_compute_new_max(fd_states_t *states)
+static void fd_states_compute_new_max(fd_states_t *states, int old_max)
 {
-    int max = -1;
+    int new_max = old_max - 1;
 
-    for (int i = states->max; i >= 0; i--) {
-        if (FD_ISSET(i, &states->readable) ||
-            FD_ISSET(i, &states->writable) ||
-            FD_ISSET(i, &states->except)
+    while (new_max >= 0) {
+        if (FD_ISSET(new_max, &states->readable) ||
+            FD_ISSET(new_max, &states->writable) ||
+            FD_ISSET(new_max, &states->except)
         ) {
-            max = i;
             break;
         }
+        new_max -= 1;
     }
-    states->max = max;
+    states->max = new_max;
 }
 
 void fd_states_init(fd_states_t *states)
@@ -51,7 +51,8 @@ void fd_states_unset(fd_states_t *states, int fd, int flags)
         FD_CLR(fd, &states->writable);
     if (flags & FD_STATES_E)
         FD_CLR(fd, &states->except);
-    fd_states_compute_new_max(states);
+    if (fd == states->max)
+        fd_states_compute_new_max(states, fd);
 }
 
 void fd_states_clear(fd_states_t *states, int flags)
@@ -62,5 +63,5 @@ void fd_states_clear(fd_states_t *states, int flags)
         FD_ZERO(&states->writable);
     if (flags & FD_STATES_E)
         FD_ZERO(&states->except);
-    fd_states_compute_new_max(states);
+    fd_states_compute_new_max(states, states->max + 1);
 }
