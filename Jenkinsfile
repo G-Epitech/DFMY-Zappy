@@ -52,7 +52,6 @@ pipeline {
                     }
                     steps {
                         dir('server') {
-                            sh 'make fclean'
                             sh 'make tests_run'
                         }
                     }
