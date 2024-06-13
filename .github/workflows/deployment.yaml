@@ -17,9 +17,9 @@ jobs:
           url="${url%.git}"
           repo=$(echo "$url" | awk -F ':' '{print $2}')
           if [ "${{ github.repository }}" == "$repo" ]; then
-            echo "ignore::true" >> $GITHUB_OUTPUT
+            echo "ignore=true" >> $GITHUB_OUTPUT
           else
-            echo "ignore::false" >> $GITHUB_OUTPUT
+            echo "ignore=false" >> $GITHUB_OUTPUT
           fi
 
   repository_mirroring:
