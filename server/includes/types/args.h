@@ -11,8 +11,13 @@
 #include <stdbool.h>
 
 #include "types/args_parser.h"
+#include "log.h"
 
+// @brief Default frequency value
 #define ARGS_DEFAULT_FREQ 100
+
+// @brief Default verbose level
+#define ARGS_DEFAULT_VERBOSE_LEVEL LOG_ERROR
 
 // @brief Structure containing the arguments of the server
 typedef struct args_s {
@@ -30,6 +35,8 @@ typedef struct args_s {
     char **teams;
     // @brief Help requested
     bool help;
+    // @brief Verbose level
+    log_level_t verbose_level;
 } args_t;
 
 // @brief Function pointer to parse the options
@@ -118,3 +125,11 @@ bool args_parse_frequency_option(args_parser_t *parser, args_t *args);
  * @return true if the option was parsed, false otherwise
  */
 bool args_parse_help_option(args_parser_t *parser, args_t *args);
+
+/**
+ * @brief Parse verbose level option
+ * @param parser Parser instance
+ * @param args Arguments to fill
+ * @return true if the option was parsed, false otherwise
+ */
+bool args_parse_verbose_level_option(args_parser_t *parser, args_t *args);

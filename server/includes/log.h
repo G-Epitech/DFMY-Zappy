@@ -8,11 +8,17 @@
 #pragma once
 
 typedef enum e_log_level {
-    INFO,
-    WARN,
-    ERROR,
-    DEBUG
+    LOG_DEBUG,
+    LOG_INFO,
+    LOG_WARN,
+    LOG_ERROR
 } log_level_t;
+
+/**
+ * @brief Provide an access to the current log level
+ * @return Log level pointer
+ */
+log_level_t *log_level(void);
 
 /**
  * @brief Log a message with the DEBUG level
