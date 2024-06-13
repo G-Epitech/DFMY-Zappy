@@ -11,8 +11,8 @@ void smart_ptr_reference(smart_ptr_t **new_ptr, smart_ptr_t **smart_ptr)
 {
     if (!smart_ptr || !(*smart_ptr))
         return;
-    (*(*smart_ptr)->ref_count)++;
     if (new_ptr) {
+        (*(*smart_ptr)->ref_count)++;
         *new_ptr = *smart_ptr;
     }
 }
