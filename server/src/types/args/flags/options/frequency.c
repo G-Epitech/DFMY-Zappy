@@ -10,7 +10,7 @@
 #include <string.h>
 #include "types/args.h"
 
-static bool read_frequency_value(args_parser_t *parser, args_t *args)
+static void read_frequency_value(args_parser_t *parser, args_t *args)
 {
     char *arg = ARGS_PARSER_CURRENT(parser);
     char *end = NULL;
@@ -23,7 +23,6 @@ static bool read_frequency_value(args_parser_t *parser, args_t *args)
         fprintf(stderr, "Frequency value must be in range [2, 10000]\n");
         parser->error = true;
     }
-    return true;
 }
 
 bool args_parse_frequency_option(args_parser_t *parser, args_t *args)

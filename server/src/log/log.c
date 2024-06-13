@@ -14,17 +14,17 @@
 static void log_handle_level(log_level_t level, FILE *stream)
 {
     switch (level) {
-        case WARN:
-            fprintf(stream, "\033[1;33m[WARN] \033[0m");
+        case LOG_WARN:
+            fprintf(stream, "\033[1;33m[WARN]  \033[0m");
             break;
-        case ERROR:
+        case LOG_ERROR:
             fprintf(stream, "\033[1;31m[ERROR] \033[0m");
             break;
-        case DEBUG:
+        case LOG_DEBUG:
             fprintf(stream, "\033[1;34m[DEBUG] \033[0m");
             break;
         default:
-            fprintf(stream, "\033[1;32m[INFO] \033[0m");
+            fprintf(stream, "\033[1;32m[INFO]  \033[0m");
             break;
     }
 }
@@ -46,8 +46,10 @@ static void log_current_time(FILE *stream)
 static void log_message(log_level_t level, const char *format,
     va_list args)
 {
-    FILE *stream = level == ERROR ? stderr : stdout;
+    FILE *stream = level == LOG_ERROR ? stderr : stdout;
 
+    if (level < *log_level())
+        return;
     log_current_time(stream);
     log_handle_level(level, stream);
     vfprintf(stream, format, args);
@@ -60,7 +62,7 @@ void log_debug(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    log_message(DEBUG, format, args);
+    log_message(LOG_DEBUG, format, args);
     va_end(args);
 }
 
@@ -69,7 +71,7 @@ void log_info(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    log_message(INFO, format, args);
+    log_message(LOG_INFO, format, args);
     va_end(args);
 }
 
@@ -78,7 +80,7 @@ void log_warn(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    log_message(WARN, format, args);
+    log_message(LOG_WARN, format, args);
     va_end(args);
 }
 
@@ -87,6 +89,6 @@ void log_error(const char *format, ...)
     va_list args;
 
     va_start(args, format);
-    log_message(ERROR, format, args);
+    log_message(LOG_ERROR, format, args);
     va_end(args);
 }

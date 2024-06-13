@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include "log.h"
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
@@ -18,6 +19,12 @@
  * @return Current value of the application state
  */
 bool *app_stopped(void);
+
+/**
+ * @brief Provide access to the application verbose level
+ * @return Current value of the application verbose level
+ */
+log_level_t *app_verbose_level(void);
 
 /**
  * @brief Stop the application

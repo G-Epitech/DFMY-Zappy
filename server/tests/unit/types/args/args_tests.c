@@ -19,6 +19,7 @@ Test(args_init_tests, simple_init)
     cr_assert_eq(args.height, 0);
     cr_assert_eq(args.clients_nb, 0);
     cr_assert_eq(args.frequency, ARGS_DEFAULT_FREQ);
+    cr_assert_eq(args.verbose_level, ARGS_DEFAULT_VERBOSE_LEVEL);
     cr_assert_eq(args.teams, NULL);
 }
 
@@ -32,6 +33,7 @@ Test(args_free_tests, free_no_teams)
     cr_assert_eq(args.height, 0);
     cr_assert_eq(args.clients_nb, 0);
     cr_assert_eq(args.frequency, ARGS_DEFAULT_FREQ);
+    cr_assert_eq(args.verbose_level, ARGS_DEFAULT_VERBOSE_LEVEL);
     cr_assert_eq(args.teams, NULL);
     args_free(&args);
 }
@@ -46,6 +48,7 @@ Test(args_free_tests, free_with_teams)
     cr_assert_eq(args.height, 0);
     cr_assert_eq(args.clients_nb, 0);
     cr_assert_eq(args.frequency, ARGS_DEFAULT_FREQ);
+    cr_assert_eq(args.verbose_level, ARGS_DEFAULT_VERBOSE_LEVEL);
     cr_assert_eq(args.teams, NULL);
     args.teams = malloc(sizeof(char *) * 2);
     args_free(&args);
@@ -165,7 +168,6 @@ Test(args_valid_tests, all_args_are_valid)
 Test(args_valid_tests, invalid_port, .init = cr_redirect_stderr)
 {
     args_t args = { 0 };
-    char *teams[] = { "team1", "team2", "team3", NULL };
 
     args_init(&args);
     cr_assert_eq(args_are_valid(&args), false);

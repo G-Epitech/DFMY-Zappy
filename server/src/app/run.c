@@ -25,5 +25,6 @@ int app_run(int argc, char **argv)
         app_print_usage();
         return app_exit(&args, APP_EXIT_SUCCESS);
     }
+    *log_level() = args.verbose_level;
     return app_exit(&args, APP_EXIT_SUCCESS);
 }
