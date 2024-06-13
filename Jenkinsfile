@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    options {
-        skipDefaultCheckout(true)
-    }
     stages {
         stage('Project compilation') {
             parallel {
@@ -13,8 +10,6 @@ pipeline {
                         }
                     }
                     steps {
-                        cleanWs()
-                        checkout scm
                         dir('server') {
                             sh 'make'
                             sh 'make clean'
@@ -27,8 +22,6 @@ pipeline {
                         dockerfile true
                     }
                     steps {
-                        cleanWs()
-                        checkout scm
                         dir('graphic') {
                             sh 'make'
                             sh 'make clean'
@@ -42,8 +35,6 @@ pipeline {
             parallel {
                 stage('Server') {
                     steps {
-                        cleanWs()
-                        checkout scm
                         dir('server') {
                             sh 'docker run --rm -v "$PWD:/mnt/delivery" ghcr.io/epitech/coding-style-checker:latest /mnt/delivery /mnt/reports'
                         }
@@ -60,9 +51,8 @@ pipeline {
                         }
                     }
                     steps {
-                        cleanWs()
-                        checkout scm
                         dir('server') {
+                            sh 'make fclean'
                             sh 'make tests_run'
                         }
                     }
@@ -72,8 +62,6 @@ pipeline {
                         dockerfile true
                     }
                     steps {
-                        cleanWs()
-                        checkout scm
                         dir('graphic') {
                             sh 'make tests_run'
                         }
@@ -86,8 +74,6 @@ pipeline {
                 dockerfile true
             }
             steps {
-                cleanWs()
-                checkout scm
                 sh 'make'
                 sh 'make clean'
                 sh 'make fclean'

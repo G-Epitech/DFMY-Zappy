@@ -33,6 +33,7 @@ fclean:		clean
 			@rm -rf cmake-build-*
 			@rm -rf build
 			@rm -rf *.log
+			@$(MAKE) -C tests/libs fclean
 
 re:
 			@$(MAKE) fclean
@@ -40,7 +41,6 @@ re:
 
 tests_run:	fclean
 			@$(MAKE) -C tests/libs
-			@nm tests/libs/clcc/libclcc.a | grep "T clcc"
 			@cmake -S . -B $(BUILD_PATH) -DCOVERAGE=ON
 			@cmake --build $(BUILD_PATH) --target $(TESTS_NAME)
 			@./$(TESTS_NAME) -j1
