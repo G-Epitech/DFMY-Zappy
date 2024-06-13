@@ -141,6 +141,14 @@ controller_t *server_accept_connection(server_t *server);
 void server_close_connection(server_t *server, controller_t *controller);
 
 /**
+ * @brief Get controller by its socket number
+ * @param server Server to get controller from
+ * @param socket Socket number of the controller to get
+ * @return Server controller or NULL if not found
+ */
+controller_t *server_get_controller_by_socket(server_t *server, int socket);
+
+/**
  * @brief Initialize given file descriptors states
  * @param states File descriptors states to initialize
  */

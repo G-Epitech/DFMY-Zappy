@@ -880,3 +880,56 @@ Test(server_close_connection_tests, simple_close_with_several_clients, .init = c
     cr_assert_eq(server->fd_watch.max, 6);
     server_free(server);
 }
+
+Test(server_get_controller_by_socket_tests, get_unknown_controller)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    controller = server_get_controller_by_socket(server, 42);
+
+    // Assert
+    cr_assert_null(controller);
+    server_free(server);
+}
+
+Test(server_get_controller_by_socket_tests, get_controller, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_not_null(controller);
+    cr_assert_eq(server_get_controller_by_socket(server, 4), controller);
+    server_free(server);
+}
+
+Test(server_get_controller_by_socket_tests, get_controller_with_several_clients, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller1, *controller2, *controller3 = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller1 = server_accept_connection(server);
+    clcc_return_now(accept, 5);
+    controller2 = server_accept_connection(server);
+    clcc_return_now(accept, 6);
+    controller3 = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_eq(server_get_controller_by_socket(server, 4), controller1);
+    cr_assert_eq(server_get_controller_by_socket(server, 5), controller2);
+    cr_assert_eq(server_get_controller_by_socket(server, 6), controller3);
+    server_free(server);
+}
