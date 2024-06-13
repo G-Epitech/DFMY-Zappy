@@ -10,4 +10,5 @@ target_sources(zappy_server_core PUBLIC
         flags/clients_nb.c
         flags/options/help.c
         flags/options/frequency.c
+        flags/options/verbose_level.c
 )

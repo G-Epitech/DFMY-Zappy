@@ -16,4 +16,5 @@ void args_init(args_t *args)
     args->frequency = ARGS_DEFAULT_FREQ;
     args->port = -1;
     args->help = false;
+    args->verbose_level = ARGS_DEFAULT_VERBOSE_LEVEL;
 }

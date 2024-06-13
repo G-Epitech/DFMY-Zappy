@@ -14,6 +14,7 @@ static const args_handler_t handlers[] = {
     &args_parse_clients_nb,
     &args_parse_help_option,
     &args_parse_frequency_option,
+    &args_parse_verbose_level_option,
     NULL
 };
 

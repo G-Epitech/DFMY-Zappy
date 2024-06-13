@@ -50,7 +50,7 @@ bool controller_graphics_list_add_emission(list_t *controllers, char *buffer,
         return false;
     node = controllers->first;
     while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type == CTRL_GRAPHIC) {
             controller_add_emission(controller, buffer_ptr, buffer_size);
         }
@@ -73,7 +73,7 @@ bool controller_players_list_add_emission(list_t *controllers, char *buffer,
         return false;
     node = controllers->first;
     while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type != CTRL_PLAYER) {
             controller_add_emission(controller, buffer_ptr, buffer_size);
         }
@@ -96,7 +96,7 @@ bool controller_all_list_add_emission(list_t *controllers, char *buffer,
         return false;
     node = controllers->first;
     while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type != CTRL_UNKNOWN) {
             controller_add_emission(controller, buffer_ptr, buffer_size);
         }
