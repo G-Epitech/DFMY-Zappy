@@ -9,6 +9,7 @@
 
 #include <netinet/in.h>
 #include "list.h"
+#include "controller.h"
 
 // @brief Cast a pointer to a sockaddr structure
 #define AS_SOCKADDR(x) ((struct sockaddr*) x)
@@ -108,6 +109,29 @@ bool server_setup_listener(server_t *server);
  * @return false If an error occurred
  */
 bool server_start(server_t *server, uint16_t port);
+
+/**
+ * @brief Check if the server has pending connections
+ * @param server Server to check
+ * @return Status of pending connections
+ */
+bool server_has_pending_connections(server_t *server);
+
+/**
+ * @brief Register a new client
+ * @param server Server to register client to
+ * @param socket Socket of the client to register
+ * @return Controller of the registered client or NULL if an error occurred
+ */
+controller_t *server_register_client(server_t *server, int socket);
+
+/**
+ * @brief Accept a new connection
+ * @param server Server to accept connection from
+ * @return true If connection was accepted successfully
+ * @return false If an error occurred
+ */
+controller_t *server_accept_connection(server_t *server);
 
 /**
  * @brief Initialize given file descriptors states
