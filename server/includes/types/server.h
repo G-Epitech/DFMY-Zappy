@@ -9,7 +9,6 @@
 
 #include <netinet/in.h>
 #include "list.h"
-#include "shared_event.h"
 
 // @brief Cast a pointer to a sockaddr structure
 #define AS_SOCKADDR(x) ((struct sockaddr*) x)
@@ -47,8 +46,6 @@ typedef struct server_s {
     list_t *controllers;
     // @brief Running status of the server
     bool running;
-    // @brief List of shared events to send to several clients
-    list_t *events;
 } server_t;
 
 /**
@@ -108,23 +105,3 @@ bool server_start(server_t *server, uint16_t port);
  * @param states File descriptors states to initialize
  */
 void fd_states_init(fd_states_t *states);
-
-/**
- * @brief Register given event to server
- * @param event Event to register
- * @return Register success status
- */
-bool server_event_register(server_t *server, shared_event_t *event);
-
-/**
- * @brief Propagate given event to subscribers
- * @param actual Actual file descriptor states
- * @param event Event to propagate
- */
-void server_propagate_event(server_t *server, shared_event_t *event);
-
-/**
- * @brief Propagate first event of server
- * @param server Server to propagate event
- */
-void server_propagate_events(server_t *server);
