@@ -19,6 +19,13 @@ typedef fd_set fd_set_t;
 // @brief Internet address
 typedef struct sockaddr_in sockaddr_in_t;
 
+// @brief File descriptor state write
+#define FD_STATES_W 1
+// @brief File descriptor state read
+#define FD_STATES_R 2
+// @brief File descriptor state exception
+#define FD_STATES_E 4
+
 // @brief File descriptor states
 typedef struct fd_states_s {
     // @brief Readable file descriptors
@@ -107,3 +114,19 @@ bool server_start(server_t *server, uint16_t port);
  * @param states File descriptors states to initialize
  */
 void fd_states_init(fd_states_t *states);
+
+/**
+ * @brief Set given file descriptor state
+ * @param states File descriptors states to set
+ * @param fd File descriptor to set
+ * @param flags State to set
+ */
+void fd_states_set(fd_states_t *states, int fd, int flags);
+
+/**
+ * @brief Unset given file descriptor state
+ * @param states File descriptors states to unset
+ * @param fd File descriptor to unset
+ * @param flags State to unset
+ */
+void fd_states_unset(fd_states_t *states, int fd, int flags);
