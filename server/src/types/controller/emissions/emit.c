@@ -7,7 +7,6 @@
 
 #include <unistd.h>
 #include <memory.h>
-#include "log.h"
 #include "types/controller.h"
 #include "types/emission.h"
 #include "types/list.h"
