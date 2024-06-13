@@ -12,7 +12,7 @@
 #include "types/server.h"
 #include "types/controller.h"
 
-static void server_event_handle_propagate_fail(controller_t *controller,
+/*static void server_event_handle_propagate_fail(controller_t *controller,
     shared_event_t *event, ssize_t write_size)
 {
     char *buffer = strndup(event->buffer - write_size + 1, write_size);
@@ -24,7 +24,7 @@ static void server_event_handle_propagate_fail(controller_t *controller,
     log_info("Failed to propagate event to %d... converting to emission",
         controller->generic.socket);
     controller_add_emission(controller, buffer, buffer_size);
-}
+}*/
 
 static void server_event_handle_write(controller_t *controller,
     shared_event_t *event, fd_states_t actual)
@@ -35,7 +35,7 @@ static void server_event_handle_write(controller_t *controller,
         write_size = controller_write(controller,
             event->buffer, event->buffer_size);
         if (write_size != event->buffer_size && write_size != 0) {
-            server_event_handle_propagate_fail(controller, event, write_size);
+            /*server_event_handle_propagate_fail(controller, event, write_size);*/
         }
     }
 }

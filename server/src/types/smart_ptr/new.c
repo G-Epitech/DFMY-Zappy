@@ -14,12 +14,7 @@ smart_ptr_t *smart_ptr_new(void *data)
     if (!smart_ptr)
         return NULL;
     smart_ptr->ptr = data;
-    smart_ptr->ref_count = calloc(1, sizeof(size_t));
-    if (!smart_ptr->ref_count) {
-        free(smart_ptr);
-        return NULL;
-    }
-    *smart_ptr->ref_count = 1;
-    smart_ptr->destructor = NULL;
+    smart_ptr->ref_count = 1;
+    smart_ptr->destructor = &free;
     return smart_ptr;
 }

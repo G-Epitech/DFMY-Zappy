@@ -12,7 +12,7 @@ void emission_free(emission_t *emission)
 {
     if (!emission)
         return;
-    free(emission->buffer);
+    smart_ptr_free(emission->buffer_ptr);
     free(emission);
 }
 

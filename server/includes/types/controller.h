@@ -9,6 +9,7 @@
 
 #include "list.h"
 #include "types/world/chrono.h"
+#include "smart_ptr.h"
 
 // Forward declaration
 typedef struct player_s player_t;
@@ -117,9 +118,9 @@ void controller_emit(controller_t *controller);
 /**
  * @brief Add an emission to the controller
  * @param controller Controller to add the emission to
- * @param buffer Buffer to add to the emission
+ * @param buffer_ptr Buffer to add to the emission
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controller_add_emission(controller_t *controller, char *buffer,
+bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
     size_t buffer_size);

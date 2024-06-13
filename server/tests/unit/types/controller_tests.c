@@ -92,9 +92,11 @@ Test(controller_emissions_tests, add_emission_to_controller, .init = redirect_al
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
+    smart_ptr_t *buffer_ptr = smart_ptr_new(buffer);
 
+    buffer_ptr->destructor = &free;
     cr_assert_eq(controller->generic.emissions->len, 0);
-    controller_add_emission(controller, buffer, 13);
+    controller_add_emission(controller, buffer_ptr, 13);
     cr_assert_eq(controller->generic.emissions->len, 1);
     list_free(controller->generic.emissions, &emission_free_as_node_data);
 }
@@ -102,20 +104,18 @@ Test(controller_emissions_tests, add_emission_to_controller, .init = redirect_al
 Test(controller_emissions_tests, add_emission_to_controller_with_calloc_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
-    char *buffer = strdup("Hello World");
 
     clcc_return_now(calloc, NULL);
-    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    cr_assert_eq(controller_add_emission(controller, NULL, 13), false);
     clcc_disable_control(calloc);
 }
 
 Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
-    char *buffer = strdup("Hello World");
 
     clcc_return_now(malloc, NULL);
-    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    cr_assert_eq(controller_add_emission(controller, NULL, 13), false);
     clcc_disable_control(malloc);
 }
 
@@ -123,10 +123,11 @@ Test(controller_emissions_tests, controller_emit, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(STDERR_FILENO);
     char *buffer = strdup("Hello World");
+    smart_ptr_t *buffer_ptr = smart_ptr_new(buffer);
     FILE* local_stderr = cr_get_redirected_stderr();
     char buffer_stderr[10000];
 
-    controller_add_emission(controller, buffer, 13);
+    controller_add_emission(controller, buffer_ptr, 13);
     memset(buffer_stderr, 0, sizeof(buffer_stderr));
     controller_emit(controller);
     fflush(stderr);
@@ -164,8 +165,9 @@ Test(controller_emissions_tests, write_error, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
+    smart_ptr_t *buffer_ptr = smart_ptr_new(buffer);
 
-    controller_add_emission(controller, buffer, 13);
+    controller_add_emission(controller, buffer_ptr, 13);
     clcc_return_now(write, -1);
     controller_emit(controller);
     clcc_disable_control(write);

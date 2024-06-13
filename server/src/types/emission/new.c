@@ -8,15 +8,15 @@
 #include <stdlib.h>
 #include "types/emission.h"
 
-emission_t *emission_new(char *buffer, size_t buffer_size)
+emission_t *emission_new(smart_ptr_t *buffer_ptr, size_t buffer_size)
 {
     emission_t *emission = calloc(1, sizeof(emission_t));
 
     if (!emission) {
-        free(buffer);
         return NULL;
     }
-    emission->buffer = buffer;
     emission->buffer_size = buffer_size;
+    emission->written = 0;
+    emission->buffer_ptr = smart_ptr_reference(buffer_ptr);
     return emission;
 }

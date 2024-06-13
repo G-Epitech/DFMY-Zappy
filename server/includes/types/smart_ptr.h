@@ -9,6 +9,8 @@
 
 #include <stdlib.h>
 
+#define SMART_PTR_CAST(type, smart_ptr) ((type)(smart_ptr)->ptr)
+
 // @brief Smart pointer structure
 typedef struct smart_ptr_s {
     // @brief Pointer to the data
@@ -16,7 +18,7 @@ typedef struct smart_ptr_s {
     // @brief Destructor function
     void (*destructor)(void *);
     // @brief Reference count
-    size_t *ref_count;
+    size_t ref_count;
 } smart_ptr_t;
 
 /**
@@ -30,10 +32,10 @@ smart_ptr_t *smart_ptr_new(void *data);
  * @brief Reference a smart pointer
  * @param smart_ptr Pointer to the smart pointer
  */
-void smart_ptr_reference(smart_ptr_t **new_ptr, smart_ptr_t **smart_ptr);
+smart_ptr_t *smart_ptr_reference(smart_ptr_t *ptr);
 
 /**
  * @brief Dereference a smart pointer
  * @param smart_ptr Pointer to the smart pointer
  */
-void smart_ptr_dereference(smart_ptr_t **smart_ptr);
+void smart_ptr_free(smart_ptr_t *smart_ptr);

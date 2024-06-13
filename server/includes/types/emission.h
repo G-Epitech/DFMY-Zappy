@@ -8,16 +8,19 @@
 #pragma once
 
 #include "types/list.h"
+#include "types/smart_ptr.h"
 
 // @brief Buffer writing section size for emission
 #define EMISSION_BUFF_SIZE 4096
 
 // @brief Represent response or an event to send to a single client
 typedef struct emission_s {
-    // @brief Buffer for emission content
-    char *buffer;
+    // @brief Smart pointer to buffer
+    smart_ptr_t *buffer_ptr;
     // @brief Buffer size
     size_t buffer_size;
+    // @brief Written bytes
+    ssize_t written;
 } emission_t;
 
 /**
@@ -27,7 +30,7 @@ typedef struct emission_s {
  * @return Created emission or NULL if failed
  * @warning The ownership of buffer will be transferred to the emission.
  */
-emission_t *emission_new(char *buffer, size_t buffer_size);
+emission_t *emission_new(smart_ptr_t *buffer_ptr, size_t buffer_size);
 
 /**
  * @brief Free given emission

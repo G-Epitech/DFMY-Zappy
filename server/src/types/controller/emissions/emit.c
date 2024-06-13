@@ -14,15 +14,15 @@
 static void controller_handle_emit_write(controller_t *controller,
     node_t *node, emission_t *emission)
 {
-    ssize_t written = controller_write(controller, emission->buffer,
-        emission->buffer_size);
+    char *emission_buffer = SMART_PTR_CAST(char *, emission->buffer_ptr);
+    ssize_t written = controller_write(controller,
+        &emission_buffer[emission->written], emission->buffer_size);
 
     if (written == emission->buffer_size) {
         list_erase(controller->generic.emissions, node,
             &emission_free_as_node_data);
     } else {
-        memmove(emission->buffer, emission->buffer + written,
-            emission->buffer_size - written);
+        emission->written += written;
         emission->buffer_size -= written;
     }
 }
