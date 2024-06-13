@@ -27,8 +27,8 @@ bool server_setup_socket(server_t *server)
         log_error("Server socket initialization failed: %s", strerror(errno));
         return false;
     }
-    FD_SET(server->socket, &(server->fd_watch.readable));
-    server->fd_watch.max = server->socket;
+    fd_states_set(&server->fd_watch, server->socket,
+        FD_STATES_R | FD_STATES_E);
     return true;
 }
 
