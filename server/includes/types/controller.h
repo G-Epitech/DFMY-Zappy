@@ -124,3 +124,33 @@ void controller_emit(controller_t *controller);
  */
 bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
     size_t buffer_size);
+
+/**
+ * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
+ * @param controllers List of controllers
+ * @param buffer Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_graphics_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size);
+
+/**
+ * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
+ * @param controllers List of controllers
+ * @param buffer Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_players_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size);
+
+/**
+ * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
+ * @param controllers List of controllers
+ * @param buffer Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_all_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size);

@@ -14,11 +14,14 @@
 bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
     size_t buffer_size)
 {
-    emission_t *emission = emission_new(buffer_ptr, buffer_size);
+    emission_t *emission = NULL;
     char *buffer = NULL;
     bool success = true;
 
-    if (!emission || !buffer_ptr || !buffer_ptr->ptr)
+    if (!controller || !buffer_ptr || !buffer_ptr->ptr)
+        return false;
+    emission = emission_new(buffer_ptr, buffer_size);
+    if (!emission)
         return false;
     buffer = SMART_PTR_CAST(char *, buffer_ptr);
     success = list_push(controller->generic.emissions,
@@ -31,4 +34,73 @@ bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
             controller->generic.socket);
     }
     return success;
+}
+
+bool controller_graphics_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size)
+{
+    smart_ptr_t *buffer_ptr = NULL;
+    controller_t *controller = NULL;
+    node_t *node = NULL;
+
+    if (!buffer || !controllers)
+        return false;
+    buffer_ptr = smart_ptr_new(buffer);
+    if (!buffer_ptr)
+        return false;
+    node = controllers->first;
+    while (node) {
+        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        if (controller->generic.type == CTRL_GRAPHIC) {
+            controller_add_emission(controller, buffer_ptr, buffer_size);
+        }
+        node = node->next;
+    }
+    return true;
+}
+
+bool controller_players_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size)
+{
+    smart_ptr_t *buffer_ptr = NULL;
+    controller_t *controller = NULL;
+    node_t *node = NULL;
+
+    if (!buffer || !controllers)
+        return false;
+    buffer_ptr = smart_ptr_new(buffer);
+    if (!buffer_ptr)
+        return false;
+    node = controllers->first;
+    while (node) {
+        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        if (controller->generic.type != CTRL_PLAYER) {
+            controller_add_emission(controller, buffer_ptr, buffer_size);
+        }
+        node = node->next;
+    }
+    return true;
+}
+
+bool controller_all_list_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size)
+{
+    smart_ptr_t *buffer_ptr = NULL;
+    controller_t *controller = NULL;
+    node_t *node = NULL;
+
+    if (!buffer || !controllers)
+        return false;
+    buffer_ptr = smart_ptr_new(buffer);
+    if (!buffer_ptr)
+        return false;
+    node = controllers->first;
+    while (node) {
+        controller = NODE_DATA_TO_PTR(node->data, controller_t*);
+        if (controller->generic.type != CTRL_UNKNOWN) {
+            controller_add_emission(controller, buffer_ptr, buffer_size);
+        }
+        node = node->next;
+    }
+    return true;
 }

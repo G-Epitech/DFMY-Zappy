@@ -64,3 +64,12 @@ Test(smart_ptr, smart_ptr_dereference_with_destructor)
     smart_ptr->destructor = &free;
     smart_ptr_free(smart_ptr);
 }
+
+Test(smart_ptr, smart_ptr_dereference_without_destructor)
+{
+    char *buffer = strdup("Hello World");
+    smart_ptr_t *smart_ptr = smart_ptr_new(buffer);
+
+    smart_ptr->destructor = NULL;
+    smart_ptr_free(smart_ptr);
+}
