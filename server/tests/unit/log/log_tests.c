@@ -9,7 +9,13 @@
 #include <criterion/redirect.h>
 #include "log.h"
 
-Test(log_tests, simple_info, .init = cr_redirect_stdout)
+static void setup(void) {
+    *log_level() = LOG_ERROR;
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
+
+Test(log_tests, simple_info_with_level_not_active, .init = setup)
 {
     char *msg = "This is a simple log message";
     FILE* local_stdout = cr_get_redirected_stdout();
@@ -23,10 +29,46 @@ Test(log_tests, simple_info, .init = cr_redirect_stdout)
     // Assert
     fflush(stdout);
     fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
+    cr_assert_str_empty(buffer);
+}
+
+Test(log_tests, simple_info_with_level_active, .init = setup)
+{
+    char *msg = "This is a simple log message";
+    FILE* local_stdout = cr_get_redirected_stdout();
+    char buffer[10000];
+
+    memset(buffer, 0, sizeof(buffer));
+    *log_level() = LOG_INFO;
+
+    // Act and assert
+    log_info("%s", msg);
+
+    // Assert
+    fflush(stdout);
+    fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
     cr_assert_str_not_empty(buffer);
 }
 
-Test(log_tests, simple_warn, .init = cr_redirect_stdout)
+Test(log_tests, simple_warn_with_level_active, .init = setup)
+{
+    char *msg = "This is a simple log message";
+    FILE* local_stdout = cr_get_redirected_stdout();
+    char buffer[10000];
+
+    memset(buffer, 0, sizeof(buffer));
+    *log_level() = LOG_WARN;
+
+    // Act and assert
+    log_warn("%s", msg);
+
+    // Assert
+    fflush(stdout);
+    fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
+    cr_assert_str_not_empty(buffer);
+}
+
+Test(log_tests, simple_warn_with_level_not_active, .init = setup)
 {
     char *msg = "This is a simple log message";
     FILE* local_stdout = cr_get_redirected_stdout();
@@ -40,13 +82,31 @@ Test(log_tests, simple_warn, .init = cr_redirect_stdout)
     // Assert
     fflush(stdout);
     fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
+    cr_assert_str_empty(buffer);
+}
+
+Test(log_tests, simple_error_with_level_active, .init = setup)
+{
+    char *msg = "This is a simple log message";
+    FILE* local_stdout = cr_get_redirected_stderr();
+    char buffer[10000];
+
+    memset(buffer, 0, sizeof(buffer));
+    *log_level() = LOG_ERROR;
+
+    // Act and assert
+    log_error("%s", msg);
+
+    // Assert
+    fflush(stdout);
+    fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
     cr_assert_str_not_empty(buffer);
 }
 
-Test(log_tests, simple_error, .init = cr_redirect_stderr)
+Test(log_tests, simple_error_with_level_not_active, .init = setup)
 {
     char *msg = "This is a simple log message";
-    FILE* local_stderr = cr_get_redirected_stderr();
+    FILE* local_stdout = cr_get_redirected_stdout();
     char buffer[10000];
 
     memset(buffer, 0, sizeof(buffer));
@@ -55,12 +115,30 @@ Test(log_tests, simple_error, .init = cr_redirect_stderr)
     log_error("%s", msg);
 
     // Assert
-    fflush(stderr);
-    fread(buffer, sizeof(char), sizeof(buffer), local_stderr);
+    fflush(stdout);
+    fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
+    cr_assert_str_empty(buffer);
+}
+
+Test(log_tests, simple_debug_with_level_active, .init = setup)
+{
+    char *msg = "This is a simple log message";
+    FILE* local_stdout = cr_get_redirected_stdout();
+    char buffer[10000];
+
+    memset(buffer, 0, sizeof(buffer));
+    *log_level() = LOG_DEBUG;
+
+    // Act and assert
+    log_debug("%s", msg);
+
+    // Assert
+    fflush(stdout);
+    fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
     cr_assert_str_not_empty(buffer);
 }
 
-Test(log_tests, simple_debug, .init = cr_redirect_stdout)
+Test(log_tests, simple_debug_with_level_not_active, .init = setup)
 {
     char *msg = "This is a simple log message";
     FILE* local_stdout = cr_get_redirected_stdout();
@@ -74,5 +152,5 @@ Test(log_tests, simple_debug, .init = cr_redirect_stdout)
     // Assert
     fflush(stdout);
     fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
-    cr_assert_str_not_empty(buffer);
+    cr_assert_str_empty(buffer);
 }
