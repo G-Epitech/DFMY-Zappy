@@ -27,6 +27,7 @@ controller_t *server_register_client(server_t *server, int socket)
         controller_free(controller);
         controller = NULL;
     }
+    fd_states_set(&server->fd_watch, socket, FD_STATES_R | FD_STATES_E);
     return controller;
 }
 
