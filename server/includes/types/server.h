@@ -134,6 +134,13 @@ controller_t *server_register_client(server_t *server, int socket);
 controller_t *server_accept_connection(server_t *server);
 
 /**
+ * @brief Remove a controller from the server and close its connection
+ * @param server Server to remove controller from
+ * @param controller Controller to remove
+ */
+void server_close_connection(server_t *server, controller_t *controller);
+
+/**
  * @brief Initialize given file descriptors states
  * @param states File descriptors states to initialize
  */

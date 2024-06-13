@@ -19,13 +19,15 @@ bool server_has_pending_connections(server_t *server)
 
 controller_t *server_register_client(server_t *server, int socket)
 {
-    controller_t *controller = controller_new(socket);
+    controller_t *controller = server ? controller_new(socket) : NULL;
 
+    if (!server)
+        return NULL;
     if (controller &&
         !list_push(server->controllers, NODE_DATA_FROM_PTR(controller))
     ) {
         controller_free(controller);
-        controller = NULL;
+        return NULL;
     }
     fd_states_set(&server->fd_watch, socket, FD_STATES_R | FD_STATES_E);
     return controller;
@@ -36,8 +38,8 @@ controller_t *server_accept_connection(server_t *server)
     sockaddr_in_t address = { 0 };
     socklen_t address_len = sizeof(address);
     controller_t *controller = NULL;
-    int socket = accept(server->socket, AS_SOCKADDR(&address),
-        &address_len);
+    int socket = server ? accept(server->socket, AS_SOCKADDR(&address),
+        &address_len) : -1;
 
     if (socket < 0) {
         log_error("Failed to accept new connection");

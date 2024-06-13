@@ -11,7 +11,14 @@
 #include <unistd.h>
 #include "clcc/modules/sys/socket.h"
 #include "clcc/modules/stdlib.h"
+#include "clcc/modules/unistd.h"
 #include "types/server.h"
+
+static void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
 
 Test(server_tests, init_server)
 {
@@ -214,6 +221,9 @@ Test(server_start_tests, simple_setup)
     server_init(&server);
     cr_assert(server_start(&server, 4242));
     cr_assert(server.running);
+    cr_assert(FD_ISSET(server.socket, &server.fd_watch.readable));
+    cr_assert_not(FD_ISSET(server.socket, &server.fd_watch.writable));
+    cr_assert(FD_ISSET(server.socket, &server.fd_watch.except));
 
     // Cleanup
     close(server.socket);
@@ -577,6 +587,25 @@ Test(fd_states_tests, clear_max_present_in_r_and_w)
     cr_assert_eq(states.max, 64);
 }
 
+Test(fd_states_tests, clear_only_e)
+{
+    fd_states_t states;
+
+    fd_states_init(&states);
+    fd_states_set(&states, 64, FD_STATES_R);
+    fd_states_set(&states, 64, FD_STATES_W);
+    fd_states_set(&states, 42, FD_STATES_E);
+    cr_assert(FD_ISSET(64, &states.readable));
+    cr_assert(FD_ISSET(64, &states.writable));
+    cr_assert(FD_ISSET(42, &states.except));
+    cr_assert_eq(states.max, 64);
+    fd_states_clear(&states, FD_STATES_E);
+    cr_assert(FD_ISSET(64, &states.readable));
+    cr_assert(FD_ISSET(64, &states.writable));
+    cr_assert_not(FD_ISSET(42, &states.except));
+    cr_assert_eq(states.max, 64);
+}
+
 Test(server_has_pending_connections_tests, no_pending_connections)
 {
     // Arrange
@@ -616,4 +645,238 @@ Test(server_has_pending_connections_tests, has_pending_connection)
 
     // Act and assert
     cr_assert(server_has_pending_connections(&server));
+}
+
+Test(server_register_client_tests, simple_register) {
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    cr_assert_eq(server->controllers->len, 0);
+    controller = server_register_client(server, 42);
+    cr_assert_not_null(controller);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.socket, 42);
+    cr_assert_not_null(controller->generic.emissions);
+    cr_assert_not_null(controller->generic.requests);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
+    cr_assert(FD_ISSET(42, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(42, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(42, &server->fd_watch.writable));
+    server_free(server);
+}
+
+Test(server_register_client_tests, null_server)
+{
+    // Act and assert
+    cr_assert_null(server_register_client(NULL, 42));
+}
+
+Test(server_resigter_clients_tests, register_fail_due_to_calloc)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+
+    // Act and assert
+    clcc_return_now(calloc, NULL);
+    controller = server_register_client(server, 42);
+    clcc_disable_control(calloc);
+    cr_assert_null(controller);
+    cr_assert_eq(server->controllers->len, 0);
+    server_free(server);
+}
+
+Test(server_register_clients_tests, register_fail_due_to_list_push)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act and assert
+    clcc_enable_control(malloc);
+    clcc_return_value_after(malloc, NULL, 2);
+    controller = server_register_client(server, 42);
+    cr_assert_null(controller);
+    cr_assert_eq(server->controllers->len, 0);
+    server_free(server);
+    clcc_disable_control(malloc);
+}
+
+Test(server_accept_connection_tests, simple_accept, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_not_null(controller);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.socket, 4);
+    cr_assert_not_null(controller->generic.emissions);
+    cr_assert_not_null(controller->generic.requests);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
+    cr_assert(FD_ISSET(4, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(4, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+}
+
+Test(server_accept_connection_tests, null_server, .init = cr_redirect_stderr)
+{
+    // Act and assert
+    cr_assert_null(server_accept_connection(NULL));
+}
+
+Test(server_accept_connection_tests, accept_fail_due_to_accept, .init = cr_redirect_stderr)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    clcc_return_now(accept, -1);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_null(controller);
+    cr_assert_eq(server->controllers->len, 0);
+}
+
+Test(server_accept_connection_tests, accept_fail_due_to_controller_new, .init = cr_redirect_stderr)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    clcc_return_now(calloc, NULL);
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+    clcc_disable_control(calloc);
+    cr_assert_null(controller);
+    cr_assert_eq(server->controllers->len, 0);
+}
+
+Test(server_close_connection_tests, close_null_controller_on_null_server, .init = redirect_all_std)
+{
+    // Act and assert
+    server_close_connection(NULL, NULL);
+}
+
+Test(server_close_connection_tests, close_null_controller, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Act and assert
+    server_close_connection(server, NULL);
+    cr_assert_eq(server->controllers->len, 0);
+    server_free(server);
+}
+
+Test(server_close_connection_tests, close_controller_on_null_server, .init = cr_redirect_stdout)
+{
+    // Arrange
+    controller_t *controller = controller_new(42);
+
+    // Act and assert
+    cr_assert_eq(controller->generic.socket, 42);
+    cr_assert_not_null(controller);
+    server_close_connection(NULL, controller);
+}
+
+Test(server_close_connection_tests, simple_close, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(4, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(4, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, 4);
+
+    server_close_connection(server, controller);
+
+    cr_assert_eq(server->controllers->len, 0);
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.readable));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, server->socket);
+    server_free(server);
+}
+
+Test(server_close_connection_tests, simple_close_with_several_clients, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller1, *controller2, *controller3 = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller1 = server_accept_connection(server);
+    clcc_return_now(accept, 5);
+    controller2 = server_accept_connection(server);
+    clcc_return_now(accept, 6);
+    controller3 = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 3);
+    cr_assert(FD_ISSET(4, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(4, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+    cr_assert(FD_ISSET(5, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(5, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(5, &server->fd_watch.writable));
+    cr_assert(FD_ISSET(6, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(6, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(6, &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, 6);
+
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller1);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first->next, controller_t *), controller2);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->last, controller_t *), controller3);
+
+    clcc_return_now(close, 0);
+    server_close_connection(server, controller2);
+    clcc_disable_control(close);
+
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller1);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->last, controller_t *), controller3);
+
+    cr_assert_eq(server->controllers->len, 2);
+    cr_assert(FD_ISSET(4, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(4, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+    cr_assert_not(FD_ISSET(5, &server->fd_watch.readable));
+    cr_assert_not(FD_ISSET(5, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(5, &server->fd_watch.writable));
+    cr_assert(FD_ISSET(6, &server->fd_watch.readable));
+    cr_assert(FD_ISSET(6, &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(6, &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, 6);
+    cr_assert_eq(server->fd_watch.max, 6);
+    server_free(server);
 }

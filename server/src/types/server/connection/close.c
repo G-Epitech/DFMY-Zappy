@@ -6,8 +6,10 @@
 */
 
 #include <unistd.h>
+#include <stdio.h>
 #include "types/server.h"
 #include "types/controller.h"
+#include "log.h"
 
 static void server_remove_controller(server_t *server, controller_t *controller)
 {
@@ -25,10 +27,17 @@ static void server_remove_controller(server_t *server, controller_t *controller)
 
 void server_close_connection(server_t *server, controller_t *controller)
 {
-    if (!server || !controller)
+    if (!controller) {
+        log_warn("Trying to close a NULL controller");
         return;
-    fd_states_unset(&server->fd_watch, controller->generic.socket,
-        FD_STATES_R | FD_STATES_E | FD_STATES_W);
+    }
     close(controller->generic.socket);
-    server_remove_controller(server, controller);
+    log_info("Client on socket %d disconnected", controller->generic.socket);
+    if (server) {
+        fd_states_unset(&server->fd_watch, controller->generic.socket,
+            FD_STATES_R | FD_STATES_E | FD_STATES_W);
+        server_remove_controller(server, controller);
+    } else {
+        controller_free(controller);
+    }
 }
