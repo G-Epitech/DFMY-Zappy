@@ -34,7 +34,7 @@ static void server_event_handle_write(controller_t *controller,
     if (FD_ISSET(controller->generic.socket, &actual.writable)) {
         write_size = controller_write(controller,
             event->buffer, event->buffer_size);
-        if (write_size != event->buffer_size  && write_size != 0) {
+        if (write_size != event->buffer_size && write_size != 0) {
             server_event_handle_propagate_fail(controller, event, write_size);
         }
     }

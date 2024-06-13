@@ -395,10 +395,10 @@ Test(server_tests, propagate_event_fail_strdup_fail, .init = cr_redirect_stdout)
     select(server->fd_actual.max + 1, NULL, &server->fd_actual.writable, NULL, NULL);
     fflush(stdout);
     clcc_return_now(write, 10);
-    clcc_return_now(strdup, NULL);
+    clcc_return_now(strndup, NULL);
     server_propagate_events(server);
     clcc_disable_control(write);
-    clcc_disable_control(strdup);
+    clcc_disable_control(strndup);
     cr_assert_eq(server->events->len, 0);
     cr_assert_eq(controller->generic.emissions->len, 0);
     close(pipefd[0]);
