@@ -6,8 +6,6 @@
 */
 
 #include <stdio.h>
-#include <getopt.h>
-#include <stdlib.h>
 #include "types/args.h"
 
 static bool parsing_error(args_parser_t *parser)

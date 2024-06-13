@@ -7,7 +7,6 @@
 
 #include "types/args.h"
 #include <criterion/criterion.h>
-#include <criterion/redirect.h>
 
 Test(args_options_help_tests, short_help)
 {

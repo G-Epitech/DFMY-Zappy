@@ -6,7 +6,6 @@
 */
 
 #include <unistd.h>
-#include <stdio.h>
 #include "types/server.h"
 #include "types/controller.h"
 #include "log.h"
