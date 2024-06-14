@@ -13,8 +13,15 @@ static request_t *generic_controller_create_request(
 {
     request_t *req = request_new();
 
-    if (!req || !list_push(generic->requests, NODE_DATA_FROM_PTR(req)))
+    if (!req) {
+        log_error("Failed to create request. Ignored.");
         return NULL;
+    }
+    if (!list_push(generic->requests, NODE_DATA_FROM_PTR(req))) {
+        log_error("Failed to append request in queue. Ignored.");
+        request_free(req);
+        return NULL;
+    }
     return req;
 }
 
@@ -22,7 +29,7 @@ static request_t *player_controller_create_request(
     player_controller_t *controller)
 {
     if (controller->requests->len == CTRL_PLAYER_MAX_REQ) {
-        log_info("Player controller %d reached max requests. "
+        log_info("Player controller %d reached max allowed pending requests. "
             "Ignored.", controller->socket);
         return NULL;
     }

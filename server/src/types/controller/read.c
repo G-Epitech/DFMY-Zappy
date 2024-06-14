@@ -10,7 +10,7 @@
 #include "types/controller.h"
 #include "log.h"
 
-static bool controller_read_next_token(char *start, size_t size,
+bool controller_read_next_token(char *start, size_t size,
     request_token_t *token)
 {
     char *end = memchr(start, '\n', size);
@@ -25,7 +25,7 @@ static bool controller_read_next_token(char *start, size_t size,
     }
 }
 
-static void controller_handle_token(controller_t *controller,
+void controller_handle_buffer_token(controller_t *controller,
     request_token_t *token)
 {
     request_t *req = controller_get_next_pending_request(controller);
@@ -45,7 +45,7 @@ static void controller_handle_token(controller_t *controller,
     }
 }
 
-static void controller_handle_buffer(controller_t *controller,
+void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size)
 {
     request_token_t token = { 0 };
@@ -54,7 +54,7 @@ static void controller_handle_buffer(controller_t *controller,
 
     while (!last) {
         last = controller_read_next_token(start, size, &token);
-        controller_handle_token(controller, &token);
+        controller_handle_buffer_token(controller, &token);
         start += token.size;
         size -= token.size;
     }

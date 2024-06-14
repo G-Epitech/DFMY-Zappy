@@ -139,3 +139,32 @@ controller_state_t controller_read(controller_t *controller);
  * @return Last request or NULL if no request
  */
 request_t *controller_get_last_request(controller_t *controller);
+
+/**
+ * @brief Read next token from a buffer
+ * @param start Start of the buffer
+ * @param size Size of the buffer
+ * @param token Token to fill
+ * @return true if is the last token, false otherwise
+ */
+bool controller_read_next_token(char *start, size_t size,
+    request_token_t *token);
+
+/**
+ * @brief Handle a token from a buffer
+ * @param controller Controller to handle token
+ * @param token Token to handle
+ */
+void controller_handle_buffer_token(controller_t *controller,
+    request_token_t *token);
+
+/**
+ * @brief Handle a buffer from a controller and append it to
+ * controller requests
+ * @param controller Controller to handle buffer
+ * @param buffer Buffer to handle
+ * @param size Size of the buffer
+ */
+void controller_handle_buffer(controller_t *controller,
+    char buffer[REQ_BUFF_SIZE], size_t size);
+
