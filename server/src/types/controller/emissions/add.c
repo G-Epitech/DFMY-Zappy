@@ -27,11 +27,12 @@ static bool controller_add_emission_final(controller_t *controller,
     if (success) {
         log_info("Added emission [%s] to controller %d", buffer,
             controller->generic.socket);
-        return true;
     } else {
+        log_error("Failed to add emission [%s] to controller %d", buffer,
+                  controller->generic.socket);
         emission_free(emission);
     }
-    return false;
+    return success;
 }
 
 bool controller_add_emission(controller_t *controller, char *buffer,
