@@ -11,15 +11,13 @@
 #include "types/list.h"
 #include "log.h"
 
-bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
-    size_t buffer_size)
+static bool controller_add_emission_final(controller_t *controller,
+    smart_ptr_t *buffer_ptr, size_t buffer_size)
 {
     emission_t *emission = NULL;
     char *buffer = NULL;
     bool success = false;
 
-    if (!controller || !buffer_ptr || !buffer_ptr->ptr)
-        return false;
     emission = emission_new(buffer_ptr, buffer_size);
     if (!emission)
         return false;
@@ -34,6 +32,25 @@ bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
         emission_free(emission);
     }
     return false;
+}
+
+bool controller_add_emission(controller_t *controller, char *buffer,
+    size_t buffer_size)
+{
+    smart_ptr_t *buffer_ptr = NULL;
+    bool success = false;
+
+    if (!controller || !buffer)
+        return false;
+    buffer_ptr = smart_ptr_new(buffer);
+    if (!buffer_ptr)
+        return false;
+    success = controller_add_emission_final(controller, buffer_ptr,
+        buffer_size);
+    if (!success) {
+        smart_ptr_free(buffer_ptr);
+    }
+    return success;
 }
 
 bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
@@ -52,7 +69,7 @@ bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type == CTRL_GRAPHIC) {
-            controller_add_emission(controller, buffer_ptr, buffer_size);
+            controller_add_emission_final(controller, buffer_ptr, buffer_size);
         }
         node = node->next;
     }
@@ -75,7 +92,7 @@ bool controllers_player_add_emission(list_t *controllers, char *buffer,
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type != CTRL_PLAYER) {
-            controller_add_emission(controller, buffer_ptr, buffer_size);
+            controller_add_emission_final(controller, buffer_ptr, buffer_size);
         }
         node = node->next;
     }
@@ -98,7 +115,7 @@ bool controllers_all_add_emission(list_t *controllers, char *buffer,
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type != CTRL_UNKNOWN) {
-            controller_add_emission(controller, buffer_ptr, buffer_size);
+            controller_add_emission_final(controller, buffer_ptr, buffer_size);
         }
         node = node->next;
     }

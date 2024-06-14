@@ -122,7 +122,7 @@ void controller_emit(controller_t *controller);
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
+bool controller_add_emission(controller_t *controller, char *buffer,
     size_t buffer_size);
 
 /**
