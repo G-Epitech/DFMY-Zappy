@@ -20,7 +20,7 @@ request_t *request_new(void)
 
     if (!request)
         return NULL;
-    request->buffer = calloc(1, REQUEST_BUFF_SIZE);
+    request->buffer = calloc(REQUEST_BUFF_SIZE + 1, sizeof(char));
     if (!request->buffer) {
         free(request);
         return NULL;
