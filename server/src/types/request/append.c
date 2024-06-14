@@ -24,7 +24,7 @@ static bool request_resize(request_t *request)
     if (!new_buffer) {
         request->status = REQ_INVALID;
         log_error("Failed to resize request buffer. "
-              "Request marked as invalid.");
+            "Request marked as invalid.");
         return false;
     }
     memset(new_buffer + request->content_size, 0, REQ_BUFF_SIZE + 1);

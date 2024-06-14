@@ -49,7 +49,7 @@ controller_t *server_accept_connection(server_t *server)
     if (!controller) {
         close(socket);
         log_error("Failed to create controller for socket %d. "
-                  "Socket closed.", socket);
+            "Socket closed.", socket);
         return NULL;
     }
     log_info("New client connected on socket %d", socket);

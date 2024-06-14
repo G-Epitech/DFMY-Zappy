@@ -55,7 +55,6 @@ request_t *controller_get_last_request(controller_t *controller)
 
 request_t *controller_get_next_pending_request(controller_t *controller)
 {
-
     request_t *req = controller_get_last_request(controller);
 
     if (req && req->status == REQ_PENDING)

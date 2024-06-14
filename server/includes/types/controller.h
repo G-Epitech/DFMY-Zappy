@@ -164,4 +164,3 @@ void controller_handle_buffer_token(controller_t *controller,
  */
 void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size);
-
