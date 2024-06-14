@@ -7,6 +7,7 @@
 
 #include <unistd.h>
 #include <memory.h>
+#include <stdio.h>
 #include "types/controller.h"
 #include "log.h"
 
@@ -29,19 +30,19 @@ void controller_handle_buffer_token(controller_t *controller,
     request_token_t *token)
 {
     request_t *req = controller_get_next_pending_request(controller);
+    size_t real_size = token->size;
 
     if (!req)
         return;
     if (token->content[token->size - 1] == '\n') {
-        token->size -= 1;
-        token->content[token->size] = '\0';
+        real_size -= 1;
         req->status = REQ_READY;
     } else {
         req->status = REQ_PENDING;
     }
-    if (!request_append(req, token->content, token->size)) {
-        return log_error("Failed to append token to request buffer. "
-            "Ignored.");
+    if (!request_append(req, token->content, real_size)) {
+        return log_error("Failed to append token to request buffer of "
+            "controller %d. Ignored.", controller->generic.socket);
     }
 }
 
