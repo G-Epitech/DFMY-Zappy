@@ -7,7 +7,7 @@
 
 import time
 from classes.client import SocketClient
-from typing import Any, Callable
+from typing import Any, Callable, NamedTuple
 import json
 from datetime import datetime
 import random
@@ -16,11 +16,17 @@ import time
 HAMSTER_NEW = "NEW_HAMSTER"
 HAMSTER_ASSERT_AUTHORITY = "I_AM_THE_MOTHER"
 HAMSTER_CANNIBALISM = "I_WILL_EAT_YOU"
-HAMSTER_REQUEST_CANNIBALISM = "MAY_I_EAT_YOU?"
+HAMSTER_ACCEPT_CANNIBALISM = "ACCEPT_CANNIBALISM"
+HAMSTER_REJECT_CANNIBALISM = "REJECT_CANNIBALISM"
 HAMSTER_INCANTATION = "INCANTATION"
+HAMSTER_CALL_FAMILY = "CALL_FAMILY"
+HAMSTER_STOP_CALLING = "STOP_CALLING"
+HAMSTER_I_ALIVE = "I_AM_ALIVE"
+HAMSTER_COMMING = "COMMING"
 HAMSTER_OK = "OK"
 HAMSTER_KO = "KO"
 HAMSTER_RUN = "RUN"
+HAMSTER_SET_OBJECT = "SET_OBJECT"
 
 COLOR_GREEN = "\033[1;32m"
 COLOR_RED = "\033[1;31m"
@@ -29,6 +35,79 @@ COLOR_BLUE = "\033[1;34m"
 COLOR_MAGENTA = "\033[1;35m"
 COLOR_CYAN = "\033[1;36m"
 COLOR_RESET = "\033[0m"
+
+LEVELS_REQUIREMENTS = {
+    2: {
+        "player": 1,
+        "linemate": 1,
+        "deraumere": 0,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0
+    },
+    3: {
+        "player": 2,
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0
+    },
+    4: {
+        "player": 2,
+        "linemate": 2,
+        "deraumere": 0,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 2,
+        "thystame": 0
+    },
+    5: {
+        "player": 4,
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 2,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0
+    },
+    6: {
+        "player": 4,
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 1,
+        "mendiane": 3,
+        "phiras": 0,
+        "thystame": 0
+    },
+    7: {
+        "player": 6,
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 3,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0
+    },
+    8: {
+        "player": 6,
+        "linemate": 2,
+        "deraumere": 2,
+        "sibur": 2,
+        "mendiane": 2,
+        "phiras": 2,
+        "thystame": 1
+    }
+}
+
+class HamsterEntity(NamedTuple):
+    starting_timestamp: int
+    current_timestamp: int
+    inventory: dict
+    cooldown_before_declared_dead: int
+    direction: int = -1
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -49,11 +128,16 @@ class Hamster:
         self.pending_broadcast: list[tuple[int, str]] = []
         self.starting_timestamp: int = 0
         self.mother: bool = True
-        self.hamsters: list[int] = []
         self.cannibal_parent: int = 0
         self.dead: bool = False
         self.sync_with_other_hamsters: bool = False
         self.encrypting_key: str = "I_AM_THE_MOTHER_OF_" + self.name
+        self.called_by_mother: bool = False
+        self.direction_called_by_mother: int = 0
+        self.hamsters: list[HamsterEntity] = []
+        self.I_gonna_be_eaten: bool = False
+        self.current_level: int = 1
+        self.previous_level: int = 0
 
     def init_hamster(self):
         """
@@ -112,6 +196,20 @@ class Hamster:
                 if broadcast_message:
                     self.pending_broadcast.append(broadcast_message)
                 response = None
+                continue
+            if response.startswith("Elevation underway"):
+                self.debug(f"Elevation underway")
+                response = None
+                if self.mother:
+                    return "ok"
+                continue
+            if response.startswith("Current level: "):
+                self.previous_level = self.current_level
+                self.current_level = int(response.replace("Current level: ", ""))
+                if self.previous_level != self.current_level:
+                    self.debug(f"Level up! {self.current_level}")
+                response = None
+                continue
         return response
     
     def response_get_array(self, response: str) -> list[str] | None:
@@ -135,7 +233,7 @@ class Hamster:
                 raise Exception("Empty array")
             return list
         except Exception as e:
-            self.debug(f"Error parsing array: {e}")
+            self.debug(f"Error parsing array: {e} | on response: {response}")
         return None
 
     def update_inventory(self):
@@ -150,6 +248,8 @@ class Hamster:
             response = self.response_get_last_command()
             if response == "ko":
                 raise Exception("Server responded with ko")
+            if response == "ok":
+                return
             inventory = self.response_get_array(response)
             if not inventory:
                 raise Exception("Invalid inventory format")
@@ -182,14 +282,15 @@ class Hamster:
         Args:
             message (str): The message to be broadcasted.
         """
+        self.hamsters_decrement_cooldown()
         self.client.send(f"Broadcast {self.encrypt_message(message)}\n")
         response = self.response_get_last_command()
-        if response == "ko":
-            self.debug(f"Server did not accept broadcast message: |{message}|")
-        elif response == "ok":
-            self.debug(f"Message successfully broadcasted")
-        else:
-            self.debug(f"Server responded with unknown message: {response}")
+        # if response == "ko":
+        #     self.debug(f"Server did not accept broadcast message: |{message}|")
+        # elif response == "ok":
+        #     self.debug(f"Message successfully broadcasted")
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}")
 
     def get_current_time_nano(self) -> int:
             """
@@ -211,6 +312,7 @@ class Hamster:
         Returns:
             str: The broadcast message in JSON format.
         """
+        self.update_inventory()
         json_message = {
             "starting_timestamp": self.starting_timestamp,
             "current_timestamp": self.get_current_time_nano(),
@@ -221,6 +323,63 @@ class Hamster:
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
         return message
+    
+    def hamsters_remove_dead(self):
+        """
+        Removes dead hamsters from the list of hamsters.
+
+        This method iterates over the list of hamsters and removes any hamster
+        that has a cooldown before being declared dead greater than 0.
+        """
+        for hamster in self.hamsters:
+            if hamster.cooldown_before_declared_dead <= 0:
+                self.hamsters.remove(hamster)
+
+    def hamsters_decrement_cooldown(self):
+        """
+        Decrements the cooldown before being declared dead for each hamster.
+
+        This method iterates over the list of hamsters and decrements the
+        cooldown before being declared dead for each hamster.
+        """
+        for hamster in self.hamsters:
+            hamster._replace(cooldown_before_declared_dead=hamster.cooldown_before_declared_dead - 5)
+
+    def hamsters_manager_message(self, dir: int, message: str):
+        """
+        Manages living hamsters based on the received message.
+
+        Args:
+            message (str): The message to process.
+        """
+        if not self.mother:
+            return
+        try:
+            message = self.decrypt_message(message).replace("'", "\"")
+            json_message = json.loads(message)
+            if not json_message:
+                raise Exception("Invalid json message")
+            hamster_starting_timestamp = json_message["starting_timestamp"]
+            hamster_current_timestamp = json_message["current_timestamp"]
+            hamster_inventory = json_message["inventory"]
+            hamster_message = json_message["message"]
+            if hamster_starting_timestamp == self.starting_timestamp:
+                return
+            if hamster_starting_timestamp not in [hamster.starting_timestamp for hamster in self.hamsters]:
+                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
+            else:
+                for hamster in self.hamsters:
+                    if hamster.starting_timestamp == hamster_starting_timestamp:
+                        self.hamsters.remove(hamster)
+                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
+                        break
+            if hamster_message == HAMSTER_ACCEPT_CANNIBALISM or hamster_message == HAMSTER_REJECT_CANNIBALISM:
+                for hamster in self.hamsters:
+                    if hamster.starting_timestamp == hamster_starting_timestamp:
+                        self.hamsters.remove(hamster)
+                        break
+        except Exception as e:
+            self.debug(f"Error managing living hamsters: {e}")
 
     def manage_broadcast_message(self, dir: int, message: str):
         """
@@ -269,26 +428,91 @@ class Hamster:
         json_message = json.loads(message)
         if not message:
             raise Exception(f"Invalid message format: {message}")
+
+        if self.mother:
+            if json_message["starting_timestamp"] < self.starting_timestamp:
+                self.mother = False
+                self.error(f"Lost authority to {json_message['starting_timestamp']}")
+
         if json_message["message"] == HAMSTER_NEW:
             if self.mother:
                 if json_message["starting_timestamp"] > self.starting_timestamp:
                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ASSERT_AUTHORITY, json_message['starting_timestamp'])}")
                     self.sync_with_other_hamsters = True
                 else:
-                    self.mother = False
+                    if not self.I_gonna_be_eaten:
+                        self.mother = False
                     self.sync_with_other_hamsters = True
+
         if json_message["message"] == HAMSTER_ASSERT_AUTHORITY:
-            self.mother = False
-            self.sync_with_other_hamsters = True
+            if json_message["recipient"] == self.starting_timestamp:
+                self.mother = False
+                self.sync_with_other_hamsters = True
+                self.debug(f"Lost authority to {json_message['starting_timestamp']}")
+
         if json_message["message"] == HAMSTER_CANNIBALISM:
             if json_message["recipient"] == self.starting_timestamp:
                 if self.cannibal_parent == 0 and dir == 0:
+                    self.mother = False
+                    self.I_gonna_be_eaten = True
                     self.sync_with_other_hamsters = True
                     self.cannibal_parent = json_message["starting_timestamp"]
-                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_OK, json_message['starting_timestamp'])}")
+                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ACCEPT_CANNIBALISM, json_message['starting_timestamp'])}")
                     self.debug(f"Accepted cannibalism from {json_message['starting_timestamp']}")
                 else:
-                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_KO, json_message['starting_timestamp'])}")
+                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_REJECT_CANNIBALISM, json_message['starting_timestamp'])}")
+
+        if self.I_gonna_be_eaten:
+            return
+
+        if json_message["message"] == HAMSTER_CALL_FAMILY:
+            self.called_by_mother = True
+            self.direction_called_by_mother = dir
+
+        if json_message["message"] == HAMSTER_STOP_CALLING:
+            self.called_by_mother = False
+            self.direction_called_by_mother = 0
+        
+        msg: str = json_message["message"]
+        if msg.startswith(HAMSTER_SET_OBJECT):
+            object = msg.replace(HAMSTER_SET_OBJECT, "")
+            self.debug(f"Set object: {object}")
+            self.client.send(f"Set {object}\n")
+            response = self.response_get_last_command()
+            if response == "ko":
+                self.debug(f"Server did not accept set {object}")
+            # elif response == "ok":
+            #     self.debug(f"Set {object}")
+            # else:
+            #     self.debug(f"Server responded with unknown message: {response}")
+        
+        if json_message["message"] == HAMSTER_INCANTATION:
+            self.debug(f"Starting incantation")
+
+    def manage_broadcast_cannibalism(self, ID: int):
+        for message in self.pending_broadcast:
+            try:
+                encrypted = self.decrypt_message(message[1]).replace("'", "\"")
+                json_message = json.loads(encrypted)
+                if not json_message:
+                    raise Exception("Invalid json message")
+                if json_message["message"] == HAMSTER_NEW:
+                    if json_message["starting_timestamp"] == ID:
+                        self.pending_broadcast.remove(message)
+                        # self.debug(f"===================================== New hamster {ID} found =====================================", COLOR_YELLOW)
+            except Exception as e:
+                self.debug(f"Error managing broadcast message: {e}")
+
+    def manage_broadcast_cannibalism_id(self, message: str) -> int | None:
+        message = self.decrypt_message(message).replace("'", "\"")
+        json_message = json.loads(message)
+        if not json_message:
+            raise Exception("Invalid json message")
+        
+        if json_message["message"] == HAMSTER_CANNIBALISM:
+            if json_message["recipient"] != self.starting_timestamp:
+                return json_message["recipient"]
+        return None
 
     def manage_broadcast(self):
         """
@@ -304,10 +528,23 @@ class Hamster:
         """
         for message in self.pending_broadcast:
             try:
+                id = self.manage_broadcast_cannibalism_id(message[1])
+                if id:
+                    self.pending_broadcast.remove(message)
+                    self.manage_broadcast_cannibalism(id)
+            except Exception as e:
+                self.debug(f"Error managing broadcast message: {e}")
+
+        for message in self.pending_broadcast:
+            try:
                 self.manage_broadcast_message(message[0], message[1])
+                self.hamsters_manager_message(message[0], message[1])
             except Exception as e:
                 self.debug(f"Error managing broadcast message: {e}")
         self.pending_broadcast = []
+        if self.mother and self.cannibal_parent == self.starting_timestamp:
+            self.debug(f"Number of hamsters: {len(self.hamsters)}", COLOR_MAGENTA)
+            self.hamsters_remove_dead()
 
     def message_get_json(self, message: str) -> Any | None:
         """
@@ -487,10 +724,10 @@ class Hamster:
                         try:
                             json_message = self.message_get_json(broadcast_message[1])
                             if json_message and json_message["recipient"] == self.starting_timestamp:
-                                if json_message["message"] == HAMSTER_OK:
+                                if json_message["message"] == HAMSTER_ACCEPT_CANNIBALISM:
                                     accepted = True
                                     break
-                                elif json_message["message"] == HAMSTER_KO:
+                                elif json_message["message"] == HAMSTER_REJECT_CANNIBALISM:
                                     accepted = False
                                     break
                         except Exception as e:
@@ -538,17 +775,21 @@ class Hamster:
             - Captures any exceptions raised during the process, logs an error message, and exits.
         """
         self.cannibal_parent = self.starting_timestamp
+        
+        self.walk()
 
         self.client.send(f"Fork\n")
         response = self.response_get_last_command()
-        if response == "ko":
-            self.debug("Server did not accept fork")
-            return
-        elif response == "ok":
-            self.debug("Fork accepted")
-        else:
-            self.debug(f"Server responded with unknown message: {response}")
-            return
+        # if response == "ko":
+        #     self.debug("Server did not accept fork")
+        #     return
+        # elif response == "ok":
+        #     self.debug("Fork accepted")
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}")
+        #     return
+        
+        self.manage_broadcast()
 
         self.add_hamster()
 
@@ -571,6 +812,8 @@ class Hamster:
                 find_my_child = True
             else:
                 self.debug(f"Cannibalism refused by child {child_hamster}")
+            if self.mother:
+                self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_ASSERT_AUTHORITY, child_hamster)}")
 
         attempt = 0
 
@@ -582,7 +825,9 @@ class Hamster:
                 if response == "ko":
                     self.error("Server did not accept look")
                     return
-                self.debug(f"Look response: {response}")
+                if response == "ok":
+                    return
+                # self.debug(f"Look response: {response}")
                 vision = self.response_get_array(response)
                 if not vision:
                     raise Exception("Invalid vision format")         
@@ -590,33 +835,33 @@ class Hamster:
                 first_case_list = first_case.split(" ")
                 if not first_case_list:
                     raise Exception("Invalid first element in vision")
-                self.debug(f"First case: {first_case_list}", COLOR_BLUE)
+                # self.debug(f"First case: {first_case_list}", COLOR_BLUE)
                 for item in first_case_list:
                     if item == "food":
                         food_on_ground += 1
-                self.debug(f"Food on ground: {food_on_ground}")
+                # self.debug(f"Food on ground: {food_on_ground}")
                 if food_on_ground > 0:
                     while food_on_ground > 0:
                         self.client.send(f"Take food\n")
                         response = self.response_get_last_command()
                         if response == "ko":
                             self.debug("Server did not accept take food")
-                        elif response == "ok":
-                            self.debug("Took food")
-                        else:
-                            self.debug(f"Server responded with unknown message: {response}")
-                            return
+                        # elif response == "ok":
+                        #     self.debug("Took food")
+                        # else:
+                        #     self.debug(f"Server responded with unknown message: {response}")
+                        #     return
                         food_on_ground -= 1
                 else:
-                    self.debug("No food on ground")
-                    if attempt > 2:
+                    # self.debug("No food on ground")
+                    if attempt > 5:
                         break
                     attempt += 1
             except Exception as e:
                 self.error(f"Error cannibalism: {e}")
                 return
 
-    def walk_take_object(self, items: list[str]):
+    def walk_take_objects(self, items: list[str]):
         """
         Takes the specified items while walking.
 
@@ -631,11 +876,11 @@ class Hamster:
             self.client.send(f"Take {item}\n")
             response = self.response_get_last_command()
             if response == "ko":
-                self.debug(f"Server did not accept take {item}", COLOR_CYAN)
-            elif response == "ok":
-                self.debug(f"Took {item}", COLOR_CYAN)
-            else:
-                self.debug(f"Server responded with unknown message: {response}", COLOR_CYAN)
+                self.debug(f"Server did not accept take {item} | response: {response}", COLOR_CYAN)
+            # elif response == "ok":
+            #     self.debug(f"Took {item}", COLOR_CYAN)
+            # else:
+            #     self.debug(f"Server responded with unknown message: {response}", COLOR_CYAN)
     
     def walk_forward(self):
         """
@@ -651,10 +896,10 @@ class Hamster:
         response = self.response_get_last_command()
         if response == "ko":
             self.debug("Server did not accept forward", COLOR_YELLOW)
-        elif response == "ok":
-            self.debug("Moved forward", COLOR_YELLOW)
-        else:
-            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+        # elif response == "ok":
+        #     self.debug("Moved forward", COLOR_YELLOW)
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
 
     def walk_rotate_right(self):
         """
@@ -670,10 +915,10 @@ class Hamster:
         response = self.response_get_last_command()
         if response == "ko":
             self.debug("Server did not accept right", COLOR_YELLOW)
-        elif response == "ok":
-            self.debug("Rotated right", COLOR_YELLOW)
-        else:
-            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+        # elif response == "ok":
+        #     self.debug("Rotated right", COLOR_YELLOW)
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
     
     def walk_rotate_left(self):
         """
@@ -689,10 +934,10 @@ class Hamster:
         response = self.response_get_last_command()
         if response == "ko":
             self.debug("Server did not accept left", COLOR_YELLOW)
-        elif response == "ok":
-            self.debug("Rotated left", COLOR_YELLOW)
-        else:
-            self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
+        # elif response == "ok":
+        #     self.debug("Rotated left", COLOR_YELLOW)
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}", COLOR_YELLOW)
 
     def walk(self):
         """
@@ -708,7 +953,9 @@ class Hamster:
             if response == "ko":
                 self.error("Server did not accept look")
                 return
-            self.debug(f"Look response: {response}")
+            if response == "ok":
+                return
+            # self.debug(f"Look response: {response}")
             vision = self.response_get_array(response)
             if not vision:
                 raise Exception("Invalid vision format")
@@ -716,15 +963,15 @@ class Hamster:
             first_case_list = first_case.split(" ")
             if not first_case_list:
                 raise Exception("Invalid first element in vision")
-            self.debug(f"First case: {first_case_list}", COLOR_BLUE)
-            self.walk_take_object(first_case_list)
-            self.walk_forward()
+            # self.debug(f"First case: {first_case_list}", COLOR_BLUE)
+            self.walk_take_objects(first_case_list)
             third_case = vision[2].strip()
             third_case_list = third_case.split(" ")
             if not third_case_list:
                 raise Exception("Invalid third element in vision")
-            self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
-            self.walk_take_object(third_case_list)
+            # self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
+            self.walk_forward()
+            self.walk_take_objects(third_case_list)
             second_case = vision[1].strip()
             second_case_list = second_case.split(" ")
             second_case_list = [item for item in second_case_list if item != "player"]
@@ -732,23 +979,231 @@ class Hamster:
             fourth_case_list = fourth_case.split(" ")
             fourth_case_list = [item for item in fourth_case_list if item != "player"]
             if not second_case_list:
-                raise Exception("Invalid second element in vision")
-            self.debug(f"Second case: {second_case_list}", COLOR_BLUE)
+                second_case_list = []
+            # self.debug(f"Second case: {second_case_list}", COLOR_BLUE)
             if not fourth_case_list:
-                raise Exception("Invalid fourth element in vision")
-            self.debug(f"Fourth case: {fourth_case_list}", COLOR_BLUE)
+                fourth_case_list = []
+            # self.debug(f"Fourth case: {fourth_case_list}", COLOR_BLUE)
+            if (len(second_case_list) == len(fourth_case_list)) or (len(third_case_list) > len(second_case_list) and len(third_case_list) > len(fourth_case_list)):
+                self.walk_forward()
+                return
             if len(second_case_list) > len(fourth_case_list):
                 self.walk_rotate_left()
             else:
                 self.walk_rotate_right()
             self.walk_forward()
             if len(second_case_list) > len(fourth_case_list):
-                self.walk_take_object(second_case_list)
+                self.walk_take_objects(second_case_list)
             else:
-                self.walk_take_object(fourth_case_list)
+                self.walk_take_objects(fourth_case_list)
             self.walk_forward()
         except Exception as e:
             self.error(f"Error walking: {e}")
+    
+    def family_gathering(self):
+        # self.error(f"Called by mother: {self.direction_called_by_mother}########################################################################")
+        if self.direction_called_by_mother < 0 or self.direction_called_by_mother > 8:
+            self.error("Invalid direction")
+            return
+        if self.direction_called_by_mother == 0:
+            # self.debug("I arrived to the mother!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_GREEN)
+            self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
+            return
+        possible_moves = [
+            [self.walk_forward],
+            [self.walk_forward, self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_left, self.walk_forward, self.walk_rotate_left, self.walk_forward],
+            [self.walk_rotate_right, self.walk_rotate_right, self.walk_forward],
+            [self.walk_rotate_right, self.walk_forward, self.walk_rotate_right, self.walk_forward],
+            [self.walk_rotate_right, self.walk_forward],
+            [self.walk_forward, self.walk_rotate_right, self.walk_forward]
+        ]
+        for move in possible_moves[self.direction_called_by_mother - 1]:
+            move()
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
+
+    def reproduce(self):
+        self.debug("!!!Reproducing!!!", COLOR_MAGENTA)
+        self.client.send("Fork\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept fork")
+        # elif response == "ok":
+        #     self.debug("Fork accepted")
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}")
+
+        self.add_hamster()
+
+        self.walk()
+
+        self.debug("!!!Reproduced!!!", COLOR_MAGENTA)
+
+        self.cannibalism()
+
+    def fill_empty_slots(self) -> bool:
+        connect_nbr = 0
+        self.client.send("Connect_nbr\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept connect_nbr")
+            return False
+        try:
+            connect_nbr = int(response)
+        except Exception as e:
+            self.error(f"Error parsing connect_nbr response: {e}")
+            return False
+        self.debug(f"Connect_nbr: {connect_nbr}")
+        if connect_nbr == 0:
+            return False
+        while connect_nbr > 0:
+            self.add_hamster()
+            connect_nbr -= 1
+        return True
+    
+    def hamsters_have_at_leats_n_foods(self, n: int) -> bool:
+        for hamster in self.hamsters:
+            if hamster.inventory["food"] < n:
+                return False
+        return True
+
+    def hamsters_all_arrived(self) -> bool:
+        for hamster in self.hamsters:
+            if hamster.direction != 0:
+                return False
+        return True
+    
+    def hamster_ask_to_set_object(self, object: str, hamster_id: int):
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_SET_OBJECT + object, hamster_id)}")
+
+    def hamsters_have_enough_ressources_for_the_next_level(self) -> bool:
+        linemate_total = 0
+        deraumere_total = 0
+        sibur_total = 0
+        mendiane_total = 0
+        phiras_total = 0
+        thystame_total = 0
+        for hamster in self.hamsters:
+            linemate_total += hamster.inventory["linemate"]
+            deraumere_total += hamster.inventory["deraumere"]
+            sibur_total += hamster.inventory["sibur"]
+            mendiane_total += hamster.inventory["mendiane"]
+            phiras_total += hamster.inventory["phiras"]
+            thystame_total += hamster.inventory["thystame"]
+        next_level_requirements = LEVELS_REQUIREMENTS[self.current_level + 1]
+        self.debug(f"Next level requirements: {next_level_requirements}")
+        if linemate_total < next_level_requirements["linemate"]:
+            return False
+        if deraumere_total < next_level_requirements["deraumere"]:
+            return False
+        if sibur_total < next_level_requirements["sibur"]:
+            return False
+        if mendiane_total < next_level_requirements["mendiane"]:
+            return False
+        if phiras_total < next_level_requirements["phiras"]:
+            return False
+        if thystame_total < next_level_requirements["thystame"]:
+            return False
+        return True
+    
+    def hamsters_ask_to_set_objects(self, objects: list[str]):
+        for object in objects:
+            for hamster in self.hamsters:
+                if hamster.inventory[object] > 0:
+                    self.hamster_ask_to_set_object(object, hamster.starting_timestamp)
+                    objects.remove(object)
+                    break
+    
+    def elevation_missing_items(self) -> list[str] | None:
+        self.client.send("Look\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept look")
+            return None
+        if response == "ok":
+            return None
+
+        vision = self.response_get_array(response)
+        if not vision:
+            self.error("Invalid vision format")
+            return None
+        
+        first_case = vision[0].strip()
+        first_case_list = first_case.split(" ")
+        if not first_case_list:
+            self.error("Invalid first element in vision")
+            return None
+
+        linemate_total = 0
+        deraumere_total = 0
+        sibur_total = 0
+        mendiane_total = 0
+        phiras_total = 0
+        thystame_total = 0
+        for item in first_case_list:
+            if item == "linemate":
+                linemate_total += 1
+            elif item == "deraumere":
+                deraumere_total += 1
+            elif item == "sibur":
+                sibur_total += 1
+            elif item == "mendiane":
+                mendiane_total += 1
+            elif item == "phiras":
+                phiras_total += 1
+            elif item == "thystame":
+                thystame_total += 1
+        missing_items = []
+        next_level_requirements = LEVELS_REQUIREMENTS[self.current_level + 1]
+        
+        while linemate_total < next_level_requirements["linemate"]:
+            missing_items.append("linemate")
+            linemate_total += 1
+        while deraumere_total < next_level_requirements["deraumere"]:
+            missing_items.append("deraumere")
+            deraumere_total += 1
+        while sibur_total < next_level_requirements["sibur"]:
+            missing_items.append("sibur")
+            sibur_total += 1
+        while mendiane_total < next_level_requirements["mendiane"]:
+            missing_items.append("mendiane")
+            mendiane_total += 1
+        while phiras_total < next_level_requirements["phiras"]:
+            missing_items.append("phiras")
+            phiras_total += 1
+        while thystame_total < next_level_requirements["thystame"]:
+            missing_items.append("thystame")
+            thystame_total += 1
+        
+        if len(missing_items) == 0:
+            return None
+
+        return missing_items
+
+    def elevation(self) -> bool:
+        missing_items = self.elevation_missing_items()
+
+        while missing_items and len(missing_items) > 0:
+            self.hamsters_ask_to_set_objects(missing_items)
+            missing_items = self.elevation_missing_items()
+            self.manage_broadcast()
+
+        if not self.hamsters_have_at_leats_n_foods(10):
+            return False
+
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_INCANTATION, 0)}")
+        self.client.send("Incantation\n")
+        response = self.response_get_last_command()
+        if response == "ko":
+            self.debug("Server did not accept incantation")
+            return False
+        self.update_inventory()
+        return True
+        # elif response == "ok":
+        #     self.debug("Incantation accepted")
+        # else:
+        #     self.debug(f"Server responded with unknown message: {response}")
 
     def run(self):
         """
@@ -764,21 +1219,30 @@ class Hamster:
         """
         self.debug(f"Hamster {self.name} is running")
         self.init_hamster()
+        max_number_of_hamsters = 6
 
-        while not self.sync_with_other_hamsters and not self.dead:
+        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0):
             try:
                 for _ in range(10):
                     self.update_inventory()
                 self.manage_broadcast()
+                max_number_of_hamsters -= 1
+                if self.I_gonna_be_eaten:
+                    break
             except Exception as e:
                 self.debug(f"An error occurred in the main loop: {e}")
 
-        self.debug(f"Hamster {self.name} is now synchronized! Am I ? { self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp } ; ID: { self.starting_timestamp }", COLOR_GREEN)
+        self.debug(f"Hamster {self.name} is now synchronized! Am I ? {self.cannibal_parent} | { self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp } | {self.I_gonna_be_eaten} ; ID: { self.starting_timestamp }", COLOR_GREEN)
+
+        if self.mother:
+            self.error("I'm the mother")
+
+        attemps = 0
 
         while not self.dead:
             try:
                 self.manage_broadcast()
-                if self.cannibal_parent > 0 and self.cannibal_parent != self.starting_timestamp:
+                if self.I_gonna_be_eaten:
                     # self.debug(f"Parent cannibal: {self.cannibal_parent}")
                     self.client.send(f"Set food\n")
                     response = self.response_get_last_command()
@@ -786,22 +1250,56 @@ class Hamster:
                         self.debug("Server did not accept set food")
                     elif response == "dead":
                         self.debug("Server responded with dead")
+                        self.dead = True
+                        continue
+                    self.manage_broadcast()
                 else:
                     self.update_inventory()
-                    self.debug(f"Inventory: {self.inventory}")
+                    # self.debug(f"Inventory: {self.inventory}")
                     if self.inventory["food"] < 20:
                         self.debug("I'm hungry")
+                        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
                         for _ in range(10):
                             self.cannibalism()
                             # self.update_inventory()
                             # self.debug(f"Inventory: {self.inventory}")
                             self.manage_broadcast()
-                            self.error("Less hungry")
-                        self.error("I'm not hungry anymore!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                    self.walk()
+                            # self.error("Less hungry")
+                        # self.error("I'm not hungry anymore!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                    if self.mother:
+                        if self.fill_empty_slots():
+                            self.debug("Filled empty slots")
+                        elif len(self.hamsters) < 8:
+                            self.debug("I'm the mother and I need to reproduce")
+                            self.reproduce()
+                            attemps += 1
+                        else:
+                            # self.debug("I'm the mother and I have enough children")
+                            # self.walk()
+                            if self.hamsters_have_at_leats_n_foods(30):
+                                if self.hamsters_have_enough_ressources_for_the_next_level():
+                                    self.debug("I'm the mother and my little ones have enough ressources", COLOR_YELLOW)
+                                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
+                                    self.called_by_mother = True
+                                    if self.hamsters_all_arrived():
+                                        self.elevation()
+                            else:
+                                if self.called_by_mother:
+                                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
+                                self.debug("I'm the mother and my little ones are hungry")
+                                self.walk()
+                            # self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
+                    else:
+                        if self.called_by_mother:
+                            self.debug("Mother called me", COLOR_GREEN)
+                            self.family_gathering()
+                        else:
+                            self.walk()
+                            self.debug(f"Say that I'm alive | {self.starting_timestamp}")
+                            self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_I_ALIVE, 0)}")
                 self.manage_broadcast()
             except Exception as e:
-                self.error(f"An error occurred in the main loop: {e}")
+                self.error(f"\n=========================\nAn error occurred in the main loop: {e}\n=========================")
 
     def encrypt_message(self, message: str) -> str:
         """
