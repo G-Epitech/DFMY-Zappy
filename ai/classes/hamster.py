@@ -26,6 +26,7 @@ HAMSTER_COMMING = "COMMING"
 HAMSTER_OK = "OK"
 HAMSTER_KO = "KO"
 HAMSTER_RUN = "RUN"
+HAMSTER_SET_OBJECT = "SET_OBJECT"
 
 COLOR_GREEN = "\033[1;32m"
 COLOR_RED = "\033[1;31m"
@@ -35,11 +36,78 @@ COLOR_MAGENTA = "\033[1;35m"
 COLOR_CYAN = "\033[1;36m"
 COLOR_RESET = "\033[0m"
 
+LEVELS_REQUIREMENTS = {
+    1: {
+        "player": 1,
+        "linemate": 1,
+        "deraumere": 0,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0
+    },
+    2: {
+        "player": 2,
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0
+    },
+    3: {
+        "player": 2,
+        "linemate": 2,
+        "deraumere": 0,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 2,
+        "thystame": 0
+    },
+    4: {
+        "player": 4,
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 2,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0
+    },
+    5: {
+        "player": 4,
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 1,
+        "mendiane": 3,
+        "phiras": 0,
+        "thystame": 0
+    },
+    6: {
+        "player": 6,
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 3,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0
+    },
+    7: {
+        "player": 6,
+        "linemate": 2,
+        "deraumere": 2,
+        "sibur": 2,
+        "mendiane": 2,
+        "phiras": 2,
+        "thystame": 1
+    }
+}
+
 class HamsterEntity(NamedTuple):
     starting_timestamp: int
     current_timestamp: int
     inventory: dict
     cooldown_before_declared_dead: int
+    direction: int = -1
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -68,6 +136,7 @@ class Hamster:
         self.direction_called_by_mother: int = 0
         self.hamsters: list[HamsterEntity] = []
         self.I_gonna_be_eaten: bool = False
+        self.current_level: int = 1
 
     def init_hamster(self):
         """
@@ -261,7 +330,7 @@ class Hamster:
         for hamster in self.hamsters:
             hamster._replace(cooldown_before_declared_dead=hamster.cooldown_before_declared_dead - 5)
 
-    def hamsters_manager_message(self, message: str):
+    def hamsters_manager_message(self, dir: int, message: str):
         """
         Manages living hamsters based on the received message.
 
@@ -282,12 +351,12 @@ class Hamster:
             if hamster_starting_timestamp == self.starting_timestamp:
                 return
             if hamster_starting_timestamp not in [hamster.starting_timestamp for hamster in self.hamsters]:
-                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100))
+                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
             else:
                 for hamster in self.hamsters:
                     if hamster.starting_timestamp == hamster_starting_timestamp:
                         self.hamsters.remove(hamster)
-                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100))
+                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
                         break
             if hamster_message == HAMSTER_ACCEPT_CANNIBALISM or hamster_message == HAMSTER_REJECT_CANNIBALISM:
                 for hamster in self.hamsters:
@@ -438,7 +507,7 @@ class Hamster:
         for message in self.pending_broadcast:
             try:
                 self.manage_broadcast_message(message[0], message[1])
-                self.hamsters_manager_message(message[1])
+                self.hamsters_manager_message(message[0], message[1])
             except Exception as e:
                 self.debug(f"Error managing broadcast message: {e}")
         self.pending_broadcast = []
@@ -902,7 +971,7 @@ class Hamster:
             self.error("Invalid direction")
             return
         if self.direction_called_by_mother == 0:
-            self.debug("I arrived to the mother!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_GREEN)
+            # self.debug("I arrived to the mother!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_GREEN)
             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
             return
         possible_moves = [
@@ -959,14 +1028,19 @@ class Hamster:
         return True
     
     def hamsters_have_at_leats_n_foods(self, n: int) -> bool:
-        enought_food = True
         for hamster in self.hamsters:
             if hamster.inventory["food"] < n:
-                self.debug(f"Hamster {hamster.starting_timestamp} have only {hamster.inventory['food']} foods", COLOR_BLUE)
-                enought_food = False
-            else:
-                self.debug(f"Hamster {hamster.starting_timestamp} have {hamster.inventory['food']} foods", COLOR_GREEN)
-        return enought_food
+                return False
+        return True
+
+    def hamsters_all_arrived(self) -> bool:
+        for hamster in self.hamsters:
+            if hamster.direction != 0:
+                return False
+        return True
+    
+    def hamster_ask_to_set_object(self, object: str, hamster_id: int):
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_SET_OBJECT + object, hamster_id)}")
 
     def run(self):
         """
