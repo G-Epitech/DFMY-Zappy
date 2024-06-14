@@ -37,7 +37,7 @@ COLOR_CYAN = "\033[1;36m"
 COLOR_RESET = "\033[0m"
 
 LEVELS_REQUIREMENTS = {
-    1: {
+    2: {
         "player": 1,
         "linemate": 1,
         "deraumere": 0,
@@ -46,7 +46,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 0,
         "thystame": 0
     },
-    2: {
+    3: {
         "player": 2,
         "linemate": 1,
         "deraumere": 1,
@@ -55,7 +55,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 0,
         "thystame": 0
     },
-    3: {
+    4: {
         "player": 2,
         "linemate": 2,
         "deraumere": 0,
@@ -64,7 +64,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 2,
         "thystame": 0
     },
-    4: {
+    5: {
         "player": 4,
         "linemate": 1,
         "deraumere": 1,
@@ -73,7 +73,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 1,
         "thystame": 0
     },
-    5: {
+    6: {
         "player": 4,
         "linemate": 1,
         "deraumere": 2,
@@ -82,7 +82,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 0,
         "thystame": 0
     },
-    6: {
+    7: {
         "player": 6,
         "linemate": 1,
         "deraumere": 2,
@@ -91,7 +91,7 @@ LEVELS_REQUIREMENTS = {
         "phiras": 1,
         "thystame": 0
     },
-    7: {
+    8: {
         "player": 6,
         "linemate": 2,
         "deraumere": 2,
@@ -254,7 +254,6 @@ class Hamster:
                 if item[0] not in self.inventory:
                     self.debug(f"Item {item[0]} is not in inventory")
                     continue
-                self.debug(f"Item {item[0]} updated to {item[1]}")
                 self.inventory[item[0]] = int(item[1])
         except Exception as e:
             self.debug(f"Error updating inventory: {e}")
@@ -306,7 +305,6 @@ class Hamster:
         }
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
-        self.debug(f"Broadcast message: {message}")
         return message
     
     def hamsters_remove_dead(self):
@@ -1041,6 +1039,36 @@ class Hamster:
     
     def hamster_ask_to_set_object(self, object: str, hamster_id: int):
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_SET_OBJECT + object, hamster_id)}")
+    
+    def hamsters_have_enough_ressources_for_the_next_level(self) -> bool:
+        linemate_total = 0
+        deraumere_total = 0
+        sibur_total = 0
+        mendiane_total = 0
+        phiras_total = 0
+        thystame_total = 0
+        for hamster in self.hamsters:
+            linemate_total += hamster.inventory["linemate"]
+            deraumere_total += hamster.inventory["deraumere"]
+            sibur_total += hamster.inventory["sibur"]
+            mendiane_total += hamster.inventory["mendiane"]
+            phiras_total += hamster.inventory["phiras"]
+            thystame_total += hamster.inventory["thystame"]
+        next_level_requirements = LEVELS_REQUIREMENTS[self.current_level + 1]
+        self.debug(f"Next level requirements: {next_level_requirements}")
+        if linemate_total < next_level_requirements["linemate"]:
+            return False
+        if deraumere_total < next_level_requirements["deraumere"]:
+            return False
+        if sibur_total < next_level_requirements["sibur"]:
+            return False
+        if mendiane_total < next_level_requirements["mendiane"]:
+            return False
+        if phiras_total < next_level_requirements["phiras"]:
+            return False
+        if thystame_total < next_level_requirements["thystame"]:
+            return False
+        return True
 
     def run(self):
         """
@@ -1114,8 +1142,9 @@ class Hamster:
                             # self.debug("I'm the mother and I have enough children")
                             # self.walk()
                             if self.hamsters_have_at_leats_n_foods(30):
-                                self.debug("I'm the mother and my little ones have enough food")
-                                self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
+                                if self.hamsters_have_enough_ressources_for_the_next_level():
+                                    self.debug("I'm the mother and my little ones have enough ressources", COLOR_YELLOW)
+                                    self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
                             else:
                                 self.debug("I'm the mother and my little ones are hungry")
                                 self.walk()
