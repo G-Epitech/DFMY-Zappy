@@ -42,7 +42,7 @@ void controller_handle_buffer_token(controller_t *controller,
     }
     if (!request_append(req, token->content, real_size)) {
         return log_error("Failed to append token to request buffer of "
-            "controller %d. Ignored.", controller->generic.socket);
+            "controller %d.", controller->generic.socket);
     }
 }
 

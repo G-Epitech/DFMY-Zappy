@@ -12,6 +12,9 @@
 // @brief Size of request buffer section
 #define REQ_BUFF_SIZE 4096
 
+// Max size of a request buffer
+#define REQ_MAX_BUFF_SIZE (10 * REQ_BUFF_SIZE)
+
 // @brief Request token
 typedef struct request_token_s {
     // @brief Token content

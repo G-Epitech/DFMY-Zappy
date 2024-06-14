@@ -11,9 +11,6 @@
 #include "types/request.h"
 #include "types/world/chrono.h"
 
-// Max size of a request buffer
-#define CTRL_MAX_REQ_SIZE (10 * REQ_BUFF_SIZE)
-
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
 
