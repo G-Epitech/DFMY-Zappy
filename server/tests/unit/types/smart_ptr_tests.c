@@ -56,8 +56,6 @@ Test(smart_ptr, smart_ptr_free)
     smart_ptr_free(smart_ptr);
 }
 
-#include <stdio.h>
-
 Test(smart_ptr, smart_ptr_dereference_with_destructor)
 {
     char *buffer = strdup("Hello World");
