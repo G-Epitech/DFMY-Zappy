@@ -18,7 +18,7 @@ Test(request_tests, new_request)
     cr_assert_not_null(request->buffer);
     cr_assert_eq(request->content_size, 0);
     cr_assert_eq(request->status, REQ_PENDING);
-    cr_assert_eq(request->buffer_size, REQUEST_BUFF_SIZE);
+    cr_assert_eq(request->buffer_size, REQ_BUFF_SIZE);
     request_free(request);
 }
 
@@ -63,7 +63,7 @@ Test(request_tests, free_list_of_requests)
 Test(request_tests, append_request_not_greater_than_buff_size)
 {
     request_t *request = request_new();
-    char data[REQUEST_BUFF_SIZE - 10] = { 0 };
+    char data[REQ_BUFF_SIZE - 10] = { 0 };
 
     memset(data, 'a', sizeof(data));
     cr_assert(request_append(request, data, sizeof(data)));
@@ -75,8 +75,8 @@ Test(request_tests, append_request_not_greater_than_buff_size)
 Test(request_tests, append_request_greater_than_buff_size)
 {
     request_t *request = request_new();
-    char data1[REQUEST_BUFF_SIZE] = { 0 };
-    char data2[REQUEST_BUFF_SIZE - 10] = { 0 };
+    char data1[REQ_BUFF_SIZE] = { 0 };
+    char data2[REQ_BUFF_SIZE - 10] = { 0 };
 
     memset(data1, 'a', sizeof(data1));
     memset(data2, 'b', sizeof(data2));
@@ -93,8 +93,8 @@ Test(request_tests, append_request_greater_than_buff_size)
 Test(request_tests, append_request_realloc_fail)
 {
     request_t *request = request_new();
-    char data1[REQUEST_BUFF_SIZE];
-    char data2[REQUEST_BUFF_SIZE + 10];
+    char data1[REQ_BUFF_SIZE];
+    char data2[REQ_BUFF_SIZE + 10];
 
     memset(data1, 'a', sizeof(data1));
     memset(data2, 'b', sizeof(data2));

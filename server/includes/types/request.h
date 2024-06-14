@@ -10,7 +10,15 @@
 #include "list.h"
 
 // @brief Size of request buffer section
-#define REQUEST_BUFF_SIZE 4096
+#define REQ_BUFF_SIZE 4096
+
+// @brief Request token
+typedef struct request_token_s {
+    // @brief Token content
+    char *content;
+    // @brief Token size
+    size_t size;
+} request_token_t;
 
 // @brief Request status
 typedef enum request_status_e {
