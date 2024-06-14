@@ -933,3 +933,37 @@ Test(server_get_controller_by_socket_tests, get_controller_with_several_clients,
     cr_assert_eq(server_get_controller_by_socket(server, 6), controller3);
     server_free(server);
 }
+
+Test(server_controller_has_content_to_read_tests, has_content, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    FD_SET(4, &server->fd_actual.readable);
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert(server_controller_has_content_to_read(server, controller));
+    server_free(server);
+}
+
+Test(server_controller_has_content_to_read_tests, no_content, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    FD_CLR(4, &server->fd_actual.readable);
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_not(server_controller_has_content_to_read(server, controller));
+    server_free(server);
+}
