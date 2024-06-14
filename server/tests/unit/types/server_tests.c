@@ -879,7 +879,7 @@ Test(server_get_controller_by_socket_tests, get_unknown_controller)
     controller_t *controller = NULL;
 
     // Act
-    controller = server_get_controller_by_socket(server, 42);
+    controller = server_get_controller_by_socket(server, 84);
 
     // Assert
     cr_assert_null(controller);
