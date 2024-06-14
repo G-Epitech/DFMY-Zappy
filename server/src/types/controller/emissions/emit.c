@@ -16,14 +16,14 @@ static void controller_handle_emit_write(controller_t *controller,
 {
     char *emission_buffer = SMART_PTR_CAST(char *, emission->buffer_ptr);
     ssize_t written = controller_write(controller,
-        &emission_buffer[emission->written], emission->buffer_size);
+        &emission_buffer[emission->written],
+        emission->buffer_size - emission->written);
 
     if (written == emission->buffer_size) {
         list_erase(controller->generic.emissions, node,
             &emission_free_as_node_data);
     } else {
         emission->written += written;
-        emission->buffer_size -= written;
     }
 }
 
@@ -32,8 +32,7 @@ void controller_emit(controller_t *controller)
     emission_t *emission = NULL;
     node_t *node = NULL;
 
-    if (!controller || !controller->generic.emissions ||
-        controller->generic.emissions->len == 0)
+    if (!controller)
         return;
     node = controller->generic.emissions->first;
     while (node) {

@@ -132,7 +132,7 @@ bool controller_add_emission(controller_t *controller, smart_ptr_t *buffer_ptr,
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controller_graphics_list_add_emission(list_t *controllers, char *buffer,
+bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
     size_t buffer_size);
 
 /**
@@ -142,7 +142,7 @@ bool controller_graphics_list_add_emission(list_t *controllers, char *buffer,
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controller_players_list_add_emission(list_t *controllers, char *buffer,
+bool controllers_player_add_emission(list_t *controllers, char *buffer,
     size_t buffer_size);
 
 /**
@@ -152,5 +152,5 @@ bool controller_players_list_add_emission(list_t *controllers, char *buffer,
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controller_all_list_add_emission(list_t *controllers, char *buffer,
+bool controllers_all_add_emission(list_t *controllers, char *buffer,
     size_t buffer_size);

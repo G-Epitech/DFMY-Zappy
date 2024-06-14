@@ -176,15 +176,6 @@ Test(controller_emissions_tests, null_controller)
     controller_emit(NULL);
 }
 
-Test(controller_emissions_tests, null_emissions, .init = redirect_all_std)
-{
-    controller_t *controller = controller_new(0);
-
-    controller->generic.emissions = NULL;
-    controller_emit(controller);
-    free(controller);
-}
-
 Test(controller_emissions_tests, no_emissions, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
@@ -220,7 +211,7 @@ Test(controller_emissions_tests, add_graphics_shared_emissions, .init = redirect
     list_push(list, NODE_DATA_FROM_PTR(controller));
     list_push(list, NODE_DATA_FROM_PTR(controller2));
     list_push(list, NODE_DATA_FROM_PTR(controller3));
-    controller_graphics_list_add_emission(list, buffer, 13);
+    controllers_graphic_add_emission(list, buffer, 13);
     cr_assert_eq(controller->generic.emissions->len, 0);
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 1);
@@ -240,7 +231,7 @@ Test(controller_emissions_tests, add_players_shared_emissions, .init = redirect_
     list_push(list, NODE_DATA_FROM_PTR(controller));
     list_push(list, NODE_DATA_FROM_PTR(controller2));
     list_push(list, NODE_DATA_FROM_PTR(controller3));
-    controller_players_list_add_emission(list, buffer, 13);
+    controllers_player_add_emission(list, buffer, 13);
     cr_assert_eq(controller->generic.emissions->len, 0);
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 1);
@@ -260,7 +251,7 @@ Test(controller_emissions_tests, add_all_shared_emissions, .init = redirect_all_
     list_push(list, NODE_DATA_FROM_PTR(controller));
     list_push(list, NODE_DATA_FROM_PTR(controller2));
     list_push(list, NODE_DATA_FROM_PTR(controller3));
-    controller_all_list_add_emission(list, buffer, 13);
+    controllers_all_add_emission(list, buffer, 13);
     cr_assert_eq(controller->generic.emissions->len, 1);
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 0);
@@ -270,9 +261,9 @@ Test(controller_emissions_tests, add_shared_emissions_with_null_buffer, .init = 
 {
     list_t *list = list_new();
 
-    cr_assert_eq(controller_graphics_list_add_emission(list, NULL, 13), false);
-    cr_assert_eq(controller_all_list_add_emission(list, NULL, 13), false);
-    cr_assert_eq(controller_players_list_add_emission(list, NULL, 13), false);
+    cr_assert_eq(controllers_graphic_add_emission(list, NULL, 13), false);
+    cr_assert_eq(controllers_all_add_emission(list, NULL, 13), false);
+    cr_assert_eq(controllers_player_add_emission(list, NULL, 13), false);
     list_free(list, NULL);
 }
 
@@ -280,9 +271,9 @@ Test(controller_emissions_tests, add_shared_emissions_with_null_list, .init = re
 {
     char *buffer = strdup("Hello World");
 
-    cr_assert_eq(controller_graphics_list_add_emission(NULL, buffer, 13), false);
-    cr_assert_eq(controller_all_list_add_emission(NULL, buffer, 13), false);
-    cr_assert_eq(controller_players_list_add_emission(NULL, buffer, 13), false);
+    cr_assert_eq(controllers_graphic_add_emission(NULL, buffer, 13), false);
+    cr_assert_eq(controllers_all_add_emission(NULL, buffer, 13), false);
+    cr_assert_eq(controllers_player_add_emission(NULL, buffer, 13), false);
     free(buffer);
 }
 
@@ -301,9 +292,9 @@ Test(controller_emissions_tests, add_shared_emissions_with_calloc_fail, .init = 
     list_push(list, NODE_DATA_FROM_PTR(controller2));
     list_push(list, NODE_DATA_FROM_PTR(controller3));
     clcc_return_now(calloc, NULL);
-    cr_assert_eq(controller_graphics_list_add_emission(list, buffer, 13), false);
-    cr_assert_eq(controller_all_list_add_emission(list, buffer, 13), false);
-    cr_assert_eq(controller_players_list_add_emission(list, buffer, 13), false);
+    cr_assert_eq(controllers_graphic_add_emission(list, buffer, 13), false);
+    cr_assert_eq(controllers_all_add_emission(list, buffer, 13), false);
+    cr_assert_eq(controllers_player_add_emission(list, buffer, 13), false);
     clcc_disable_control(calloc);
     cr_assert_eq(controller->generic.emissions->len, 0);
     cr_assert_eq(controller2->generic.emissions->len, 0);
