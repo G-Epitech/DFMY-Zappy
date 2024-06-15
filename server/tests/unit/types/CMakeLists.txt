@@ -4,8 +4,8 @@ target_sources(zappy_server_tests PUBLIC
         controller_tests.c
         request_tests.c
         emission_tests.c
-        shared_event_tests.c
         server_tests.c
+        smart_ptr_tests.c
 )
 add_subdirectory(args)
 add_subdirectory(world)

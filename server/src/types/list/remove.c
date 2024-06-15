@@ -5,7 +5,6 @@
 ** List type remove and delete function
 */
 
-#include <stdlib.h>
 #include "types/list.h"
 
 void list_pop(list_t *list, node_t *node)

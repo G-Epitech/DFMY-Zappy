@@ -54,8 +54,6 @@ typedef struct server_s {
     list_t *controllers;
     // @brief Running status of the server
     bool running;
-    // @brief List of shared events to send to several clients
-    list_t *events;
 } server_t;
 
 /**
