@@ -338,12 +338,13 @@ class Hamster:
     def hamsters_decrement_cooldown(self):
         """
         Decrements the cooldown before being declared dead for each hamster.
-
+    
         This method iterates over the list of hamsters and decrements the
         cooldown before being declared dead for each hamster.
         """
-        for hamster in self.hamsters:
-            hamster._replace(cooldown_before_declared_dead=hamster.cooldown_before_declared_dead - 5)
+        for i, hamster in enumerate(self.hamsters):
+            updated_hamster = hamster.cooldown_before_declared_dead - 2
+            self.hamsters[i] = updated_hamster
 
     def hamsters_manager_message(self, dir: int, message: str):
         """
@@ -366,12 +367,12 @@ class Hamster:
             if hamster_starting_timestamp == self.starting_timestamp:
                 return
             if hamster_starting_timestamp not in [hamster.starting_timestamp for hamster in self.hamsters]:
-                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
+                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 300, dir))
             else:
                 for hamster in self.hamsters:
                     if hamster.starting_timestamp == hamster_starting_timestamp:
                         self.hamsters.remove(hamster)
-                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 100, dir))
+                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 300, dir))
                         break
             if hamster_message == HAMSTER_ACCEPT_CANNIBALISM or hamster_message == HAMSTER_REJECT_CANNIBALISM:
                 for hamster in self.hamsters:
@@ -1220,13 +1221,15 @@ class Hamster:
         self.debug(f"Hamster {self.name} is running")
         self.init_hamster()
         max_number_of_hamsters = 6
+        attemps = 0
 
-        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0):
+        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0) and attemps < 12:
             try:
                 for _ in range(10):
                     self.update_inventory()
                 self.manage_broadcast()
                 max_number_of_hamsters -= 1
+                attemps += 1
                 if self.I_gonna_be_eaten:
                     break
             except Exception as e:
@@ -1288,6 +1291,7 @@ class Hamster:
                                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
                                 self.debug("I'm the mother and my little ones are hungry")
                                 self.walk()
+                                self.hamsters_decrement_cooldown()
                             # self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
                     else:
                         if self.called_by_mother:
