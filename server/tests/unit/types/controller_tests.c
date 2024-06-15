@@ -6,6 +6,9 @@
 */
 
 #include <criterion/criterion.h>
+#include <criterion/redirect.h>
+#include <unistd.h>
+#include "clcc/modules/unistd.h"
 #include "clcc/modules/stdlib.h"
 #include "types/list.h"
 #include "types/controller.h"
@@ -76,4 +79,415 @@ Test(controller_tests, free_list_of_controllers)
     cr_assert_eq(list.len, 3);
     list_clear(&list, &controller_free_as_node_data);
     cr_assert_eq(list.len, 0);
+}
+
+Test(controller_tests, get_next_pending_request_with_no_request)
+{
+    controller_t *controller = controller_new(0);
+    request_t *req = controller_get_next_pending_request(controller);
+
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(controller->generic.requests->len, 1);
+}
+
+Test(controller_tests, get_next_pending_request_with_no_request_but_create_fail_due_to_list_push, .init = cr_redirect_stderr) {
+    controller_t *controller = controller_new(0);
+    request_t *req = NULL;
+
+    clcc_enable_control(malloc);
+    clcc_return_value_after(malloc, NULL, 0);
+    controller_get_next_pending_request(controller);
+    clcc_disable_control(malloc);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    cr_assert_null(req);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_with_no_request_but_create_fail_due_to_calloc, .init = cr_redirect_stderr) {
+    controller_t *controller = controller_new(0);
+    request_t *req = NULL;
+
+    clcc_enable_control(calloc);
+    clcc_return_value_after(calloc, NULL, 0);
+    controller_get_next_pending_request(controller);
+    clcc_disable_control(calloc);
+    cr_assert_null(req);
+    cr_assert_eq(controller->generic.requests->len, 0);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_with_request_pending)
+{
+    controller_t *controller = controller_new(0);
+    request_t *req = controller_get_next_pending_request(controller);
+
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(controller_get_next_pending_request(controller), req);
+    cr_assert_eq(controller->generic.requests->len, 1);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_with_request_ready)
+{
+    controller_t *controller = controller_new(0);
+    request_t *req1 = controller_get_next_pending_request(controller);
+    request_t *req2 = NULL;
+
+    cr_assert_eq(controller->generic.requests->len, 1);
+    cr_assert_not_null(req1);
+    cr_assert_eq(req1->status, REQ_PENDING);
+    req1->status = REQ_READY;
+    req2 = controller_get_next_pending_request(controller);
+    cr_assert_not_null(req2);
+    cr_assert_eq(req2->status, REQ_PENDING);
+    cr_assert_neq(req1, req2);
+    cr_assert_eq(controller->generic.requests->len, 2);
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_on_player_controller)
+{
+    controller_t *controller = controller_new(0);
+    controller->generic.type = CTRL_PLAYER;
+    request_t *req = controller_get_next_pending_request(controller);
+
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(controller->generic.requests->len, 1);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_on_player_controller_with_max_requests, .init = cr_redirect_stdout)
+{
+    controller_t *controller = controller_new(0);
+    controller->generic.type = CTRL_PLAYER;
+
+    cr_assert_eq(controller->generic.requests->len, 0);
+    for (int i = 0; i < CTRL_PLAYER_MAX_REQ; ++i) {
+        request_t *req = controller_get_next_pending_request(controller);
+        req->status = REQ_READY;
+    }
+    cr_assert_eq(controller->generic.requests->len, CTRL_PLAYER_MAX_REQ);
+
+    request_t *req = controller_get_next_pending_request(controller);
+    cr_assert_null(req);
+
+    cr_assert_eq(controller->generic.requests->len, CTRL_PLAYER_MAX_REQ);
+    controller_free(controller);
+}
+
+Test(controller_tests, get_next_pending_request_on_graphic_controller)
+{
+    controller_t *controller = controller_new(0);
+    controller->generic.type = CTRL_GRAPHIC;
+    request_t *req = controller_get_next_pending_request(controller);
+
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(controller->generic.requests->len, 1);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_read_2_tokens_with_2_newlines)
+{
+    char buffer[] = "token1\ntoken2\n";
+    size_t size = sizeof(buffer) - 1;
+    request_token_t token = { 0 };
+
+    cr_assert_eq(controller_read_next_token(buffer, size, &token), false);
+    cr_assert_eq(token.size, 7);
+    cr_assert_eq(memcmp(token.content, "token1\n", 7), 0);
+    cr_assert_eq(controller_read_next_token(buffer + 7, size - 7, &token), true);
+    cr_assert_eq(token.size, 7);
+    cr_assert_eq(memcmp(token.content, "token2\n", 7), 0);
+}
+
+Test(controller_tests, controller_read_2_tokens_with_1_newline)
+{
+    char buffer[] = "token1\ntoken2";
+    size_t size = sizeof(buffer) - 1;
+    request_token_t token = { 0 };
+
+    cr_assert_eq(controller_read_next_token(buffer, size, &token), false);
+    cr_assert_eq(token.size, 7);
+    cr_assert_eq(memcmp(token.content, "token1\n", 7), 0);
+    cr_assert_eq(controller_read_next_token(buffer + 7, size - 7, &token), true);
+    cr_assert_eq(token.size, 6);
+    cr_assert_eq(memcmp(token.content, "token2", 6), 0);
+}
+
+Test(controller_tests, controller_handle_buffer_token_complete_req)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[] = "complete request 1\ncomplete request 2\n";
+    request_t *req = NULL;
+    request_token_t token = {
+        .content = buffer,
+        .size = 19
+    };
+
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer_token(controller, &token);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    req = controller_get_last_request(controller);
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_READY);
+    cr_assert_eq(req->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req->content_size, 18);
+    cr_assert_eq(memcmp(req->buffer, buffer, 18), 0);
+}
+
+Test(controller_tests, controller_handle_buffer_token_pending_req)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[] = "pending request 1\npending request 2";
+    request_t *req = NULL;
+    request_token_t token = {
+        .content = buffer,
+        .size = 18
+    };
+
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer_token(controller, &token);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    req = controller_get_last_request(controller);
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_READY);
+    cr_assert_eq(req->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req->content_size, 17);
+    cr_assert_eq(memcmp(req->buffer, "pending request 1", 18), 0);
+
+    token.content += token.size;
+    token.size = 17;
+
+    controller_handle_buffer_token(controller, &token);
+    cr_assert_eq(controller->generic.requests->len, 2);
+    req = controller_get_last_request(controller);
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(req->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req->content_size, 17);
+    cr_assert_eq(memcmp(req->buffer, "pending request 2", 17), 0);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_handle_buffer_token_create_request_fail, .init = cr_redirect_stderr)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[] = "pending request 1\npending request 2";
+    request_t *req = NULL;
+    request_token_t token = {
+        .content = buffer,
+        .size = 18
+    };
+
+    clcc_enable_control(calloc);
+    clcc_return_value_after(calloc, NULL, 1);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer_token(controller, &token);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    clcc_disable_control(calloc);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_handle_buffer_token_append_fail, .init = cr_redirect_stderr)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[REQ_BUFF_SIZE];
+    request_t *req = NULL;
+    request_token_t token = {
+        .content = buffer,
+        .size = REQ_BUFF_SIZE
+    };
+
+    memset(buffer, 'a', REQ_BUFF_SIZE);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer_token(controller, &token);
+    cr_assert_eq(controller->generic.requests->len, 1);
+
+    clcc_enable_control(realloc);
+    clcc_return_value_after(realloc, NULL, 0);
+    controller_handle_buffer_token(controller, &token);
+    clcc_disable_control(realloc);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_handle_buffer_with_2_complete_requests)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[REQ_BUFF_SIZE] = "complete request 1\ncomplete request 2\n";
+    size_t size = 38;
+
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer(controller, buffer, size);
+    cr_assert_eq(controller->generic.requests->len, 2);
+
+    request_t *req1 = NODE_TO_PTR(controller->generic.requests->first, request_t *);
+    request_t *req2 = NODE_TO_PTR(controller->generic.requests->last, request_t *);
+
+    cr_assert_not_null(req1);
+    cr_assert_not_null(req2);
+    cr_assert_eq(req1->status, REQ_READY);
+    cr_assert_eq(req2->status, REQ_READY);
+    cr_assert_eq(req1->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req2->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req1->content_size, 18);
+    cr_assert_eq(req2->content_size, 18);
+    cr_assert_eq(memcmp(req1->buffer, "complete request 1", 18), 0);
+    cr_assert_eq(memcmp(req2->buffer, "complete request 2", 18), 0);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_handle_buffer_with_1_complete_request_and_1_pending_request)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[REQ_BUFF_SIZE] = "complete request 1\npending request 2";
+    size_t size = 36;
+
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer(controller, buffer, size);
+    cr_assert_eq(controller->generic.requests->len, 2);
+
+    request_t *req1 = NODE_TO_PTR(controller->generic.requests->first, request_t *);
+    request_t *req2 = NODE_TO_PTR(controller->generic.requests->last, request_t *);
+
+    cr_assert_not_null(req1);
+    cr_assert_not_null(req2);
+    cr_assert_eq(req1->status, REQ_READY);
+    cr_assert_eq(req2->status, REQ_PENDING);
+    cr_assert_eq(req1->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req2->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req1->content_size, 18);
+    cr_assert_eq(req2->content_size, 17);
+    cr_assert_eq(memcmp(req1->buffer, "complete request 1", 18), 0);
+    cr_assert_eq(memcmp(req2->buffer, "pending request 2", 17), 0);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_handle_buffer_with_reach_max_requests, .init = cr_redirect_stdout)
+{
+    controller_t *controller = controller_new(0);
+    char buffer[REQ_BUFF_SIZE] = "req1\nreq2\nreq3\nreq4\nreq5\nreq6\nreq7\nreq8\nreq9\nreq10\nreq11\nreq12\nreq13\n";
+    size_t size = 9 * 5 + 4 * 6;
+
+    controller->generic.type = CTRL_PLAYER;
+    cr_assert_eq(controller->generic.requests->len, 0);
+    controller_handle_buffer(controller, buffer, size);
+    cr_assert_eq(controller->generic.requests->len, CTRL_PLAYER_MAX_REQ);
+
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_read_with_no_controller)
+{
+    cr_assert_eq(controller_read(NULL), CTRL_DISCONNECTED);
+}
+
+Test(controller_tests, controller_read_simple_complete_request)
+{
+    int fds[2];
+    controller_t *controller = NULL;
+    request_t *req = NULL;
+
+    // Arrange
+    pipe(fds);
+    write(fds[1], "complete request 1\n", 19);
+    close(fds[1]);
+    controller = controller_new(fds[0]);
+
+    // Act
+    cr_assert_eq(controller_read(controller), CTRL_CONNECTED);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    req = controller_get_last_request(controller);
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_READY);
+    cr_assert_eq(req->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req->content_size, 18);
+    cr_assert_eq(memcmp(req->buffer, "complete request 1", 18), 0);
+    cr_assert_eq(controller_read(controller), CTRL_DISCONNECTED);
+
+    // Cleanup
+    close(fds[0]);
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_read_simple_pending_request)
+{
+    int fds[2];
+    controller_t *controller = NULL;
+    request_t *req = NULL;
+
+    // Arrange
+    pipe(fds);
+    write(fds[1], "pending request 1", 17);
+    close(fds[1]);
+    controller = controller_new(fds[0]);
+
+    // Act
+    cr_assert_eq(controller_read(controller), CTRL_CONNECTED);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    req = controller_get_last_request(controller);
+    cr_assert_not_null(req);
+    cr_assert_eq(req->status, REQ_PENDING);
+    cr_assert_eq(req->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(req->content_size, 17);
+    cr_assert_eq(memcmp(req->buffer, "pending request 1", 17), 0);
+    cr_assert_eq(controller_read(controller), CTRL_DISCONNECTED);
+
+    // Cleanup
+    close(fds[0]);
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_read_reach_max_requests, .init = cr_redirect_stdout)
+{
+    int fds[2];
+    char buffer[REQ_BUFF_SIZE] = "req1\nreq2\nreq3\nreq4\nreq5\nreq6\nreq7\nreq8\nreq9\nreq10\nreq11\nreq12\nreq13\n";
+    size_t size = 9 * 5 + 4 * 6;
+    controller_t *controller = NULL;
+    request_t *req = NULL;
+
+    // Arrange
+    pipe(fds);
+
+    controller = controller_new(fds[0]);
+    write(fds[1], buffer, size);
+    close(fds[1]);
+    controller->generic.type = CTRL_PLAYER;
+
+    // Act
+    cr_assert_eq(controller_read(controller), CTRL_CONNECTED);
+    cr_assert_eq(controller->generic.requests->len, CTRL_PLAYER_MAX_REQ);
+    cr_assert_eq(controller_read(controller), CTRL_DISCONNECTED);
+
+    // Cleanup
+    close(fds[0]);
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_read_with_read_fail, .init = cr_redirect_stderr)
+{
+    controller_t *controller = controller_new(0);
+    controller_state_t status;
+
+    clcc_enable_control(read);
+    clcc_return_value_after(read, -1, 0);
+    status = controller_read(controller);
+    clcc_disable_control(read);
+
+    cr_assert_eq(status, CTRL_CONNECTED);
+
+    controller_free(controller);
 }

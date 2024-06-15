@@ -6,12 +6,12 @@
 */
 
 #include <unistd.h>
-#include <stdio.h>
 #include "types/server.h"
 #include "types/controller.h"
 #include "log.h"
 
-static void server_remove_controller(server_t *server, controller_t *controller)
+static void server_remove_controller(server_t *server,
+    controller_t *controller)
 {
     node_t *node = server->controllers->first;
     node_t *next = NULL;
@@ -19,7 +19,8 @@ static void server_remove_controller(server_t *server, controller_t *controller)
     while (node) {
         next = node->next;
         if (NODE_TO_PTR(node, controller_t *) == controller) {
-            list_erase(server->controllers, node, &controller_free_as_node_data);
+            list_erase(server->controllers, node,
+                &controller_free_as_node_data);
         }
         node = next;
     }

@@ -8,7 +8,11 @@
 #pragma once
 
 #include "list.h"
+#include "types/request.h"
 #include "types/world/chrono.h"
+
+// Max number of requests a player can have
+#define CTRL_PLAYER_MAX_REQ 10
 
 // Forward declaration
 typedef struct player_s player_t;
@@ -33,6 +37,14 @@ typedef enum controller_type_e {
     CTRL_GRAPHIC
 } controller_type_t;
 
+// @brief Controller states
+typedef enum controller_read_state_e {
+    // @brief Controller is connected
+    CTRL_CONNECTED,
+    // @brief Controller is disconnected
+    CTRL_DISCONNECTED,
+} controller_state_t;
+
 // @brief Represent a generic controller
 typedef struct generic_controller_s {
     // @brief Controller socket
@@ -44,6 +56,9 @@ typedef struct generic_controller_s {
     // @brief Controller type
     controller_type_t type;
 } generic_controller_t;
+
+// @brief Represent a graphic controller
+typedef generic_controller_t graphic_controller_t;
 
 // @brief Represent a player controller
 typedef struct player_controller_s {
@@ -67,6 +82,8 @@ typedef struct player_controller_s {
 typedef union controller_u {
     // @brief Generic controller
     generic_controller_t generic;
+    // @brief Graphic controller
+    graphic_controller_t graphic;
     // @brief Player controller
     player_controller_t player;
 } controller_t;
@@ -97,3 +114,53 @@ void controller_free(controller_t *controller);
  * @param data Node data to free as controller
  */
 void controller_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Get next pending request of a controller
+ * @param controller Controller to get request from
+ * @return Next pending request or NULL if an error occurred or
+ * max request policy reached
+ */
+request_t *controller_get_next_pending_request(controller_t *controller);
+
+/**
+ * @brief Read pending data from a controller and transform it into requests
+ * @param controller Controller to read from
+ * @return Controller state after reading
+ */
+controller_state_t controller_read(controller_t *controller);
+
+/**
+ * @brief Get last request of a controller
+ * @param controller Controller to get request from
+ * @return Last request or NULL if no request
+ */
+request_t *controller_get_last_request(controller_t *controller);
+
+/**
+ * @brief Read next token from a buffer
+ * @param start Start of the buffer
+ * @param size Size of the buffer
+ * @param token Token to fill
+ * @return true if is the last token, false otherwise
+ */
+bool controller_read_next_token(char *start, size_t size,
+    request_token_t *token);
+
+/**
+ * @brief Handle a token from a buffer
+ * @param controller Controller to handle token
+ * @param token Token to handle
+ */
+void controller_handle_buffer_token(controller_t *controller,
+    request_token_t *token);
+
+/**
+ * @brief Handle a buffer from a controller and append it to
+ * controller requests
+ * @param controller Controller to handle buffer
+ * @param buffer Buffer to handle
+ * @param size Size of the buffer
+ */
+void controller_handle_buffer(controller_t *controller,
+    char buffer[REQ_BUFF_SIZE], size_t size);
