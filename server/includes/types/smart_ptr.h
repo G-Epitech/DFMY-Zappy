@@ -30,7 +30,8 @@ smart_ptr_t *smart_ptr_new(void *data);
 
 /**
  * @brief Reference a smart pointer
- * @param smart_ptr Given pointer with updated references counter
+ * @param smart_ptr Pointer to the smart pointer
+ * @return Given pointer with updated references counter
  */
 smart_ptr_t *smart_ptr_reference(smart_ptr_t *ptr);
 
