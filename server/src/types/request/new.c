@@ -10,7 +10,7 @@
 void request_init(request_t *request)
 {
     request->status = REQ_PENDING;
-    request->buffer_size = REQUEST_BUFF_SIZE;
+    request->buffer_size = REQ_BUFF_SIZE;
     request->content_size = 0;
 }
 
@@ -20,7 +20,7 @@ request_t *request_new(void)
 
     if (!request)
         return NULL;
-    request->buffer = calloc(1, REQUEST_BUFF_SIZE);
+    request->buffer = calloc(REQ_BUFF_SIZE + 1, sizeof(char));
     if (!request->buffer) {
         free(request);
         return NULL;

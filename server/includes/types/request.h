@@ -10,7 +10,18 @@
 #include "list.h"
 
 // @brief Size of request buffer section
-#define REQUEST_BUFF_SIZE 4096
+#define REQ_BUFF_SIZE 4096
+
+// Max size of a request buffer
+#define REQ_MAX_BUFF_SIZE (10 * REQ_BUFF_SIZE)
+
+// @brief Request token
+typedef struct request_token_s {
+    // @brief Token content
+    char *content;
+    // @brief Token size
+    size_t size;
+} request_token_t;
 
 // @brief Request status
 typedef enum request_status_e {
@@ -62,3 +73,11 @@ void request_free(request_t *request);
  * @param data Node data to free as request
  */
 void request_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Append given data to request buffer
+ * @param request Request to append data to
+ * @param data Data to append
+ * @param size Size of data (must be less or equal to REQUEST_BUFF_SIZE)
+ */
+bool request_append(request_t *request, const char *data, size_t size);

@@ -147,6 +147,16 @@ void server_close_connection(server_t *server, controller_t *controller);
 controller_t *server_get_controller_by_socket(server_t *server, int socket);
 
 /**
+ * @brief Check if a controller has content to read
+ * @param server Server to check
+ * @param controller Controller to check
+ * @return true If controller has content to read
+ * @return false If controller has no content to read
+ */
+bool server_controller_has_content_to_read(server_t *server,
+    controller_t *controller);
+
+/**
  * @brief Initialize given file descriptors states
  * @param states File descriptors states to initialize
  */

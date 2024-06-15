@@ -220,6 +220,21 @@ Test(args_valid_tests, invalid_teams, .init = cr_redirect_stderr)
     cr_assert_stderr_eq_str("Missing teams names\n");
 }
 
+Test(args_valid_tests, illegal_team_name_graphic, .init = cr_redirect_stderr)
+{
+    args_t args = { 0 };
+    char *teams[] = { "team1", "team2", "GRAPHIC", NULL };
+
+    args_init(&args);
+    args.port = 4242;
+    args.width = 10;
+    args.height = 10;
+    args.clients_nb = 10;
+    args.teams = teams;
+    cr_assert_eq(args_are_valid(&args), false);
+    cr_assert_stderr_eq_str("Illegal team name: GRAPHIC\n");
+}
+
 Test(args_valid_tests, all_args_are_valid_with_help)
 {
     args_t args = { 0 };

@@ -4,4 +4,6 @@ target_sources(zappy_server_core PUBLIC
         write.c
         emissions/add.c
         emissions/emit.c
+        read.c
+        request.c
 )
