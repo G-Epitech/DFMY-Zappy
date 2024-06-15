@@ -27,6 +27,7 @@ HAMSTER_OK = "OK"
 HAMSTER_KO = "KO"
 HAMSTER_RUN = "RUN"
 HAMSTER_SET_OBJECT = "SET_OBJECT"
+HAMSERT_GIVE_AUTHORITY = "GIVE_AUTHORITY"
 
 COLOR_GREEN = "\033[1;32m"
 COLOR_RED = "\033[1;31m"
@@ -108,6 +109,7 @@ class HamsterEntity(NamedTuple):
     inventory: dict
     cooldown_before_declared_dead: int
     direction: int = -1
+    level: int = 1
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -318,7 +320,8 @@ class Hamster:
             "current_timestamp": self.get_current_time_nano(),
             "inventory": self.inventory,
             "message": message,
-            "recipient": recipient
+            "recipient": recipient,
+            "level": self.current_level
         }
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
@@ -343,7 +346,7 @@ class Hamster:
         cooldown before being declared dead for each hamster.
         """
         for i, hamster in enumerate(self.hamsters):
-            updated_hamster = hamster.cooldown_before_declared_dead - 2
+            updated_hamster = hamster._replace(cooldown_before_declared_dead=hamster.cooldown_before_declared_dead - 2)
             self.hamsters[i] = updated_hamster
 
     def hamsters_manager_message(self, dir: int, message: str):
@@ -364,21 +367,16 @@ class Hamster:
             hamster_current_timestamp = json_message["current_timestamp"]
             hamster_inventory = json_message["inventory"]
             hamster_message = json_message["message"]
+            hamster_level = json_message["level"]
             if hamster_starting_timestamp == self.starting_timestamp:
                 return
-            if hamster_starting_timestamp not in [hamster.starting_timestamp for hamster in self.hamsters]:
-                self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 300, dir))
-            else:
-                for hamster in self.hamsters:
-                    if hamster.starting_timestamp == hamster_starting_timestamp:
-                        self.hamsters.remove(hamster)
-                        self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 300, dir))
-                        break
+            for hamster in self.hamsters:
+                if hamster.starting_timestamp == hamster_starting_timestamp:
+                    self.hamsters.remove(hamster)
+                    break
             if hamster_message == HAMSTER_ACCEPT_CANNIBALISM or hamster_message == HAMSTER_REJECT_CANNIBALISM:
-                for hamster in self.hamsters:
-                    if hamster.starting_timestamp == hamster_starting_timestamp:
-                        self.hamsters.remove(hamster)
-                        break
+                return
+            self.hamsters.append(HamsterEntity(hamster_starting_timestamp, hamster_current_timestamp, hamster_inventory, 300, dir, hamster_level))
         except Exception as e:
             self.debug(f"Error managing living hamsters: {e}")
 
@@ -482,13 +480,15 @@ class Hamster:
             response = self.response_get_last_command()
             if response == "ko":
                 self.debug(f"Server did not accept set {object}")
-            # elif response == "ok":
-            #     self.debug(f"Set {object}")
-            # else:
-            #     self.debug(f"Server responded with unknown message: {response}")
-        
+
         if json_message["message"] == HAMSTER_INCANTATION:
             self.debug(f"Starting incantation")
+
+        if json_message["message"] == HAMSERT_GIVE_AUTHORITY:
+            if json_message["recipient"] == self.starting_timestamp:
+                self.mother = True
+                self.sync_with_other_hamsters = True
+                self.debug(f"I'm the mother now!", COLOR_YELLOW)
 
     def manage_broadcast_cannibalism(self, ID: int):
         for message in self.pending_broadcast:
@@ -874,15 +874,26 @@ class Hamster:
                 continue
             if item == "player":
                 continue
+            if item == "food" and self.inventory["food"] >= 100:
+                continue
             self.client.send(f"Take {item}\n")
             response = self.response_get_last_command()
             if response == "ko":
                 self.debug(f"Server did not accept take {item} | response: {response}", COLOR_CYAN)
-            # elif response == "ok":
-            #     self.debug(f"Took {item}", COLOR_CYAN)
-            # else:
-            #     self.debug(f"Server responded with unknown message: {response}", COLOR_CYAN)
-    
+            
+    def walk_set_objects(self, items: list[str]):
+        """
+        Takes the specified items while walking.
+
+        Args:
+            items (list[str]): A list of items to take.
+        """
+        for item in items:
+            self.client.send(f"Set {item}\n")
+            response = self.response_get_last_command()
+            if response == "ko":
+                self.debug(f"Server did not accept set {item} | response: {response}", COLOR_CYAN)
+
     def walk_forward(self):
         """
         Moves the hamster forward.
@@ -1064,27 +1075,35 @@ class Hamster:
         return True
     
     def hamsters_have_at_leats_n_foods(self, n: int) -> bool:
+        hamsters_with_enought_food = 0
         for hamster in self.hamsters:
-            if hamster.inventory["food"] < n:
-                return False
-        return True
+            if hamster.level == self.current_level:
+                if hamster.inventory["food"] > n:
+                    hamsters_with_enought_food += 1
+        self.debug(f"Hamsters with enought food: {hamsters_with_enought_food}")
+        return hamsters_with_enought_food >= 6
 
     def hamsters_all_arrived(self) -> bool:
+        hamsters_arrived = 0
         for hamster in self.hamsters:
-            if hamster.direction != 0:
-                return False
-        return True
-    
+            self.debug(f"Hamster level: {hamster.level} | Current level: {self.current_level}")
+            if hamster.level == self.current_level:
+                self.debug(f"Hamster direction: {hamster.direction}")
+                if hamster.direction == 0:
+                    hamsters_arrived += 1
+        self.debug(f"Hamsters arrived: {hamsters_arrived}")
+        return hamsters_arrived >= 6
+
     def hamster_ask_to_set_object(self, object: str, hamster_id: int):
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_SET_OBJECT + object, hamster_id)}")
 
     def hamsters_have_enough_ressources_for_the_next_level(self) -> bool:
-        linemate_total = 0
-        deraumere_total = 0
-        sibur_total = 0
-        mendiane_total = 0
-        phiras_total = 0
-        thystame_total = 0
+        linemate_total = self.inventory["linemate"]
+        deraumere_total = self.inventory["deraumere"]
+        sibur_total = self.inventory["sibur"]
+        mendiane_total = self.inventory["mendiane"]
+        phiras_total = self.inventory["phiras"]
+        thystame_total = self.inventory["thystame"]
         for hamster in self.hamsters:
             linemate_total += hamster.inventory["linemate"]
             deraumere_total += hamster.inventory["deraumere"]
@@ -1110,6 +1129,18 @@ class Hamster:
     
     def hamsters_ask_to_set_objects(self, objects: list[str]):
         for object in objects:
+            if self.inventory[object] > 0:
+                self.client.send(f"Set {object}\n")
+                response = self.response_get_last_command()
+                if response == "ko":
+                    self.debug(f"Server did not accept set {object}")
+                    self.update_inventory()
+                    continue
+                if response == "ok":
+                    self.debug(f"Set {object}")
+                objects.remove(object)
+                self.update_inventory()
+                continue
             for hamster in self.hamsters:
                 if hamster.inventory[object] > 0:
                     self.hamster_ask_to_set_object(object, hamster.starting_timestamp)
@@ -1181,6 +1212,15 @@ class Hamster:
             return None
 
         return missing_items
+    
+    def elevation_exist_enought_hamsters(self) -> bool:
+        nb_hamsters_with_my_level = 0
+        for hamster in self.hamsters:
+            self.debug(f"Hamster level: {hamster.level} | Current level: {self.current_level}")
+            if hamster.level == self.current_level:
+                nb_hamsters_with_my_level += 1
+        self.debug(f"Number of hamsters with my level: {nb_hamsters_with_my_level}")
+        return nb_hamsters_with_my_level >= 6
 
     def elevation(self) -> bool:
         missing_items = self.elevation_missing_items()
@@ -1201,10 +1241,28 @@ class Hamster:
             return False
         self.update_inventory()
         return True
-        # elif response == "ok":
-        #     self.debug("Incantation accepted")
-        # else:
-        #     self.debug(f"Server responded with unknown message: {response}")
+
+    def hamster_give_authority(self):
+        hamster_id = self.hamsters[0].starting_timestamp
+        for hamster in self.hamsters:
+            if hamster_id < hamster.starting_timestamp:
+                hamster_id = hamster.starting_timestamp
+        if hamster_id == self.starting_timestamp:
+            self.reproduce()
+            return
+        self.send_broadcast(f"{self.create_broadcast_message(HAMSERT_GIVE_AUTHORITY, hamster_id)}")
+        self.suicide()
+
+    def suicide(self):
+        while not self.dead:
+            self.update_inventory()
+            keys = self.inventory.keys()
+            for key in keys:
+                if key == "food":
+                    continue
+                objects = self.inventory[key]
+                self.walk_set_objects(objects)
+            self.walk()
 
     def run(self):
         """
@@ -1241,6 +1299,7 @@ class Hamster:
             self.error("I'm the mother")
 
         attemps = 0
+        attemps_enough_hamsters = 0
 
         while not self.dead:
             try:
@@ -1279,13 +1338,31 @@ class Hamster:
                         else:
                             # self.debug("I'm the mother and I have enough children")
                             # self.walk()
-                            if self.hamsters_have_at_leats_n_foods(30):
+                            if not self.elevation_exist_enought_hamsters():
+                                if attemps_enough_hamsters < 10:
+                                    self.debug("I'm the mother and I don't have enough hamsters")
+                                    attemps_enough_hamsters += 1
+                                else:
+                                    self.error("I'm the mother and I don't have enough hamsters")
+                                    if self.current_level == 1:
+                                        self.reproduce()
+                                    else:
+                                        self.hamster_give_authority()
+                            elif self.hamsters_have_at_leats_n_foods(50):
+                                attemps_enough_hamsters = 0
                                 if self.hamsters_have_enough_ressources_for_the_next_level():
                                     self.debug("I'm the mother and my little ones have enough ressources", COLOR_YELLOW)
                                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
                                     self.called_by_mother = True
                                     if self.hamsters_all_arrived():
-                                        self.elevation()
+                                        while self.elevation():
+                                            self.debug("Elevation")
+                                    else:
+                                        self.debug("I'm the mother and my little ones are not all arrived")
+                                else:
+                                    self.debug("I'm the mother and my little ones don't have enough ressources")
+                                    if self.called_by_mother:
+                                        self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
                             else:
                                 if self.called_by_mother:
                                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
@@ -1295,11 +1372,11 @@ class Hamster:
                             # self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_CALL_FAMILY, 0)}")
                     else:
                         if self.called_by_mother:
-                            self.debug("Mother called me", COLOR_GREEN)
+                            # self.debug("Mother called me", COLOR_GREEN)
                             self.family_gathering()
                         else:
                             self.walk()
-                            self.debug(f"Say that I'm alive | {self.starting_timestamp}")
+                            # self.debug(f"Say that I'm alive | {self.starting_timestamp}")
                             self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_I_ALIVE, 0)}")
                 self.manage_broadcast()
             except Exception as e:
