@@ -15,7 +15,7 @@ Test(smart_ptr, new_smart_ptr)
 
     cr_assert_not_null(smart_ptr);
     cr_assert_eq(smart_ptr->destructor, &free);
-    cr_assert_null(smart_ptr->ptr);
+    cr_assert_null(smart_ptr->target);
     cr_assert_eq(smart_ptr->ref_count, 0);
     smart_ptr_free(smart_ptr);
 }

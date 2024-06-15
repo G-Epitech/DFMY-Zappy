@@ -501,7 +501,7 @@ Test(controller_tests, controller_read_with_read_fail, .init = cr_redirect_stder
     controller_free(controller);
 }
 
-Test(controller_tests, emit_test)
+Test(controller_tests, emit_test, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
 
@@ -515,12 +515,12 @@ Test(controller_tests, emit_test)
     controller_free(controller);
 }
 
-Test(controller_tests, null_controller_emit)
+Test(controller_tests, null_controller_emit, .init = redirect_all_std)
 {
     controller_emit(NULL);
 }
 
-Test(controller_tests, write_fail)
+Test(controller_tests, write_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
 

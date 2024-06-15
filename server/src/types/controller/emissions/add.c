@@ -55,7 +55,7 @@ bool controller_add_emission(controller_t *controller, char *buffer,
 }
 
 bool controllers_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size, int types)
+    size_t buffer_size, controller_type_t types)
 {
     smart_ptr_t *buffer_ptr = NULL;
     controller_t *controller = NULL;

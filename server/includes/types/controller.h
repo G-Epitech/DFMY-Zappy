@@ -150,7 +150,7 @@ bool controller_add_emission(controller_t *controller, char *buffer,
  * @return true if the emission was added, false otherwise
  */
 bool controllers_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size, int types);
+    size_t buffer_size, controller_type_t types);
 
 /**
  * @brief Get next pending request of a controller

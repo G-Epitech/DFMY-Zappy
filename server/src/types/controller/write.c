@@ -6,6 +6,8 @@
 */
 
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
 #include "log.h"
 #include "types/controller.h"
 
@@ -17,7 +19,8 @@ ssize_t controller_write(controller_t *controller, const char *msg, size_t len)
         return -1;
     written = write(controller->generic.socket, msg, len);
     if (written == -1) {
-        log_error("Failed to write to %d", controller->generic.socket);
+        log_error("Failed to write to %d: %s", controller->generic.socket,
+            strerror(errno));
     } else {
         log_debug("%ldb / %ldb bytes sent to %d", written, len,
             controller->generic.socket);
