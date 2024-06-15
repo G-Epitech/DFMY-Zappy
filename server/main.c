@@ -9,5 +9,5 @@
 
 int main(int argc, char **argv)
 {
-    return app_run(argc, argv);
+    return app_start(argc, argv);
 }

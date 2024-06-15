@@ -8,23 +8,9 @@
 #include "app.h"
 #include "types/args.h"
 
-int app_exit(args_t *args, int code)
+int app_run(app_t *app)
 {
-    args_free(args);
-    return code;
-}
-
-int app_run(int argc, char **argv)
-{
-    args_t args = { 0 };
-
-    args_init(&args);
-    if (!args_parse(argc, argv, &args) || !args_are_valid(&args))
-        return app_exit(&args, APP_EXIT_FAILURE);
-    if (args.help) {
-        app_print_usage();
-        return app_exit(&args, APP_EXIT_SUCCESS);
-    }
-    *log_level() = args.verbose_level;
-    return app_exit(&args, APP_EXIT_SUCCESS);
+    while (APP_RUNNING && app->server->running);
+    log_info("Server gracefully shutting down");
+    return app_exit(app, APP_EXIT_SUCCESS);
 }

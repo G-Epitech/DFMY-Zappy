@@ -20,7 +20,7 @@ Test(run_tests, run_with_no_args, .init = cr_redirect_stderr)
     char *av[] = {"./zappy_server"};
     int ac = 1;
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_FAILURE);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_FAILURE);
 }
 
 Test(run_tests, run_with_help, .init = redirect_all_stdout)
@@ -32,7 +32,7 @@ Test(run_tests, run_with_help, .init = redirect_all_stdout)
 
     memset(buffer, 0, sizeof(buffer));
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_SUCCESS);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_SUCCESS);
     fflush(stdout);
     fflush(local_stdout);
     fread(buffer, sizeof(char), sizeof(buffer), local_stdout);
@@ -44,7 +44,7 @@ Test(run_tests, run_with_all_valid_arguments, .init = redirect_all_stdout)
     char *av[] = {"./zappy_server", "-p", "4242", "-x", "10", "-y", "10", "-n", "team1", "team2", "-c", "10", "-f", "100"};
     int ac = 14;
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_SUCCESS);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_SUCCESS);
 }
 
 Test(run_tests, run_with_invalid_arguments, .init = cr_redirect_stderr)
@@ -60,7 +60,7 @@ Test(run_tests, run_with_invalid_arguments, .init = cr_redirect_stderr)
     };
     int ac = 16;
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_FAILURE);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_FAILURE);
     cr_assert_stderr_eq_str("Invalid flag: -t\n");
 }
 
@@ -75,7 +75,7 @@ Test(run_tests, run_with_missing_port, .init = cr_redirect_stderr)
     };
     int ac = 12;
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_FAILURE);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_FAILURE);
     fflush(stderr);
     cr_assert_stderr_eq_str("Missing server port\n");
 }
@@ -92,7 +92,7 @@ Test(run_tests, run_with_teams_as_last_args, .init = cr_redirect_stderr)
     };
     int ac = 15;
 
-    cr_assert_eq(app_run(ac, av), APP_EXIT_FAILURE);
+    cr_assert_eq(app_start(ac, av), APP_EXIT_FAILURE);
     fflush(stderr);
     cr_assert_stderr_eq_str("Duplicated team name 'team2'\n");
 }
