@@ -51,6 +51,7 @@ Test(controller_tests, new_controller_with_calloc_fail)
     clcc_disable_control(calloc);
 }
 
+
 Test(controller_tests, new_controller_with_requests_alloc_fail)
 {
     clcc_enable_control(malloc);
@@ -498,4 +499,191 @@ Test(controller_tests, controller_read_with_read_fail, .init = cr_redirect_stder
     cr_assert_eq(status, CTRL_CONNECTED);
 
     controller_free(controller);
+}
+
+Test(controller_tests, emit_test)
+{
+    controller_t *controller = controller_new(0);
+
+    controller_add_emission(controller, "test", 4);
+    clcc_return_now(write, 2);
+    controller_emit(controller);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    controller_emit(controller);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    clcc_disable_control(write);
+    controller_free(controller);
+}
+
+Test(controller_tests, null_controller_emit)
+{
+    controller_emit(NULL);
+}
+
+Test(controller_tests, write_fail)
+{
+    controller_t *controller = controller_new(0);
+
+    controller_add_emission(controller, "test", 4);
+    clcc_return_now(write, -1);
+    controller_emit(controller);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    clcc_return_now(write, 4);
+    controller_emit(controller);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    clcc_disable_control(write);
+    controller_free(controller);
+}
+
+Test(controller_tests, controller_write)
+{
+    controller_t *controller = controller_new(0);
+
+    cr_assert_eq(controller_write(controller, NULL, 4), -1);
+    cr_assert_eq(controller_write(NULL, "test", 4), -1);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller, .init = redirect_all_std)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    controller_add_emission(controller, buffer, 13);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    list_free(controller->generic.emissions, &emission_free_as_node_data);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller_with_calloc_fail, .init = redirect_all_std) {
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    clcc_return_now(calloc, NULL);
+    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    clcc_disable_control(calloc);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std) {
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    clcc_return_now(malloc, NULL);
+    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    clcc_disable_control(malloc);
+}
+
+Test(controller_emissions_tests, add_emission_to_controller_with_calloc_emission_fail, .init = redirect_all_std)
+{
+    controller_t *controller = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    clcc_enable_control(calloc);
+    clcc_return_value_after(calloc, NULL, 1);
+    cr_assert_eq(controller_add_emission(controller, buffer, 13), false);
+    clcc_disable_control(calloc);
+}
+
+Test(controller_emissions_tests, add_emission_with_null_controller, .init = redirect_all_std)
+{
+    char *buffer = strdup("Hello World");
+    cr_assert_eq(controller_add_emission(NULL, buffer, 13), false);
+}
+
+Test(controller_emissions_tests, add_emission_with_null_smart_ptr, .init = redirect_all_std)
+{
+    controller_t *controller = controller_new(0);
+    cr_assert_eq(controller_add_emission(controller, NULL, 13), false);
+    controller_free(controller);
+}
+
+Test(controller_emissions_tests, add_shared_emissions_with_calloc_fail, .init = redirect_all_std)
+{
+    list_t *list = list_new();
+    controller_t *controller = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_GRAPHIC;
+    controller->generic.type = CTRL_PLAYER;
+    list_push(list, NODE_DATA_FROM_PTR(controller));
+    list_push(list, NODE_DATA_FROM_PTR(controller2));
+    list_push(list, NODE_DATA_FROM_PTR(controller3));
+    clcc_return_now(calloc, NULL);
+    cr_assert_eq(controllers_add_emission(list, buffer, 13, CTRL_UNKNOWN),
+                 false);
+    cr_assert_eq(controllers_add_emission(list, buffer, 13, CTRL_UNKNOWN),
+                 false);
+    cr_assert_eq(controllers_add_emission(list, buffer, 13, CTRL_UNKNOWN),
+                 false);
+    clcc_disable_control(calloc);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller2->generic.emissions->len, 0);
+    cr_assert_eq(controller3->generic.emissions->len, 0);
+    list_free(list, &controller_free_as_node_data);
+}
+
+Test(controller_emissions_tests, add_shared_emissions_with_null_list, .init = redirect_all_std)
+{
+    char *buffer = strdup("Hello World");
+
+    cr_assert_eq(controllers_add_emission(NULL, buffer, 13,
+                                          CTRL_UNKNOWN), false);
+    cr_assert_eq(controllers_add_emission(NULL, buffer, 13, 0), false);
+    cr_assert_eq(controllers_add_emission(NULL, buffer, 13,
+                                          CTRL_UNKNOWN), false);
+    free(buffer);
+}
+
+Test(controller_emissions_tests, add_shared_emissions_with_null_buffer, .init = redirect_all_std)
+{
+    list_t *list = list_new();
+
+    cr_assert_eq(controllers_add_emission(list, NULL, 13,
+                                          CTRL_UNKNOWN), false);
+    cr_assert_eq(controllers_add_emission(list, NULL, 13, 0), false);
+    cr_assert_eq(controllers_add_emission(list, NULL, 13,
+                                          CTRL_UNKNOWN), false);
+    list_free(list, NULL);
+}
+
+Test(controller_emissions_tests, add_all_shared_emissions, .init = redirect_all_std)
+{
+    list_t *list = list_new();
+    controller_t *controller = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    controller->generic.type = CTRL_PLAYER;
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_UNKNOWN;
+    list_push(list, NODE_DATA_FROM_PTR(controller));
+    list_push(list, NODE_DATA_FROM_PTR(controller2));
+    list_push(list, NODE_DATA_FROM_PTR(controller3));
+    controllers_add_emission(list, buffer, 13, CTRL_GRAPHIC | CTRL_PLAYER);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller2->generic.emissions->len, 1);
+    cr_assert_eq(controller3->generic.emissions->len, 0);
+}
+
+Test(controller_emissions_tests, add_graphics_shared_emissions, .init = redirect_all_std)
+{
+    list_t *list = list_new();
+    controller_t *controller = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+    char *buffer = strdup("Hello World");
+
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_GRAPHIC;
+    controller->generic.type = CTRL_PLAYER;
+    list_push(list, NODE_DATA_FROM_PTR(controller));
+    list_push(list, NODE_DATA_FROM_PTR(controller2));
+    list_push(list, NODE_DATA_FROM_PTR(controller3));
+    controllers_add_emission(list, buffer, 13, CTRL_GRAPHIC);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller2->generic.emissions->len, 1);
+    cr_assert_eq(controller3->generic.emissions->len, 1);
 }
