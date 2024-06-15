@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
-#include <stdbool.h>
 #include "log.h"
 
 static void log_handle_level(log_level_t level, FILE *stream)

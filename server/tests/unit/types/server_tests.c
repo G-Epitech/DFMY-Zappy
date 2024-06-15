@@ -38,7 +38,6 @@ Test(server_tests, new_server)
 
     cr_assert_not_null(server);
     cr_assert_not_null(server->controllers);
-    cr_assert_not_null(server->events);
     cr_assert_eq(server->socket, -1);
     cr_assert_eq(server->fd_actual.max, -1);
     cr_assert_eq(server->fd_watch.max, -1);
@@ -58,14 +57,6 @@ Test(server_tests, new_server_fail_due_to_controller_list_new)
 {
     clcc_enable_control(malloc);
     clcc_return_value_after(malloc, NULL, 0);
-    cr_assert_null(server_new());
-    clcc_disable_control(malloc);
-}
-
-Test(server_tests, new_server_fail_due_to_events_list_new)
-{
-    clcc_enable_control(malloc);
-    clcc_return_value_after(malloc, NULL, 1);
     cr_assert_null(server_new());
     clcc_disable_control(malloc);
 }
@@ -885,7 +876,7 @@ Test(server_get_controller_by_socket_tests, get_unknown_controller)
     controller_t *controller = NULL;
 
     // Act
-    controller = server_get_controller_by_socket(server, 42);
+    controller = server_get_controller_by_socket(server, 84);
 
     // Assert
     cr_assert_null(controller);

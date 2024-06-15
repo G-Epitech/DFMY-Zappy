@@ -52,8 +52,6 @@ typedef struct server_s {
     fd_states_t fd_actual;
     // @brief List of clients controllers
     list_t *controllers;
-    // @brief List of shared events to send to several clients
-    list_t *events;
 } server_t;
 
 /**

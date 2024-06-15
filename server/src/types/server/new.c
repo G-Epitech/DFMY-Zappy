@@ -23,8 +23,7 @@ server_t *server_new(void)
     if (!server)
         return NULL;
     server->controllers = list_new();
-    server->events = list_new();
-    if (!server->controllers || !server->events) {
+    if (!server->controllers) {
         server_free(server);
         return NULL;
     }

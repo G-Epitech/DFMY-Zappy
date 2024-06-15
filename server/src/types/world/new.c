@@ -6,7 +6,6 @@
 */
 
 #include <memory.h>
-#include <stdio.h>
 #include "types/world/world.h"
 
 void world_init(world_t *world, size_t frequency)
