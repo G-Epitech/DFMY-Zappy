@@ -26,7 +26,6 @@ Test(server_tests, init_server)
 
     server_init(&server);
     cr_assert_eq(server.socket, -1);
-    cr_assert_eq(server.running, false);
     cr_assert_eq(server.fd_actual.max, -1);
     cr_assert_eq(server.fd_watch.max, -1);
     cr_assert_eq(server.address.sin_family, AF_INET);
@@ -41,7 +40,6 @@ Test(server_tests, new_server)
     cr_assert_not_null(server->controllers);
     cr_assert_not_null(server->events);
     cr_assert_eq(server->socket, -1);
-    cr_assert_eq(server->running, false);
     cr_assert_eq(server->fd_actual.max, -1);
     cr_assert_eq(server->fd_watch.max, -1);
     cr_assert_eq(server->address.sin_family, AF_INET);
@@ -220,7 +218,6 @@ Test(server_start_tests, simple_setup)
     // Act and assert
     server_init(&server);
     cr_assert(server_start(&server, 4242));
-    cr_assert(server.running);
     cr_assert(FD_ISSET(server.socket, &server.fd_watch.readable));
     cr_assert_not(FD_ISSET(server.socket, &server.fd_watch.writable));
     cr_assert(FD_ISSET(server.socket, &server.fd_watch.except));

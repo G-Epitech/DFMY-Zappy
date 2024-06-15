@@ -6,30 +6,22 @@
 */
 
 #include <signal.h>
+#include <stdio.h>
 #include "app.h"
-
-void app_setup_sig_handlers(void)
-{
-    signal(SIGINT, (void (*)(int)) &app_stop);
-    signal(SIGTERM, (void (*)(int)) &app_stop);
-}
-
-bool *app_stopped(void)
-{
-    static bool stopped = false;
-
-    return &stopped;
-}
 
 int app_exit(app_t *app, int code)
 {
     if (app->server)
         server_free(app->server);
+    app_sig_handlers_target(NULL, true);
     args_free(&app->args);
     return code;
 }
 
 void app_stop(void)
 {
-    *app_stopped() = true;
+    app_t *app = app_sig_handlers_target(NULL, false);
+
+    if (app)
+        app->running = false;
 }

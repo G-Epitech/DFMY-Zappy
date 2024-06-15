@@ -10,7 +10,7 @@
 
 int app_run(app_t *app)
 {
-    while (APP_RUNNING && app->server->running);
+    while (app->running);
     log_info("Server gracefully shutting down");
     return app_exit(app, APP_EXIT_SUCCESS);
 }

@@ -14,7 +14,6 @@
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
-#define APP_RUNNING (*app_stopped() == false)
 
 // @brief Application state
 typedef struct app_s {
@@ -22,13 +21,17 @@ typedef struct app_s {
     server_t *server;
     // @brief Program arguments
     args_t args;
+    // @brief Application running state
+    volatile bool running;
 } app_t;
 
 /**
- * @brief Provide access to the application state
- * @return Current value of the application state
+ * @brief Set the target of the signal handler
+ * @param app Application to set the target
+ * @param set Set the target
+ * @return Current target of the signal handler
  */
-bool *app_stopped(void);
+app_t *app_sig_handlers_target(app_t *app, bool set);
 
 /**
  * @brief Initialize the application

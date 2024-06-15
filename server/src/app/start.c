@@ -34,6 +34,5 @@ int app_start(int argc, char **argv)
     *log_level() = app.args.verbose_level;
     if (!app_create_and_start_server(&app))
         return app_exit(&app, APP_EXIT_FAILURE);
-    app_setup_sig_handlers();
     return app_run(&app);
 }
