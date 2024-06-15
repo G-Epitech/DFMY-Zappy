@@ -29,7 +29,7 @@ static bool controller_add_emission_final(controller_t *controller,
             controller->generic.socket);
     } else {
         log_error("Failed to add emission [%s] to controller %d", buffer,
-                  controller->generic.socket);
+            controller->generic.socket);
         emission_free(emission);
     }
     return success;
@@ -54,8 +54,8 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     return success;
 }
 
-bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size)
+bool controllers_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size, int types)
 {
     smart_ptr_t *buffer_ptr = NULL;
     controller_t *controller = NULL;
@@ -69,53 +69,7 @@ bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
     node = controllers->first;
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        if (controller->generic.type == CTRL_GRAPHIC) {
-            controller_add_emission_final(controller, buffer_ptr, buffer_size);
-        }
-        node = node->next;
-    }
-    return true;
-}
-
-bool controllers_player_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size)
-{
-    smart_ptr_t *buffer_ptr = NULL;
-    controller_t *controller = NULL;
-    node_t *node = NULL;
-
-    if (!buffer || !controllers)
-        return false;
-    buffer_ptr = smart_ptr_new(buffer);
-    if (!buffer_ptr)
-        return false;
-    node = controllers->first;
-    while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        if (controller->generic.type != CTRL_PLAYER) {
-            controller_add_emission_final(controller, buffer_ptr, buffer_size);
-        }
-        node = node->next;
-    }
-    return true;
-}
-
-bool controllers_all_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size)
-{
-    smart_ptr_t *buffer_ptr = NULL;
-    controller_t *controller = NULL;
-    node_t *node = NULL;
-
-    if (!buffer || !controllers)
-        return false;
-    buffer_ptr = smart_ptr_new(buffer);
-    if (!buffer_ptr)
-        return false;
-    node = controllers->first;
-    while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        if (controller->generic.type != CTRL_UNKNOWN) {
+        if (controller->generic.type & types) {
             controller_add_emission_final(controller, buffer_ptr, buffer_size);
         }
         node = node->next;

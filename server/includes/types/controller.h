@@ -27,11 +27,11 @@ typedef enum frozen_state_e {
 // @brief Controller types
 typedef enum controller_type_e {
     // @brief Unknown controller
-    CTRL_UNKNOWN,
+    CTRL_UNKNOWN = 1,
     // @brief Player controller
-    CTRL_PLAYER,
+    CTRL_PLAYER = 2,
     // @brief Graphic controller
-    CTRL_GRAPHIC
+    CTRL_GRAPHIC = 4
 } controller_type_t;
 
 // @brief Represent a generic controller
@@ -110,7 +110,7 @@ ssize_t controller_write(controller_t *controller, const char *msg,
     size_t len);
 
 /**
- * @brief Emit the first emission of the controller
+ * @brief Emit as much emissions as possible of the controller
  * @param controller Controller to emit
  */
 void controller_emit(controller_t *controller);
@@ -132,25 +132,5 @@ bool controller_add_emission(controller_t *controller, char *buffer,
  * @param buffer_size Buffer size
  * @return true if the emission was added, false otherwise
  */
-bool controllers_graphic_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size);
-
-/**
- * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
- * @param controllers List of controllers
- * @param buffer Buffer to add to the emission
- * @param buffer_size Buffer size
- * @return true if the emission was added, false otherwise
- */
-bool controllers_player_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size);
-
-/**
- * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
- * @param controllers List of controllers
- * @param buffer Buffer to add to the emission
- * @param buffer_size Buffer size
- * @return true if the emission was added, false otherwise
- */
-bool controllers_all_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size);
+bool controllers_add_emission(list_t *controllers, char *buffer,
+    size_t buffer_size, int types);

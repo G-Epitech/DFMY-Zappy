@@ -19,11 +19,12 @@ static void controller_handle_emit_write(controller_t *controller,
         &emission_buffer[emission->written],
         emission->buffer_size - emission->written);
 
-    if (written == emission->buffer_size) {
+    if (written == -1)
+        return;
+    emission->written += written;
+    if (emission->written == emission->buffer_size) {
         list_erase(controller->generic.emissions, node,
             &emission_free_as_node_data);
-    } else {
-        emission->written += written;
     }
 }
 
