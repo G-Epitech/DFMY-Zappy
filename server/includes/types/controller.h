@@ -10,6 +10,8 @@
 #include "list.h"
 #include "types/request.h"
 #include "types/world/chrono.h"
+#include "types/world/team.h"
+#include "types/vector2.h"
 #include "smart_ptr.h"
 
 // Max number of requests a player can have
@@ -201,3 +203,13 @@ void controller_handle_buffer_token(controller_t *controller,
  */
 void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size);
+
+/**
+ * @brief Initialize a player controller from a generic controller
+ * @param controller Controller to initialize
+ * @param team Player team
+ * @param position Player position
+ * @return Success status
+ */
+bool controller_player_init(controller_t *controller, team_t *team,
+    vector2u_t position);

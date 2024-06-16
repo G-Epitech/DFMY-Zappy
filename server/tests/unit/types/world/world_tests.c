@@ -125,3 +125,66 @@ Test(world_free_tests, free_null_map_cell)
 {
     map_cell_free(NULL);
 }
+
+Test(world_add_player_tests, add_player_to_world)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    cr_assert_eq(world_add_player(world, player), true);
+    cr_assert_eq(world->players->len, 1);
+    cr_assert_eq(world->players->first->data.ptr, player);
+    world_free(world);
+    team_free(team);
+}
+
+Test(world_add_player_tests, add_player_to_world_fail_push_world)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    clcc_return_now(malloc, NULL);
+    cr_assert_eq(world_add_player(world, player), false);
+    clcc_disable_control(malloc);
+    cr_assert_eq(world->players->len, 0);
+    world_free(world);
+    team_free(team);
+}
+
+Test(world_add_player_tests, add_player_to_world_fail_push_world_cell)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    clcc_return_value_after(malloc, NULL, 1);
+    clcc_enable_control(malloc);
+    cr_assert_eq(world_add_player(world, player), false);
+    clcc_disable_control(malloc);
+    world_free(world);
+    team_free(team);
+}
+
+Test(world_add_player_tests, add_player_to_world_fail_push_world_team)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    clcc_return_value_after(malloc, NULL, 2);
+    clcc_enable_control(malloc);
+    cr_assert_eq(world_add_player(world, player), false);
+    clcc_disable_control(malloc);
+    world_free(world);
+    team_free(team);
+}

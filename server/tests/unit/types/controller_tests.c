@@ -687,3 +687,43 @@ Test(controller_emissions_tests, add_graphics_shared_emissions, .init = redirect
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 1);
 }
+
+Test(controller_conversion_tests, controller_player_init)
+{
+    controller_t *controller = controller_new(0);
+    team_t team = { 0 };
+    vector2u_t position = { 0 };
+
+    cr_assert_eq(controller_player_init(controller, &team, position), true);
+    cr_assert_eq(controller->player.type, CTRL_PLAYER);
+    cr_assert_eq(controller->player.cooldown, 0);
+    cr_assert_eq(controller->player.frozen, FROZ_NO);
+    cr_assert_not_null(controller->player.player);
+}
+
+Test(controller_conversion_tests, null_controller)
+{
+    team_t team = { 0 };
+    vector2u_t position = { 0 };
+
+    cr_assert_eq(controller_player_init(NULL, &team, position), false);
+}
+
+Test(controller_conversion_tests, null_team)
+{
+    controller_t *controller = controller_new(0);
+    vector2u_t position = { 0 };
+
+    cr_assert_eq(controller_player_init(controller, NULL, position), false);
+}
+
+Test(controller_conversion_tests, controller_player_init_fail)
+{
+    controller_t *controller = controller_new(0);
+    team_t team = { 0 };
+    vector2u_t position = { 0 };
+
+    clcc_return_now(calloc, NULL);
+    cr_assert_eq(controller_player_init(controller, &team, position), false);
+    clcc_disable_control(calloc);
+}

@@ -16,6 +16,8 @@
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
+
+// @brief Default player direction
 #define PLAYER_DEFAULT_DIRECTION DIR_NORTH
 
 // @brief Structure representing a Trantorian player's direction
@@ -46,6 +48,8 @@ typedef struct player_s {
     size_t level;
     // @brief Direction of the player
     player_direction_t direction;
+    // @brief Player ID
+    size_t number;
 } player_t;
 
 /**
@@ -69,3 +73,10 @@ void player_free(player_t *player);
  * @param data Player structure to free
  */
 void player_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Change player direction
+ * @param player Player structure
+ * @param direction_offset Direction offset (in degrees)
+ */
+void player_change_direction(player_t *player, int direction_offset);

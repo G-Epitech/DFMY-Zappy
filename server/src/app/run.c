@@ -5,6 +5,8 @@
 ** zappy_server.c
 */
 
+#include <stdlib.h>
+#include <time.h>
 #include "app.h"
 #include "types/args.h"
 
@@ -25,6 +27,7 @@ int app_run(int argc, char **argv)
         app_print_usage();
         return app_exit(&args, APP_EXIT_SUCCESS);
     }
+    srandom(time(NULL));
     *log_level() = args.verbose_level;
     return app_exit(&args, APP_EXIT_SUCCESS);
 }

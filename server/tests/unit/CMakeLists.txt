@@ -8,6 +8,7 @@ add_executable(zappy_server_tests)
 add_subdirectory(app)
 add_subdirectory(log)
 add_subdirectory(types)
+add_subdirectory(utils)
 
 add_library(clcc STATIC IMPORTED)
 set_property(TARGET clcc
