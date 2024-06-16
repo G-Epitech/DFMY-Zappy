@@ -110,6 +110,7 @@ class HamsterEntity(NamedTuple):
     cooldown_before_declared_dead: int
     direction: int = -1
     level: int = 1
+    last_broadcast: int = 0
 
 class Hamster:
     def __init__(self, client: SocketClient, name: str, map_size: tuple, add_hamster: Callable[[], None], ID: int):
@@ -140,6 +141,7 @@ class Hamster:
         self.I_gonna_be_eaten: bool = False
         self.current_level: int = 1
         self.previous_level: int = 0
+        self.elvevation_underway: bool = False
 
     def init_hamster(self):
         """
@@ -175,7 +177,8 @@ class Hamster:
                 message = message.strip()
                 return (direction_int, message)
             except Exception as e:
-                self.debug(f"Error parsing broadcast message: {e}")
+                # self.debug(f"Error parsing broadcast message: {e}")
+                e
         return None
 
     def response_get_last_command(self) -> str:
@@ -202,15 +205,22 @@ class Hamster:
             if response.startswith("Elevation underway"):
                 self.debug(f"Elevation underway")
                 response = None
+                self.elvevation_underway = True
                 if self.mother:
                     return "ok"
                 continue
             if response.startswith("Current level: "):
+                self.elvevation_underway = False
                 self.previous_level = self.current_level
                 self.current_level = int(response.replace("Current level: ", ""))
                 if self.previous_level != self.current_level:
                     self.debug(f"Level up! {self.current_level}")
                 response = None
+                continue
+            if response == "ko" and self.elvevation_underway:
+                self.debug(f"Server did not accept elevation")
+                response = None
+                self.elvevation_underway = False
                 continue
         return response
     
@@ -327,6 +337,39 @@ class Hamster:
         message = message.replace(" ", "").replace("\"", "'")
         return message
     
+    def json_message_is_valid(self, json: Any) -> bool:
+        """
+        Checks if a JSON message is valid.
+
+        Args:
+            json (Any): The JSON message to be validated.
+
+        Returns:
+            bool: True if the message is valid, False otherwise.
+        """
+        if not json:
+            return False
+        if not json["message"]:
+            self.debug(f"Invalid message: {json}")
+            return False
+        recipient = json["recipient"]
+        if not recipient and recipient != 0:
+            self.debug(f"Invalid recipient: {json}")
+            return False
+        if not json["starting_timestamp"]:
+            self.debug(f"Invalid starting timestamp: {json}")
+            return False
+        if not json["current_timestamp"]:
+            self.debug(f"Invalid current timestamp: {json}")
+            return False
+        if not json["inventory"]:
+            self.debug(f"Invalid inventory: {json}")
+            return False
+        if not json["level"]:
+            self.debug(f"Invalid level: {json}")
+            return False
+        return True
+    
     def hamsters_remove_dead(self):
         """
         Removes dead hamsters from the list of hamsters.
@@ -361,7 +404,7 @@ class Hamster:
         try:
             message = self.decrypt_message(message).replace("'", "\"")
             json_message = json.loads(message)
-            if not json_message:
+            if not self.json_message_is_valid(json_message):
                 raise Exception("Invalid json message")
             hamster_starting_timestamp = json_message["starting_timestamp"]
             hamster_current_timestamp = json_message["current_timestamp"]
@@ -425,8 +468,14 @@ class Hamster:
         """
         message = self.decrypt_message(message).replace("'", "\"")
         json_message = json.loads(message)
-        if not message:
+        if not self.json_message_is_valid(json_message):
             raise Exception(f"Invalid message format: {message}")
+        
+        for hamster in self.hamsters:
+            if hamster.starting_timestamp == json_message["starting_timestamp"]:
+                if hamster.current_timestamp >= json_message["current_timestamp"]:
+                    self.debug(f"Someone trying to hack our team!", COLOR_RED)
+                    return
 
         if self.mother:
             if json_message["starting_timestamp"] < self.starting_timestamp:
@@ -495,19 +544,20 @@ class Hamster:
             try:
                 encrypted = self.decrypt_message(message[1]).replace("'", "\"")
                 json_message = json.loads(encrypted)
-                if not json_message:
+                if not self.json_message_is_valid(json_message):
                     raise Exception("Invalid json message")
                 if json_message["message"] == HAMSTER_NEW:
                     if json_message["starting_timestamp"] == ID:
                         self.pending_broadcast.remove(message)
                         # self.debug(f"===================================== New hamster {ID} found =====================================", COLOR_YELLOW)
             except Exception as e:
-                self.debug(f"Error managing broadcast message: {e}")
+                # self.debug(f"Error managing broadcast message: {e}")
+                e
 
     def manage_broadcast_cannibalism_id(self, message: str) -> int | None:
         message = self.decrypt_message(message).replace("'", "\"")
         json_message = json.loads(message)
-        if not json_message:
+        if not self.json_message_is_valid(json_message):
             raise Exception("Invalid json message")
         
         if json_message["message"] == HAMSTER_CANNIBALISM:
@@ -534,14 +584,16 @@ class Hamster:
                     self.pending_broadcast.remove(message)
                     self.manage_broadcast_cannibalism(id)
             except Exception as e:
-                self.debug(f"Error managing broadcast message: {e}")
+                # self.debug(f"Error managing broadcast message: {e}")
+                e
 
         for message in self.pending_broadcast:
             try:
                 self.manage_broadcast_message(message[0], message[1])
                 self.hamsters_manager_message(message[0], message[1])
             except Exception as e:
-                self.debug(f"Error managing broadcast message: {e}")
+                # self.debug(f"Error managing broadcast message: {e}")
+                e
         self.pending_broadcast = []
         if self.mother and self.cannibal_parent == self.starting_timestamp:
             self.debug(f"Number of hamsters: {len(self.hamsters)}", COLOR_MAGENTA)
@@ -560,9 +612,12 @@ class Hamster:
         try:
             unparsed_message = self.decrypt_message(message).replace("'", "\"")
             json_message = json.loads(unparsed_message)
+            if not self.json_message_is_valid(json_message):
+                raise Exception("Invalid json message")
             return json_message
         except Exception as e:
-            self.debug(f"Error parsing broadcast message: {e}")
+            # self.debug(f"Error parsing broadcast message: {e}")
+            e
         return None
     
     def json_get_sender(self, json_message: Any) -> int | None:
@@ -732,10 +787,12 @@ class Hamster:
                                     accepted = False
                                     break
                         except Exception as e:
-                            self.debug(f"Error parsing broadcast message: {e}")
+                            # self.debug(f"Error parsing broadcast message: {e}")
+                            e
                         self.pending_broadcast.append(broadcast_message)
                 except Exception as e:
-                    self.debug(f"Error parsing broadcast message: {e}")
+                    # self.debug(f"Error parsing broadcast message: {e}")
+                    e
                 response = None
         return accepted
 
@@ -975,13 +1032,13 @@ class Hamster:
             first_case_list = first_case.split(" ")
             if not first_case_list:
                 raise Exception("Invalid first element in vision")
-            # self.debug(f"First case: {first_case_list}", COLOR_BLUE)
+            self.debug(f"First case: {first_case_list}", COLOR_BLUE)
             self.walk_take_objects(first_case_list)
             third_case = vision[2].strip()
             third_case_list = third_case.split(" ")
             if not third_case_list:
                 raise Exception("Invalid third element in vision")
-            # self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
+            self.debug(f"Third case: {third_case_list}", COLOR_BLUE)
             self.walk_forward()
             self.walk_take_objects(third_case_list)
             second_case = vision[1].strip()
@@ -1005,13 +1062,15 @@ class Hamster:
                 self.walk_rotate_right()
             self.walk_forward()
             if len(second_case_list) > len(fourth_case_list):
+                self.debug(f"Second case: {second_case_list}")
                 self.walk_take_objects(second_case_list)
             else:
+                self.debug(f"Fourth case: {fourth_case_list}")
                 self.walk_take_objects(fourth_case_list)
             self.walk_forward()
         except Exception as e:
             self.error(f"Error walking: {e}")
-    
+
     def family_gathering(self):
         # self.error(f"Called by mother: {self.direction_called_by_mother}########################################################################")
         if self.direction_called_by_mother < 0 or self.direction_called_by_mother > 8:
@@ -1075,24 +1134,18 @@ class Hamster:
         return True
     
     def hamsters_have_at_leats_n_foods(self, n: int) -> bool:
-        hamsters_with_enought_food = 0
         for hamster in self.hamsters:
             if hamster.level == self.current_level:
-                if hamster.inventory["food"] > n:
-                    hamsters_with_enought_food += 1
-        self.debug(f"Hamsters with enought food: {hamsters_with_enought_food}")
-        return hamsters_with_enought_food >= 6
+                if hamster.inventory["food"] < n:
+                    return False
+        return True
 
     def hamsters_all_arrived(self) -> bool:
-        hamsters_arrived = 0
         for hamster in self.hamsters:
-            self.debug(f"Hamster level: {hamster.level} | Current level: {self.current_level}")
             if hamster.level == self.current_level:
-                self.debug(f"Hamster direction: {hamster.direction}")
-                if hamster.direction == 0:
-                    hamsters_arrived += 1
-        self.debug(f"Hamsters arrived: {hamsters_arrived}")
-        return hamsters_arrived >= 6
+                if hamster.direction != 0:
+                    return False
+        return True
 
     def hamster_ask_to_set_object(self, object: str, hamster_id: int):
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_SET_OBJECT + object, hamster_id)}")
@@ -1216,18 +1269,20 @@ class Hamster:
     def elevation_exist_enought_hamsters(self) -> bool:
         nb_hamsters_with_my_level = 0
         for hamster in self.hamsters:
-            self.debug(f"Hamster level: {hamster.level} | Current level: {self.current_level}")
             if hamster.level == self.current_level:
                 nb_hamsters_with_my_level += 1
         self.debug(f"Number of hamsters with my level: {nb_hamsters_with_my_level}")
         return nb_hamsters_with_my_level >= 6
 
     def elevation(self) -> bool:
+        if not self.hamsters_all_arrived():
+            return False
         missing_items = self.elevation_missing_items()
 
         while missing_items and len(missing_items) > 0:
             self.hamsters_ask_to_set_objects(missing_items)
             missing_items = self.elevation_missing_items()
+            self.debug(f"Missing items: {missing_items}")
             self.manage_broadcast()
 
         if not self.hamsters_have_at_leats_n_foods(10):
@@ -1243,15 +1298,18 @@ class Hamster:
         return True
 
     def hamster_give_authority(self):
-        hamster_id = self.hamsters[0].starting_timestamp
-        for hamster in self.hamsters:
-            if hamster_id < hamster.starting_timestamp:
-                hamster_id = hamster.starting_timestamp
-        if hamster_id == self.starting_timestamp:
-            self.reproduce()
-            return
-        self.send_broadcast(f"{self.create_broadcast_message(HAMSERT_GIVE_AUTHORITY, hamster_id)}")
-        self.suicide()
+        try :
+            hamster_id = self.hamsters[0].starting_timestamp
+            for hamster in self.hamsters:
+                if hamster_id < hamster.starting_timestamp:
+                    hamster_id = hamster.starting_timestamp
+            if hamster_id == self.hamsters[0].starting_timestamp:
+                self.reproduce()
+                return
+            self.send_broadcast(f"{self.create_broadcast_message(HAMSERT_GIVE_AUTHORITY, hamster_id)}")
+            self.suicide()
+        except Exception as e:
+            self.error(f"Error occured in give authority: {e}")
 
     def suicide(self):
         while not self.dead:
@@ -1307,13 +1365,7 @@ class Hamster:
                 if self.I_gonna_be_eaten:
                     # self.debug(f"Parent cannibal: {self.cannibal_parent}")
                     self.client.send(f"Set food\n")
-                    response = self.response_get_last_command()
-                    if response == "ko":
-                        self.debug("Server did not accept set food")
-                    elif response == "dead":
-                        self.debug("Server responded with dead")
-                        self.dead = True
-                        continue
+                    self.response_get_last_command()
                     self.manage_broadcast()
                 else:
                     self.update_inventory()
@@ -1348,7 +1400,7 @@ class Hamster:
                                         self.reproduce()
                                     else:
                                         self.hamster_give_authority()
-                            elif self.hamsters_have_at_leats_n_foods(50):
+                            elif self.hamsters_have_at_leats_n_foods(40):
                                 attemps_enough_hamsters = 0
                                 if self.hamsters_have_enough_ressources_for_the_next_level():
                                     self.debug("I'm the mother and my little ones have enough ressources", COLOR_YELLOW)
@@ -1397,10 +1449,18 @@ class Hamster:
         for char in message:
             if char.isalpha():
                 key_char = self.encrypting_key[key_index % len(self.encrypting_key)]
-                if char.isupper():
-                    encrypted_char = chr((ord(char) + ord(key_char) - 2 * ord('A')) % 26 + ord('A'))
+                if key_char.isdigit():
+                    key_shift = int(key_char)
+                elif key_char.isupper():
+                    key_shift = ord(key_char) - ord('A')
                 else:
-                    encrypted_char = chr((ord(char) + ord(key_char) - 2 * ord('a')) % 26 + ord('a'))
+                    key_shift = ord(key_char) - ord('a')
+                
+                if char.isupper():
+                    encrypted_char = chr((ord(char) - ord('A') + key_shift) % 26 + ord('A'))
+                else:
+                    encrypted_char = chr((ord(char) - ord('a') + key_shift) % 26 + ord('a'))
+
                 encrypted_message += encrypted_char
                 key_index += 1
             else:
@@ -1422,10 +1482,18 @@ class Hamster:
         for char in message:
             if char.isalpha():
                 key_char = self.encrypting_key[key_index % len(self.encrypting_key)]
-                if char.isupper():
-                    decrypted_char = chr((ord(char) - ord(key_char) + 26) % 26 + ord('A'))
+                if key_char.isdigit():
+                    key_shift = int(key_char)
+                elif key_char.isupper():
+                    key_shift = ord(key_char) - ord('A')
                 else:
-                    decrypted_char = chr((ord(char) - ord(key_char) + 26) % 26 + ord('a'))
+                    key_shift = ord(key_char) - ord('a')
+
+                if char.isupper():
+                    decrypted_char = chr((ord(char) - ord('A') - key_shift + 26) % 26 + ord('A'))
+                else:
+                    decrypted_char = chr((ord(char) - ord('a') - key_shift + 26) % 26 + ord('a'))
+
                 decrypted_message += decrypted_char
                 key_index += 1
             else:
