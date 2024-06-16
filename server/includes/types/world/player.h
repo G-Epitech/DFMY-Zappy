@@ -16,6 +16,19 @@
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
+#define PLAYER_DEFAULT_DIRECTION DIR_NORTH
+
+// @brief Structure representing a Trantorian player's direction
+typedef enum player_direction_e {
+    // @brief East direction
+    DIR_EAST = 0,
+    // @brief North direction
+    DIR_NORTH = 90,
+    // @brief West direction
+    DIR_WEST = 180,
+    // @brief South direction
+    DIR_SOUTH = 270
+} player_direction_t;
 
 // @brief Structure representing a Trantorian player
 typedef struct player_s {
@@ -31,6 +44,8 @@ typedef struct player_s {
     vector2u_t position;
     // @brief Level of the player
     size_t level;
+    // @brief Direction of the player
+    player_direction_t direction;
 } player_t;
 
 /**
