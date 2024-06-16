@@ -20,7 +20,7 @@ Test(player_new_tests, simple_new)
     cr_assert_eq(player->position.y, 5);
     cr_assert_eq(player->lives, 1260);
     cr_assert_eq(player->level, 1);
-    cr_assert_eq(player->direction, PLAYER_DEFAULT_DIRECTION);
+    cr_assert_eq(player->direction, PLAYER_DIRECTION_DEFAULT);
     cr_assert_eq(player->number, 0);
     cr_assert_null(player->controller);
     player_free(player);
@@ -63,22 +63,22 @@ Test(player_direction_tests, change_direction)
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(NULL, team, position);
 
-    cr_assert_eq(player->direction, PLAYER_DEFAULT_DIRECTION);
-    player_change_direction(player, -90);
+    cr_assert_eq(player->direction, PLAYER_DIRECTION_DEFAULT);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     cr_assert_eq(player->direction, DIR_EAST);
-    player_change_direction(player, -90);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     cr_assert_eq(player->direction, DIR_SOUTH);
-    player_change_direction(player, 90);
+    player_change_direction(player, PLAYER_DIRECTION_LEFT_OFFSET);
     cr_assert_eq(player->direction, DIR_EAST);
-    player_change_direction(player, 90);
+    player_change_direction(player, PLAYER_DIRECTION_LEFT_OFFSET);
     cr_assert_eq(player->direction, DIR_NORTH);
-    player_change_direction(player, 90);
+    player_change_direction(player, PLAYER_DIRECTION_LEFT_OFFSET);
     cr_assert_eq(player->direction, DIR_WEST);
-    player_change_direction(player, 90);
+    player_change_direction(player, PLAYER_DIRECTION_LEFT_OFFSET);
     cr_assert_eq(player->direction, DIR_SOUTH);
-    player_change_direction(player, 90);
+    player_change_direction(player, PLAYER_DIRECTION_LEFT_OFFSET);
     cr_assert_eq(player->direction, DIR_EAST);
-    player_change_direction(player, 50);
+    player_change_direction(player, 23);
     cr_assert_eq(player->direction, DIR_EAST);
 }
 

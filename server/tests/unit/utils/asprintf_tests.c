@@ -6,7 +6,6 @@
 */
 
 #include <criterion/criterion.h>
-#include <stdio.h>
 #include "utils.h"
 #include "clcc/modules/stdio.h"
 #include "clcc/modules/stdlib.h"

@@ -9,14 +9,9 @@
 
 void player_change_direction(player_t *player, int direction_offset)
 {
-    int temp_direction;
-
-    if (direction_offset != 90 && direction_offset != -90)
+    if (direction_offset != 1 && direction_offset != -1)
         return;
-    temp_direction = ((int) player->direction + direction_offset);
-    if (temp_direction >= 360)
-        temp_direction = 0;
-    else if (temp_direction < 0)
-        temp_direction = 270;
-    player->direction = (player_direction_t) temp_direction;
+    player->direction = (player->direction + direction_offset) % 4;
+    if (player->direction <= 0)
+        player->direction = DIR_WEST;
 }

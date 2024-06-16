@@ -53,3 +53,18 @@ void world_free(world_t *world);
  * @return Success status
  */
 bool world_add_player(world_t *world, player_t *player);
+
+/**
+ * @brief Remove a player from the world
+ * @param world World to remove the player from
+ * @param player Player to remove
+ * @return Success status
+ */
+void world_remove_player(world_t *world, player_t *player);
+
+/**
+ * @brief Move a player forward in the world
+ * @param world World to move the player in
+ * @param player Player to move
+ */
+void world_forward_player(world_t *world, player_t *player);

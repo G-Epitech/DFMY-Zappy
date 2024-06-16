@@ -228,3 +228,20 @@ Test(types_list, clear_list)
     list_clear(&list, NULL);
     cr_assert_eq(list.len, 0);
 }
+
+Test(types_list, find_list)
+{
+    list_t list;
+    char *str = "HELLO";
+    char *str2 = "UNKNOWN";
+    node_t *node = NULL;
+
+    list_init(&list);
+    list_push(&list, NODE_DATA_FROM_PTR("WORLD"));
+    list_push(&list, NODE_DATA_FROM_PTR(str));
+    node = list_find(&list, NODE_DATA_FROM_PTR(str));
+    cr_assert_not_null(node);
+    node = list_find(&list, NODE_DATA_FROM_PTR(str2));
+    cr_assert_null(node);
+    list_clear(&list, NULL);
+}

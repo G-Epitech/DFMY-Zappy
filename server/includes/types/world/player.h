@@ -18,18 +18,22 @@
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
 
 // @brief Default player direction
-#define PLAYER_DEFAULT_DIRECTION DIR_NORTH
+#define PLAYER_DIRECTION_DEFAULT DIR_NORTH
+// @brief Player direction offset when turning left or right
+#define PLAYER_DIRECTION_LEFT_OFFSET -1
+// @brief Player direction offset when turning left or right
+#define PLAYER_DIRECTION_RIGHT_OFFSET 1
 
 // @brief Structure representing a Trantorian player's direction
 typedef enum player_direction_e {
-    // @brief East direction
-    DIR_EAST = 0,
     // @brief North direction
-    DIR_NORTH = 90,
-    // @brief West direction
-    DIR_WEST = 180,
+    DIR_NORTH = 1,
+    // @brief East direction
+    DIR_EAST,
     // @brief South direction
-    DIR_SOUTH = 270
+    DIR_SOUTH,
+    // @brief West direction
+    DIR_WEST
 } player_direction_t;
 
 // @brief Structure representing a Trantorian player

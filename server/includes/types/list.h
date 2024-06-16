@@ -74,3 +74,11 @@ void list_pop(list_t *list, node_t *node);
  * @param freer Freer to call to free node data
  */
 void list_erase(list_t *list, node_t *node, node_freer_t freer);
+
+/**
+ * @brief Find node with given data in given list.
+ * @param list List in which find node
+ * @param data Data to find in list
+ * @return Found node or NULL if not found
+ */
+node_t *list_find(list_t *list, node_data_t data);

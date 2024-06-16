@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "clcc/modules/stdlib.h"
 #include "types/world/world.h"
+#include "types/world/incantation.h"
 
 Test(world_new_tests, simple_new)
 {
@@ -186,5 +187,92 @@ Test(world_add_player_tests, add_player_to_world_fail_push_world_team)
     cr_assert_eq(world_add_player(world, player), false);
     clcc_disable_control(malloc);
     world_free(world);
+    team_free(team);
+}
+
+Test(world_remove_player_tests, remove_player_from_everything)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+    incantation_t *incantation = incantation_new(NULL, 1);
+
+    world_add_player(world, player);
+    list_push(incantation->players, NODE_DATA_FROM_PTR(player));
+    list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
+    cr_assert_eq(world->players->len, 1);
+    cr_assert_eq(world->incantations->len, 1);
+    world_remove_player(world, player);
+    cr_assert_eq(world->players->len, 0);
+    cr_assert_eq(incantation->players->len, 0);
+}
+
+Test(world_remove_player_tests, remove_unadded_player_from_everything)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 5, 5 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+    player_t *player2 = player_new(NULL, team, position);
+    incantation_t *incantation = incantation_new(NULL, 1);
+
+    world_add_player(world, player2);
+    list_push(incantation->players, NODE_DATA_FROM_PTR(player2));
+    list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
+    cr_assert_eq(world->players->len, 1);
+    cr_assert_eq(world->incantations->len, 1);
+    world_remove_player(world, player);
+    cr_assert_eq(world->players->len, 1);
+    cr_assert_eq(incantation->players->len, 1);
+}
+
+
+Test(world_move_player_tests, simple_forward)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_add_player(world, player);
+    world_forward_player(world, player);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 5);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    world_forward_player(world, player);
+    cr_assert_eq(player->position.x, 5);
+    cr_assert_eq(player->position.y, 5);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    world_forward_player(world, player);
+    cr_assert_eq(player->position.x, 5);
+    cr_assert_eq(player->position.y, 4);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    world_forward_player(world, player);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 4);
+    world_free(world);
+    team_free(team);
+}
+
+Test(world_move_player_tests, simple_forward_with_null_player)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+
+    world_forward_player(world, NULL);
+    world_free(world);
+}
+
+Test(world_move_player_tests, simple_forward_with_null_world)
+{
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_forward_player(NULL, player);
     team_free(team);
 }
