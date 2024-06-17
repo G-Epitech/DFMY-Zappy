@@ -22,8 +22,23 @@ ssize_t controller_write(controller_t *controller, const char *msg, size_t len)
         log_error("Failed to write to %d: %s", controller->generic.socket,
             strerror(errno));
     } else {
-        log_debug("%ldb / %ldb bytes sent to %d", written, len,
+        log_debug("%ldB/%ldB sent to %d", written, len,
             controller->generic.socket);
     }
     return written;
+}
+
+bool controller_end_emission(controller_t *controller)
+{
+    ssize_t written;
+
+    if (!controller)
+        return false;
+    written = write(controller->generic.socket, "\n", 1);
+    if (written == -1) {
+        log_error("Failed to write to %d: %s", controller->generic.socket,
+            strerror(errno));
+        return false;
+    }
+    return true;
 }

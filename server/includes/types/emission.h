@@ -10,8 +10,9 @@
 #include "types/list.h"
 #include "types/smart_ptr.h"
 
-// @brief Buffer writing section size for emission
-#define EMISSION_BUFF_SIZE 4096
+// @brief Specify that the emission is partial and
+// end char should not be sent
+#define EMISSION_PARTIAL 1
 
 // @brief Represent response or an event to send to a single client
 typedef struct emission_s {
@@ -21,16 +22,31 @@ typedef struct emission_s {
     size_t buffer_size;
     // @brief Written bytes
     ssize_t written;
+    // @brief Flags
+    int flags;
 } emission_t;
+
+
+// @brief Controller emission parameters
+typedef struct emission_params_s {
+    // @brief Buffer to send
+    char *buffer;
+    // @brief Buffer size
+    size_t buffer_size;
+    // @brief Flags
+    int flags;
+} emission_params_t;
 
 /**
  * @brief Create a new emission
  * @param buffer Buffer for emission content.
  * @param buffer_size Buffer size
+ * @param flags Flags for the emission
  * @return Created emission or NULL if failed
  * @warning The ownership of buffer will be transferred to the emission.
  */
-emission_t *emission_new(smart_ptr_t *buffer_ptr, size_t buffer_size);
+emission_t *emission_new(smart_ptr_t *buffer_ptr, size_t buffer_size,
+    int flags);
 
 /**
  * @brief Free given emission
