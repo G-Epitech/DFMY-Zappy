@@ -11,7 +11,7 @@
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
-void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &meshName, int quantity, std::vector<Ogre::SceneNode *> &items)
+void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity)
 {
     Ogre::SceneNode *node = tile.node;
     if (!node || node->numAttachedObjects() == 0)
@@ -21,28 +21,28 @@ void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std
     Ogre::Vector3 size = node->getAttachedObject(0)->getBoundingBox().getSize();
 
     for (int i = 0; i < quantity; i++) {
-        Ogre::Entity* cubeEntity = scnMgr->createEntity(meshName);
+        Ogre::Entity* cubeEntity = scnMgr->createEntity(itemName + ".mesh");
         Ogre::SceneNode* itemNode = scnMgr->getRootSceneNode()->createChildSceneNode();
         auto itemSize = cubeEntity->getBoundingBox().getSize();
         itemNode->attachObject(cubeEntity);
 
         float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
         float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
-        float itemY = itemSize.y / 2 * 0.1;
+        float itemY = itemSize.y / 2.0f * 0.1;
 
         itemNode->setPosition(randX, itemY, randZ);
         itemNode->setScale(0.1f, 0.1f, 0.1f);
-        items.push_back(itemNode);
+        tile.items[itemName].push_back(itemNode);
     }
 }
 
-void Commands::_removeItemsFromTile(Ogre::SceneManager *scnMgr, int quantity, std::vector<Ogre::SceneNode *> &items)
+void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity)
 {
     for (int i = 0; i < quantity; i++) {
-        if (items.size() == 0)
+        if (tile.items[itemName].empty())
             return;
-        Ogre::SceneNode *node = items.back();
-        items.pop_back();
+        Ogre::SceneNode *node = tile.items[itemName].back();
+        tile.items[itemName].pop_back();
         scnMgr->destroySceneNode(node);
     }
 }
@@ -100,13 +100,13 @@ void Commands::tile_content(std::string &command, Map &map, Ogre::SceneManager *
     }
 
     if (food > 0)
-        _addItemsToTile(map.tiles[x][y], scnMgr, "food.mesh", food, map.tiles[x][y].items["food"]);
+        _addItemsToTile(map.tiles[x][y], scnMgr, "food", food);
     else if (food < 0)
-        _removeItemsFromTile(scnMgr, -food, map.tiles[x][y].items["food"]);
+        _removeItemsFromTile(map.tiles[x][y], scnMgr, "food", -food);
     for (int i = 0; i < stonesNames.size(); i++) {
         if (stones[i] > 0)
-            _addItemsToTile(map.tiles[x][y], scnMgr, stonesNames[i] + ".mesh", stones[i], map.tiles[x][y].items[stonesNames[i]]);
+            _addItemsToTile(map.tiles[x][y], scnMgr, stonesNames[i], stones[i]);
         else if (stones[i] < 0)
-            _removeItemsFromTile(scnMgr, -stones[i], map.tiles[x][y].items[stonesNames[i]]);
+            _removeItemsFromTile(map.tiles[x][y], scnMgr, stonesNames[i], -stones[i]);
     }
 }

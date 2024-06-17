@@ -37,6 +37,6 @@ public:
     static void command_parameters(std::string &command, Map &map, Ogre::SceneManager *scnMgr);
 
 private:
-    static void _addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &meshName, int quantity, std::vector<Ogre::SceneNode *> &items);
-    static void _removeItemsFromTile(Ogre::SceneManager *scnMgr, int quantity, std::vector<Ogre::SceneNode *> &items);
+    static void _addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity);
+    static void _removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity);
 };
