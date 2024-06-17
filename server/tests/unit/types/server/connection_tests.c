@@ -7,6 +7,9 @@
 
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <errno.h>
 #include "types/server.h"
 #include "clcc/modules/stdlib.h"
 #include "clcc/modules/unistd.h"
@@ -476,5 +479,205 @@ Test(server_close_all_connections_tests, close_2_connections, .init=cr_redirect_
     cr_assert_eq(server->controllers->len, 0);
 
     // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_0_controllers)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Act and assert
+    server_handle_emissions(server);
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_1_controller_with_emissions)
+{
+    // Arrange
+    int fd[2];
+    char buffer[1024] = { 0 };
+    ssize_t buff_content_size = 0;
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    pipe(fd);
+    controller = server_register_client(server, fd[1]);
+
+    // Pre-assert
+    cr_assert_not_null(controller);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_not(FD_ISSET(fd[1], &server->fd_watch.writable));
+
+    // Act and assert
+    server_update_fd_watch_write(server);
+    server->fd_actual = server->fd_watch;
+    server_handle_emissions(server);
+
+    buff_content_size = read(fd[0], buffer, 1024);
+    cr_assert_eq(buff_content_size, 8);
+    cr_assert_str_eq(buffer, "WELCOME\n");
+
+    // Cleanup
+    server_close_all_connections(server);
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_1_controller_with_no_emissions)
+{
+    // Arrange
+    int fd[2];
+    char buffer[1024] = { 0 };
+    ssize_t buff_content_size = 0;
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    pipe(fd);
+    controller = server_register_client(server, fd[1]);
+    fcntl(fd[0], F_SETFL, O_NONBLOCK);
+
+    // Pre-assert
+    cr_assert_not_null(controller);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_not(FD_ISSET(fd[1], &server->fd_watch.writable));
+
+    // Act and assert
+
+    // First emissions
+    server_update_fd_watch_write(server);
+    server->fd_actual = server->fd_watch;
+    server_handle_emissions(server);
+
+    buff_content_size = read(fd[0], buffer, 1024);
+    cr_assert_eq(buff_content_size, 8);
+    cr_assert_str_eq(buffer, "WELCOME\n");
+    cr_assert_eq(controller->generic.emissions->len, 0);
+
+    // Second emissions
+    server_handle_emissions(server);
+    memset(buffer, 0, 1024);
+    buff_content_size = read(fd[0], buffer, 1024);
+    cr_assert_eq(buff_content_size, -1);
+    cr_assert_eq(errno, EAGAIN);
+
+    // Cleanup
+    server_close_all_connections(server);
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions)
+{
+    // Arrange
+    int fd_1[2];
+    int fd_2[2];
+    char buffer1[1024] = { 0 };
+    char buffer2[1024] = { 0 };
+    ssize_t buff_content_size1 = 0;
+    ssize_t buff_content_size2 = 0;
+    server_t *server = server_new();
+    controller_t *controller1, *controller2 = NULL;
+
+    pipe(fd_1);
+    pipe(fd_2);
+    controller1 = server_register_client(server, fd_1[1]);
+    controller2 = server_register_client(server, fd_2[1]);
+    fcntl(fd_1[0], F_SETFL, O_NONBLOCK);
+    fcntl(fd_2[0], F_SETFL, O_NONBLOCK);
+
+    // Pre-assert
+    cr_assert_not_null(controller1);
+
+    cr_assert_eq(server->controllers->len, 2);
+    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_not(FD_ISSET(fd_1[1], &server->fd_watch.writable));
+    cr_assert_not(FD_ISSET(fd_2[1], &server->fd_watch.writable));
+
+    // Act and assert
+
+    // First emissions
+    server_update_fd_watch_write(server);
+    server->fd_actual = server->fd_watch;
+    server_handle_emissions(server);
+
+    buff_content_size1 = read(fd_1[0], buffer1, 1024);
+    cr_assert_eq(buff_content_size1, 8);
+    cr_assert_str_eq(buffer1, "WELCOME\n");
+    cr_assert_eq(controller1->generic.emissions->len, 0);
+
+    buff_content_size2 = read(fd_2[0], buffer2, 1024);
+    cr_assert_eq(buff_content_size2, 8);
+    cr_assert_str_eq(buffer2, "WELCOME\n");
+    cr_assert_eq(controller2->generic.emissions->len, 0);
+
+    // Second emissions
+    server_handle_emissions(server);
+    memset(buffer1, 0, 1024);
+    buff_content_size1 = read(fd_1[0], buffer2, 1024);
+    cr_assert_eq(buff_content_size1, -1);
+    cr_assert_eq(errno, EAGAIN);
+    memset(buffer2, 0, 1024);
+    buff_content_size2 = read(fd_1[0], buffer2, 1024);
+    cr_assert_eq(buff_content_size2, -1);
+    cr_assert_eq(errno, EAGAIN);
+
+    // Cleanup
+    server_close_all_connections(server);
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions_not_ready)
+{
+    // Arrange
+    int fd_1[2];
+    int fd_2[2];
+    char buffer1[1024] = { 0 };
+    char buffer2[1024] = { 0 };
+    ssize_t buff_content_size1 = 0;
+    ssize_t buff_content_size2 = 0;
+    server_t *server = server_new();
+    controller_t *controller1, *controller2 = NULL;
+
+    pipe(fd_1);
+    pipe(fd_2);
+    controller1 = server_register_client(server, fd_1[1]);
+    controller2 = server_register_client(server, fd_2[1]);
+    fcntl(fd_1[0], F_SETFL, O_NONBLOCK);
+    fcntl(fd_2[0], F_SETFL, O_NONBLOCK);
+
+    // Pre-assert
+    cr_assert_not_null(controller1);
+
+    cr_assert_eq(server->controllers->len, 2);
+    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_not(FD_ISSET(fd_1[1], &server->fd_watch.writable));
+    cr_assert_not(FD_ISSET(fd_2[1], &server->fd_watch.writable));
+
+    // Act and assert
+    server_update_fd_watch_write(server);
+    FD_CLR(fd_1[1], &server->fd_watch.writable);
+    server->fd_actual = server->fd_watch;
+    server_handle_emissions(server);
+
+    buff_content_size1 = read(fd_1[0], buffer1, 1024);
+    cr_assert_eq(buff_content_size1, -1);
+    cr_assert_eq(errno, EAGAIN);
+
+    buff_content_size2 = read(fd_2[0], buffer2, 1024);
+    cr_assert_eq(buff_content_size2, 8);
+    cr_assert_str_eq(buffer2, "WELCOME\n");
+    cr_assert_eq(controller2->generic.emissions->len, 0);
+
+    // Cleanup
+    server_close_all_connections(server);
     server_free(server);
 }

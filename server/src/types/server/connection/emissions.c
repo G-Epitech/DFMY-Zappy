@@ -7,11 +7,10 @@
 
 #include "types/server.h"
 
-void server_handle_controller_emissions(server_t *server,
+static void server_handle_controller_emissions(server_t *server,
     controller_t *controller)
 {
-    if (controller &&
-        FD_ISSET(controller->generic.socket, &server->fd_actual.writable) &&
+    if (FD_ISSET(controller->generic.socket, &server->fd_actual.writable) &&
         controller->generic.emissions->len > 0
     ) {
         controller_emit(controller);
