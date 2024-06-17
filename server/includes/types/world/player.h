@@ -20,7 +20,7 @@
 // @brief Default player direction
 #define PLAYER_DIRECTION_DEFAULT DIR_NORTH
 // @brief Player direction offset when turning left or right
-#define PLAYER_DIRECTION_LEFT_OFFSET -1
+#define PLAYER_DIRECTION_LEFT_OFFSET (-1)
 // @brief Player direction offset when turning left or right
 #define PLAYER_DIRECTION_RIGHT_OFFSET 1
 
