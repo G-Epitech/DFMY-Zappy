@@ -10,6 +10,7 @@
 #include "types/list.h"
 #include "types/vector2.h"
 #include "types/world/resource.h"
+#include "types/world/player.h"
 
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
@@ -54,3 +55,28 @@ bool map_cell_init(map_cell_t *cell);
  * @param cell Cell to free
  */
 void map_cell_free(map_cell_t *cell);
+
+/**
+ * @brief Take an object from the current map cell at current player position
+ * @param map Map to take the object from
+ * @param player Player to take the object
+ * @param resource Resource to take
+ */
+void map_player_take_object(map_t *map, player_t *player,
+    resource_t resource);
+
+/**
+ * @brief Set an object to the current map cell at current player position
+ * @param map Map to set the object to
+ * @param player Player to set the object
+ * @param resource Resource to set
+ */
+void map_player_set_object(map_t *map, player_t *player,
+    resource_t resource);
+
+/**
+ * @brief Move a player forward in the world
+ * @param world World to move the player in
+ * @param player Player to move
+ */
+void map_player_forward(map_t *world, player_t *player);

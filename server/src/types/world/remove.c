@@ -2,32 +2,15 @@
 ** EPITECH PROJECT, 2024
 ** zappy_server
 ** File description:
-** new.c
+** remove.c
 */
 
 #include "types/world/world.h"
 #include "types/world/player.h"
 #include "types/world/incantation.h"
 
-bool world_add_player(world_t *world, player_t *player)
-{
-    node_data_t data = NODE_DATA_FROM_PTR(player);
-    list_t *lists_stack[] = {
-            world->players,
-            world->map->cells[player->position.y][player->position.x].players,
-            player->team->players,
-            NULL
-    };
-
-    for (int i = 0; lists_stack[i]; i++) {
-        if (!list_push(lists_stack[i], data))
-            return false;
-    }
-    return true;
-}
-
 static void world_remove_player_from_incantations(world_t *world,
-    player_t *player)
+                                                  player_t *player)
 {
     node_data_t data = NODE_DATA_FROM_PTR(player);
     node_t *node = world->incantations->first;
@@ -62,3 +45,4 @@ void world_remove_player(world_t *world, player_t *player)
     }
     world_remove_player_from_incantations(world, player);
 }
+

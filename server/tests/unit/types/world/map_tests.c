@@ -70,3 +70,51 @@ Test(map_tests, map_alloc_fail)
     cr_assert_null(map_new(size));
     clcc_disable_control(calloc);
 }
+
+Test(world_move_player_tests, simple_forward)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_add_player(world, player);
+    map_player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 5);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    map_player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 5);
+    cr_assert_eq(player->position.y, 5);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    map_player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 5);
+    cr_assert_eq(player->position.y, 4);
+    player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
+    map_player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 4);
+    world_free(world);
+    team_free(team);
+}
+
+Test(world_move_player_tests, simple_forward_with_null_player)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+
+    map_player_forward(world->map, NULL);
+    world_free(world);
+}
+
+Test(world_move_player_tests, simple_forward_with_null_world)
+{
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    map_player_forward(NULL, player);
+    team_free(team);
+}
+

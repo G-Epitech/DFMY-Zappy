@@ -61,10 +61,3 @@ bool world_add_player(world_t *world, player_t *player);
  * @return Success status
  */
 void world_remove_player(world_t *world, player_t *player);
-
-/**
- * @brief Move a player forward in the world
- * @param world World to move the player in
- * @param player Player to move
- */
-void world_forward_player(world_t *world, player_t *player);

@@ -1,7 +1,8 @@
 target_sources(zappy_server_core PUBLIC
         new.c
         free.c
-        move.c
+        add.c
+        remove.c
 )
 
 add_subdirectory(egg)
@@ -11,4 +12,3 @@ add_subdirectory(chrono)
 add_subdirectory(incantation)
 add_subdirectory(resources_manager)
 add_subdirectory(map)
-add_subdirectory(core)
