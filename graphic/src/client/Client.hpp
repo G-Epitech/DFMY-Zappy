@@ -45,14 +45,20 @@ public:
      * @param size The size of the buffer
      * @return The number of bytes read
      */
-    std::size_t read(std::string &buffer, std::size_t size);
+    std::size_t read(char *buffer, std::size_t size);
 
     /**
-     * @brief Get the next command from the server or an empty string if no command is available.
-     * @param block If true, block until a complete command is received
-     * @return The command
+     * @brief Check if the server has data to read.
+     * @param block If true, the function will block until data is available.
+     * @return True if the server has data to read in the pending buffer, false otherwise.
      */
-    std::string getCommand(bool block = false);
+    bool hasData(bool block = false);
+
+    /**
+     * @brief Get the next command from the pending buffer.
+     * @return The command or an empty string if no command is available.
+     */
+    std::string getCommandFromPendingBuffer();
 
     /**
      * @brief Exception class for the Client class.
@@ -96,10 +102,4 @@ private:
      * @brief Set the socket to non-blocking mode.
      */
     void _setNonBlocking();
-
-    /**
-     * @brief Get the next command from the pending buffer.
-     * @return The command or an empty string if no command is available.
-     */
-    std::string _getCommandFromPendingBuffer();
 };

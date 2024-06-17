@@ -10,26 +10,17 @@
 #include <iostream>
 
 int main() {
-    // try {
-    //     App app;
-    //     app.initApp();
-    //     app.getRoot()->startRendering();
-    //     app.closeApp();
-    // }
-    // catch (const Ogre::Exception &e) {
-    //     std::cerr << "An exception has occurred: " << e.getFullDescription().c_str() << std::endl;
-    // }
-    // catch (const std::exception &e) {
-    //     std::cerr << "An exception has occurred: " << e.what() << std::endl;
-    // }
-    // return 0;
-    try
-    {
-        Client client(3001);
+    try {
+        App app;
+        app.initApp();
+        app.getRoot()->startRendering();
+        app.closeApp();
     }
-    catch(const std::exception& e)
-    {
+    catch (const Ogre::Exception &e) {
+        std::cerr << "An exception has occurred: " << e.getFullDescription().c_str() << std::endl;
+    }
+    catch (const std::exception &e) {
         std::cerr << "An exception has occurred: " << e.what() << std::endl;
     }
-    
+    return 0;
 }

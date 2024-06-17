@@ -10,9 +10,14 @@
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
+#include "client/Client.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
+
+    /**
+     * @brief Construct a new App object
+     */
     App();
 
     /**
@@ -27,11 +32,15 @@ public:
      */
     bool keyPressed(const OgreBites::KeyboardEvent &evt) override;
 
+    bool frameRenderingQueued(const Ogre::FrameEvent &evt) override;
+
 private:
+    Client _client;
+    OgreBites::TrayManager *trayManager;
+    Ogre::SceneManager *scnMgr;
+
     /**
      * @brief Load resources of the application
      */
     static void _loadResources();
-
-    OgreBites::TrayManager *trayManager;
 };

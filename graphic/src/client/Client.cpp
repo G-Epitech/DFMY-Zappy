@@ -22,7 +22,9 @@ Client::Client(int port, std::string host)
     this->_socket = -1;
     this->_connect(host, port);
 
-    std::string command = this->getCommand(true);
+    this->hasData(true);
+
+    std::string command = this->getCommandFromPendingBuffer();
 
     if (command != "WELCOME") {
         throw Client::Exception("Invalid welcome message");
@@ -102,7 +104,7 @@ std::size_t Client::write(const std::string &buffer, std::size_t size)
         throw Client::Exception("Socket not connected");
     }
 
-    ssize_t bytesWritten = send(this->_socket, buffer.data(), size, 0);
+    ssize_t bytesWritten = ::write(this->_socket, buffer.data(), size);
     if (bytesWritten < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return 0;
@@ -119,15 +121,13 @@ std::size_t Client::write(const std::string& buffer)
     return this->write(buffer, buffer.size());
 }
 
-std::size_t Client::read(std::string& buffer, std::size_t size)
+std::size_t Client::read(char *buffer, std::size_t size)
 {
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
     }
 
-    buffer.resize(size);
-
-    ssize_t bytesRead = recv(this->_socket, buffer.data(), size, 0);
+    ssize_t bytesRead = ::read(this->_socket, buffer, size);
     if (bytesRead < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return 0;
@@ -138,40 +138,38 @@ std::size_t Client::read(std::string& buffer, std::size_t size)
         throw Client::Exception("Connection closed");
     }
 
-    buffer.resize(bytesRead);
-
     return bytesRead;
 }
 
-std::string Client::getCommand(bool block)
+bool Client::hasData(bool block)
 {
-    std::string command;
-    std::size_t size = 1024;
+    char buffer[1024] = {0};
     std::size_t bytesRead = 0;
 
-    bytesRead = this->read(command, size);
+    bytesRead = this->read(buffer, 1024);
     if (block) {
         while (bytesRead == 0) {
-            bytesRead = this->read(command, size);
+            bytesRead = this->read(buffer, 1024);
         }
     }
-    this->_pendingBuffer += command;
 
     if (bytesRead == 0) {
-        return "";
+        return false;
     }
 
-    return this->_getCommandFromPendingBuffer();
+    this->_pendingBuffer.append(buffer, bytesRead);
+
+    return true;
 }
 
-std::string Client::_getCommandFromPendingBuffer()
+std::string Client::getCommandFromPendingBuffer()
 {
-    std::string command;
     std::size_t pos = this->_pendingBuffer.find('\n');
 
     if (pos == std::string::npos) {
         return "";
     }
+    std::string command;
 
     command = this->_pendingBuffer.substr(0, pos);
     this->_pendingBuffer = this->_pendingBuffer.substr(pos + 1);

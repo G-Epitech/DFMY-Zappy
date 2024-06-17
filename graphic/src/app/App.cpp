@@ -12,15 +12,14 @@
 using namespace Ogre;
 using namespace OgreBites;
 
-App::App() : OgreBites::ApplicationContext("Zappy") {
-}
+App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {}
 
 void App::setup() {
     ApplicationContext::setup();
     addInputListener(this);
 
     Root *root = getRoot();
-    SceneManager *scnMgr = root->createSceneManager();
+    scnMgr = root->createSceneManager();
 
     _loadResources();
 
@@ -59,6 +58,14 @@ void App::setup() {
     trayMgr->showFrameStats(TL_BOTTOMLEFT);
     trayMgr->showLogo(TL_BOTTOMRIGHT);
     trayMgr->hideCursor();
+}
+
+bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
+    if (_client.hasData()) {
+        std::string command = _client.getCommandFromPendingBuffer();
+        std::cout << "|" << command << "|" << std::endl;
+    }
+    return true;
 }
 
 void App::_loadResources() {
