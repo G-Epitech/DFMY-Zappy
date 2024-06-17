@@ -14,6 +14,11 @@ static void free_ptr_from_node_data(node_data_t data)
     free(data.ptr);
 }
 
+static bool predicate_null(node_data_t data)
+{
+    return data.ptr == NULL;
+}
+
 Test(types_list, init_list)
 {
     list_t list;
@@ -227,4 +232,49 @@ Test(types_list, clear_list)
     cr_assert_eq(list.len, 1);
     list_clear(&list, NULL);
     cr_assert_eq(list.len, 0);
+}
+
+Test(types_list, some_return_result)
+{
+    list_t *list = list_new();
+    char *str = "HELLO";
+
+    list_init(list);
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(NULL));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+
+    cr_assert(list_some(list, &predicate_null));
+    list_clear(list, NULL);
+}
+
+Test(types_list, some_return_no_result)
+{
+    list_t *list = list_new();
+    char *str = "HELLO";
+
+    list_init(list);
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+    list_push(list, NODE_DATA_FROM_PTR(str));
+
+    cr_assert_not(list_some(list, &predicate_null));
+    list_clear(list, NULL);
+}
+
+Test(types_list, some_on_null_list)
+{
+    cr_assert_not(list_some(NULL, &predicate_null));
+}
+
+Test(types_list, some_on_empty_list)
+{
+    list_t *list = list_new();
+
+    list_init(list);
+    cr_assert_not(list_some(list, &predicate_null));
+    list_clear(list, NULL);
 }

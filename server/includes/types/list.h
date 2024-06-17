@@ -18,6 +18,9 @@ typedef struct s_list {
     size_t len;     //Length of list
 } list_t;
 
+// Predicate a condition to check on a node
+typedef bool (*list_predicate_t)(node_data_t data);
+
 /**
  * @brief Initialize given list
  * @param list List to initialize
@@ -74,3 +77,11 @@ void list_pop(list_t *list, node_t *node);
  * @param freer Freer to call to free node data
  */
 void list_erase(list_t *list, node_t *node, node_freer_t freer);
+
+/**
+ * @brief Look for a node in list with given predicate
+ * @param list List in which search node
+ * @param predicate Predicate to use to search node
+ * @return Predicate success status
+ */
+bool list_some(list_t *list, list_predicate_t predicate);

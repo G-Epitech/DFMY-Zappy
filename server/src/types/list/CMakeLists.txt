@@ -3,4 +3,5 @@ target_sources(zappy_server_core PUBLIC
         new.c
         push.c
         remove.c
+        some.c
 )
