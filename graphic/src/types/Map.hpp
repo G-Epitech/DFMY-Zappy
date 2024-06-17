@@ -13,7 +13,7 @@
 
 struct Tile {
     Items items;
-    Ogre::SceneNode *node;
+    Ogre::SceneNode *node = nullptr;
 };
 
 struct Map {

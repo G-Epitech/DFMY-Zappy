@@ -40,17 +40,17 @@ void App::setup() {
 
     getRenderWindow()->addViewport(cam);
 
-    for (int i = -5; i <= 5; i++) {
-        for (int j = -5; j <= 5; j++) {
-            Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
-            SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
-            node->attachObject(cubeEntity);
+    // for (int i = -5; i <= 5; i++) {
+    //     for (int j = -5; j <= 5; j++) {
+    //         Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
+    //         SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
+    //         node->attachObject(cubeEntity);
 
-            AxisAlignedBox aab = cubeEntity->getBoundingBox();
-            Vector3 size = aab.getSize();
-            node->setPosition(i * size.x, 0, j * size.z);
-        }
-    }
+    //         AxisAlignedBox aab = cubeEntity->getBoundingBox();
+    //         Vector3 size = aab.getSize();
+    //         node->setPosition(i * size.x, 0, j * size.z);
+    //     }
+    // }
 
     CameraMan *camMan = new CameraMan(camNode);
     camMan->setStyle(CS_ORBIT);
@@ -110,6 +110,6 @@ void App::_updateMap(std::string &command) {
     std::string commandName = command.substr(0, 3);
     if (this->_commands.find(commandName) != this->_commands.end()) {
         std::string params = command.substr(4);
-        this->_commands[commandName](params, this->_map);
+        this->_commands[commandName](params, this->_map, this->scnMgr);
     }
 }
