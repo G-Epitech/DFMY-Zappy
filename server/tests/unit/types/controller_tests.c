@@ -8,6 +8,7 @@
 #include <criterion/criterion.h>
 #include <criterion/redirect.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "clcc/modules/unistd.h"
 #include "clcc/modules/stdlib.h"
 #include "clcc/modules/unistd.h"
@@ -501,12 +502,46 @@ Test(controller_tests, controller_read_with_read_fail, .init = cr_redirect_stder
     controller_free(controller);
 }
 
-Test(controller_tests, emit_test, .init = redirect_all_std)
+Test(controller_tests, emit_test_in_1_try, .init = redirect_all_std)
+{
+    // Arrange
+    int fds[2];
+    char buffer[1024] = { 0 };
+    ssize_t buff_size_content = 0;
+    controller_t *controller = NULL;
+    emission_t *emission = NULL;
+
+    pipe(fds);
+    fcntl(fds[1], F_SETFL, O_NONBLOCK);
+    controller = controller_new(fds[1]);
+    controller_add_emission(controller, strdup("test"), 4, 0);
+    emission = NODE_TO_PTR(controller->generic.emissions->first, emission_t *);
+
+    // Pre-assert
+    cr_assert(controller->generic.emissions->len == 1);
+    cr_assert(emission->written == 0);
+    cr_assert(emission->buffer_size == 4);
+
+    // Act
+    controller_emit(controller);
+
+    // Assert
+    buff_size_content = read(fds[0], buffer, 1024);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(emission->written, 4);
+    cr_assert(buff_size_content == 5);
+    cr_assert_str_eq(buffer, "test\n");
+
+    // Cleanup
+    controller_free(controller);
+}
+
+Test(controller_tests, emit_test_in_2_tries, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(1);
     emission_t *emission = NULL;
 
-    controller_add_emission(controller, "test", 4, 0);
+    controller_add_emission(controller, strdup("test"), 4, 0);
     emission = NODE_TO_PTR(controller->generic.emissions->first, emission_t *);
 
     cr_assert(controller->generic.emissions->len == 1);
@@ -528,6 +563,42 @@ Test(controller_tests, emit_test, .init = redirect_all_std)
     cr_assert_eq(controller->generic.emissions->len, 0);
     controller_free(controller);
 }
+
+Test(controller_tests, emit_test_partial, .init = redirect_all_std)
+{
+    // Arrange
+    // Arrange
+    int fds[2];
+    char buffer[1024] = { 0 };
+    ssize_t buff_size_content = 0;
+    controller_t *controller = NULL;
+    emission_t *emission = NULL;
+
+    pipe(fds);
+    fcntl(fds[1], F_SETFL, O_NONBLOCK);
+    controller = controller_new(fds[1]);
+    controller_add_emission(controller, strdup("test"), 4, EMISSION_PARTIAL);
+    emission = NODE_TO_PTR(controller->generic.emissions->first, emission_t *);
+
+    // Pre-assert
+    cr_assert(controller->generic.emissions->len == 1);
+    cr_assert(emission->written == 0);
+    cr_assert(emission->buffer_size == 4);
+
+    // Act
+    controller_emit(controller);
+
+    // Assert
+    buff_size_content = read(fds[0], buffer, 1024);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(emission->written, 4);
+    cr_assert(buff_size_content == 4);
+    cr_assert_str_eq(buffer, "test");
+
+    // Cleanup
+    controller_free(controller);
+}
+
 
 Test(controller_tests, null_controller_emit, .init = redirect_all_std)
 {
@@ -688,6 +759,32 @@ Test(controller_emissions_tests, add_all_shared_emissions, .init = redirect_all_
     cr_assert_eq(controller->generic.emissions->len, 1);
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 0);
+    list_free(list, &controller_free_as_node_data);
+}
+
+Test(controller_emissions_tests, add_all_shared_emissions_with_null_buffer, .init = redirect_all_std)
+{
+    list_t *list = list_new();
+    controller_t *controller = controller_new(0);
+    controller_t *controller2 = controller_new(0);
+    controller_t *controller3 = controller_new(0);
+    emission_params_t params = {
+        .buffer = NULL,
+        .buffer_size = 11,
+        .flags = 0
+    };
+
+    controller->generic.type = CTRL_PLAYER;
+    controller2->generic.type = CTRL_GRAPHIC;
+    controller3->generic.type = CTRL_UNKNOWN;
+    list_push(list, NODE_DATA_FROM_PTR(controller));
+    list_push(list, NODE_DATA_FROM_PTR(controller2));
+    list_push(list, NODE_DATA_FROM_PTR(controller3));
+    controllers_add_emission(list, &params, CTRL_GRAPHIC | CTRL_PLAYER);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller2->generic.emissions->len, 0);
+    cr_assert_eq(controller3->generic.emissions->len, 0);
+    list_free(list, &controller_free_as_node_data);
 }
 
 Test(controller_emissions_tests, add_graphics_shared_emissions, .init = redirect_all_std)
@@ -712,6 +809,7 @@ Test(controller_emissions_tests, add_graphics_shared_emissions, .init = redirect
     cr_assert_eq(controller->generic.emissions->len, 0);
     cr_assert_eq(controller2->generic.emissions->len, 1);
     cr_assert_eq(controller3->generic.emissions->len, 1);
+    list_free(list, &controller_free_as_node_data);
 }
 
 Test(controller_emissions_tests, end_emission_on_null_controller, .init = redirect_all_std)
