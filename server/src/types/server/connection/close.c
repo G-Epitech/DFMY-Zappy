@@ -53,14 +53,14 @@ void server_close_all_connections(server_t *server)
 
     while (node) {
         controller = NODE_TO_PTR(node, controller_t *);
-        if (!controller)
-            continue;
-        fd_states_unset((&server->fd_watch), controller->generic.socket,
-            FD_STATES_R | FD_STATES_E | FD_STATES_W);
-        fd_states_unset((&server->fd_actual), controller->generic.socket,
-            FD_STATES_R | FD_STATES_E | FD_STATES_W);
-        close(controller->generic.socket);
-        controller->generic.socket = -1;
+        if (controller) {
+            fd_states_unset((&server->fd_watch), controller->generic.socket,
+                FD_STATES_R | FD_STATES_E | FD_STATES_W);
+            fd_states_unset((&server->fd_actual), controller->generic.socket,
+                FD_STATES_R | FD_STATES_E | FD_STATES_W);
+            close(controller->generic.socket);
+            controller->generic.socket = -1;
+        }
         node = node->next;
     }
     list_clear(server->controllers, &controller_free_as_node_data);
