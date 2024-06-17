@@ -17,10 +17,10 @@ struct Tile {
 };
 
 struct Map {
-    std::vector<std::vector<Tile>> tiles;
-    std::vector<Player> players;
-    int width;
-    int height;
-    int timeUnit;
-    std::vector<std::string> teams;
+    std::vector<std::vector<Tile>> tiles = {};
+    std::vector<Player> players = {};
+    int width = 0;
+    int height = 0;
+    int timeUnit = 0;
+    std::vector<std::string> teams = {};
 };

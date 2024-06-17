@@ -5,14 +5,17 @@
 ** App class
 */
 
-#include "App.hpp"
-#include <OgreCameraMan.h>
 #include <iostream>
+#include <OgreCameraMan.h>
+#include "App.hpp"
+#include "commands/Commands.hpp"
 
 using namespace Ogre;
 using namespace OgreBites;
 
-App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {}
+App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
+    this->_commands["msz"] = &Commands::map_size;
+}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -66,8 +69,7 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
         if (command.empty()) {
             return true;
         }
-        std::cout << "Received command: " << command << std::endl;
-
+        _updateMap(command);
     }
     return true;
 }
@@ -102,4 +104,12 @@ bool App::keyPressed(const KeyboardEvent &evt) {
         getRoot()->queueEndRendering();
     }
     return true;
+}
+
+void App::_updateMap(std::string &command) {
+    std::string commandName = command.substr(0, 3);
+    if (this->_commands.find(commandName) != this->_commands.end()) {
+        std::string params = command.substr(4);
+        this->_commands[commandName](params, this->_map);
+    }
 }

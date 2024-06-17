@@ -11,6 +11,7 @@
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
 #include "client/Client.hpp"
+#include "types/Map.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
@@ -38,9 +39,17 @@ private:
     Client _client;
     OgreBites::TrayManager *trayManager;
     Ogre::SceneManager *scnMgr;
+    Map _map;
+    std::map<std::string, std::function<void(std::string &, Map &)>> _commands;
 
     /**
      * @brief Load resources of the application
      */
     static void _loadResources();
+
+    /**
+     * @brief Update the map
+     * @param command Command received from the server
+     */
+    void _updateMap(std::string &command);
 };
