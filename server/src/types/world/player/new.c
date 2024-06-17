@@ -18,7 +18,7 @@ void player_init(player_t *player, player_controller_t *controller,
     player->lives = PLAYER_LIFE_UNITS_PER_FOOD * player->inventory[RES_FOOD];
     player->position = position;
     player->direction = PLAYER_DIRECTION_DEFAULT;
-    player->number = 0;
+    player->id = 0;
     memset(player->inventory, 0, RES_LEN * sizeof(size_t));
 }
 

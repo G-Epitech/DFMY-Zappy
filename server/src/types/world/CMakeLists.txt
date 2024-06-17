@@ -3,6 +3,7 @@ target_sources(zappy_server_core PUBLIC
         free.c
         add.c
         remove.c
+        register.c
 )
 
 add_subdirectory(egg)

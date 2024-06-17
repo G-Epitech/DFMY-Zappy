@@ -22,5 +22,6 @@ bool world_add_player(world_t *world, player_t *player)
         if (!list_push(lists_stack[i], data))
             return false;
     }
+    world_player_register(world, player);
     return true;
 }

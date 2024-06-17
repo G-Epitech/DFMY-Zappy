@@ -9,7 +9,7 @@
 #include "types/world/player.h"
 #include "types/vector2.h"
 
-bool controller_player_init(controller_t *controller, team_t *team,
+bool controller_player_from_generic(controller_t *controller, team_t *team,
     vector2u_t position)
 {
     if (!controller || !team)

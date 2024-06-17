@@ -222,10 +222,11 @@ Test(world_remove_player_tests, remove_unadded_player_from_everything)
     world_add_player(world, player2);
     list_push(incantation->players, NODE_DATA_FROM_PTR(player2));
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
+    cr_assert_eq(world->next_player_id, 1);
+    cr_assert_eq(player->id, 0);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(world->incantations->len, 1);
     world_remove_player(world, player);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(incantation->players->len, 1);
 }
-

@@ -13,6 +13,7 @@ void world_init(world_t *world, size_t frequency)
     chrono_init(&world->chrono, frequency);
     resources_manager_init(&world->resources_manager, world->map->size);
     world->next_event_delay = 0.0f;
+    world->next_player_id = 0;
 }
 
 world_t *world_new(vector2u_t map_size, size_t frequency)

@@ -53,7 +53,7 @@ typedef struct player_s {
     // @brief Direction of the player
     player_direction_t direction;
     // @brief Player number
-    size_t number;
+    size_t id;
 } player_t;
 
 /**

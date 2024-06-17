@@ -54,8 +54,6 @@ typedef struct server_s {
     list_t *controllers;
     // @brief Running status of the server
     bool running;
-    // @brief The current number that will be assigned to the next player
-    size_t current_player_number;
 } server_t;
 
 /**
@@ -192,4 +190,4 @@ void fd_states_clear(fd_states_t *states, int flags);
  * @param server The server to register the player to
  * @param player The player to register
  */
-void server_player_register(server_t *server, player_t *player);
+void world_player_register(server_t *server, player_t *player);
