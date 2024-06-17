@@ -33,6 +33,8 @@ void fd_states_init(fd_states_t *states)
 
 void fd_states_set(fd_states_t *states, int fd, int flags)
 {
+    if (fd < 0)
+        return;
     if (flags & FD_STATES_R)
         FD_SET(fd, &states->readable);
     if (flags & FD_STATES_W)
@@ -45,6 +47,8 @@ void fd_states_set(fd_states_t *states, int fd, int flags)
 
 void fd_states_unset(fd_states_t *states, int fd, int flags)
 {
+    if (fd < 0)
+        return;
     if (flags & FD_STATES_R)
         FD_CLR(fd, &states->readable);
     if (flags & FD_STATES_W)

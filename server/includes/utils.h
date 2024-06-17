@@ -7,6 +7,9 @@
 
 #pragma once
 
+// @brief Time value
+typedef struct timeval timeval_t;
+
 /**
  * @brief Allocates memory and copies the formatted string given in parameter
  * @param strp The buffer to copy the formatted string into

@@ -69,9 +69,11 @@ controller_state_t controller_read(controller_t *controller)
 
     if (read_size == 0 || !generic)
         return CTRL_DISCONNECTED;
-    if (read_size < 0)
+    if (read_size < 0) {
         log_error("Failed to read from socket %d", generic->socket);
-    else
+    } else {
+        log_debug("Received %ldB from %d", read_size, generic->socket);
         controller_handle_buffer(controller, buffer, read_size);
+    }
     return CTRL_CONNECTED;
 }

@@ -5,11 +5,12 @@
 ** chrono.c
 */
 
+#include <stdio.h>
 #include "types/world/chrono.h"
 
 void chrono_init(chrono_t *chrono, size_t frequency)
 {
-    chrono->started_at = (struct timeval){0};
-    chrono->stopped_at = (struct timeval){0};
+    chrono->started_at = (timeval_t) { 0 };
+    chrono->stopped_at = (timeval_t) { 0 };
     chrono->frequency = frequency;
 }

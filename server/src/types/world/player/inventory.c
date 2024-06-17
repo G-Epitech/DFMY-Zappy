@@ -8,7 +8,7 @@
 #include "types/world/player.h"
 
 bool player_set_inventory_resource(player_t *player, resource_t resource,
-                                   int quantity)
+    int quantity)
 {
     time_unit_t t_units = 0;
 

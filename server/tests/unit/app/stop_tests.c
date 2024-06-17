@@ -8,26 +8,46 @@
 #include <criterion/criterion.h>
 #include "app.h"
 
-Test(stop_tests, get_value_of_stopped)
+Test(stop_tests, app_exit)
 {
-    cr_assert_eq(*app_stopped(), false);
+    app_t app;
+
+    app_init(&app);
+    cr_assert_eq(app_exit(&app, 0), 0);
 }
 
-Test(stop_tests, set_value_of_stopped)
+Test(stop_tests, app_stop)
 {
-    cr_assert_eq(*app_stopped(), false);
+    app_t app;
+
+    // Arrange
+    app_init(&app);
+    app_sig_handlers_target(&app, true);
+
+    // Act
     app_stop();
-    cr_assert_eq(*app_stopped(), true);
+
+    // Assert
+    cr_assert_eq(app.running, false);
+
+    // Cleanup
+    app_sig_handlers_target(NULL, true);
 }
 
-Test(stop_tests, app_running_macro_must_return_true)
+Test(stop_tests, app_stop_null_target)
 {
-    *app_stopped() = false;
-    cr_assert_eq(APP_RUNNING, true);
-}
+    app_t app;
 
-Test(stop_tests, app_running_macro_must_return_false)
-{
+    // Arrange
+    app_init(&app);
+    app_sig_handlers_target(NULL, true);
+
+    // Act
     app_stop();
-    cr_assert_eq(APP_RUNNING, false);
+
+    // Assert
+    cr_assert_eq(app.running, true);
+
+    // Cleanup
+    app_sig_handlers_target(NULL, true);
 }

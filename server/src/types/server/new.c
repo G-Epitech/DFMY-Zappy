@@ -10,7 +10,6 @@
 void server_init(server_t *server)
 {
     server->socket = -1;
-    server->running = false;
     fd_states_init(&server->fd_actual);
     fd_states_init(&server->fd_watch);
     server->address.sin_family = AF_INET;

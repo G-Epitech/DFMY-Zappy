@@ -123,4 +123,4 @@ void player_update_lives(player_t *player, time_unit_t time_units);
  * @param quantity Quantity to set
  */
 bool player_set_inventory_resource(player_t *player, resource_t resource,
-                                   int quantity);
+    int quantity);

@@ -70,6 +70,5 @@ bool server_start(server_t *server, uint16_t port)
         close(server->socket);
         return false;
     }
-    server->running = true;
     return true;
 }

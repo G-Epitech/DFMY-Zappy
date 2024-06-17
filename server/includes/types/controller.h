@@ -13,6 +13,7 @@
 #include "types/world/team.h"
 #include "types/vector2.h"
 #include "smart_ptr.h"
+#include "emission.h"
 
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
@@ -58,6 +59,8 @@ typedef struct generic_controller_s {
     list_t *emissions;
     // @brief Controller type
     controller_type_t type;
+    // @brief Controller state
+    controller_state_t state;
 } generic_controller_t;
 
 // @brief Represent a graphic controller
@@ -73,6 +76,8 @@ typedef struct player_controller_s {
     list_t *emissions;
     // @brief Controller type
     controller_type_t type;
+    // @brief Controller state
+    controller_state_t state;
     // @brief Link to player instance
     player_t *player;
     // @brief Player cooldown (time units locked for)
@@ -139,20 +144,21 @@ void controller_emit(controller_t *controller);
  * @param controller Controller to add the emission to
  * @param buffer_ptr Buffer to add to the emission
  * @param buffer_size Buffer size
+ * @param flags Flags of the emission
  * @return true if the emission was added, false otherwise
  */
 bool controller_add_emission(controller_t *controller, char *buffer,
-    size_t buffer_size);
+    size_t buffer_size, int flags);
 
 /**
  * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
  * @param controllers List of controllers
- * @param buffer Buffer to add to the emission
- * @param buffer_size Buffer size
+ * @param params Emission parameters
+ * @param types Types of controllers to add emission to
  * @return true if the emission was added, false otherwise
  */
-bool controllers_add_emission(list_t *controllers, char *buffer,
-    size_t buffer_size, controller_type_t types);
+bool controllers_add_emission(list_t *controllers,
+    emission_params_t *params, controller_type_t types);
 
 /**
  * @brief Get next pending request of a controller
@@ -203,6 +209,13 @@ void controller_handle_buffer_token(controller_t *controller,
  */
 void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size);
+
+/**
+ * @brief Send emission last character
+ * @param controller Controller on which send emission last char
+ * @return Success of emission termination
+ */
+bool controller_end_emission(controller_t *controller);
 
 /**
  * @brief Initialize a player controller from a generic controller
