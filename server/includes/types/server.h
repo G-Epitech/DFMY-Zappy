@@ -10,15 +10,13 @@
 #include <netinet/in.h>
 #include "list.h"
 #include "controller.h"
+#include "time.h"
 
 // @brief Cast a pointer to a sockaddr structure
 #define AS_SOCKADDR(x) ((struct sockaddr*) x)
 
 // @brief Set of file descriptors
 typedef fd_set fd_set_t;
-
-// @brief Time value
-typedef struct timeval timeval_t;
 
 // @brief Internet address
 typedef struct sockaddr_in sockaddr_in_t;

@@ -10,9 +10,10 @@
 
 int app_run(app_t *app)
 {
-    while (app->running) {
-        timeval_t timeout = {10, 0};
+    timeval_t timeout;
 
+    while (app->running) {
+        timeout = (timeval_t) { 0, 1000 };
         if (server_poll(app->server, &timeout) > 0) {
             server_handle_new_connections(app->server);
             server_handle_emissions(app->server);
