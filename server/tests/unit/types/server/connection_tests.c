@@ -392,3 +392,43 @@ Test(server_controller_has_content_to_read_tests, no_content, .init = cr_redirec
     cr_assert_not(server_controller_has_content_to_read(server, controller));
     server_free(server);
 }
+
+
+Test(server_handle_new_connections_tests, no_new_connections)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Act and assert
+    server_handle_new_connections(server);
+    cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_new_connections_tests, new_connection, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    server->socket = 4;
+    fd_states_set(&server->fd_actual, server->socket, FD_STATES_R);
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Act and assert
+    clcc_return_now(accept, 7);
+    server_handle_new_connections(server);
+    clcc_disable_control(accept);
+    cr_assert(FD_ISSET(server->socket, &(server->fd_actual.readable)));
+    cr_assert_eq(server->controllers->len, 1);
+
+    // Cleanup
+    server_free(server);
+}
