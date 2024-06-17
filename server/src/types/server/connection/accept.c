@@ -6,6 +6,7 @@
 */
 
 #include <unistd.h>
+#include <string.h>
 #include "types/server.h"
 #include "log.h"
 #include "types/controller.h"
@@ -21,15 +22,15 @@ controller_t *server_register_client(server_t *server, int socket)
 {
     controller_t *controller = server ? controller_new(socket) : NULL;
 
-    if (!server)
+    if (!server || !controller)
         return NULL;
-    if (controller &&
-        !list_push(server->controllers, NODE_DATA_FROM_PTR(controller))
+    if (!list_push(server->controllers, NODE_DATA_FROM_PTR(controller))
     ) {
         controller_free(controller);
         return NULL;
     }
     fd_states_set(&server->fd_watch, socket, FD_STATES_R | FD_STATES_E);
+    controller_add_emission(controller, strdup("WELCOME"), 7, 0);
     return controller;
 }
 
@@ -43,7 +44,7 @@ controller_t *server_accept_connection(server_t *server)
 
     if (socket < 0) {
         log_error("Failed to accept new connection");
-        return false;
+        return NULL;
     }
     controller = server_register_client(server, socket);
     if (!controller) {
@@ -54,4 +55,10 @@ controller_t *server_accept_connection(server_t *server)
     }
     log_info("New client connected on socket %d", socket);
     return controller;
+}
+
+void server_handle_new_connections(server_t *server)
+{
+    if (server_has_pending_connections(server))
+        server_accept_connection(server);
 }

@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include "list.h"
 #include "controller.h"
+#include "time.h"
 
 // @brief Cast a pointer to a sockaddr structure
 #define AS_SOCKADDR(x) ((struct sockaddr*) x)
@@ -52,8 +53,6 @@ typedef struct server_s {
     fd_states_t fd_actual;
     // @brief List of clients controllers
     list_t *controllers;
-    // @brief Running status of the server
-    bool running;
 } server_t;
 
 /**
@@ -132,11 +131,17 @@ controller_t *server_register_client(server_t *server, int socket);
 controller_t *server_accept_connection(server_t *server);
 
 /**
- * @brief Remove a controller from the server and close its connection
+ * @brief Mark a controller as disconnected and close its socket
  * @param server Server to remove controller from
  * @param controller Controller to remove
  */
-void server_close_connection(server_t *server, controller_t *controller);
+void server_disconnect_controller(server_t *server, controller_t *controller);
+
+/**
+ * @brief Remove disconnected controllers from the server
+ * @param server Server to remove controllers from
+ */
+void server_remove_disconnected_controllers(server_t *server);
 
 /**
  * @brief Get controller by its socket number
@@ -155,6 +160,54 @@ controller_t *server_get_controller_by_socket(server_t *server, int socket);
  */
 bool server_controller_has_content_to_read(server_t *server,
     controller_t *controller);
+
+/**
+ * @brief Poll server controllers
+ * @param server Server to poll
+ * @param timeout Timeout to wait for
+ * @return Number of controllers that have content to read
+ * or -1 if an error occurred
+ */
+int server_poll(server_t *server, timeval_t *timeout);
+
+/**
+ * @brief Close all server connections
+ * @param server Server to close connections from
+ */
+void server_close_all_connections(server_t *server);
+
+/**
+ * @brief Handle server connections
+ * @param server Server on which handle connections
+ */
+void server_handle_requests(server_t *server);
+
+/**
+ * @brief Handle server controller requests
+ * @param server Server on which handle controller requests
+ * @param controller Controller to handle requests
+ */
+void server_handle_controller_requests(server_t *server,
+    controller_t *controller);
+
+/**
+ * @brief Handle server emissions
+ * @param server Server on which handle emissions
+ */
+void server_handle_emissions(server_t *server);
+
+/**
+ * @brief Handle new server connections
+ * @param server Server on which handle new connections
+ */
+void server_handle_new_connections(server_t *server);
+
+/**
+ * @brief Update file descriptors to watch for write
+ * @param server Server to update file descriptors for
+ */
+void server_update_fd_watch_write(server_t *server);
+
 
 /**
  * @brief Initialize given file descriptors states

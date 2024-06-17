@@ -11,21 +11,37 @@
 #include "types/emission.h"
 #include "types/list.h"
 
+static bool controller_handle_end_emission(controller_t *controller,
+    node_t *node_emission)
+{
+    emission_t *emission = NODE_TO_PTR(node_emission, emission_t *);
+    bool partial = emission->flags & EMISSION_PARTIAL;
+
+    if (emission->written != emission->buffer_size)
+        return false;
+    if (!partial && !controller_end_emission(controller))
+        return false;
+    list_erase(controller->generic.emissions, node_emission,
+        &emission_free_as_node_data);
+    return true;
+}
+
 static void controller_handle_emit_write(controller_t *controller,
     node_t *node, emission_t *emission)
 {
     char *emission_buffer = SMART_PTR_CAST(char *, emission->buffer_ptr);
-    ssize_t written = controller_write(controller,
-        &emission_buffer[emission->written],
-        emission->buffer_size - emission->written);
+    ssize_t written;
 
+    if (controller_handle_end_emission(controller, node))
+        return;
+    written = controller_write(controller,
+        &emission_buffer[emission->written],
+        emission->buffer_size - emission->written
+    );
     if (written == -1)
         return;
     emission->written += written;
-    if (emission->written == emission->buffer_size) {
-        list_erase(controller->generic.emissions, node,
-            &emission_free_as_node_data);
-    }
+    controller_handle_end_emission(controller, node);
 }
 
 void controller_emit(controller_t *controller)
