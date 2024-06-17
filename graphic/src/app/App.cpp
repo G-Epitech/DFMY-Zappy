@@ -63,7 +63,11 @@ void App::setup() {
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
-        std::cout << "|" << command << "|" << std::endl;
+        if (command.empty()) {
+            return true;
+        }
+        std::cout << "Received command: " << command << std::endl;
+
     }
     return true;
 }

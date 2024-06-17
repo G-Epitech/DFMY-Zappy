@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <Ogre.h>
 
 struct Position {
     int x;
@@ -31,4 +32,5 @@ struct Player {
     int level;
     int orientation;
     std::string team;
+    Ogre::SceneNode *node;
 };

@@ -8,10 +8,12 @@
 #pragma once
 
 #include <vector>
+#include <Ogre.h>
 #include "Player.hpp"
 
 struct Tile {
     Items items;
+    Ogre::SceneNode *node;
 };
 
 struct Map {
