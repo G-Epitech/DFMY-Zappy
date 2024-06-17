@@ -13,3 +13,4 @@ target_link_libraries(zappy_gui zappy_gui_src)
 
 ## Add subdirectories
 add_subdirectory(app)
+add_subdirectory(client)
