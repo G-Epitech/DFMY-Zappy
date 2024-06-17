@@ -15,6 +15,7 @@ using namespace OgreBites;
 
 App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
     this->_commands["msz"] = &Commands::map_size;
+    this->_commands["bct"] = &Commands::tile_content;
 }
 
 void App::setup() {
