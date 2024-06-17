@@ -10,7 +10,7 @@
 #include "log.h"
 #include "types/server.h"
 
-static void server_update_fd_watch_write(server_t *server)
+void server_update_fd_watch_write(server_t *server)
 {
     node_t *node = server->controllers->first;
     controller_t *controller = NULL;

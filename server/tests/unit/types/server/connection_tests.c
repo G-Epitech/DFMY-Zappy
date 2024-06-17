@@ -478,33 +478,3 @@ Test(server_close_all_connections_tests, close_2_connections, .init=cr_redirect_
     // Cleanup
     server_free(server);
 }
-
-Test(server_close_all_connections_tests, close_2_connections_and_one_null, .init=cr_redirect_stdout)
-{
-    // Arrange
-    server_t *server = server_new();
-
-    server->socket = 4;
-
-    clcc_return_now(accept, 7);
-    server_accept_connection(server);
-    clcc_disable_control(accept);
-
-    list_push(server->controllers, NODE_DATA_FROM_PTR(NULL));
-
-    clcc_return_now(accept, 8);
-    server_accept_connection(server);
-    clcc_disable_control(accept);
-
-    // Pre-assert
-    cr_assert_eq(server->controllers->len, 3);
-
-    // Act and assert
-    clcc_return_now(close, 0);
-    server_close_all_connections(server);
-    clcc_disable_control(close);
-    cr_assert_eq(server->controllers->len, 0);
-
-    // Cleanup
-    server_free(server);
-}

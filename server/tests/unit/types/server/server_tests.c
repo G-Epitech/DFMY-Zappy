@@ -9,6 +9,8 @@
 #include <criterion/redirect.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
+#include "clcc/modules/sys/select.h"
 #include "clcc/modules/sys/socket.h"
 #include "clcc/modules/stdlib.h"
 #include "clcc/modules/unistd.h"
@@ -276,3 +278,185 @@ Test(server_start_tests, setup_error_du_to_listen, .init=cr_redirect_stderr)
     // Cleanup
     clcc_disable_control(listen);
 }
+
+Test(server_poll_tests, simple_poll)
+{
+    // Arrange
+    server_t *server = server_new();
+    timeval_t timeout = { 0, 0 };
+
+    server->socket = 12;
+
+    // Act and assert
+    clcc_return_now(select, 12);
+    cr_assert_eq(server_poll(server, &timeout), 12);
+    clcc_disable_control(select);
+
+    // Cleanup
+    server->socket = -1;
+    server_free(server);
+}
+
+Test(server_poll_tests, poll_error_due_to_select, .init=cr_redirect_stderr)
+{
+    // Arrange
+    server_t *server = server_new();
+    timeval_t timeout = { 0, 0 };
+
+    server->socket = 12;
+
+    // Act and assert
+    clcc_return_now(select, -1);
+    cr_assert_eq(server_poll(server, &timeout), -1);
+    clcc_disable_control(select);
+
+    cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));
+
+    // Cleanup
+    server->socket = -1;
+    server_free(server);
+}
+
+Test(server_poll_tests, poll_error_due_to_interruption, .init=cr_redirect_stderr)
+{
+    // Arrange
+    server_t *server = server_new();
+    timeval_t timeout = { 10, 0 };
+    int status = 0;
+
+    server_start(server, 4242);
+
+    // Act and
+    errno = EINTR;
+    clcc_return_now(select, -1);
+    status = server_poll(server, &timeout);
+    clcc_disable_control(select);
+    cr_assert_eq(status, -1);
+    cr_assert_stderr_eq_str("");
+    cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_poll_tests, poll_error_due_to_select_timeout, .init=cr_redirect_stderr)
+{
+    // Arrange
+    server_t *server = server_new();
+    timeval_t timeout = { 0, 15 };
+    int status = 0;
+
+    server_start(server, 4243);
+
+    // Act and
+    status = server_poll(server, &timeout);
+    cr_assert_eq(status, 0);
+    cr_assert_stderr_eq_str("");
+    cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_update_fd_write_tests, update_0_controllers)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Act and assert
+    server_start(server, 56731);
+    server_update_fd_watch_write(server);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.except), 1);
+    cr_assert_eq(server->fd_watch.max, server->socket);
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_update_fd_write_tests, update_3_controllers_with_emissions)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller1 = server_register_client(server, 42);
+    controller_t *controller2 = server_register_client(server, 43);
+    controller_t *controller3 = server_register_client(server, 44);
+
+    server_start(server, 4242);
+
+    //Pre assert
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.readable), 1);
+
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.writable), 0);
+
+    // Act and assert
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    server_update_fd_watch_write(server);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.readable), 1);
+
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.writable), 1);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.writable), 1);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.writable), 1);
+
+    cr_assert_eq(server->fd_watch.max, 44);
+
+    // Cleanup
+    controller1->generic.socket = -1;
+    controller2->generic.socket = -1;
+    controller3->generic.socket = -1;
+    server_free(server);
+}
+
+
+Test(server_update_fd_write_tests, update_3_controllers_without_emissions)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller1 = server_register_client(server, 42);
+    controller_t *controller2 = server_register_client(server, 43);
+    controller_t *controller3 = server_register_client(server, 44);
+
+    list_clear(controller1->generic.emissions, &emission_free_as_node_data);
+    list_clear(controller2->generic.emissions, &emission_free_as_node_data);
+    list_clear(controller3->generic.emissions, &emission_free_as_node_data);
+
+    server_start(server, 4242);
+
+    //Pre assert
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.readable), 1);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.readable), 1);
+
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.writable), 0);
+
+    // Act and assert
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    server_update_fd_watch_write(server);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(server->socket, &server->fd_watch.readable), 1);
+
+    cr_assert_eq(FD_ISSET(42, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(43, &server->fd_watch.writable), 0);
+    cr_assert_eq(FD_ISSET(44, &server->fd_watch.writable), 0);
+
+    cr_assert_eq(server->fd_watch.max, 44);
+
+    // Cleanup
+    controller1->generic.socket = -1;
+    controller2->generic.socket = -1;
+    controller3->generic.socket = -1;
+    server_free(server);
+}
+

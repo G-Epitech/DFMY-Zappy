@@ -191,6 +191,13 @@ void server_handle_emissions(server_t *server);
 void server_handle_new_connections(server_t *server);
 
 /**
+ * @brief Update file descriptors to watch for write
+ * @param server Server to update file descriptors for
+ */
+void server_update_fd_watch_write(server_t *server);
+
+
+/**
  * @brief Initialize given file descriptors states
  * @param states File descriptors states to initialize
  */
