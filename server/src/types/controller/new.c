@@ -12,6 +12,7 @@ void controller_init(controller_t *controller, int socket)
 {
     controller->generic.type = CTRL_UNKNOWN;
     controller->generic.socket = socket;
+    controller->generic.state = CTRL_CONNECTED;
 }
 
 controller_t *controller_new(int socket)

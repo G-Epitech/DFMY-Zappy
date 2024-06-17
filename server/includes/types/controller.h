@@ -57,6 +57,8 @@ typedef struct generic_controller_s {
     list_t *emissions;
     // @brief Controller type
     controller_type_t type;
+    // @brief Controller state
+    controller_state_t state;
 } generic_controller_t;
 
 // @brief Represent a graphic controller
@@ -72,6 +74,8 @@ typedef struct player_controller_s {
     list_t *emissions;
     // @brief Controller type
     controller_type_t type;
+    // @brief Controller state
+    controller_state_t state;
     // @brief Link to player instance
     player_t *player;
     // @brief Player cooldown (time units locked for)

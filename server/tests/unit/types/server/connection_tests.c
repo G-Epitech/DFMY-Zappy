@@ -202,7 +202,7 @@ Test(server_accept_connection_tests, accept_fail_due_to_controller_new, .init = 
 Test(server_close_connection_tests, close_null_controller_on_null_server, .init = redirect_all_std)
 {
     // Act and assert
-    server_close_connection(NULL, NULL);
+    server_disconnect_controller(NULL, NULL);
 }
 
 Test(server_close_connection_tests, close_null_controller, .init = cr_redirect_stdout)
@@ -211,7 +211,7 @@ Test(server_close_connection_tests, close_null_controller, .init = cr_redirect_s
     server_t *server = server_new();
 
     // Act and assert
-    server_close_connection(server, NULL);
+    server_disconnect_controller(server, NULL);
     cr_assert_eq(server->controllers->len, 0);
     server_free(server);
 }
@@ -224,7 +224,7 @@ Test(server_close_connection_tests, close_controller_on_null_server, .init = cr_
     // Act and assert
     cr_assert_eq(controller->generic.socket, 42);
     cr_assert_not_null(controller);
-    server_close_connection(NULL, controller);
+    server_disconnect_controller(NULL, controller);
 }
 
 Test(server_close_connection_tests, simple_close, .init = cr_redirect_stdout)
@@ -245,9 +245,10 @@ Test(server_close_connection_tests, simple_close, .init = cr_redirect_stdout)
     cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
     cr_assert_eq(server->fd_watch.max, 4);
 
-    server_close_connection(server, controller);
+    server_disconnect_controller(server, controller);
 
-    cr_assert_eq(server->controllers->len, 0);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.state, CTRL_DISCONNECTED);
     cr_assert_not(FD_ISSET(4, &server->fd_watch.readable));
     cr_assert_not(FD_ISSET(4, &server->fd_watch.except));
     cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
@@ -288,13 +289,17 @@ Test(server_close_connection_tests, simple_close_with_several_clients, .init = c
     cr_assert_eq(NODE_TO_PTR(server->controllers->last, controller_t *), controller3);
 
     clcc_return_now(close, 0);
-    server_close_connection(server, controller2);
+    server_disconnect_controller(server, controller2);
     clcc_disable_control(close);
 
     cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller1);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first->next, controller_t *), controller2);
     cr_assert_eq(NODE_TO_PTR(server->controllers->last, controller_t *), controller3);
 
-    cr_assert_eq(server->controllers->len, 2);
+    cr_assert_eq(controller1->generic.state, CTRL_CONNECTED);
+    cr_assert_eq(controller2->generic.state, CTRL_DISCONNECTED);
+    cr_assert_eq(controller3->generic.state, CTRL_CONNECTED);
+    cr_assert_eq(server->controllers->len, 3);
     cr_assert(FD_ISSET(4, &server->fd_watch.readable));
     cr_assert(FD_ISSET(4, &server->fd_watch.except));
     cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
@@ -495,6 +500,27 @@ Test(server_handle_emissions_tests, emit_on_0_controllers)
     cr_assert_eq(server->controllers->len, 0);
 
     // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_emissions_tests, emit_on_1_disconnected_controllers)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = server_register_client(server, 42);
+
+    controller->generic.state = CTRL_DISCONNECTED;
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 1);
+
+    // Act and assert
+    server_handle_emissions(server);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+
+    // Cleanup
+    server_remove_disconnected_controllers(server);
     server_free(server);
 }
 
@@ -711,7 +737,6 @@ Test(server_handle_controller_requests_tests, simple_request, .init = cr_redirec
     server_t *server = server_new();
     controller_t *controller = NULL;
     request_t *request = NULL;
-    controller_state_t state;
 
     // Act
     pipe(fds);
@@ -730,10 +755,10 @@ Test(server_handle_controller_requests_tests, simple_request, .init = cr_redirec
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Act
-    state = server_handle_controller_requests(server, controller);
+    server_handle_controller_requests(server, controller);
 
     // Assert
-    cr_assert_eq(state, CTRL_CONNECTED);
+    cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
     cr_assert_eq(server->controllers->len, 1);
     cr_assert_eq(controller->generic.requests->len, 1);
     request = controller_get_last_request(controller);
@@ -754,7 +779,6 @@ Test(server_handle_controller_requests_tests, no_content_to_read, .init = cr_red
     int fds[2];
     server_t *server = server_new();
     controller_t *controller = NULL;
-    controller_state_t state;
 
     // Act
     pipe(fds);
@@ -770,10 +794,10 @@ Test(server_handle_controller_requests_tests, no_content_to_read, .init = cr_red
     cr_assert_eq(controller->generic.requests->len, 0);
 
     // Act
-    state = server_handle_controller_requests(server, controller);
+    server_handle_controller_requests(server, controller);
 
     // Assert
-    cr_assert_eq(state, CTRL_CONNECTED);
+    cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
     cr_assert_eq(server->controllers->len, 1);
     cr_assert_eq(controller->generic.requests->len, 0);
 
@@ -790,7 +814,6 @@ Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redi
     server_t *server = server_new();
     controller_t *controller = NULL;
     request_t *request = NULL;
-    controller_state_t state;
 
     // Act
     pipe(fds);
@@ -810,8 +833,8 @@ Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redi
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Read first request
-    state = server_handle_controller_requests(server, controller);
-    cr_assert_eq(state, CTRL_CONNECTED);
+    server_handle_controller_requests(server, controller);
+    cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
     cr_assert_eq(server->controllers->len, 1);
     cr_assert_eq(controller->generic.requests->len, 1);
     request = controller_get_last_request(controller);
@@ -821,8 +844,8 @@ Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redi
     cr_assert_eq(request->content_size, 5);
 
     // Act
-    state = server_handle_controller_requests(server, controller);
-    cr_assert_eq(state, CTRL_DISCONNECTED);
+    server_handle_controller_requests(server, controller);
+    cr_assert_eq(controller->generic.state, CTRL_DISCONNECTED);
 
     // Cleanup
     server_close_all_connections(server);
@@ -836,9 +859,24 @@ Test(server_handle_controller_requests_tests, null_controller, .init = cr_redire
 
     // Assert
     cr_assert_eq(server->controllers->len, 0);
-    cr_assert_eq(server_handle_controller_requests(server, NULL), CTRL_DISCONNECTED);
+    server_handle_controller_requests(server, NULL);
 
     // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_controller_requests_tests, disconnected_contoller, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = controller_new(42);
+
+    // Assert
+    controller->generic.state = CTRL_DISCONNECTED;
+    server_handle_controller_requests(server, controller);
+
+    // Cleanup
+    controller_free(controller);
     server_free(server);
 }
 
@@ -912,9 +950,43 @@ Test(server_handle_requests_tests, closed_connection, .init = cr_redirect_stdout
     server_handle_requests(server);
 
     // Assert
-    cr_assert_eq(server->controllers->len, 0);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.state, CTRL_DISCONNECTED);
 
     // Cleanup
     server_close_all_connections(server);
+    server_free(server);
+}
+
+Test(server_remove_disconnected_controllers, remove_disconnected_controllers, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller1, *controller2, *controller3 = NULL;
+
+    // Act
+    clcc_return_now(accept, 4);
+    controller1 = server_accept_connection(server);
+    clcc_return_now(accept, 5);
+    controller2 = server_accept_connection(server);
+    clcc_return_now(accept, 6);
+    controller3 = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    clcc_return_now(close, 0);
+    server_disconnect_controller(server, controller2);
+    clcc_disable_control(close);
+
+    cr_assert_eq(controller1->generic.state, CTRL_CONNECTED);
+    cr_assert_eq(controller2->generic.state, CTRL_DISCONNECTED);
+    cr_assert_eq(controller3->generic.state, CTRL_CONNECTED);
+
+    server_remove_disconnected_controllers(server);
+
+    cr_assert_eq(server->controllers->len, 2);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller1);
+    cr_assert_eq(NODE_TO_PTR(server->controllers->last, controller_t *), controller3);
+
     server_free(server);
 }

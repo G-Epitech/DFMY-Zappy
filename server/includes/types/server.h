@@ -131,11 +131,17 @@ controller_t *server_register_client(server_t *server, int socket);
 controller_t *server_accept_connection(server_t *server);
 
 /**
- * @brief Remove a controller from the server and close its connection
+ * @brief Mark a controller as disconnected and close its socket
  * @param server Server to remove controller from
  * @param controller Controller to remove
  */
-void server_close_connection(server_t *server, controller_t *controller);
+void server_disconnect_controller(server_t *server, controller_t *controller);
+
+/**
+ * @brief Remove disconnected controllers from the server
+ * @param server Server to remove controllers from
+ */
+void server_remove_disconnected_controllers(server_t *server);
 
 /**
  * @brief Get controller by its socket number
@@ -180,9 +186,8 @@ void server_handle_requests(server_t *server);
  * @brief Handle server controller requests
  * @param server Server on which handle controller requests
  * @param controller Controller to handle requests
- * @return Controller state after handling requests
  */
-controller_state_t server_handle_controller_requests(server_t *server,
+void server_handle_controller_requests(server_t *server,
     controller_t *controller);
 
 /**

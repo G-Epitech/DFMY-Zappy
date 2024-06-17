@@ -9,7 +9,7 @@
 
 #include <stddef.h>
 #include <sys/time.h>
-#include "time.h"
+#include "utils.h"
 
 // @brief Represent a time unit of Trantor world
 typedef float time_unit_t;
