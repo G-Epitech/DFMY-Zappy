@@ -527,6 +527,7 @@ Test(server_handle_emissions_tests, emit_on_1_controller_with_emissions)
 
     // Cleanup
     server_close_all_connections(server);
+    close(fd[0]);
     server_free(server);
 }
 
@@ -570,6 +571,7 @@ Test(server_handle_emissions_tests, emit_on_1_controller_with_no_emissions)
 
     // Cleanup
     server_close_all_connections(server);
+    close(fd[0]);
     server_free(server);
 }
 
@@ -631,6 +633,8 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions)
 
     // Cleanup
     server_close_all_connections(server);
+    close(fd_1[0]);
+    close(fd_2[0]);
     server_free(server);
 }
 
@@ -676,6 +680,239 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions_not_read
     cr_assert_eq(buff_content_size2, 8);
     cr_assert_str_eq(buffer2, "WELCOME\n");
     cr_assert_eq(controller2->generic.emissions->len, 0);
+
+    // Cleanup
+    server_close_all_connections(server);
+    close(fd_1[0]);
+    close(fd_2[0]);
+    server_free(server);
+}
+
+Test(server_handle_requests_tests, no_requests)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Act and assert
+    server_handle_requests(server);
+    cr_assert_eq(server->controllers->len, 0);
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_controller_requests_tests, simple_request, .init = cr_redirect_stdout)
+{
+    // Arrange
+    int fds[2];
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+    request_t *request = NULL;
+    controller_state_t state;
+
+    // Act
+    pipe(fds);
+    write(fds[1], "HELLO\n", 6);
+    controller = server_register_client(server, fds[1]);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.readable));
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(fds[1], &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, fds[1]);
+    cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    fd_states_set(&server->fd_actual, fds[0], FD_STATES_R);
+    controller->generic.socket = fds[0]; // Enable read on the controller
+
+    // Act
+    state = server_handle_controller_requests(server, controller);
+
+    // Assert
+    cr_assert_eq(state, CTRL_CONNECTED);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    request = controller_get_last_request(controller);
+    cr_assert_not_null(request);
+    cr_assert_str_eq(request->buffer, "HELLO");
+    cr_assert_eq(request->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(request->content_size, 5);
+
+    // Cleanup
+    server_close_all_connections(server);
+    close(fds[1]);
+    server_free(server);
+}
+
+Test(server_handle_controller_requests_tests, no_content_to_read, .init = cr_redirect_stdout)
+{
+    // Arrange
+    int fds[2];
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+    controller_state_t state;
+
+    // Act
+    pipe(fds);
+    controller = server_register_client(server, fds[1]);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.readable));
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(fds[1], &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, fds[1]);
+    cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.requests->len, 0);
+
+    // Act
+    state = server_handle_controller_requests(server, controller);
+
+    // Assert
+    cr_assert_eq(state, CTRL_CONNECTED);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.requests->len, 0);
+
+    // Cleanup
+    server_close_all_connections(server);
+    close(fds[0]);
+    server_free(server);
+}
+
+Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redirect_stdout)
+{
+    // Arrange
+    int fds[2];
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+    request_t *request = NULL;
+    controller_state_t state;
+
+    // Act
+    pipe(fds);
+    write(fds[1], "HELLO\n", 6);
+    close(fds[1]);
+    controller = server_register_client(server, fds[1]);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.readable));
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(fds[1], &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, fds[1]);
+    cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    fd_states_set(&server->fd_actual, fds[0], FD_STATES_R);
+    controller->generic.socket = fds[0]; // Enable read on the controller
+
+    // Read first request
+    state = server_handle_controller_requests(server, controller);
+    cr_assert_eq(state, CTRL_CONNECTED);
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    request = controller_get_last_request(controller);
+    cr_assert_not_null(request);
+    cr_assert_str_eq(request->buffer, "HELLO");
+    cr_assert_eq(request->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(request->content_size, 5);
+
+    // Act
+    state = server_handle_controller_requests(server, controller);
+    cr_assert_eq(state, CTRL_DISCONNECTED);
+
+    // Cleanup
+    server_close_all_connections(server);
+    server_free(server);
+}
+
+Test(server_handle_controller_requests_tests, null_controller, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 0);
+    cr_assert_eq(server_handle_controller_requests(server, NULL), CTRL_DISCONNECTED);
+
+    // Cleanup
+    server_free(server);
+}
+
+Test(server_handle_requests_tests, simple_request, .init = cr_redirect_stdout)
+{
+    // Arrange
+    int fds[2];
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+    request_t *request = NULL;
+
+    // Act
+    pipe(fds);
+    write(fds[1], "HELLO\n", 6);
+    controller = server_register_client(server, fds[1]);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.readable));
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(fds[1], &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, fds[1]);
+    cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    fd_states_set(&server->fd_actual, fds[0], FD_STATES_R);
+    controller->generic.socket = fds[0]; // Enable read on the controller
+
+    // Act
+    server_handle_requests(server);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert_eq(controller->generic.requests->len, 1);
+    request = controller_get_last_request(controller);
+    cr_assert_not_null(request);
+    cr_assert_str_eq(request->buffer, "HELLO");
+    cr_assert_eq(request->buffer_size, REQ_BUFF_SIZE);
+    cr_assert_eq(request->content_size, 5);
+
+    // Cleanup
+    server_close_all_connections(server);
+    close(fds[1]);
+    server_free(server);
+}
+
+Test(server_handle_requests_tests, closed_connection, .init = cr_redirect_stdout)
+{
+    // Arrange
+    int fds[2];
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+    request_t *request = NULL;
+
+    // Act
+    pipe(fds);
+    close(fds[1]);
+    controller = server_register_client(server, fds[1]);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 1);
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.readable));
+    cr_assert(FD_ISSET(fds[1], &server->fd_watch.except));
+    cr_assert_not(FD_ISSET(fds[1], &server->fd_watch.writable));
+    cr_assert_eq(server->fd_watch.max, fds[1]);
+    cr_assert_not_null(controller);
+    cr_assert_eq(controller->generic.requests->len, 0);
+    fd_states_set(&server->fd_actual, fds[0], FD_STATES_R);
+    controller->generic.socket = fds[0]; // Enable read on the controller
+
+    // Act
+    server_handle_requests(server);
+
+    // Assert
+    cr_assert_eq(server->controllers->len, 0);
 
     // Cleanup
     server_close_all_connections(server);

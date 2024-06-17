@@ -179,6 +179,15 @@ void server_close_all_connections(server_t *server);
 void server_handle_requests(server_t *server);
 
 /**
+ * @brief Handle server controller requests
+ * @param server Server on which handle controller requests
+ * @param controller Controller to handle requests
+ * @return Controller state after handling requests
+ */
+controller_state_t server_handle_controller_requests(server_t *server,
+    controller_t *controller);
+
+/**
  * @brief Handle server emissions
  * @param server Server on which handle emissions
  */
