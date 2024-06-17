@@ -9,6 +9,7 @@
 #include <criterion/redirect.h>
 #include <thread_db.h>
 #include <unistd.h>
+#include <signal.h>
 #include "app.h"
 #include "clcc/modules/stdlib.h"
 #include "clcc/modules/sys/socket.h"
@@ -18,7 +19,7 @@ static void *thread_stopper_routine(void *seconds)
     double sec = *(double *) seconds;
 
     usleep((unsigned int) (sec * 1000000));
-    app_stop();
+    kill(getpid(), SIGINT);
     return NULL;
 }
 
