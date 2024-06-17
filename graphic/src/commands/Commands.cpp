@@ -47,7 +47,26 @@ void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, cons
     }
 }
 
-void Commands::map_size(std::string &command, Map &map, Ogre::SceneManager *scnMgr)
+Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile)
+{
+    Ogre::Entity *cubeEntity = scnMgr->createEntity("food.mesh");
+    Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
+    node->attachObject(cubeEntity);
+
+    Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
+    Ogre::Vector3 size = aab.getSize();
+
+    float randX = tile.node->getPosition().x + static_cast<float>(std::rand()) / RAND_MAX * size.x - size.x / 2.0f;
+    float randZ = tile.node->getPosition().z + static_cast<float>(std::rand()) / RAND_MAX * size.z - size.z / 2.0f;
+    float itemY = size.y;
+
+    node->setPosition(randX, itemY, randZ);
+    node->setScale(PLAYER_SCALE, PLAYER_SCALE, PLAYER_SCALE);
+
+    return node;
+}
+
+void Commands::map_size(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
 {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
@@ -83,7 +102,7 @@ void Commands::map_size(std::string &command, Map &map, Ogre::SceneManager *scnM
     }
 }
 
-void Commands::tile_content(std::string &command, Map &map, Ogre::SceneManager *scnMgr)
+void Commands::tile_content(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
 {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
@@ -109,4 +128,167 @@ void Commands::tile_content(std::string &command, Map &map, Ogre::SceneManager *
         else if (stones[i] < 0)
             _removeItemsFromTile(map.tiles[x][y], scnMgr, stonesNames[i], -stones[i]);
     }
+}
+
+void Commands::teams_names(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 1)
+        return;
+    map.teams.push_back(args[0]);
+}
+
+void Commands::player_connect(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 6)
+        return;
+    int id = std::stoi(args[0]);
+    int x = std::stoi(args[1]);
+    int y = std::stoi(args[2]);
+    int orientation = std::stoi(args[3]);
+    int level = std::stoi(args[4]);
+    std::string team = args[5];
+
+    if (x < 0 || x >= map.width || y < 0 || y >= map.height)
+        return;
+
+    for (const auto& player : map.players) {
+        if (player.id == id) {
+            return;
+        }
+    }
+
+    Player player;
+    player.id = id;
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
+    player.orientation = orientation;
+    player.level = level;
+    player.team = team;
+    player.position = {x, y};
+    map.players.push_back(player);
+}
+
+void Commands::player_position(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 4)
+        return;
+    int id = std::stoi(args[0]);
+    int x = std::stoi(args[1]);
+    int y = std::stoi(args[2]);
+    if (x < 0 || x >= map.width || y < 0 || y >= map.height)
+        return;
+
+    for (auto &player : map.players) {
+        if (player.id == id) {
+            player.position.x = x;
+            player.position.y = y;
+            if (!player.node)
+                player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
+            player.node->setPosition(map.tiles[x][y].node->getPosition().x, player.node->getPosition().y, map.tiles[x][y].node->getPosition().z);
+            return;
+        }
+    }
+
+    Player player;
+    player.id = id;
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
+    player.position.x = x;
+    player.position.y = y;
+    map.players.push_back(player);
+
+    client.write("pin " + std::to_string(id) + "\n");
+    client.write("plv " + std::to_string(id) + "\n");
+}
+
+void Commands::player_level(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 2)
+        return;
+    int id = std::stoi(args[0]);
+    int level = std::stoi(args[1]);
+
+    for (auto &player : map.players) {
+        if (player.id == id) {
+            player.level = level;
+            return;
+        }
+    }
+
+    Player player;
+    player.id = id;
+    player.level = level;
+    map.players.push_back(player);
+
+    client.write("pin " + std::to_string(id) + "\n");
+    client.write("ppo " + std::to_string(id) + "\n");
+}
+
+void Commands::player_inventory(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 10)
+        return;
+    int id = std::stoi(args[0]);
+    int x = std::stoi(args[1]);
+    int y = std::stoi(args[2]);
+
+    if (x < 0 || x >= map.width || y < 0 || y >= map.height)
+        return;
+
+    Inventory inventory;
+    inventory.food = std::stoi(args[3]);
+    inventory.linemate = std::stoi(args[4]);
+    inventory.deraumere = std::stoi(args[5]);
+    inventory.sibur = std::stoi(args[6]);
+    inventory.mendiane = std::stoi(args[7]);
+    inventory.phiras = std::stoi(args[8]);
+    inventory.thystame = std::stoi(args[9]);
+
+    for (auto &player : map.players) {
+        if (player.id == id) {
+            player.inventory = inventory;
+            return;
+        }
+    }
+
+    Player player;
+    player.id = id;
+    player.inventory = inventory;
+    map.players.push_back(player);
+
+    client.write("pin " + std::to_string(id) + "\n");
+    client.write("plv " + std::to_string(id) + "\n");
+}
+
+void Commands::player_eject(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() != 1)
+        return;
+    int id = std::stoi(args[0]);
+
+    // TODO: Implement player ejection
+    std::cout << "Player " << id << " have been ejected or eject others?" << std::endl;
+}
+
+void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
+{
+    std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
+
+    if (args.size() < 2)
+        return;
+    int id = std::stoi(args[0]);
+    std::string message = args[1];
+
+    // TODO: Implement broadcast animation
+    std::cout << "Player " << id << " broadcasted: " << message << std::endl;
 }

@@ -40,7 +40,7 @@ private:
     OgreBites::TrayManager *trayManager;
     Ogre::SceneManager *scnMgr;
     Map _map;
-    std::map<std::string, std::function<void(std::string &, Map &, Ogre::SceneManager *)>> _commands;
+    std::map<std::string, std::function<void(std::string &, Map &, Ogre::SceneManager *, Client &)>> _commands;
 
     /**
      * @brief Load resources of the application

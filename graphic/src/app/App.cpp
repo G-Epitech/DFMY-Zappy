@@ -14,8 +14,16 @@ using namespace Ogre;
 using namespace OgreBites;
 
 App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
+    _client.write("mct\n");
     this->_commands["msz"] = &Commands::map_size;
     this->_commands["bct"] = &Commands::tile_content;
+    this->_commands["tna"] = &Commands::teams_names;
+    this->_commands["pnw"] = &Commands::player_connect;
+    this->_commands["ppo"] = &Commands::player_position;
+    this->_commands["plv"] = &Commands::player_level;
+    this->_commands["pin"] = &Commands::player_inventory;
+    this->_commands["pex"] = &Commands::player_eject;
+    this->_commands["pbc"] = &Commands::broadcast;
 }
 
 void App::setup() {
@@ -67,10 +75,11 @@ void App::setup() {
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
-        if (command.empty()) {
-            return true;
+
+        while (!command.empty()) {
+            _updateMap(command);
+            command = _client.getCommandFromPendingBuffer();
         }
-        _updateMap(command);
     }
     return true;
 }
@@ -111,6 +120,8 @@ void App::_updateMap(std::string &command) {
     std::string commandName = command.substr(0, 3);
     if (this->_commands.find(commandName) != this->_commands.end()) {
         std::string params = command.substr(4);
-        this->_commands[commandName](params, this->_map, this->scnMgr);
+        this->_commands[commandName](params, this->_map, this->scnMgr, this->_client);
+    } else {
+        std::cerr << "Unknown command: " << commandName << std::endl;
     }
 }
