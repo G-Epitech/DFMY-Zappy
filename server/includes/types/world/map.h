@@ -58,20 +58,22 @@ void map_cell_free(map_cell_t *cell);
 
 /**
  * @brief Add a resource to the current map cell
- * @param cell Cell to add the resource to
+ * @param map Map to add the resource to
+ * @param pos Position of the cell to add the resource to
  * @param resource Resource to add
  * @param quantity Quantity of the resource to add
  */
-void map_cell_add_resource(map_cell_t *cell, resource_t resource,
+void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
 
 /**
  * @brief Remove a resource from the current map cell
- * @param cell Cell to remove the resource from
+ * @param map Map to remove the resource from
+ * @param pos Position of the cell to remove the resource from
  * @param resource Resource to remove
  * @param quantity Quantity of the resource to remove
  */
-void map_cell_remove_resource(map_cell_t *cell, resource_t resource,
+void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
 
 /**

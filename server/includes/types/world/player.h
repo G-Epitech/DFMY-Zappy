@@ -52,7 +52,7 @@ typedef struct player_s {
     size_t level;
     // @brief Direction of the player
     player_direction_t direction;
-    // @brief Player ID
+    // @brief Player number
     size_t number;
 } player_t;
 

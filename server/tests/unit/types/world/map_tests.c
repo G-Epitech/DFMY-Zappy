@@ -141,7 +141,7 @@ Test(map_take_object_tests, take_object)
     player_t *player = player_new(NULL, team, position);
 
     world_add_player(world, player);
-    map_cell_add_resource(&world->map->cells[4][4], RES_FOOD, 1);
+    map_add_resource(world->map, position, RES_FOOD, 1);
     cr_assert_eq(map_player_take_object(world->map, player, RES_FOOD), true);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
     cr_assert_eq(player->inventory[RES_FOOD], 1);
@@ -208,21 +208,26 @@ Test(map_set_object_tests, set_object_with_null_player)
 
 Test(map_add_resource_tests, add_resource_to_null_cell)
 {
-    map_cell_add_resource(NULL, RES_FOOD, 1);
+    vector2u_t position = { 4, 4 };
+
+    map_add_resource(NULL, position, RES_FOOD, 1);
 }
 
 Test(map_remove_resource_tests, remove_resource_from_null_cell)
 {
-    map_cell_remove_resource(NULL, RES_FOOD, 1);
+    vector2u_t position = { 4, 4 };
+
+    map_remove_resource(NULL, position, RES_FOOD, 1);
 }
 
 Test(map_remove_resource_tests, remove_resource_from_cell)
 {
     vector2u_t size = { 6, 6 };
+    vector2u_t position = { 4, 4 };
     world_t *world = world_new(size, 100);
 
-    map_cell_add_resource(&world->map->cells[4][4], RES_FOOD, 1);
-    map_cell_remove_resource(&world->map->cells[4][4], RES_FOOD, 1);
+    map_add_resource(world->map, position, RES_FOOD, 1);
+    map_remove_resource(world->map, position, RES_FOOD, 1);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
     world_free(world);
 }

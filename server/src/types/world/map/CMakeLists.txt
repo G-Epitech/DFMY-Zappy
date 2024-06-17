@@ -3,8 +3,8 @@ target_sources(zappy_server_core PUBLIC
         free.c
         cell/init.c
         cell/free.c
-        cell/add.c
-        cell/remove.c
+        add.c
+        remove.c
         set.c
         take.c
         forward.c
