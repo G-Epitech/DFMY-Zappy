@@ -13,6 +13,7 @@
 #include "types/list.h"
 #include "types/vector2.h"
 #include "types/controller.h"
+#include "types/world/map.h"
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
@@ -84,3 +85,26 @@ void player_free_as_node_data(node_data_t data);
  * @param direction_offset Direction offset (in degrees)
  */
 void player_change_direction(player_t *player, int direction_offset);
+
+/**
+ * @brief Take an object from the current map cell at current player position
+ * @param map Map to take the object from
+ * @param player Player to take the object
+ * @param resource Resource to take
+ */
+bool player_take_object(map_t *map, player_t *player, resource_t resource);
+
+/**
+ * @brief Set an object to the current map cell at current player position
+ * @param map Map to set the object to
+ * @param player Player to set the object
+ * @param resource Resource to set
+ */
+bool player_set_object(map_t *map, player_t *player, resource_t resource);
+
+/**
+ * @brief Move a player forward in the world
+ * @param map World to move the player in
+ * @param player Player to move
+ */
+void player_forward(map_t *map, player_t *player);

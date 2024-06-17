@@ -14,4 +14,5 @@
  * @param ... Arguments to format
  * @return The number of characters copied
  */
-int my_asprintf(char **strp, const char *fmt, ...);
+int my_asprintf(char **strp, const char *fmt,
+    ...) __attribute__((format(printf, 2, 3)));

@@ -26,7 +26,7 @@ static void increment_player_position(map_t *map, player_t *player)
     }
 }
 
-void map_player_forward(map_t *map, player_t *player)
+void player_forward(map_t *map, player_t *player)
 {
     node_t *node = NULL;
     map_cell_t cell;

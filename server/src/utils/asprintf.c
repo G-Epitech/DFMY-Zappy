@@ -9,10 +9,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-
 static int run_asprintf(char **strp, const char *fmt, va_list ap)
 {
     va_list ap_copy;

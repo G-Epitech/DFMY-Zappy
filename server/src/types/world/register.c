@@ -10,6 +10,5 @@
 
 void world_player_register(world_t *world, player_t *player)
 {
-    player->id = world->next_player_id;
-    world->next_player_id += 1;
+    player->id = world->next_player_id++;;
 }

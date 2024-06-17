@@ -5,7 +5,4 @@ target_sources(zappy_server_core PUBLIC
         cell/free.c
         add.c
         remove.c
-        set.c
-        take.c
-        forward.c
 )
