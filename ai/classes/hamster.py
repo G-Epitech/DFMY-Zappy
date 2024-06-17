@@ -528,10 +528,10 @@ class Hamster:
         """
         for message in self.pending_broadcast:
             try:
-                number = self.manage_broadcast_cannibalism_id(message[1])
-                if number:
+                id = self.manage_broadcast_cannibalism_id(message[1])
+                if id:
                     self.pending_broadcast.remove(message)
-                    self.manage_broadcast_cannibalism(number)
+                    self.manage_broadcast_cannibalism(id)
             except Exception as e:
                 self.debug(f"Error managing broadcast message: {e}")
 
