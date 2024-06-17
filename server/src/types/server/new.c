@@ -15,6 +15,7 @@ void server_init(server_t *server)
     fd_states_init(&server->fd_watch);
     server->address.sin_family = AF_INET;
     server->address.sin_addr.s_addr = INADDR_ANY;
+    server->current_player_number = 0;
 }
 
 server_t *server_new(void)

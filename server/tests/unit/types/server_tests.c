@@ -13,6 +13,7 @@
 #include "clcc/modules/stdlib.h"
 #include "clcc/modules/unistd.h"
 #include "types/server.h"
+#include "types/world/player.h"
 
 static void redirect_all_std(void)
 {
@@ -957,4 +958,24 @@ Test(server_controller_has_content_to_read_tests, no_content, .init = cr_redirec
     // Assert
     cr_assert_not(server_controller_has_content_to_read(server, controller));
     server_free(server);
+}
+
+Test(server_register_tests, register_player)
+{
+    // Arrange
+    vector2u_t size = { 6, 6 };
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+    server_t *server = server_new();
+
+    // Act
+    server_player_register(server, player);
+
+    // Assert
+    cr_assert_eq(player->number, 0);
+    cr_assert_eq(server->current_player_number, 1);
+    server_free(server);
+    player_free(player);
+    team_free(team);
 }
