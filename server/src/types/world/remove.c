@@ -10,7 +10,7 @@
 #include "types/world/incantation.h"
 
 static void world_remove_player_from_incantations(world_t *world,
-                                                  player_t *player)
+    player_t *player)
 {
     node_data_t data = NODE_DATA_FROM_PTR(player);
     node_t *node = world->incantations->first;
@@ -45,4 +45,3 @@ void world_remove_player(world_t *world, player_t *player)
     }
     world_remove_player_from_incantations(world, player);
 }
-

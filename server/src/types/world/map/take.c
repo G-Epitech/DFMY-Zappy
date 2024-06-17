@@ -9,15 +9,17 @@
 #include "types/world/map.h"
 #include "types/world/resource.h"
 
-void map_player_take_object(map_t *map, player_t *player, resource_t resource)
+bool map_player_take_object(map_t *map, player_t *player, resource_t resource)
 {
-    map_cell_t cell = {0};
+    map_cell_t *cell = NULL;
 
     if (!map || !player)
-        return;
-    cell = map->cells[player->position.y][player->position.x];
-    if (cell.resources[resource] > 0) {
-        cell.resources[resource] -= 1;
+        return false;
+    cell = &map->cells[player->position.y][player->position.x];
+    if (cell->resources[resource] > 0) {
+        cell->resources[resource] -= 1;
         player->inventory[resource] += 1;
+        return true;
     }
+    return false;
 }

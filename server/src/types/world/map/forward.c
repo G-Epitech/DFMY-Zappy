@@ -20,7 +20,7 @@ static void increment_player_position(map_t *map, player_t *player)
         case DIR_SOUTH:
             player->position.y = (player->position.y - 1) % map->size.y;
             break;
-        case DIR_WEST:
+        default:
             player->position.x = (player->position.x - 1) % map->size.x;
             break;
     }
@@ -35,8 +35,9 @@ void map_player_forward(map_t *map, player_t *player)
         return;
     cell = map->cells[player->position.y][player->position.x];
     node = list_find(cell.players, NODE_DATA_FROM_PTR(player));
-    if (node)
-        list_erase(cell.players, node, NULL);
+    if (!node)
+        return;
+    list_erase(cell.players, node, NULL);
     increment_player_position(map, player);
     cell = map->cells[player->position.y][player->position.x];
     list_push(cell.players, NODE_DATA_FROM_PTR(player));

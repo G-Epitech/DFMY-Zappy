@@ -57,12 +57,30 @@ bool map_cell_init(map_cell_t *cell);
 void map_cell_free(map_cell_t *cell);
 
 /**
+ * @brief Add a resource to the current map cell
+ * @param cell Cell to add the resource to
+ * @param resource Resource to add
+ * @param quantity Quantity of the resource to add
+ */
+void map_cell_add_resource(map_cell_t *cell, resource_t resource,
+    size_t quantity);
+
+/**
+ * @brief Remove a resource from the current map cell
+ * @param cell Cell to remove the resource from
+ * @param resource Resource to remove
+ * @param quantity Quantity of the resource to remove
+ */
+void map_cell_remove_resource(map_cell_t *cell, resource_t resource,
+    size_t quantity);
+
+/**
  * @brief Take an object from the current map cell at current player position
  * @param map Map to take the object from
  * @param player Player to take the object
  * @param resource Resource to take
  */
-void map_player_take_object(map_t *map, player_t *player,
+bool map_player_take_object(map_t *map, player_t *player,
     resource_t resource);
 
 /**
@@ -71,7 +89,7 @@ void map_player_take_object(map_t *map, player_t *player,
  * @param player Player to set the object
  * @param resource Resource to set
  */
-void map_player_set_object(map_t *map, player_t *player,
+bool map_player_set_object(map_t *map, player_t *player,
     resource_t resource);
 
 /**
