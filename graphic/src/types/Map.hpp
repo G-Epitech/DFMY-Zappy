@@ -12,7 +12,7 @@
 #include "Player.hpp"
 
 struct Tile {
-    Items items;
+    std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
     Ogre::SceneNode *node = nullptr;
 };
 

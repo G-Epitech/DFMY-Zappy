@@ -15,7 +15,7 @@ struct Position {
     int y;
 };
 
-struct Items {
+struct Inventory {
     int food = 0;
     int linemate = 0;
     int deraumere = 0;
@@ -28,7 +28,7 @@ struct Items {
 struct Player {
     int id;
     Position position;
-    Items inventory;
+    Inventory inventory;
     int level;
     int orientation;
     std::string team;
