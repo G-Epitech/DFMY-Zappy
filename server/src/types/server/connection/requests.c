@@ -8,12 +8,13 @@
 #include "types/server.h"
 
 void server_handle_controller_requests(server_t *server,
-    controller_t *controller)
-{
+    controller_t *controller) {
     if (!controller || controller->generic.state == CTRL_DISCONNECTED)
         return;
-    if (server_controller_has_content_to_read(server, controller))
-        controller->generic.state = controller_read(controller);
+    if (!server_controller_has_content_to_read(server, controller))
+        return;
+    if (controller_read(controller) == CTRL_DISCONNECTED)
+        server_disconnect_controller(server, controller);
 }
 
 void server_handle_requests(server_t *server)

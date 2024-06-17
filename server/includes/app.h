@@ -25,6 +25,9 @@ typedef struct app_s {
     volatile bool running;
 } app_t;
 
+// @brief Middleware function
+typedef void (*app_step_t)(app_t *app);
+
 /**
  * @brief Set the target of the signal handler
  * @param app Application to set the target
@@ -76,3 +79,15 @@ void app_print_usage(void);
  * @brief Setup signal handlers
  */
 void app_setup_sig_handlers(void);
+
+/**
+ * @brief Run the application pipeline
+ * @param app Application with which run the pipeline
+ */
+void app_run_pipeline(app_t *app);
+
+/**
+ * @brief Handle server logic
+ * @param app Application to handle the server logic
+ */
+void app_handle_server_logic(app_t *app);
