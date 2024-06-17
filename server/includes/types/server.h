@@ -17,6 +17,9 @@
 // @brief Set of file descriptors
 typedef fd_set fd_set_t;
 
+// @brief Time value
+typedef struct timeval timeval_t;
+
 // @brief Internet address
 typedef struct sockaddr_in sockaddr_in_t;
 
@@ -153,6 +156,39 @@ controller_t *server_get_controller_by_socket(server_t *server, int socket);
  */
 bool server_controller_has_content_to_read(server_t *server,
     controller_t *controller);
+
+/**
+ * @brief Poll server controllers
+ * @param server Server to poll
+ * @param timeout Timeout to wait for
+ * @return Number of controllers that have content to read
+ * or -1 if an error occurred
+ */
+int server_poll(server_t *server, timeval_t *timeout);
+
+/**
+ * @brief Close all server connections
+ * @param server Server to close connections from
+ */
+void server_close_all_connections(server_t *server);
+
+/**
+ * @brief Handle server connections
+ * @param server Server on which handle connections
+ */
+void server_handle_requests(server_t *server);
+
+/**
+ * @brief Handle server emissions
+ * @param server Server on which handle emissions
+ */
+void server_handle_emissions(server_t *server);
+
+/**
+ * @brief Handle new server connections
+ * @param server Server on which handle new connections
+ */
+void server_handle_new_connections(server_t *server);
 
 /**
  * @brief Initialize given file descriptors states

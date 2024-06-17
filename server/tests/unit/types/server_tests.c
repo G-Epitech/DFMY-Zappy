@@ -454,6 +454,24 @@ Test(fd_states_tests, unset_fd_states_e)
     cr_assert_eq(states.max, -1);
 }
 
+Test(fd_states_tests, set_negative_fd)
+{
+    fd_states_t states;
+
+    fd_states_init(&states);
+    fd_states_set(&states, -1, FD_STATES_E);
+    cr_assert_eq(states.max, -1);
+}
+
+Test(fd_states_tests, unset_negative_fd)
+{
+    fd_states_t states;
+
+    fd_states_init(&states);
+    fd_states_unset(&states, -1, FD_STATES_E);
+    cr_assert_eq(states.max, -1);
+}
+
 Test(fd_states_tests, unset_fd_states_w_not_max)
 {
     fd_states_t states;
@@ -639,16 +657,26 @@ Test(server_register_client_tests, simple_register) {
     // Arrange
     server_t *server = server_new();
     controller_t *controller = NULL;
+    emission_t *emission = NULL;
+
+    // Pre-assert
+    cr_assert_eq(server->controllers->len, 0);
 
     // Act
-    cr_assert_eq(server->controllers->len, 0);
     controller = server_register_client(server, 42);
+
+    // Assert
     cr_assert_not_null(controller);
     cr_assert_eq(server->controllers->len, 1);
     cr_assert_eq(controller->generic.socket, 42);
     cr_assert_not_null(controller->generic.emissions);
     cr_assert_not_null(controller->generic.requests);
-    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller->generic.emissions->len, 1);
+
+    emission = NODE_TO_PTR(controller->generic.emissions->first, emission_t *);
+    cr_assert_not_null(emission);
+    cr_assert(memcmp(emission->buffer_ptr->target, "WELCOME", 7) == 0);
+
     cr_assert_eq(controller->generic.requests->len, 0);
     cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
     cr_assert(FD_ISSET(42, &server->fd_watch.readable));
@@ -713,12 +741,15 @@ Test(server_accept_connection_tests, simple_accept, .init = cr_redirect_stdout)
     cr_assert_not_null(controller->generic.emissions);
     cr_assert_not_null(controller->generic.requests);
     cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller);
-    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller->generic.emissions->len, 1);
     cr_assert_eq(controller->generic.requests->len, 0);
     cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
     cr_assert(FD_ISSET(4, &server->fd_watch.readable));
     cr_assert(FD_ISSET(4, &server->fd_watch.except));
     cr_assert_not(FD_ISSET(4, &server->fd_watch.writable));
+
+    // Cleanup
+    server_free(server);
 }
 
 Test(server_accept_connection_tests, null_server, .init = cr_redirect_stderr)
