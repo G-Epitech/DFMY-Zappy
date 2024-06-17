@@ -15,10 +15,9 @@ bool world_add_player(world_t *world, player_t *player)
             world->players,
             world->map->cells[player->position.y][player->position.x].players,
             player->team->players,
-            NULL
     };
 
-    for (int i = 0; lists_stack[i]; i++) {
+    for (size_t i = 0; i < sizeof(lists_stack) / sizeof(lists_stack[0]); i++) {
         if (!list_push(lists_stack[i], data))
             return false;
     }

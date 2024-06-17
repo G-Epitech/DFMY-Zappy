@@ -153,11 +153,13 @@ Test(player_take_object_tests, take_object)
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(NULL, team, position);
 
+    player->inventory[RES_FOOD] = 1;
+    player->lives = PLAYER_LIFE_UNITS_PER_FOOD;
     world_add_player(world, player);
     map_add_resource(world->map, position, RES_FOOD, 1);
     cr_assert_eq(player_take_object(world->map, player, RES_FOOD), true);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
-    cr_assert_eq(player->inventory[RES_FOOD], 1);
+    cr_assert_eq(player->inventory[RES_FOOD], 2);
     cr_assert_eq(player_take_object(world->map, player, RES_LINEMATE), false);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
@@ -192,12 +194,48 @@ Test(player_set_object_tests, set_object)
 
     world_add_player(world, player);
     player->inventory[RES_FOOD] = 1;
+    player->lives = PLAYER_LIFE_UNITS_PER_FOOD;
     cr_assert_eq(player_set_object(world->map, player, RES_FOOD), true);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 1);
     cr_assert_eq(player->inventory[RES_FOOD], 0);
     cr_assert_eq(player_set_object(world->map, player, RES_LINEMATE), false);
     cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], 0);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
+    player->inventory[RES_LINEMATE] = 1;
+    cr_assert_eq(player_set_object(world->map, player, RES_LINEMATE), true);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], 1);
+    cr_assert_eq(player->inventory[RES_LINEMATE], 0);
+}
+
+Test(player_set_object_tests, discard_food_until_failure)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_add_player(world, player);
+    player->inventory[RES_FOOD] = 1;
+    player->lives = PLAYER_LIFE_UNITS_PER_FOOD;
+    cr_assert_eq(player_set_object(world->map, player, RES_FOOD), true);
+    cr_assert_eq(player_set_object(world->map, player, RES_FOOD), false);
+}
+
+Test(player_set_object_tests, discard_food_near_death)
+{
+    vector2u_t size = { 6, 6 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 4, 4 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_add_player(world, player);
+    player->inventory[RES_FOOD] = 1;
+    player->lives = 125;
+    cr_assert_eq(player_set_object(world->map, player, RES_FOOD), false);
+    player->lives = 126;
+    cr_assert_eq(player_set_object(world->map, player, RES_FOOD), true);
 }
 
 Test(player_set_object_tests, set_object_with_null_map)

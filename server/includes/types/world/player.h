@@ -108,3 +108,19 @@ bool player_set_object(map_t *map, player_t *player, resource_t resource);
  * @param player Player to move
  */
 void player_forward(map_t *map, player_t *player);
+
+/**
+ * @brief Update player food units
+ * @param player Player to update
+ * @param time_units Time units to add to player lives
+ */
+void player_update_lives(player_t *player, time_unit_t time_units);
+
+/**
+ * @brief Set a player inventory resource
+ * @param player Player to set the resource to
+ * @param resource Resource to set
+ * @param quantity Quantity to set
+ */
+bool player_set_inventory_resource(player_t *player, resource_t resource,
+                                   int quantity);

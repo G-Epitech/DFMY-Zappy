@@ -5,4 +5,6 @@ target_sources(zappy_server_core PUBLIC
         forward.c
         set.c
         take.c
+        inventory.c
+        life.c
 )

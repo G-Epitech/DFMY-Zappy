@@ -9,38 +9,21 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-static int run_asprintf(char **strp, const char *fmt, va_list ap)
-{
-    va_list ap_copy;
-    int len;
-
-    va_copy(ap_copy, ap);
-    len = vsnprintf(NULL, 0, fmt, ap_copy);
-    va_end(ap_copy);
-    if (len < 0)
-        return -1;
-    *strp = malloc(len + 1);
-    if (!*strp)
-        return -1;
-    va_copy(ap_copy, ap);
-    len = vsnprintf(*strp, len + 1, fmt, ap_copy);
-    va_end(ap_copy);
-    if (len < 0) {
-        free(*strp);
-        return -1;
-    }
-    return len;
-}
-
 int my_asprintf(char **strp, const char *fmt, ...)
 {
-    va_list ap;
-    int len;
+    va_list args1;
+    va_list args2;
+    int size = 0;
 
-    if (!strp || !fmt)
-        return -1;
-    va_start(ap, fmt);
-    len = run_asprintf(strp, fmt, ap);
-    va_end(ap);
-    return len;
+    va_start(args1, fmt);
+    va_start(args2, fmt);
+    size = vsnprintf(NULL, 0, fmt, args1) + 1;
+    *strp = malloc(size);
+    if (*strp)
+        vsprintf(*strp, fmt, args2);
+    else
+        size = -1;
+    va_end(args1);
+    va_end(args2);
+    return size;
 }
