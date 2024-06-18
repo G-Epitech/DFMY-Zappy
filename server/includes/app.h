@@ -24,7 +24,7 @@ typedef struct app_s {
     args_t args;
     // @brief Application running state
     volatile bool running;
-    // @brief Application step function
+    // @brief World instance
     world_t *world;
 } app_t;
 
