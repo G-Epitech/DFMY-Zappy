@@ -30,7 +30,7 @@ Test(world_new_tests, simple_new)
     cr_assert_eq(world->players->len, 0);
     cr_assert_eq(world->teams->len, 0);
     cr_assert_eq(world->incantations->len, 0);
-    cr_assert_eq(world->next_event_delay, 0.0f);
+    cr_assert_eq(world->next_event_delay, -1.0f);
     for (resource_t i = 0; i < RES_LEN; i++) {
         cr_expect_eq(world->resources_manager.stats[i].actual, 0);
         cr_expect_eq(world->resources_manager.stats[i].limit, resources_limit[i]);
@@ -125,6 +125,22 @@ Test(world_free_tests, free_null_world)
 Test(world_free_tests, free_null_map_cell)
 {
     map_cell_free(NULL);
+}
+
+Test(world_register_event, simple)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+
+    world_register_event(world, 10);
+    cr_assert_eq(world->next_event_delay, 10);
+    world_register_event(world, 5);
+    cr_assert_eq(world->next_event_delay, 5);
+    world_register_event(world, 6);
+    cr_assert_eq(world->next_event_delay, 5);
+    world_reset_event_delay(world);
+    cr_assert_eq(world->next_event_delay, -1);
+    world_free(world);
 }
 
 Test(world_add_player_tests, add_player_to_world)
