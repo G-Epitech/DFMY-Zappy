@@ -33,13 +33,17 @@ Test(smart_ptr, new_smart_ptr_fail_calloc)
 Test(smart_ptr, smart_ptr_reference)
 {
     smart_ptr_t *smart_ptr = smart_ptr_new(NULL);
-    smart_ptr_t *new_ptr = NULL;
+    smart_ptr_t *ref1 = NULL;
+    smart_ptr_t *ref2 = NULL;
 
-    new_ptr = smart_ptr_reference(smart_ptr);
-    cr_assert_eq(new_ptr, smart_ptr);
+    ref1 = smart_ptr_reference(smart_ptr);
     cr_assert_eq(smart_ptr->ref_count, 1);
-    smart_ptr_free(new_ptr);
-    cr_assert_eq(smart_ptr->ref_count, 0);
+    ref2 = smart_ptr_reference(smart_ptr);
+    cr_assert_eq(smart_ptr->ref_count, 2);
+    cr_assert_eq(ref1, smart_ptr);
+    cr_assert_eq(ref2, smart_ptr);
+    smart_ptr_free(ref1);
+    cr_assert_eq(smart_ptr->ref_count, 1);
     smart_ptr_free(smart_ptr);
 }
 
