@@ -5,11 +5,14 @@
 ** zappy_server.c
 */
 
+#include <stdlib.h>
+#include <time.h>
 #include "app.h"
 #include "types/args.h"
 
 int app_run(app_t *app)
 {
+    srandom(time(NULL));
     while (app->running)
         app_run_pipeline(app);
     server_close_all_connections(app->server);

@@ -7,7 +7,6 @@
 
 #include <unistd.h>
 #include <memory.h>
-#include <stdio.h>
 #include "types/controller.h"
 #include "log.h"
 

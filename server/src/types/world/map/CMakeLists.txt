@@ -3,4 +3,6 @@ target_sources(zappy_server_core PUBLIC
         free.c
         cell/init.c
         cell/free.c
+        add.c
+        remove.c
 )

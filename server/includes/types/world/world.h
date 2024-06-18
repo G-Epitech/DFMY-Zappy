@@ -12,6 +12,7 @@
 #include "chrono.h"
 #include "resource.h"
 #include "types/list.h"
+#include "types/world/player.h"
 
 // @brief Structure representing a Trantorian world
 typedef struct world_s {
@@ -29,6 +30,8 @@ typedef struct world_s {
     time_unit_t next_event_delay;
     // @brief List of incantations in the world
     list_t *incantations;
+    // @brief The current number that will be assigned to the next player
+    size_t next_player_id;
 } world_t;
 
 /**
@@ -44,3 +47,25 @@ world_t *world_new(vector2u_t map_size, size_t frequency);
  * @param world World to free
  */
 void world_free(world_t *world);
+
+/**
+ * @brief Register a player in the world
+ * @param world World to register the player in
+ * @param player Player to register
+ */
+void world_player_register(world_t *world, player_t *player);
+
+/**
+ * @brief Add a player to the world
+ * @param world World to add the player to
+ * @param player Player to add
+ * @return Success status
+ */
+bool world_add_player(world_t *world, player_t *player);
+
+/**
+ * @brief Remove a player from the world
+ * @param world World to remove the player from
+ * @param player Player to remove
+ */
+void world_remove_player(world_t *world, player_t *player);
