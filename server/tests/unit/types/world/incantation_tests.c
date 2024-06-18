@@ -47,16 +47,17 @@ Test(incantation_tests, new_incantation_fail_due_to_players_list_new)
 
 Test(incantation_tests, new_incantation_fail_due_to_add_player)
 {
-    clcc_return_value_after(malloc, NULL, 1);
-    clcc_enable_control(malloc);
     cr_assert_null(incantation_new(7, NULL));
-    clcc_disable_control(malloc);
 }
 
 Test(incantation_tests, free_incantation)
 {
-    incantation_t *incantation = incantation_new(7, NULL);
+    player_controller_t *requester = calloc(1, sizeof(player_controller_t));
+    player_t *player = player_new(requester, NULL, (vector2u_t) { 1, 1 });
+    incantation_t *incantation = incantation_new(7, player);
 
+    player_free(player);
+    free(requester);
     incantation_free(incantation);
 }
 
@@ -68,10 +69,12 @@ Test(incantation_tests, free_null_incantation)
 Test(incantation_tests, free_list_of_incantations)
 {
     list_t *incantations = list_new();
+    player_t *players[5] = { NULL };
 
     cr_assert_eq(incantations->len, 0);
     for (int i = 0; i < 5; i++) {
-        incantation_t *incantation = incantation_new(7, NULL);
+        players[i] = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+        incantation_t *incantation = incantation_new(7, players[i]);
 
         cr_assert_not_null(incantation);
         list_push(incantations, NODE_DATA_FROM_PTR(incantation));
@@ -81,6 +84,8 @@ Test(incantation_tests, free_list_of_incantations)
     list_clear(incantations, &incantation_free_as_node_data);
     cr_assert_eq(incantations->len, 0);
     list_free(incantations, NULL);
+    for (int i = 0; i < 5; i++)
+        player_free(players[i]);
 }
 
 Test(incantation_tests, simple_add_player)

@@ -5,11 +5,17 @@
 ** new.c
 */
 
+#include "types/world/player.h"
 #include "types/world/incantation.h"
 
 bool incantation_add_player(incantation_t *incantation, player_t *player)
 {
-    return list_push(incantation->players, NODE_DATA_FROM_PTR(player));
+    if (!player || player->incantation)
+        return false;
+    if (!list_push(incantation->players, NODE_DATA_FROM_PTR(player)))
+        return false;
+    player->incantation = incantation;
+    return true;
 }
 
 void incantation_remove_player(incantation_t *incantation, player_t *player)
@@ -21,4 +27,6 @@ void incantation_remove_player(incantation_t *incantation, player_t *player)
         list_erase(incantation->players, node, NULL);
     if (player == incantation->requester)
         incantation->requester = NULL;
+    if (player->incantation == incantation)
+        player->incantation = NULL;
 }
