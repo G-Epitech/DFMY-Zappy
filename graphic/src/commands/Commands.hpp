@@ -10,8 +10,7 @@
 #include "types/Map.hpp"
 #include "client/Client.hpp"
 #include "constants/Broadcast.hpp"
-
-#define PLAYER_SCALE 0.6f
+#include "constants/Player.hpp"
 
 class Commands {
 public:

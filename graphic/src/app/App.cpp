@@ -96,7 +96,7 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
             _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
             continue;
         }
-        circle.radius += evt.timeSinceLastFrame * 3.0f; // Adjust the speed as needed
+        circle.radius += evt.timeSinceLastFrame * BROADCAST_SPEED;
         circle.circle->beginUpdate(0);
         for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
         {
