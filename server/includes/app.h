@@ -25,7 +25,7 @@ typedef struct app_s {
     volatile bool running;
 } app_t;
 
-// @brief Middleware function
+// @brief App step function prototype
 typedef void (*app_step_t)(app_t *app);
 
 /**
