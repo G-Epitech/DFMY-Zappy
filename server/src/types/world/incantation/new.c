@@ -12,6 +12,7 @@ void incantation_init(incantation_t *incantation,
 {
     incantation->cell = cell;
     incantation->level = level;
+    incantation->cooldown = INCANTATION_DURATION;
 }
 
 incantation_t *incantation_new(map_cell_t *cell,

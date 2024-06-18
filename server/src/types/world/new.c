@@ -23,24 +23,10 @@ bool world_create_teams(world_t *world, char **teams_names, size_t min_slots)
 
     while (teams_names[i]) {
         team = team_new(teams_names[i], min_slots);
-        if (!team || !list_push(world->teams, NODE_DATA_FROM_PTR(team)))
+        if (!team || !list_push(world->teams, NODE_DATA_FROM_PTR(team))) {
+            team_free(team);
             break;
-        i += 1;
-    }
-    if (teams_names[i])
-        list_clear(world->teams, &team_free_as_node_data);
-    return teams_names[i] == NULL;
-}
-
-bool world_create_teams(world_t *world, char **teams_names, size_t min_slots)
-{
-    size_t i = 0;
-    team_t *team = NULL;
-
-    while (teams_names[i]) {
-        team = team_new(teams_names[i], min_slots);
-        if (!team || !list_push(world->teams, NODE_DATA_FROM_PTR(team)))
-            break;
+        }
         i += 1;
     }
     if (teams_names[i])

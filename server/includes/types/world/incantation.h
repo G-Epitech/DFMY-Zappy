@@ -11,12 +11,17 @@
 #include "types/controller.h"
 #include "map.h"
 
+// @brief Duration of an incantation
+#define INCANTATION_DURATION 300
+
 // @brief Represents a world incantation
 typedef struct incantation_s {
     // @brief List of players involved in the incantation
     list_t *players;
     // @brief Map cell
     map_cell_t *cell;
+    // @brief Incantation cooldown
+    time_unit_t cooldown;
     // @brief The level of the incantation
     unsigned int level;
 } incantation_t;

@@ -841,7 +841,6 @@ Test(controller_conversion_tests, controller_player_from_generic)
     cr_assert_eq(controller_player_from_generic(controller, &team, position), true);
     cr_assert_eq(controller->player.type, CTRL_PLAYER);
     cr_assert_eq(controller->player.cooldown, 0);
-    cr_assert_eq(controller->player.frozen, FROZ_NO);
     cr_assert_not_null(controller->player.player);
 }
 

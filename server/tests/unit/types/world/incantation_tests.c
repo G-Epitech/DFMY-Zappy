@@ -16,6 +16,7 @@ Test(incantation_tests, new_incantation)
     incantation_t *incantation = incantation_new(&cell, 1);
 
     cr_assert_not_null(incantation);
+    cr_assert_eq(incantation->cooldown, INCANTATION_DURATION);
     cr_assert_eq(incantation->level, 1);
     cr_assert_eq(incantation->cell, &cell);
     cr_assert_not_null(incantation->players);
