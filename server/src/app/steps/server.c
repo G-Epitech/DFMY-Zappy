@@ -7,7 +7,7 @@
 
 #include "app.h"
 
-void app_handle_server_logic(app_t *app)
+void app_handle_server_connections(app_t *app)
 {
     timeval_t timeout = { 10, 0 };
 
