@@ -198,6 +198,7 @@ Test(player_set_object_tests, set_object)
     cr_assert_eq(player_set_object(world->map, player, RES_FOOD), true);
     cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 1);
     cr_assert_eq(player->inventory[RES_FOOD], 0);
+    cr_assert_float_eq(player->lives, 0.0f, 0.0001f, "Player lives: %f", player->lives);
     cr_assert_eq(player_set_object(world->map, player, RES_LINEMATE), false);
     cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], 0);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
@@ -222,6 +223,8 @@ Test(player_set_object_tests, discard_food_until_failure)
     cr_assert_eq(player_set_object(world->map, player, RES_FOOD), false);
 }
 
+#include <stdio.h>
+
 Test(player_set_object_tests, discard_food_near_death)
 {
     vector2u_t size = { 6, 6 };
@@ -231,11 +234,14 @@ Test(player_set_object_tests, discard_food_near_death)
     player_t *player = player_new(NULL, team, position);
 
     world_add_player(world, player);
-    player->inventory[RES_FOOD] = 1;
+    player->inventory[RES_FOOD] = 0;
     player->lives = 125;
     cr_assert_eq(player_set_object(world->map, player, RES_FOOD), false);
+    player->inventory[RES_FOOD] = 1;
     player->lives = 126;
     cr_assert_eq(player_set_object(world->map, player, RES_FOOD), true);
+    cr_assert_float_eq(player->lives, 0.0f, 0.0001f);
+    cr_assert_eq(player->inventory[RES_FOOD], 0);
 }
 
 Test(player_set_object_tests, set_object_with_null_map)

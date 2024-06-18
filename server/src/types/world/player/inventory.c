@@ -15,13 +15,7 @@ bool player_set_inventory_resource(player_t *player, resource_t resource,
     if ((int)(player->inventory[resource] + quantity) < 0)
         return false;
     if (resource == RES_FOOD) {
-        lives += (float)quantity * PLAYER_LIFE_UNITS_PER_FOOD;
-        if (lives < 0)
-            return false;
-        if (lives == 0) {
-            player->inventory[RES_FOOD] = 0;
-            return true;
-        }
+        lives += (float) quantity * PLAYER_LIFE_UNITS_PER_FOOD;
         player_update_lives(player, lives);
     } else {
         player->inventory[resource] += quantity;
