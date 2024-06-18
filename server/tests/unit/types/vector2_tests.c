@@ -10,9 +10,10 @@
 
 Test(vector2, test_vector2_create)
 {
-    vector2u_t vec = {0};
+    vector2u_t vec = {10, 10};
+    vector2u_t vec2 = {10, 10};
 
-    vec = vector2u_random((vector2u_t){10, 10});
+    vector2u_random(&vec, &vec2);
     cr_assert_neq(vec.x, 0);
     cr_assert_neq(vec.y, 0);
     cr_assert_neq(vec.x, 10);

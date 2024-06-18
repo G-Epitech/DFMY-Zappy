@@ -237,10 +237,3 @@ void fd_states_unset(fd_states_t *states, int fd, int flags);
  * @param flags States to clear
  */
 void fd_states_clear(fd_states_t *states, int flags);
-
-/**
- * @brief Register a new player to the server by assigning it a number
- * @param server The server to register the player to
- * @param player The player to register
- */
-void world_player_register(server_t *server, player_t *player);

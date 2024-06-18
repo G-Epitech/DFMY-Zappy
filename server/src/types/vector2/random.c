@@ -8,11 +8,8 @@
 #include <stdlib.h>
 #include "types/vector2.h"
 
-vector2u_t vector2u_random(vector2u_t max)
+void vector2u_random(vector2u_t *out, vector2u_t *max)
 {
-    vector2u_t result = {0};
-
-    result.x = random() % max.x;
-    result.y = random() % max.y;
-    return result;
+    out->x = random() % max->x;
+    out->y = random() % max->y;
 }

@@ -29,16 +29,16 @@ static void increment_player_position(map_t *map, player_t *player)
 void player_forward(map_t *map, player_t *player)
 {
     node_t *node = NULL;
-    map_cell_t cell;
+    map_cell_t *cell;
 
     if (!map || !player)
         return;
-    cell = map->cells[player->position.y][player->position.x];
-    node = list_find(cell.players, NODE_DATA_FROM_PTR(player));
+    cell = &(map->cells[player->position.y][player->position.x]);
+    node = list_find(cell->players, NODE_DATA_FROM_PTR(player));
     if (!node)
         return;
-    list_erase(cell.players, node, NULL);
+    list_pop(cell->players, node);
     increment_player_position(map, player);
-    cell = map->cells[player->position.y][player->position.x];
-    list_push(cell.players, NODE_DATA_FROM_PTR(player));
+    cell = &(map->cells[player->position.y][player->position.x]);
+    list_append(cell->players, node);
 }

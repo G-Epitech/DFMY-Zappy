@@ -16,7 +16,7 @@ typedef struct vector2u_s {
 
 /**
  * @brief Get a random vector2u_t
- * @param max Max values for x and y
- * @return Randomized vector2u_t
+ * @brief out The output vector2u_t
+ * @brief max The maximum values for the random vector2u_t
  */
-vector2u_t vector2u_random(vector2u_t max);
+void vector2u_random(vector2u_t *out, vector2u_t *max);
