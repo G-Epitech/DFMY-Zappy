@@ -154,3 +154,40 @@ Test(run_tests, run_fail_due_to_bind, .init = cr_redirect_stderr)
     clcc_disable_control(bind);
     cr_assert_eq(status, APP_EXIT_FAILURE);
 }
+
+Test(run_tests, run_fail_due_to_world_creation, .init = cr_redirect_stderr)
+{
+    char *av[] = {"./zappy_server",
+        "-p", "4242",
+        "-x", "10",
+        "-y", "10",
+        "-n", "team1", "team2",
+        "-c", "10",
+        "-f", "100",
+    };
+    int ac = 14;
+    int status;
+
+    clcc_return_value_after(calloc, NULL, 2);
+    clcc_enable_control(calloc);
+    status = app_start(ac, av);
+    clcc_disable_control(calloc);
+    cr_assert_eq(status, APP_EXIT_FAILURE);
+    cr_assert_stderr_eq_str("Failed to create world\n");
+}
+
+Test(run_tests, select_timeout)
+{
+    app_t app = { 0 };
+    timeval_t timeout = { 0, 0 };
+    controller_t *controller = controller_new(0);
+
+    app_init(&app);
+    app.server = server_new();
+    app.world = world_new((vector2u_t) { 10, 10 }, 2);
+    list_push(app.server->controllers, NODE_DATA_FROM_PTR(controller));
+    app.world->next_event_delay = 10;
+    app_handle_timeout(&app, &timeout);
+    cr_assert_eq(timeout.tv_sec, 5);
+    cr_assert_eq(timeout.tv_usec, 0);
+}

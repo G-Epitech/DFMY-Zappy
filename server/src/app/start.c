@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "app.h"
 #include "types/args.h"
+#include "types/vector2.h"
 
 bool app_create_world(app_t *app)
 {

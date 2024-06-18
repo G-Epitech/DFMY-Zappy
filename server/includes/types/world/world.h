@@ -58,6 +58,19 @@ bool world_create_teams(world_t *world, char **teams_names, size_t min_slots);
 void world_free(world_t *world);
 
 /**
+ * @brief Check the delay of the next event to see if it needs to be updated
+ * @param world World to check
+ * @param event_delay Delay of the event to check
+ */
+void world_register_event(world_t *world, time_unit_t event_delay);
+
+/**
+ * @brief Reset the delay of the next event to -1
+ * @param world World to reset the event delay in
+ */
+void world_reset_event_delay(world_t *world);
+
+/**
  * @brief Register a player in the world
  * @param world World to register the player in
  * @param player Player to register
