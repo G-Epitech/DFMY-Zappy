@@ -70,3 +70,41 @@ Test(map_tests, map_alloc_fail)
     cr_assert_null(map_new(size));
     clcc_disable_control(calloc);
 }
+
+Test(map_add_resource_tests, add_resource_to_null_cell)
+{
+    vector2u_t position = { 4, 4 };
+
+    map_add_resource(NULL, position, RES_FOOD, 1);
+}
+
+Test(map_remove_resource_tests, remove_resource_from_null_cell)
+{
+    vector2u_t position = { 4, 4 };
+
+    map_remove_resource(NULL, position, RES_FOOD, 1);
+}
+
+Test(map_remove_resource_tests, remove_resource_from_cell)
+{
+    vector2u_t size = { 6, 6 };
+    vector2u_t position = { 4, 4 };
+    world_t *world = world_new(size, 100);
+
+    map_add_resource(world->map, position, RES_FOOD, 1);
+    map_remove_resource(world->map, position, RES_FOOD, 1);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
+    world_free(world);
+}
+
+Test(map_remove_resource_tests, remove_resource_empty_cell)
+{
+    vector2u_t size = { 6, 6 };
+    vector2u_t position = { 4, 4 };
+    world_t *world = world_new(size, 100);
+
+    map_remove_resource(world->map, position, RES_FOOD, 1);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
+    world_free(world);
+}
+

@@ -128,8 +128,8 @@ Test(chrono_tests, time_unit_to_timeval_with_freq_10)
     chrono_units_to_timeval(&chrono, 1, &tv);
 
     // Assert
-    cr_assert_eq(tv.tv_sec, 0, "tv.tv_sec = %ld", tv.tv_sec);
-    cr_assert_eq(tv.tv_usec, 100000, "tv.tv_usec = %ld", tv.tv_usec);
+    cr_assert_eq(tv.tv_sec, 0);
+    cr_assert_eq(tv.tv_usec, 100000);
 }
 
 Test(chrono_tests, time_unit_to_timeval_with_freq_1)

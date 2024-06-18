@@ -14,11 +14,10 @@
 static bool controller_add_emission_final(controller_t *controller,
     smart_ptr_t *buffer_ptr, size_t buffer_size, int flags)
 {
-    emission_t *emission = NULL;
+    emission_t *emission = emission_new(buffer_ptr, buffer_size, flags);
     char *buffer = NULL;
     bool success = false;
 
-    emission = emission_new(buffer_ptr, buffer_size, flags);
     if (!emission) {
         smart_ptr_free(buffer_ptr);
         return false;

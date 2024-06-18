@@ -10,6 +10,8 @@
 #include "list.h"
 #include "types/request.h"
 #include "types/world/chrono.h"
+#include "types/world/team.h"
+#include "types/vector2.h"
 #include "smart_ptr.h"
 #include "emission.h"
 
@@ -214,3 +216,13 @@ void controller_handle_buffer(controller_t *controller,
  * @return Success of emission termination
  */
 bool controller_end_emission(controller_t *controller);
+
+/**
+ * @brief Initialize a player controller from a generic controller
+ * @param controller Controller to initialize
+ * @param team Player team
+ * @param position Player position
+ * @return Success status
+ */
+bool controller_player_from_generic(controller_t *controller, team_t *team,
+    vector2u_t position);
