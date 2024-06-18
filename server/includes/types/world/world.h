@@ -65,6 +65,12 @@ void world_free(world_t *world);
 void world_register_event(world_t *world, time_unit_t event_delay);
 
 /**
+ * @brief Reset the delay of the next event to -1
+ * @param world World to reset the event delay in
+ */
+void world_reset_event_delay(world_t *world);
+
+/**
  * @brief Register a player in the world
  * @param world World to register the player in
  * @param player Player to register
