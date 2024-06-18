@@ -42,6 +42,7 @@ void app_init(app_t *app)
 {
     app->running = true;
     app->server = NULL;
+    app->world = NULL;
     args_init(&app->args);
     app_sig_handlers_target(app, true);
     app_setup_sig_handlers();
