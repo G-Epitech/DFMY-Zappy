@@ -11,12 +11,13 @@
 
 Test(incantation_tests, new_incantation)
 {
+    map_cell_t cell = { 0 };
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
-    incantation_t *incantation = incantation_new(requester, 1);
+    incantation_t *incantation = incantation_new(&cell, 1);
 
     cr_assert_not_null(incantation);
     cr_assert_eq(incantation->level, 1);
-    cr_assert_eq(incantation->requester, requester);
+    cr_assert_eq(incantation->cell, &cell);
     cr_assert_not_null(incantation->players);
     cr_assert_eq(incantation->players->len, 0);
     incantation_free(incantation);
@@ -25,28 +26,31 @@ Test(incantation_tests, new_incantation)
 
 Test(incantation_tests, new_incantation_fail_due_to_calloc)
 {
+    map_cell_t cell = { 0 };
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
 
     clcc_return_now(calloc, NULL);
-    cr_assert_null(incantation_new(requester, 1));
+    cr_assert_null(incantation_new(&cell, 1));
     clcc_disable_control(calloc);
     free(requester);
 }
 
 Test(incantation_tests, new_incantation_fail_due_to_players_list_new)
 {
+    map_cell_t cell = { 0 };
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
 
     clcc_return_now(malloc, NULL);
-    cr_assert_null(incantation_new(requester, 1));
+    cr_assert_null(incantation_new(&cell, 1));
     clcc_disable_control(malloc);
     free(requester);
 }
 
 Test(incantation_tests, free_incantation)
 {
+    map_cell_t cell = { 0 };
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
-    incantation_t *incantation = incantation_new(requester, 1);
+    incantation_t *incantation = incantation_new(&cell, 1);
 
     incantation_free(incantation);
     free(requester);
@@ -59,12 +63,13 @@ Test(incantation_tests, free_null_incantation)
 
 Test(incantation_tests, free_list_of_incantations)
 {
+    map_cell_t cell = { 0 };
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
     list_t *incantations = list_new();
 
     cr_assert_eq(incantations->len, 0);
     for (int i = 0; i < 5; i++) {
-        incantation_t *incantation = incantation_new(requester, i);
+        incantation_t *incantation = incantation_new(&cell, i);
 
         cr_assert_not_null(incantation);
         list_push(incantations, NODE_DATA_FROM_PTR(incantation));
@@ -76,5 +81,3 @@ Test(incantation_tests, free_list_of_incantations)
     list_free(incantations, NULL);
     free(requester);
 }
-
-

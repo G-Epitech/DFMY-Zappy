@@ -19,6 +19,7 @@ void player_init(player_t *player, player_controller_t *controller,
     player->position = position;
     player->direction = PLAYER_DIRECTION_DEFAULT;
     player->id = 0;
+    player->incantation = NULL;
     memset(player->inventory, 0, RES_LEN * sizeof(size_t));
 }
 
