@@ -91,3 +91,9 @@ bool world_add_player(world_t *world, player_t *player);
  * @param player Player to remove
  */
 void world_remove_player(world_t *world, player_t *player);
+
+/**
+ * @brief Generate resources in the world
+ * @param world World to generate resources in
+ */
+void world_routine_resources_generation(world_t *world);

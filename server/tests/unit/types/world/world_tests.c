@@ -246,3 +246,30 @@ Test(world_remove_player_tests, remove_unadded_player_from_everything)
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(incantation->players->len, 1);
 }
+
+Test(world_routine_resource_generation_tests, simple)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    resources_manager_t *res_manager = &world->resources_manager;
+
+    for (resource_t i = 0; i < RES_LEN; i++) {
+        res_manager->stats[i].actual = 8;
+        res_manager->stats[i].limit = 10;
+    }
+    res_manager->next_generation = 0.0f;
+    world_routine_resources_generation(world);
+    for (resource_t i = 0; i < RES_LEN; i++) {
+        cr_assert_eq(res_manager->stats[i].actual, 8);
+    }
+    cr_assert_eq(res_manager->next_generation, RES_MANAGER_NEXT_GENERATION_DELAY);
+    for (resource_t i = 0; i < RES_LEN; i++) {
+        res_manager->stats[i].actual = 8;
+        res_manager->stats[i].limit = 10;
+    }
+    world_routine_resources_generation(world);
+    for (resource_t i = 0; i < RES_LEN; i++) {
+        cr_assert_eq(res_manager->stats[i].actual, 8);
+    }
+    world_free(world);
+}
