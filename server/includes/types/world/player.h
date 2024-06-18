@@ -13,6 +13,7 @@
 #include "types/list.h"
 #include "types/vector2.h"
 #include "types/controller.h"
+#include "incantation.h"
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
@@ -31,6 +32,8 @@ typedef struct player_s {
     vector2u_t position;
     // @brief Level of the player
     size_t level;
+    // @brief Current player incantation
+    incantation_t *incantation;
 } player_t;
 
 /**

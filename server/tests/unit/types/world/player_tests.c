@@ -21,6 +21,7 @@ Test(player_new_tests, simple_new)
     cr_assert_eq(player->lives, 1260);
     cr_assert_eq(player->level, 1);
     cr_assert_null(player->controller);
+    cr_assert_null(player->incantation);
     player_free(player);
     team_free(team);
 }

@@ -8,13 +8,13 @@
 #include "types/world/incantation.h"
 
 void incantation_init(incantation_t *incantation,
-    player_controller_t *requester, unsigned int level)
+    map_cell_t *cell, unsigned int level)
 {
-    incantation->requester = requester;
+    incantation->cell = cell;
     incantation->level = level;
 }
 
-incantation_t *incantation_new(player_controller_t *requester,
+incantation_t *incantation_new(map_cell_t *cell,
     unsigned int level)
 {
     incantation_t *incantation = calloc(1, sizeof(incantation_t));
@@ -26,6 +26,6 @@ incantation_t *incantation_new(player_controller_t *requester,
         incantation_free(incantation);
         return NULL;
     }
-    incantation_init(incantation, requester, level);
+    incantation_init(incantation, cell, level);
     return incantation;
 }
