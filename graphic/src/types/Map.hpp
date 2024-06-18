@@ -11,10 +11,17 @@
 #include <Ogre.h>
 #include "Egg.hpp"
 #include "Player.hpp"
+#include "constants/Broadcast.hpp"
 
 struct Tile {
     std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
     Ogre::SceneNode *node = nullptr;
+};
+
+struct Circle {
+    Ogre::ManualObject *circle = nullptr;
+    Ogre::SceneNode *node = nullptr;
+    float radius = BROADCAST_CIRCLE_RADIUS;
 };
 
 struct Map {
@@ -25,4 +32,7 @@ struct Map {
     int timeUnit = 0;
     std::vector<std::string> teams = {};
     std::vector<Egg> eggs = {};
+    std::vector<Circle> broadcastCircles = {};
 };
+
+bool operator==(const Circle &lhs, const Circle &rhs);

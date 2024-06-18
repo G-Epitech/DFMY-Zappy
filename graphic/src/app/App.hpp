@@ -13,6 +13,9 @@
 #include "client/Client.hpp"
 #include "types/Map.hpp"
 
+#define BROADCAST_CIRCLE_MAX_RADIUS 5.0f
+#define BROADCAST_CIRCLE_SEGMENTS 100
+
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
 

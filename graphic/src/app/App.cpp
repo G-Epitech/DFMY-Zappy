@@ -32,7 +32,7 @@ App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
     this->_commands["pdi"] = &Commands::player_death;
     this->_commands["enw"] = &Commands::player_egg_laid;
     this->_commands["edi"] = &Commands::egg_death;
-    this->_commands["eht"] = &Commands::egg_hatching;
+    this->_commands["ebo"] = &Commands::egg_hatching;
     this->_commands["sgt"] = &Commands::time_unit_request;
     this->_commands["sst"] = &Commands::time_unit_modification;
     this->_commands["seg"] = &Commands::end_game;
@@ -87,6 +87,24 @@ void App::setup() {
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
+    for (auto &circle : _map.broadcastCircles) {
+        if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
+            if (circle.circle) {
+                scnMgr->destroyManualObject(circle.circle);
+                circle.circle = nullptr;
+            }
+            _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
+            continue;
+        }
+        circle.radius += evt.timeSinceLastFrame * 3.0f; // Adjust the speed as needed
+        circle.circle->beginUpdate(0);
+        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
+        {
+            float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
+            circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
+        }
+        circle.circle->end();
+    }
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
 

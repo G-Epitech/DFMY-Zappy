@@ -68,6 +68,26 @@ Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &t
     return node;
 }
 
+Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position)
+{
+    Circle circle;
+    circle.circle = scnMgr->createManualObject();
+    circle.node = scnMgr->getRootSceneNode()->createChildSceneNode();
+    circle.node->attachObject(circle.circle);
+    circle.node->setPosition(position);
+    circle.radius = 0;
+
+    circle.circle->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
+    for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
+    {
+        float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
+        circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
+    }
+    circle.circle->end();
+
+    return circle;
+}
+
 void Commands::map_size(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
 {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
@@ -308,8 +328,15 @@ void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scn
     int id = std::stoi(args[0]);
     std::string message = args[1];
 
-    // TODO: Implement broadcast animation
-    std::cout << "Player " << id << " broadcasted: " << message << std::endl;
+    for (auto &player : map.players)
+    {
+        if (player.id == id)
+        {
+            Circle circle = _createBroadcastCircle(scnMgr, player.node->getPosition());
+            map.broadcastCircles.push_back(circle);
+            return;
+        }
+    }
 }
 
 void Commands::incantation_start(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
@@ -458,7 +485,7 @@ void Commands::egg_hatching(std::string &command, Map &map, Ogre::SceneManager *
 
     if (args.size() != 1)
         return;
-    int egg_id = std::stoi(args[1]);
+    int egg_id = std::stoi(args[0]);
 
     // TODO: Implement egg hatching animation
 }
