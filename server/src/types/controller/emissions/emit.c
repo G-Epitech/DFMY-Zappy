@@ -48,13 +48,15 @@ void controller_emit(controller_t *controller)
 {
     emission_t *emission = NULL;
     node_t *node = NULL;
+    node_t *next = NULL;
 
     if (!controller)
         return;
     node = controller->generic.emissions->first;
     while (node) {
+        next = node->next;
         emission = NODE_DATA_TO_PTR(node->data, emission_t *);
         controller_handle_emit_write(controller, node, emission);
-        node = node->next;
+        node = next;
     }
 }

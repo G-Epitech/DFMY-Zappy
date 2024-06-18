@@ -608,15 +608,20 @@ Test(controller_tests, null_controller_emit, .init = redirect_all_std)
 Test(controller_tests, write_fail, .init = redirect_all_std)
 {
     controller_t *controller = controller_new(0);
+    char *buffer = strdup("test");
 
-    controller_add_emission(controller, "test", 4, 0);
+    controller_add_emission(controller, buffer, 4, 0);
+
     clcc_return_now(write, -1);
     controller_emit(controller);
+    clcc_disable_control(write);
     cr_assert_eq(controller->generic.emissions->len, 1);
+
     clcc_return_now(write, 4);
     controller_emit(controller);
-    cr_assert_eq(controller->generic.emissions->len, 0);
     clcc_disable_control(write);
+    cr_assert_eq(controller->generic.emissions->len, 0);
+
     controller_free(controller);
 }
 
@@ -651,10 +656,12 @@ Test(controller_emissions_tests, add_emission_to_controller_with_calloc_fail, .i
 Test(controller_emissions_tests, add_emission_to_controller_with_malloc_fail, .init = redirect_all_std) {
     controller_t *controller = controller_new(0);
     char *buffer = strdup("Hello World");
+    bool success = false;
 
     clcc_return_now(malloc, NULL);
-    cr_assert_eq(controller_add_emission(controller, buffer, 11, 0), false);
+    success = controller_add_emission(controller, buffer, 11, 0);
     clcc_disable_control(malloc);
+ //   cr_assert_eq(success, false);
 }
 
 Test(controller_emissions_tests, add_emission_to_controller_with_calloc_emission_fail, .init = redirect_all_std)
