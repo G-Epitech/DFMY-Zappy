@@ -12,6 +12,10 @@ void app_handle_timeout(app_t *app, timeval_t *timeout)
     if (app->server->controllers->len == 0) {
         timeout = NULL;
     } else {
+        if (app->world->next_event_delay == -1) {
+            timeout = NULL;
+            return;
+        }
         chrono_units_to_timeval(&app->world->chrono,
             app->world->next_event_delay, timeout);
     }
