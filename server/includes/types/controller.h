@@ -21,16 +21,6 @@
 // Forward declaration
 typedef struct player_s player_t;
 
-// Frozen state of a player
-typedef enum frozen_state_e {
-    // @brief Not frozen
-    FROZ_NO,
-    // @brief Frozen by himself
-    FROZ_HIMSELF,
-    // @brief Frozen by another player
-    FROZ_BY_OTHER
-} frozen_state_t;
-
 // @brief Controller types
 typedef enum controller_type_e {
     // @brief Unknown controller
@@ -82,8 +72,6 @@ typedef struct player_controller_s {
     player_t *player;
     // @brief Player cooldown (time units locked for)
     time_unit_t cooldown;
-    // @brief Specify if the player is frozen by an incantation
-    frozen_state_t frozen;
 } player_controller_t;
 
 // @brief Represent a controller

@@ -25,6 +25,7 @@ Test(player_new_tests, simple_new)
     cr_assert_eq(player->direction, PLAYER_DIRECTION_DEFAULT);
     cr_assert_eq(player->id, 0);
     cr_assert_null(player->controller);
+    cr_assert_null(player->incantation);
     player_free(player);
     team_free(team);
 }

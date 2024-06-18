@@ -14,10 +14,10 @@
 #include "types/vector2.h"
 #include "types/controller.h"
 #include "types/world/map.h"
+#include "types/world/incantation.h"
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
-
 // @brief Default player direction
 #define PLAYER_DIRECTION_DEFAULT DIR_NORTH
 // @brief Player direction offset when turning left or right
@@ -51,6 +51,8 @@ typedef struct player_s {
     vector2u_t position;
     // @brief Level of the player
     size_t level;
+    // @brief Current player incantation
+    incantation_t *incantation;
     // @brief Direction of the player
     player_direction_t direction;
     // @brief Player number
