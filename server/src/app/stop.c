@@ -10,8 +10,8 @@
 
 int app_exit(app_t *app, int code)
 {
-    server_free(app->server);
     world_free(app->world);
+    server_free(app->server);
     app_sig_handlers_target(NULL, true);
     args_free(&app->args);
     return code;

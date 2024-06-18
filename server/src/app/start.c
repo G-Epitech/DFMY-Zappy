@@ -20,6 +20,22 @@ bool app_create_world(app_t *app)
     return true;
 }
 
+bool app_create_world(app_t *app)
+{
+    vector2u_t map_size = { app->args.width, app->args.height };
+
+    app->world = world_new(map_size, app->args.frequency);
+    if (!app->world)
+        return fprintf(stderr, "Failed to create world\n") && false;
+    if (!world_create_teams(app->world, app->args.teams,
+        app->args.clients_nb)
+    ) {
+        world_free(app->world);
+        return fprintf(stderr, "Failed to create teams\n") && false;
+    }
+    return true;
+}
+
 bool app_create_and_start_server(app_t *app)
 {
     app->server = server_new();
