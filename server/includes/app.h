@@ -101,3 +101,9 @@ void app_handle_server_connections(app_t *app);
  * @param timeout Timeout to change
  */
 void app_handle_timeout(app_t *app, timeval_t *timeout);
+
+/**
+ * @brief Handle application routines step
+ * @param app Application to handle the routines
+ */
+void app_handle_routines(app_t *app);

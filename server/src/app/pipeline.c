@@ -9,7 +9,8 @@
 
 // @brief Application steps
 static const app_step_t app_pipeline[] = {
-    &app_handle_server_connections
+    &app_handle_server_connections,
+    &app_handle_routines,
 };
 
 // @brief Application steps size
