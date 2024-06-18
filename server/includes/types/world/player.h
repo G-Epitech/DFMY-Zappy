@@ -57,8 +57,6 @@ typedef struct player_s {
     player_direction_t direction;
     // @brief Player number
     size_t id;
-    // @brief Current player incantation
-    incantation_t *incantation;
 } player_t;
 
 /**
