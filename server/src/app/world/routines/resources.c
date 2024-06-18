@@ -36,5 +36,5 @@ void world_routine_resources_generation(world_t *world)
                 (resource_t)i);
         }
     }
-    resource_manager->next_generation = RES_MANAGER_NEXT_GENERATION_DELAY;
+    resource_manager->next_generation += RES_MANAGER_NEXT_GENERATION_DELAY;
 }
