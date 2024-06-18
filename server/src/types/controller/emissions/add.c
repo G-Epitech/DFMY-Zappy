@@ -19,8 +19,10 @@ static bool controller_add_emission_final(controller_t *controller,
     bool success = false;
 
     emission = emission_new(buffer_ptr, buffer_size, flags);
-    if (!emission)
+    if (!emission) {
+        smart_ptr_free(buffer_ptr);
         return false;
+    }
     buffer = SMART_PTR_CAST(char *, buffer_ptr);
     success = list_push(controller->generic.emissions,
                         NODE_DATA_FROM_PTR(emission));
@@ -39,7 +41,6 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     size_t buffer_size, int flags)
 {
     smart_ptr_t *buffer_ptr = NULL;
-    bool success = false;
 
     if (!controller || !buffer ||
         controller->generic.state == CTRL_DISCONNECTED
@@ -49,12 +50,8 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     buffer_ptr = smart_ptr_new(buffer);
     if (!buffer_ptr)
         return false;
-    success = controller_add_emission_final(controller, buffer_ptr,
+    return controller_add_emission_final(controller, buffer_ptr,
         buffer_size, flags);
-    if (!success) {
-        smart_ptr_free(buffer_ptr);
-    }
-    return success;
 }
 
 bool controllers_add_emission(list_t *controllers,

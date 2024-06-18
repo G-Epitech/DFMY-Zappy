@@ -4,4 +4,6 @@ target_sources(zappy_server_core PUBLIC
         usage.c
         stop.c
         init.c
+        pipeline.c
+        steps/server.c
 )
