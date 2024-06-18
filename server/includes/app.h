@@ -94,3 +94,10 @@ void app_run_pipeline(app_t *app);
  * @param app Application to handle the server connections
  */
 void app_handle_server_connections(app_t *app);
+
+/**
+ * @brief Handle server select timeout
+ * @param app Application to handle the server select timeout
+ * @param timeout Timeout to change
+ */
+void app_handle_timeout(app_t *app, timeval_t *timeout);

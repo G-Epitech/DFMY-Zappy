@@ -125,3 +125,17 @@ Test(world_free_tests, free_null_map_cell)
 {
     map_cell_free(NULL);
 }
+
+Test(world_register_event, simple)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+
+    world_register_event(world, 10);
+    cr_assert_eq(world->next_event_delay, 10);
+    world_register_event(world, 5);
+    cr_assert_eq(world->next_event_delay, 5);
+    world_register_event(world, 6);
+    cr_assert_eq(world->next_event_delay, 5);
+    world_free(world);
+}

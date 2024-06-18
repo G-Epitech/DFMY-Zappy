@@ -7,7 +7,7 @@
 
 #include "app.h"
 
-static void app_handle_timeout(app_t *app, timeval_t *timeout)
+void app_handle_timeout(app_t *app, timeval_t *timeout)
 {
     if (app->server->controllers->len == 0) {
         timeout = NULL;
