@@ -88,6 +88,17 @@ Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::
     return circle;
 }
 
+Sphere Commands::_createIncantationSphere(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position)
+{
+    Sphere sphere;
+    sphere.sphere = scnMgr->createManualObject();
+    sphere.node = scnMgr->getRootSceneNode()->createChildSceneNode();
+    sphere.node->attachObject(sphere.sphere);
+    sphere.node->setPosition(position);
+
+    return sphere;
+}
+
 void Commands::map_size(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
 {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
@@ -139,7 +150,7 @@ void Commands::tile_content(std::string &command, Map &map, Ogre::SceneManager *
         return;
     int food = std::stoi(args[2]) - map.tiles[x][y].items["food"].size();
     std::vector<int> stones;
-    for (int i = 0; i < stonesNames.size(); i++)
+    for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++)
     {
         stones.push_back(std::stoi(args[3 + i]) - map.tiles[x][y].items[stonesNames[i]].size());
     }
@@ -350,7 +361,8 @@ void Commands::incantation_start(std::string &command, Map &map, Ogre::SceneMana
     int level = std::stoi(args[2]);
 
     // TODO: Implement incantation animation
-    std::cout << "Incantation started at " << x << ", " << y << " for level " << level << std::endl;
+    Sphere sphere = _createIncantationSphere(scnMgr, map.tiles[x][y].node->getPosition());
+    map.incantationSpheres.push_back(sphere);
 }
 
 void Commands::incantation_end(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
@@ -364,7 +376,15 @@ void Commands::incantation_end(std::string &command, Map &map, Ogre::SceneManage
     int level = std::stoi(args[2]);
 
     // TODO: Implement incantation animation
-    std::cout << "Incantation ended at " << x << ", " << y << " for level " << level << std::endl;
+    for (auto &sphere : map.incantationSpheres)
+    {
+        if (sphere.node->getPosition() == map.tiles[x][y].node->getPosition())
+        {
+            scnMgr->destroySceneNode(sphere.node);
+            map.incantationSpheres.erase(std::remove(map.incantationSpheres.begin(), map.incantationSpheres.end(), sphere), map.incantationSpheres.end());
+            return;
+        }
+    }
 }
 
 void Commands::player_laying_egg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)

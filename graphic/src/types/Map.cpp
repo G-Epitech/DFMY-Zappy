@@ -11,3 +11,8 @@ bool operator==(const Circle &lhs, const Circle &rhs)
 {
     return lhs.node == rhs.node;
 }
+
+bool operator==(const Sphere &lhs, const Sphere &rhs)
+{
+    return lhs.node == rhs.node;
+}

@@ -72,4 +72,19 @@ private:
      * @param evt Frame event
      */
     void _updateBroadcastCircles(const Ogre::FrameEvent &evt);
+
+    /**
+     * @brief Update the incantation spheres
+     * @param evt Frame event
+     */
+    void _updateIncantationSpheres(const Ogre::FrameEvent &evt);
+
+    /**
+     * @brief Update the sphere
+     * @param obj Manual object
+     * @param radius Radius of the sphere
+     * @param rings Number of rings
+     * @param segments Number of segments
+     */
+    void _updateSphere(Ogre::ManualObject* obj, float radius, int rings = BROADCAST_CIRCLE_SEGMENTS, int segments = BROADCAST_CIRCLE_SEGMENTS);
 };

@@ -75,6 +75,12 @@ void App::setup() {
     //     }
     // }
 
+    MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    material->setDiffuse(1, 1, 1, 0.5);
+    material->setAmbient(0, 0.65, 1);
+    material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
+    material->setDepthWriteEnabled(false);
+
     CameraMan *camMan = new CameraMan(camNode);
     camMan->setStyle(CS_ORBIT);
     addInputListener(camMan);
@@ -88,6 +94,8 @@ void App::setup() {
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     _updateBroadcastCircles(evt);
+    _updateIncantationSpheres(evt);
+
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
 
@@ -160,4 +168,64 @@ void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
         }
         circle.circle->end();
     }
+}
+
+void App::_updateIncantationSpheres(const Ogre::FrameEvent &evt) {
+    for (auto &sphere : _map.incantationSpheres) {
+        if (sphere.isGrowing) {
+            sphere.radius += evt.timeSinceLastFrame * INCANTATION_SPHERE_SPEED;
+            if (sphere.radius >= INCANTATION_SPHERE_MAX_RADIUS) {
+                sphere.isGrowing = false;
+            }
+        } else {
+            sphere.radius -= evt.timeSinceLastFrame * INCANTATION_SPHERE_SPEED;
+            if (sphere.radius <= INCANTATION_SPHERE_RADIUS) {
+                sphere.isGrowing = true;
+            }
+        }
+        _updateSphere(sphere.sphere, sphere.radius);
+    }
+}
+
+void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int segments)
+{
+    obj->clear();
+    obj->begin("TransparentMaterial", RenderOperation::OT_TRIANGLE_LIST);
+
+    float fDeltaRingAngle = (Math::PI / rings);
+    float fDeltaSegAngle = (Math::TWO_PI / segments);
+    unsigned short wVerticeIndex = 0;
+
+    // Generate the group of rings for the sphere
+    for (int ring = 0; ring <= rings; ring++)
+    {
+        float r0 = radius * sinf(ring * fDeltaRingAngle);
+        float y0 = radius * cosf(ring * fDeltaRingAngle);
+
+        // Generate the group of segments for the current ring
+        for (int seg = 0; seg <= segments; seg++)
+        {
+            float x0 = r0 * sinf(seg * fDeltaSegAngle);
+            float z0 = r0 * cosf(seg * fDeltaSegAngle);
+
+            // Add one vertex to the strip which makes up the sphere
+            obj->position(x0, y0, z0);
+            obj->normal(Vector3(x0, y0, z0).normalisedCopy());
+            obj->textureCoord((float)seg / (float)segments, (float)ring / (float)rings);
+
+            if (ring != rings)
+            {
+                // each vertex (except the last) has six indices pointing to it
+                obj->index(wVerticeIndex + segments + 1);
+                obj->index(wVerticeIndex);
+                obj->index(wVerticeIndex + segments);
+                obj->index(wVerticeIndex + segments + 1);
+                obj->index(wVerticeIndex + 1);
+                obj->index(wVerticeIndex);
+                wVerticeIndex++;
+            }
+        }
+    }
+
+    obj->end();
 }

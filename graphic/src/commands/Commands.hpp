@@ -44,4 +44,5 @@ private:
     static void _removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity);
     static Ogre::SceneNode *_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile);
     static Circle _createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position);
+    static Sphere _createIncantationSphere(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position);
 };

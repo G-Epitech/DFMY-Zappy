@@ -12,6 +12,7 @@
 #include "Egg.hpp"
 #include "Player.hpp"
 #include "constants/Broadcast.hpp"
+#include "constants/Incantation.hpp"
 
 struct Tile {
     std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
@@ -24,6 +25,13 @@ struct Circle {
     float radius = BROADCAST_CIRCLE_RADIUS;
 };
 
+struct Sphere {
+    Ogre::ManualObject *sphere = nullptr;
+    Ogre::SceneNode *node = nullptr;
+    float radius = INCANTATION_SPHERE_RADIUS;
+    bool isGrowing = true;
+};
+
 struct Map {
     std::vector<std::vector<Tile>> tiles = {};
     std::vector<Player> players = {};
@@ -33,6 +41,8 @@ struct Map {
     std::vector<std::string> teams = {};
     std::vector<Egg> eggs = {};
     std::vector<Circle> broadcastCircles = {};
+    std::vector<Sphere> incantationSpheres = {};
 };
 
 bool operator==(const Circle &lhs, const Circle &rhs);
+bool operator==(const Sphere &lhs, const Sphere &rhs);
