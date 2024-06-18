@@ -5,5 +5,5 @@ target_sources(zappy_server_core PUBLIC
         stop.c
         init.c
         pipeline.c
-        steps/server.c
 )
+add_subdirectory(steps)

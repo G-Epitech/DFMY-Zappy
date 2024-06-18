@@ -40,6 +40,15 @@ typedef struct world_s {
 world_t *world_new(vector2u_t map_size, size_t frequency);
 
 /**
+ * @brief Create teams in a trantorian world
+ * @param world World to create teams in
+ * @param teams_names Teams names
+ * @param min_slots Minimum number of slots in a team
+ * @return Teams success creation status
+ */
+bool world_create_teams(world_t *world, char **teams_names, size_t min_slots);
+
+/**
  * @brief Free a trantorian world
  * @param world World to free
  */
