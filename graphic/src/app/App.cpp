@@ -87,24 +87,7 @@ void App::setup() {
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
-    for (auto &circle : _map.broadcastCircles) {
-        if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
-            if (circle.circle) {
-                scnMgr->destroyManualObject(circle.circle);
-                circle.circle = nullptr;
-            }
-            _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
-            continue;
-        }
-        circle.radius += evt.timeSinceLastFrame * BROADCAST_SPEED;
-        circle.circle->beginUpdate(0);
-        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
-        {
-            float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
-            circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
-        }
-        circle.circle->end();
-    }
+    _updateBroadcastCircles(evt);
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
 
@@ -155,5 +138,26 @@ void App::_updateMap(std::string &command) {
         this->_commands[commandName](params, this->_map, this->scnMgr, this->_client);
     } else {
         std::cerr << "Unknown command: " << commandName << std::endl;
+    }
+}
+
+void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
+    for (auto &circle : _map.broadcastCircles) {
+        if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
+            if (circle.circle) {
+                scnMgr->destroyManualObject(circle.circle);
+                circle.circle = nullptr;
+            }
+            _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
+            continue;
+        }
+        circle.radius += evt.timeSinceLastFrame * BROADCAST_SPEED;
+        circle.circle->beginUpdate(0);
+        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
+        {
+            float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
+            circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
+        }
+        circle.circle->end();
     }
 }

@@ -33,13 +33,27 @@ public:
      */
     bool keyPressed(const OgreBites::KeyboardEvent &evt) override;
 
+    /**
+     * @brief Frame rendering queued event
+     * @param evt Frame event
+     * @return true if the event was handled
+     */
     bool frameRenderingQueued(const Ogre::FrameEvent &evt) override;
 
 private:
+    /// @brief Client object used to communicate with the server
     Client _client;
+
+    /// @brief Tray manager used to display GUI elements
     OgreBites::TrayManager *trayManager;
+
+    /// @brief Scene manager used to manage the scene
     Ogre::SceneManager *scnMgr;
+
+    /// @brief Map of the game with all the tiles, players...
     Map _map;
+
+    /// @brief Map of commands received from the server
     std::map<std::string, std::function<void(std::string &, Map &, Ogre::SceneManager *, Client &)>> _commands;
 
     /**
@@ -52,4 +66,10 @@ private:
      * @param command Command received from the server
      */
     void _updateMap(std::string &command);
+
+    /**
+     * @brief Update the broadcast circles
+     * @param evt Frame event
+     */
+    void _updateBroadcastCircles(const Ogre::FrameEvent &evt);
 };
