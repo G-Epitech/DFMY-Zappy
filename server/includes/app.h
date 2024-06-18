@@ -87,7 +87,7 @@ void app_setup_sig_handlers(void);
 void app_run_pipeline(app_t *app);
 
 /**
- * @brief Handle server logic
- * @param app Application to handle the server logic
+ * @brief Handle server connections
+ * @param app Application to handle the server connections
  */
-void app_handle_server_logic(app_t *app);
+void app_handle_server_connections(app_t *app);

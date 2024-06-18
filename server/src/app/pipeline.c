@@ -8,8 +8,8 @@
 #include "app.h"
 
 // @brief Application steps
-static const app_step_t app_pipeline[] = {*
-    &app_handle_server_logic
+static const app_step_t app_pipeline[] = {
+    &app_handle_server_connections
 };
 
 // @brief Application steps size
