@@ -8,9 +8,15 @@
 #include <stdio.h>
 #include "app.h"
 #include "types/args.h"
+#include "types/vector2.h"
 
 bool app_create_and_start_server(app_t *app)
 {
+    vector2u_t world_size = { app->args.width, app->args.height };
+
+    app->world = world_new(world_size, app->args.frequency);
+    if (!app->world)
+        return fprintf(stderr, "Failed to create world\n") && false;
     app->server = server_new();
     if (!app->server)
         return fprintf(stderr, "Failed to create server\n") && false;

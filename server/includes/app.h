@@ -11,6 +11,7 @@
 #include "log.h"
 #include "types/server.h"
 #include "types/args.h"
+#include "types/world/world.h"
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
@@ -21,6 +22,8 @@ typedef struct app_s {
     server_t *server;
     // @brief Program arguments
     args_t args;
+    // @brief World instance
+    world_t *world;
     // @brief Application running state
     volatile bool running;
 } app_t;

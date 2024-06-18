@@ -5,7 +5,6 @@
 ** stop.c
 */
 
-#include <signal.h>
 #include <stdio.h>
 #include "app.h"
 
@@ -13,6 +12,8 @@ int app_exit(app_t *app, int code)
 {
     if (app->server)
         server_free(app->server);
+    if (app->world)
+        world_free(app->world);
     app_sig_handlers_target(NULL, true);
     args_free(&app->args);
     return code;
