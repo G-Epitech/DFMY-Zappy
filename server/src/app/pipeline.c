@@ -14,7 +14,7 @@ static const app_step_t app_pipeline[] = {
 
 // @brief Application steps size
 static const size_t app_pipeline_size =
-    sizeof(app_pipeline) / sizeof(app_step_t);
+sizeof(app_pipeline) / sizeof(app_step_t);
 
 void app_run_pipeline(app_t *app)
 {
