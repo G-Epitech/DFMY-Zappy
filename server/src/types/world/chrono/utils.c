@@ -34,8 +34,10 @@ time_unit_t chrono_get_elapsed_units(chrono_t *chrono)
 void chrono_units_to_timeval(chrono_t *chrono, time_unit_t units,
     timeval_t *tv)
 {
-    float total = units * (float) chrono->frequency * 1000000;
+    float total = units / (float) chrono->frequency;
+    time_t sec = (time_t) total;
+    float usec = (total - (float) sec) * 1000000;
 
-    tv->tv_sec = (time_t) (total / 1000000);
-    tv->tv_usec = (suseconds_t) (tv->tv_sec % 1000000);
+    tv->tv_sec = (time_t) sec;
+    tv->tv_usec = (suseconds_t) usec;
 }
