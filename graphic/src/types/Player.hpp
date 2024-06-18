@@ -9,11 +9,7 @@
 
 #include <string>
 #include <Ogre.h>
-
-struct Position {
-    int x;
-    int y;
-};
+#include "Utils.hpp"
 
 struct Inventory {
     int food = 0;
@@ -34,3 +30,5 @@ struct Player {
     std::string team;
     Ogre::SceneNode *node;
 };
+
+bool operator==(const Player& lhs, const Player& rhs);

@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <Ogre.h>
+#include "Egg.hpp"
 #include "Player.hpp"
 
 struct Tile {
@@ -23,4 +24,5 @@ struct Map {
     int height = 0;
     int timeUnit = 0;
     std::vector<std::string> teams = {};
+    std::vector<Egg> eggs = {};
 };

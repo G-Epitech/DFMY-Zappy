@@ -24,6 +24,12 @@ App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
     this->_commands["pin"] = &Commands::player_inventory;
     this->_commands["pex"] = &Commands::player_eject;
     this->_commands["pbc"] = &Commands::broadcast;
+    this->_commands["pic"] = &Commands::incantation_start;
+    this->_commands["pie"] = &Commands::incantation_end;
+    this->_commands["pfk"] = &Commands::player_egg_laid;
+    this->_commands["pdr"] = &Commands::player_resource_drop;
+    this->_commands["pgt"] = &Commands::player_resource_take;
+    this->_commands["pdi"] = &Commands::player_death;
 }
 
 void App::setup() {
