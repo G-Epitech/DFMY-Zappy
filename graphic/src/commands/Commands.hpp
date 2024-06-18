@@ -26,11 +26,11 @@ public:
     static void broadcast(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void incantation_start(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void incantation_end(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_egg_laid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void player_laying_egg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void player_resource_drop(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void player_resource_take(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void player_death(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_laying_egg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void player_egg_laid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void egg_death(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void egg_hatching(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void time_unit_request(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);

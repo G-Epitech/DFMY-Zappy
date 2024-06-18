@@ -26,10 +26,18 @@ App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
     this->_commands["pbc"] = &Commands::broadcast;
     this->_commands["pic"] = &Commands::incantation_start;
     this->_commands["pie"] = &Commands::incantation_end;
-    this->_commands["pfk"] = &Commands::player_egg_laid;
+    this->_commands["pfk"] = &Commands::player_laying_egg;
     this->_commands["pdr"] = &Commands::player_resource_drop;
     this->_commands["pgt"] = &Commands::player_resource_take;
     this->_commands["pdi"] = &Commands::player_death;
+    this->_commands["enw"] = &Commands::player_egg_laid;
+    this->_commands["edi"] = &Commands::egg_death;
+    this->_commands["eht"] = &Commands::egg_hatching;
+    this->_commands["sgt"] = &Commands::time_unit_request;
+    this->_commands["sst"] = &Commands::time_unit_modification;
+    this->_commands["seg"] = &Commands::end_game;
+    this->_commands["suc"] = &Commands::unknown_command;
+    this->_commands["sbp"] = &Commands::command_parameters;
 }
 
 void App::setup() {
