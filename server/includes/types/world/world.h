@@ -97,3 +97,9 @@ void world_remove_player(world_t *world, player_t *player);
  * @param world World to generate resources in
  */
 void world_routine_resources_generation(world_t *world);
+
+/**
+ * @brief Check if a team has won and send a victory message if so
+ * @param team Team to check
+ */
+bool world_routine_team_victory(world_t *world, list_t *all_ctrls);

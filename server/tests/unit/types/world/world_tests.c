@@ -260,16 +260,63 @@ Test(world_routine_resource_generation_tests, simple)
     res_manager->next_generation = 0.0f;
     world_routine_resources_generation(world);
     for (resource_t i = 0; i < RES_LEN; i++) {
-        cr_assert_eq(res_manager->stats[i].actual, 8);
+        cr_assert_eq(res_manager->stats[i].actual, 10);
     }
     cr_assert_eq(res_manager->next_generation, RES_MANAGER_NEXT_GENERATION_DELAY);
     for (resource_t i = 0; i < RES_LEN; i++) {
         res_manager->stats[i].actual = 8;
-        res_manager->stats[i].limit = 10;
     }
     world_routine_resources_generation(world);
     for (resource_t i = 0; i < RES_LEN; i++) {
         cr_assert_eq(res_manager->stats[i].actual, 8);
     }
     world_free(world);
+}
+
+Test(world_routine_team_victory, simple)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 100);
+    controller_t *ctrl = controller_new(0);
+    controller_t *ctrl2 = controller_new(0);
+    list_t *all_ctrls = list_new();
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, (vector2u_t){0, 0});
+    player_t *player2 = player_new(NULL, team, (vector2u_t){0, 0});
+    player_t *player3 = player_new(NULL, team, (vector2u_t){0, 0});
+    player_t *player4 = player_new(NULL, team, (vector2u_t){0, 0});
+    player_t *player5 = player_new(NULL, team, (vector2u_t){0, 0});
+    player_t *player6 = player_new(NULL, team, (vector2u_t){0, 0});
+
+
+    ctrl->generic.type = CTRL_GRAPHIC;
+    ctrl2->generic.type = CTRL_PLAYER;
+    list_push(all_ctrls, NODE_DATA_FROM_PTR(ctrl));
+    list_push(all_ctrls, NODE_DATA_FROM_PTR(ctrl2));
+    list_push(world->teams, NODE_DATA_FROM_PTR(team));
+    world_add_player(world, player);
+    world_add_player(world, player2);
+    world_add_player(world, player3);
+    world_add_player(world, player4);
+    world_add_player(world, player5);
+    cr_assert_eq(world_routine_team_victory(world, all_ctrls), false);
+    world_add_player(world, player6);
+    cr_assert_eq(world_routine_team_victory(world, all_ctrls), false);
+    player->level = 8;
+    cr_assert_eq(world_routine_team_victory(world, all_ctrls), false);
+    player2->level = 8;
+    player3->level = 8;
+    player4->level = 8;
+    player5->level = 8;
+    player6->level = 8;
+    clcc_return_now(malloc, NULL);
+    cr_assert_eq(world_routine_team_victory(world, all_ctrls), true);
+    clcc_disable_control(malloc);
+    cr_assert_eq(ctrl->generic.emissions->len, 0);
+    cr_assert_eq(ctrl2->generic.emissions->len, 0);
+    cr_assert_eq(world_routine_team_victory(world, all_ctrls), true);
+    cr_assert_eq(ctrl->generic.emissions->len, 1);
+    cr_assert_eq(ctrl2->generic.emissions->len, 0);
+    world_free(world);
+    list_free(all_ctrls, controller_free_as_node_data);
 }
