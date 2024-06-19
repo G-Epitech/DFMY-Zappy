@@ -10,7 +10,7 @@
 
 static void increment_player_position(map_t *map, player_t *player)
 {
-    vector2i_t pos = VECTOR2I_FROM_U(player->position);
+    vector2l_t pos = VECTOR2L_FROM_U(player->position);
 
     switch (player->direction) {
         case DIR_NORTH:
@@ -26,7 +26,7 @@ static void increment_player_position(map_t *map, player_t *player)
             pos.x -= 1;
             break;
     }
-    player->position = map_resolve_position(pos, &(map->size));
+    player->position = map_resolve_position(map, pos);
 }
 
 void player_forward(map_t *map, player_t *player)

@@ -110,26 +110,27 @@ Test(map_remove_resource_tests, remove_resource_empty_cell)
 
 Test(map_resolve_position, resolve_position)
 {
-    vector2i_t pos = { -1, 0 };
+    vector2l_t pos = {-1, 0 };
     vector2u_t map_size = { 10, 10 };
-    vector2u_t resolved_pos = map_resolve_position(pos, &map_size);
+    map_t *map = map_new(map_size);
+    vector2u_t resolved_pos = map_resolve_position(map, pos);
 
     cr_assert_eq(resolved_pos.x, 9);
     cr_assert_eq(resolved_pos.y, 0);
-    pos = (vector2i_t){ 10, 0 };
-    resolved_pos = map_resolve_position(pos, &map_size);
+    pos = (vector2l_t){10, 0 };
+    resolved_pos = map_resolve_position(map, pos);
     cr_assert_eq(resolved_pos.x, 0);
     cr_assert_eq(resolved_pos.y, 0);
-    pos = (vector2i_t){ 11, 0 };
-    resolved_pos = map_resolve_position(pos, &map_size);
+    pos = (vector2l_t){11, 0 };
+    resolved_pos = map_resolve_position(map, pos);
     cr_assert_eq(resolved_pos.x, 1);
     cr_assert_eq(resolved_pos.y, 0);
-    pos = (vector2i_t){ -51, 0 };
-    resolved_pos = map_resolve_position(pos, &map_size);
+    pos = (vector2l_t){-51, 0 };
+    resolved_pos = map_resolve_position(map, pos);
     cr_assert_eq(resolved_pos.x, 9);
     cr_assert_eq(resolved_pos.y, 0);
-    pos = (vector2i_t){ 4, 4 };
-    resolved_pos = map_resolve_position(pos, &map_size);
+    pos = (vector2l_t){4, 4 };
+    resolved_pos = map_resolve_position(map, pos);
     cr_assert_eq(resolved_pos.x, 4);
     cr_assert_eq(resolved_pos.y, 4);
 }
