@@ -23,4 +23,3 @@ if (COVERAGE)
 endif()
 
 add_subdirectory(tests/unit)
-codi
