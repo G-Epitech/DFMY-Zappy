@@ -14,7 +14,5 @@ bool world_end_incantation(world_t *world, incantation_t *incantation)
         world_remove_incantation(world, incantation);
         return false;
     }
-    incantation_complete_success(incantation, world->map);
-    world_remove_incantation(world, incantation);
-    return true;
+    return incantation_complete_success(incantation, world->map);
 }

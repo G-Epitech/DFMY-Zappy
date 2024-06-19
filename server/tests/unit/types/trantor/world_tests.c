@@ -270,8 +270,6 @@ Test(incantation_tests, sucesful_incantation)
     cr_assert_eq(player->level, 2);
     cr_assert_eq(player2->level, 2);
     cr_assert_eq(cell->resources[RES_LINEMATE], 0);
-    cr_assert_eq(world->incantations->len, 0);
-    cr_assert_null(player->incantation);
     world_free(world);
     player_free(player2);
     player_free(player);
@@ -431,8 +429,6 @@ Test(incantation_tests, incantation_level_two)
     cr_assert_eq(cell->resources[RES_LINEMATE], 0);
     cr_assert_eq(cell->resources[RES_DERAUMERE], 0);
     cr_assert_eq(cell->resources[RES_SIBUR], 0);
-    cr_assert_eq(world->incantations->len, 0);
-    cr_assert_null(player->incantation);
     world_free(world);
     player_free(player3);
     player_free(player2);

@@ -18,6 +18,25 @@ bool incantation_add_player(incantation_t *incantation, player_t *player)
     return true;
 }
 
+bool incantation_add_players_from_cell(incantation_t *incantation,
+    map_cell_t *cell)
+{
+    node_t *node = cell->players->first;
+    player_t *player = NULL;
+
+    while (node) {
+        player = NODE_TO_PTR(node, player_t *);
+        if (player->level != (incantation->level - 1)) {
+            node = node->next;
+            continue;
+        }
+        if (!incantation_add_player(incantation, player))
+            return false;
+        node = node->next;
+    }
+    return true;
+}
+
 void incantation_remove_player(incantation_t *incantation, player_t *player)
 {
     node_data_t data = NODE_DATA_FROM_PTR(player);

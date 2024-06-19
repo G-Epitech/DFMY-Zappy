@@ -35,9 +35,12 @@ static void remove_resources(incantation_t *incantation,
     }
 }
 
-void incantation_complete_success(incantation_t *incantation,
+bool incantation_complete_success(incantation_t *incantation,
     map_t *map)
 {
+    if (!incantation || !map)
+        return false;
     increment_player_levels(incantation);
     remove_resources(incantation, map);
+    return true;
 }

@@ -17,13 +17,13 @@ incantation_t *world_start_incantation(world_t *world, player_t *player)
     if (!incantation)
         return NULL;
     cell = MAP_PLAYER_CELL(world->map, player);
-    incantation_add_players_from_cell(incantation, cell);
-    incantation->requester = player;
-    if (!incantation_is_valid(incantation, world->map) ||
+    if (!incantation_add_players_from_cell(incantation, cell) ||
+        !incantation_is_valid(incantation, world->map) ||
         !list_push(world->incantations, NODE_DATA_FROM_PTR(incantation))) {
         incantation_remove_all_players(incantation);
         incantation_free(incantation);
         return NULL;
     }
+    incantation->requester = player;
     return incantation;
 }

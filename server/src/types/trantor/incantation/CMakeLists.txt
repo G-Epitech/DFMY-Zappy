@@ -4,5 +4,4 @@ target_sources(zappy_server_core PUBLIC
         valid.c
         complete.c
         registrations.c
-        add_players.c
 )
