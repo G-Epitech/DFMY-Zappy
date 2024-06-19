@@ -99,7 +99,7 @@ void incantation_cleanup(incantation_t *incantation, world_t *world);
  * @param level Level of the incantation
  * @return The incantation requirements
  */
-incantation_requirements_t incantation_requirement(unsigned int level);
+incantation_requirements_t incantation_get_requirements(unsigned int level);
 
 /**
  * @brief Start an incantation

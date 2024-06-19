@@ -26,7 +26,7 @@ static void incantation_remove_resources(incantation_t *incantation,
     vector2u_t *pos = &incantation->requester->position;
     map_cell_t *cell = &MAP_CELL_AT_POS(map, (*pos));
     incantation_requirements_t req =
-            incantation_requirement(incantation->level);
+            incantation_get_requirements(incantation->level);
 
     for (resource_t i = RES_FOOD; i < RES_LEN; i++) {
         cell->resources[i] -= req.resources[i];

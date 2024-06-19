@@ -19,7 +19,7 @@ static const incantation_requirements_t incantation_requirements[] = {
     {.nb_players = 6, .resources = {0, 2, 2, 2, 2, 2, 1}},
 };
 
-incantation_requirements_t incantation_requirement(unsigned int level)
+incantation_requirements_t incantation_get_requirements(unsigned int level)
 {
     return incantation_requirements[level - 1];
 }
@@ -43,7 +43,7 @@ bool incantation_is_valid(incantation_t *incantation, map_t *map)
 
     if (incantation->level > 7)
         return false;
-    requirement = incantation_requirement(incantation->level);
+    requirement = incantation_get_requirements(incantation->level);
     if (incantation->players->len < requirement.nb_players)
         return false;
     if (!incantation_check_resources(incantation->players,
