@@ -10,4 +10,5 @@ target_sources(zappy_server_core PUBLIC
         connection/status.c
         connection/requests.c
         connection/emissions.c
+        connection/restrict.c
 )
