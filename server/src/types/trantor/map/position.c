@@ -5,7 +5,7 @@
 ** position.c
 */
 
-#include "types/world/map.h"
+#include "types/trantor/map.h"
 #include "types/vector2.h"
 
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos)

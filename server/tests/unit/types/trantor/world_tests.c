@@ -208,7 +208,7 @@ Test(world_remove_player_tests, remove_player_from_everything)
     world_t *world = world_new(size, 100);
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(NULL);
-    incantation_t *incantation = incantation_new(1, player);
+    incantation_t *incantation = incantation_new(1);
 
     world_register_player(world, player, team);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
@@ -249,11 +249,13 @@ Test(incantation_tests, sucesful_incantation)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
-    player_t *player2 = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
+    player->position = pos;
+    player2->position = pos;
     cr_assert_not_null(world);
     cell = MAP_CELL_AT_POS(world->map, pos);
     list_push(cell->players, NODE_DATA_FROM_PTR(player));
@@ -280,12 +282,13 @@ Test(incantation_tests, failed_end)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
     cr_assert_not_null(world);
     cell = MAP_CELL_AT_POS(world->map, pos);
+    player->position = pos;
     list_push(cell->players, NODE_DATA_FROM_PTR(player));
     cr_assert_not_null(cell);
     cr_assert_eq(cell->players->len, 1);
@@ -307,7 +310,7 @@ Test(incantation_tests, calloc_fail)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player = player_new(NULL);
 
     cr_assert_not_null(world);
     clcc_return_now(calloc, NULL);
@@ -322,7 +325,7 @@ Test(incantation_tests, incantation_invalid_level)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
@@ -344,7 +347,7 @@ Test(incantation_tests, not_enough_players)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
@@ -368,8 +371,8 @@ Test(incantation_tests, not_enough_players_with_correct_levels)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
-    player_t *player2 = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
@@ -396,9 +399,9 @@ Test(incantation_tests, incantation_level_two)
     vector2u_t size = { 10, 10 };
     vector2u_t pos = { 1, 1 };
     world_t *world = world_new(size, 2);
-    player_t *player = player_new(NULL, NULL, pos);
-    player_t *player2 = player_new(NULL, NULL, pos);
-    player_t *player3 = player_new(NULL, NULL, pos);
+    player_t *player = player_new(NULL);
+    player_t *player2 = player_new(NULL);
+    player_t *player3 = player_new(NULL);
     map_cell_t *cell = NULL;
     incantation_t *incantation = NULL;
 
@@ -409,6 +412,9 @@ Test(incantation_tests, incantation_level_two)
     list_push(cell->players, NODE_DATA_FROM_PTR(player3));
     cr_assert_not_null(cell);
     cr_assert_eq(cell->players->len, 3);
+    player->position = pos;
+    player2->position = pos;
+    player3->position = pos;
     player->level = 2;
     player2->level = 2;
     player3->level = 1;

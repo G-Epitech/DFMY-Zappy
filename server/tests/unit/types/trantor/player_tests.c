@@ -147,17 +147,10 @@ Test(player_forward_tests, simple_forward)
 Test(player_forward_tests, simple_forward_with_unfound_player)
 {
     vector2u_t size = { 6, 6 };
-    team_t *team = team_new("Team1", 1);
     world_t *world = world_new(size, 100);
     player_t *player = player_new(NULL);
 
-    clcc_return_now(random, 42);
-    world_register_player(world, player, team);
-    clcc_disable_control(random);
-    player_forward(world->map, player);
-    cr_assert_eq(player->position.x, 0);
-    cr_assert_eq(player->position.y, 5);
-    player->direction = DIR_SOUTH;
+    player->position = (vector2u_t){ 0, 0 };
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 0);
     cr_assert_eq(player->position.y, 0);

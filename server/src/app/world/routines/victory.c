@@ -7,7 +7,7 @@
 
 #include <string.h>
 #include "utils.h"
-#include "types/world/world.h"
+#include "types/trantor/world.h"
 #include "types/server.h"
 
 static bool team_has_won(team_t *team)

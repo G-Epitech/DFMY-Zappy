@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include "types/server.h"
 #include "types/controller.h"
-#include "types/world/player.h"
+#include "types/trantor/player.h"
 #include "log.h"
 
 void server_disconnect_controller(server_t *server, controller_t *controller)

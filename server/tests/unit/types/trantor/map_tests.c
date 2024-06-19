@@ -133,4 +133,8 @@ Test(map_resolve_position, resolve_position)
     resolved_pos = map_resolve_position(map, pos);
     cr_assert_eq(resolved_pos.x, 4);
     cr_assert_eq(resolved_pos.y, 4);
+    pos = (vector2l_t){1, -1 };
+    resolved_pos = map_resolve_position(map, pos);
+    cr_assert_eq(resolved_pos.x, 1);
+    cr_assert_eq(resolved_pos.y, 9);
 }

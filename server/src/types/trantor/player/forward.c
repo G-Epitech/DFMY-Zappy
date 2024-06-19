@@ -42,6 +42,6 @@ void player_forward(map_t *map, player_t *player)
         return;
     list_pop(cell->players, node);
     increment_player_position(map, player);
-    cell = &(map->cells[player->position.y][player->position.x]);
+    cell = MAP_PLAYER_CELL(map, player);
     list_append(cell->players, node);
 }

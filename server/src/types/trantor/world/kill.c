@@ -5,9 +5,9 @@
 ** remove.c
 */
 
-#include "types/world/world.h"
-#include "types/world/player.h"
-#include "types/world/incantation.h"
+#include "types/trantor/world.h"
+#include "types/trantor/player.h"
+#include "types/trantor/incantation.h"
 
 void world_kill_player(world_t *world, player_t *player, bool zombie)
 {

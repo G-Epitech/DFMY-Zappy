@@ -135,4 +135,3 @@ void app_handle_world_routine_resources_generation(world_t *world);
  * @return true if a team has won, false otherwise
  */
 bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
-

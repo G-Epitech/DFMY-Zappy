@@ -5,8 +5,8 @@
 ** add.c
 */
 
-#include "types/world/team.h"
-#include "types/world/player.h"
+#include "types/trantor/team.h"
+#include "types/trantor/player.h"
 
 bool team_add_player(team_t *team, player_t *player)
 {

@@ -72,9 +72,9 @@ Test(world_routine_team_victory, simple, .init = cr_redirect_stderr)
     player4->level = 8;
     player5->level = 8;
     player6->level = 8;
-    clcc_return_now(malloc, NULL);
+    clcc_return_now(calloc, NULL);
     cr_assert_eq(app_handle_world_routine_team_victory(world, server), true);
-    clcc_disable_control(malloc);
+    clcc_disable_control(calloc);
     cr_assert_eq(ctrl->generic.emissions->len, 0);
     cr_assert_eq(ctrl2->generic.emissions->len, 0);
     cr_assert_eq(app_handle_world_routine_team_victory(world, server), true);
