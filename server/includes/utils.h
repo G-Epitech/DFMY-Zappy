@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <stdarg.h>
+
 // @brief Time value
 typedef struct timeval timeval_t;
 
@@ -19,3 +21,13 @@ typedef struct timeval timeval_t;
  */
 int my_asprintf(char **strp, const char *fmt,
     ...) __attribute__((format(printf, 2, 3)));
+
+/**
+ * @brief Allocates memory and copies the formatted string given in parameter
+ * @param strp The buffer to copy the formatted string into
+ * @param fmt Format string
+ * @param args Arguments to format
+ * @return The number of characters copied
+ */
+int my_vasprintf(char **strp, const char *fmt, va_list args)
+__attribute__((format(printf, 2, 0)));

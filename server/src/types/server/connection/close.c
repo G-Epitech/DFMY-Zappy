@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "types/server.h"
 #include "types/controller.h"
+#include "types/world/player.h"
 #include "log.h"
 
 void server_disconnect_controller(server_t *server, controller_t *controller)
@@ -23,8 +24,8 @@ void server_disconnect_controller(server_t *server, controller_t *controller)
             FD_STATES_R | FD_STATES_E | FD_STATES_W);
         fd_states_unset(&(server->fd_actual), controller->generic.socket,
             FD_STATES_R | FD_STATES_E | FD_STATES_W);
-        controller->generic.socket = -1;
     }
+    controller->generic.socket = -1;
     controller->generic.state = CTRL_DISCONNECTED;
 }
 

@@ -40,7 +40,7 @@ static void send_victory_msg(list_t *all_ctrls, char *winning_team_name)
     controllers_add_emission(all_ctrls, &params, CTRL_GRAPHIC);
 }
 
-bool world_routine_team_victory(world_t *world, server_t *server)
+bool app_handle_world_routine_team_victory(world_t *world, server_t *server)
 {
     node_t *node = world->teams->first;
     team_t *team = NULL;

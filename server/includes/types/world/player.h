@@ -46,7 +46,7 @@ typedef struct player_s {
     // @brief Link to player controller
     player_controller_t *controller;
     // @brief Number of player lives (aka the sum of collected food x 126)
-    float lives;
+    time_unit_t lives;
     // @brief Position of the player on the map
     vector2u_t position;
     // @brief Level of the player
@@ -62,12 +62,9 @@ typedef struct player_s {
 /**
  * @brief Create a new player
  * @param controller Player controller
- * @param team Player team
- * @param position Player position
  * @return Created player or NULL if an error occurred
  */
-player_t *player_new(player_controller_t *controller, team_t *team,
-    vector2u_t position);
+player_t *player_new(player_controller_t *controller);
 
 /**
  * @brief Free a player

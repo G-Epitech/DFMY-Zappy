@@ -96,14 +96,43 @@ void app_run_pipeline(app_t *app);
 void app_handle_server_connections(app_t *app);
 
 /**
+ * @brief Handle world lifecycle of players
+ * @param server Server to handle the world lifecycle of players
+ * @param world World to handle the world lifecycle of players
+ */
+void app_handle_world_lifecycle_players(server_t *server, world_t *world);
+
+/**
+ * @brief Handle world lifecycle
+ * @param app Application to handle the world lifecycle
+ */
+void app_handle_world_lifecycle(app_t *app);
+
+/**
  * @brief Handle server select timeout
  * @param app Application to handle the server select timeout
  * @param timeout Timeout to change
+ * @return Pointer to given timeout or NULL if no timeout have to be set
  */
-bool app_handle_timeout(app_t *app, timeval_t *timeout);
+timeval_t *app_get_timeout(app_t *app, timeval_t *timeout);
 
 /**
  * @brief Handle application routines step
  * @param app Application to handle the routines
  */
 void app_handle_world_routines(app_t *app);
+
+/**
+ * @brief Handle world routine resources generation
+ * @param world World to handle the routine resources generation
+ */
+void app_handle_world_routine_resources_generation(world_t *world);
+
+/**
+ * @brief Handle world routine team victory
+ * @param world World to handle the routine team victory
+ * @param server Server to handle the routine team victory
+ * @return true if a team has won, false otherwise
+ */
+bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
+
