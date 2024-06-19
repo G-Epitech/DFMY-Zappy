@@ -10,13 +10,13 @@
 #include "types/world/map.h"
 
 static const incantation_requirements_t incantation_requirements[] = {
-    {1, {0, 1, 0, 0, 0, 0, 0}},
-    {2, {0, 1, 1, 1, 0, 0, 0}},
-    {2, {0, 2, 0, 1, 0, 2, 0}},
-    {4, {0, 1, 1, 2, 0, 1, 0}},
-    {4, {0, 1, 2, 1, 3, 0, 0}},
-    {6, {0, 1, 2, 3, 0, 1, 0}},
-    {6, {0, 2, 2, 2, 2, 2, 1}},
+    {.nb_players = 1, .resources = {0, 1, 0, 0, 0, 0, 0}},
+    {.nb_players = 2, .resources = {0, 1, 1, 1, 0, 0, 0}},
+    {.nb_players = 2, .resources = {0, 2, 0, 1, 0, 2, 0}},
+    {.nb_players = 4, .resources = {0, 1, 1, 2, 0, 1, 0}},
+    {.nb_players = 4, .resources = {0, 1, 2, 1, 3, 0, 0}},
+    {.nb_players = 6, .resources = {0, 1, 2, 3, 0, 1, 0}},
+    {.nb_players = 6, .resources = {0, 2, 2, 2, 2, 2, 1}},
 };
 
 incantation_requirements_t incantation_requirement(unsigned int level)
