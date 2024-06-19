@@ -144,8 +144,7 @@ Test(player_forward_tests, simple_forward)
     team_free(team);
 }
 
-// TODO: Uncomment this test
-/*Test(player_forward_tests, simple_forward_with_unfound_player)
+Test(player_forward_tests, simple_forward_with_unfound_player)
 {
     vector2u_t size = { 6, 6 };
     team_t *team = team_new("Team1", 1);
@@ -158,8 +157,12 @@ Test(player_forward_tests, simple_forward)
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 0);
     cr_assert_eq(player->position.y, 5);
+    player->direction = DIR_SOUTH;
+    player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 0);
+    cr_assert_eq(player->position.y, 0);
     world_free(world);
-}*/
+}
 
 Test(player_forward_tests, simple_forward_with_null_player)
 {

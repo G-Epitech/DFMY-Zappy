@@ -95,3 +95,11 @@ bool map_add_player(map_t *map, player_t *player);
  * @param player Player to remove
  */
 void map_remove_player(map_t *map, player_t *player);
+
+/**
+ * @brief Resolve a position on the map
+ * @param pos Position to resolve
+ * @param map Size of the map
+ * @return Resolved position
+ */
+vector2u_t map_resolve_position(map_t *map, vector2l_t pos);

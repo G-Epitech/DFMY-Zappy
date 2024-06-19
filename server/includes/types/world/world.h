@@ -13,6 +13,7 @@
 #include "resource.h"
 #include "types/list.h"
 #include "types/world/player.h"
+#include "types/server.h"
 
 // @brief Structure representing a Trantorian world
 typedef struct world_s {
@@ -77,6 +78,8 @@ void world_reset_event_delay(world_t *world);
  * @param world World to register the player in
  * @param player Player to register
  * @param team Team of the player
+ * @return true if player has correctly been registered,
+ * false otherwise
  */
 bool world_register_player(world_t *world, player_t *player, team_t *team);
 
