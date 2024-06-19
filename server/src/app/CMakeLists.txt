@@ -7,3 +7,4 @@ target_sources(zappy_server_core PUBLIC
         pipeline.c
 )
 add_subdirectory(steps)
+add_subdirectory(world)

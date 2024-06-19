@@ -13,6 +13,7 @@
 #include "resource.h"
 #include "types/list.h"
 #include "types/world/player.h"
+#include "types/server.h"
 
 // @brief Structure representing a Trantorian world
 typedef struct world_s {
@@ -91,3 +92,17 @@ bool world_add_player(world_t *world, player_t *player);
  * @param player Player to remove
  */
 void world_remove_player(world_t *world, player_t *player);
+
+/**
+ * @brief Generate resources in the world
+ * @param world World to generate resources in
+ */
+void world_routine_resources_generation(world_t *world);
+
+/**
+ * @brief Check if a team has won and send a victory message if so
+ * @param team Team to check
+ * @param server Server to send the message from
+ * @return true if a team wons, false otherwise
+ */
+bool world_routine_team_victory(world_t *world, server_t *server);
