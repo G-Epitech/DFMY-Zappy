@@ -35,5 +35,5 @@ void world_routine_resources_generation(world_t *world)
             world_routine_generate_resource(world->map, resource_manager, res);
         }
     }
-    resource_manager->next_generation += RES_MANAGER_NEXT_GENERATION_DELAY;
+    resource_manager->next_generation = RES_MANAGER_NEXT_GENERATION_DELAY;
 }

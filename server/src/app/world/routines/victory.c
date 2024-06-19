@@ -8,6 +8,7 @@
 #include <string.h>
 #include "utils.h"
 #include "types/world/world.h"
+#include "types/server.h"
 
 static bool team_has_won(team_t *team)
 {
@@ -39,7 +40,7 @@ static void send_victory_msg(list_t *all_ctrls, char *winning_team_name)
     controllers_add_emission(all_ctrls, &params, CTRL_GRAPHIC);
 }
 
-bool world_routine_team_victory(world_t *world, list_t *all_ctrls)
+bool world_routine_team_victory(world_t *world, server_t *server)
 {
     node_t *node = world->teams->first;
     team_t *team = NULL;
@@ -47,7 +48,7 @@ bool world_routine_team_victory(world_t *world, list_t *all_ctrls)
     while (node) {
         team = NODE_TO_PTR(node, team_t *);
         if (team_has_won(team)) {
-            send_victory_msg(all_ctrls, team->name);
+            send_victory_msg(server->controllers, team->name);
             return true;
         }
         node = node->next;

@@ -100,7 +100,7 @@ void app_handle_server_connections(app_t *app);
  * @param app Application to handle the server select timeout
  * @param timeout Timeout to change
  */
-void app_handle_timeout(app_t *app, timeval_t *timeout);
+bool app_handle_timeout(app_t *app, timeval_t *timeout);
 
 /**
  * @brief Handle application routines step
