@@ -8,7 +8,10 @@
 #pragma once
 
 #include <stddef.h>
-#include "../list.h"
+#include "types/list.h"
+
+// Forward declaration
+typedef struct player_s player_t;
 
 // @brief Structure representing a Trantorian team
 typedef struct team_s {
@@ -29,6 +32,21 @@ typedef struct team_s {
  * @return Created team or NULL if an error occurred
  */
 team_t *team_new(char *name, size_t min_slots);
+
+/**
+ * @brief Add a player to the team
+ * @param team The team to add the player to
+ * @param player The player to add to the team
+ * @return true if the player was added, false otherwise
+ */
+bool team_add_player(team_t *team, player_t *player);
+
+/**
+ * @brief Remove a player from the team
+ * @param team The team to remove the player from
+ * @param player Player to remove from the team
+ */
+void team_remove_player(team_t *team, player_t *player);
 
 /**
  * @brief Free a team

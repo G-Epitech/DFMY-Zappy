@@ -138,15 +138,6 @@ controller_t *server_accept_connection(server_t *server);
 void server_disconnect_controller(server_t *server, controller_t *controller);
 
 /**
- * @brief Restrict a controller permissions
- * @param server Server to restrict controller from
- * @param controller Controller to restrict
- * @param state State to restrict controller to
- */
-void server_restrict_controller(server_t *server, controller_t *controller,
-    controller_state_t state);
-
-/**
  * @brief Remove disconnected controllers from the server
  * @param server Server to remove controllers from
  */

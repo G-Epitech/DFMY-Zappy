@@ -147,11 +147,10 @@ Test(world_add_player_tests, add_player_to_world)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
 
-    cr_assert_eq(world_add_player(world, player), true);
+    cr_assert_eq(world_register_player(world, player, team), true);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(world->players->first->data.ptr, player);
     world_free(world);
@@ -162,12 +161,11 @@ Test(world_add_player_tests, add_player_to_world_fail_push_world)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
 
     clcc_return_now(malloc, NULL);
-    cr_assert_eq(world_add_player(world, player), false);
+    cr_assert_eq(world_register_player(world, player, team), false);
     clcc_disable_control(malloc);
     cr_assert_eq(world->players->len, 0);
     world_free(world);
@@ -178,13 +176,12 @@ Test(world_add_player_tests, add_player_to_world_fail_push_world_cell)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
 
     clcc_return_value_after(malloc, NULL, 1);
     clcc_enable_control(malloc);
-    cr_assert_eq(world_add_player(world, player), false);
+    cr_assert_eq(world_register_player(world, player, team), false);
     clcc_disable_control(malloc);
     world_free(world);
     team_free(team);
@@ -194,13 +191,12 @@ Test(world_add_player_tests, add_player_to_world_fail_push_world_team)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
 
     clcc_return_value_after(malloc, NULL, 2);
     clcc_enable_control(malloc);
-    cr_assert_eq(world_add_player(world, player), false);
+    cr_assert_eq(world_register_player(world, player, team), false);
     clcc_disable_control(malloc);
     world_free(world);
     team_free(team);
@@ -210,37 +206,38 @@ Test(world_remove_player_tests, remove_player_from_everything)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
     incantation_t *incantation = incantation_new(1, player);
 
-    world_add_player(world, player);
+    world_register_player(world, player, team);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(world->incantations->len, 1);
-    world_remove_player(world, player);
+    world_kill_player(world, player, false);
     cr_assert_eq(world->players->len, 0);
     cr_assert_eq(incantation->players->len, 0);
+    cr_assert_eq(world->dead_players->len, 1);
+    world_free(world);
 }
 
 Test(world_remove_player_tests, remove_unadded_player_from_everything)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
-    player_t *player = player_new(NULL, team, position);
-    player_t *player2 = player_new(NULL, team, position);
+    player_t *player = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     incantation_t *incantation = incantation_new(1, player2);
 
-    world_add_player(world, player2);
+    world_register_player(world, player2, team);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
     cr_assert_eq(world->next_player_id, 1);
     cr_assert_eq(player->id, 0);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(world->incantations->len, 1);
-    world_remove_player(world, player);
+    world_kill_player(world, player, false);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(incantation->players->len, 1);
+    cr_assert_eq(world->dead_players->len, 0);
 }

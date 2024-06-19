@@ -44,8 +44,10 @@ world_t *world_new(vector2u_t map_size, size_t frequency)
     world->teams = list_new();
     world->players = list_new();
     world->incantations = list_new();
+    world->dead_players = list_new();
     if (!world->map || !world->teams || !world->players ||
-        !world->incantations) {
+        !world->incantations || !world->dead_players
+    ) {
         world_free(world);
         return NULL;
     }

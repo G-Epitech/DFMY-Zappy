@@ -10,7 +10,7 @@
 void server_handle_controller_requests(server_t *server,
     controller_t *controller)
 {
-    if (!controller || !CTRL_CAN_REQ(controller))
+    if (!controller)
         return;
     if (!server_controller_has_content_to_read(server, controller))
         return;

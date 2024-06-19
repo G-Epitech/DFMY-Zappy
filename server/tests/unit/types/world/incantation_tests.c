@@ -13,7 +13,7 @@
 Test(incantation_tests, new_incantation)
 {
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
-    player_t *player = player_new(requester, NULL, (vector2u_t) { 1, 1 });
+    player_t *player = player_new(requester);
     incantation_t *incantation = incantation_new(7, player);
 
     cr_assert_not_null(incantation);
@@ -29,7 +29,7 @@ Test(incantation_tests, new_incantation)
 Test(incantation_tests, new_incantation_fail_due_to_calloc)
 {
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
-    player_t *player = player_new(requester, NULL, (vector2u_t) { 1, 1 });
+    player_t *player = player_new(requester);
 
     clcc_return_now(calloc, NULL);
     cr_assert_null(incantation_new(7, player));
@@ -53,7 +53,7 @@ Test(incantation_tests, new_incantation_fail_due_to_add_player)
 Test(incantation_tests, free_incantation)
 {
     player_controller_t *requester = calloc(1, sizeof(player_controller_t));
-    player_t *player = player_new(requester, NULL, (vector2u_t) { 1, 1 });
+    player_t *player = player_new(requester);
     incantation_t *incantation = incantation_new(7, player);
 
     player_free(player);
@@ -73,7 +73,7 @@ Test(incantation_tests, free_list_of_incantations)
 
     cr_assert_eq(incantations->len, 0);
     for (int i = 0; i < 5; i++) {
-        players[i] = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+        players[i] = player_new(NULL);
         incantation_t *incantation = incantation_new(7, players[i]);
 
         cr_assert_not_null(incantation);
@@ -90,8 +90,8 @@ Test(incantation_tests, free_list_of_incantations)
 
 Test(incantation_tests, simple_add_player)
 {
-    player_t *player1 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player2 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player1 = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     incantation_t *incantation = incantation_new(7, player1);
 
     cr_assert_eq(incantation->players->len, 1);
@@ -106,8 +106,8 @@ Test(incantation_tests, simple_add_player)
 
 Test(incantation_tests, add_player_fail_due_to_malloc)
 {
-    player_t *player1 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player2 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player1 = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     incantation_t *incantation = incantation_new(7, player1);
 
     clcc_return_now(malloc, NULL);
@@ -121,8 +121,8 @@ Test(incantation_tests, add_player_fail_due_to_malloc)
 
 Test(incantation_tests, simple_remove_player)
 {
-    player_t *player1 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player2 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player1 = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     incantation_t *incantation = incantation_new(7, player1);
 
     cr_assert_eq(incantation->players->len, 1);
@@ -139,8 +139,8 @@ Test(incantation_tests, simple_remove_player)
 
 Test(incantation_tests, simple_remove_player_requester)
 {
-    player_t *player1 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player2 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player1 = player_new(NULL);
+    player_t *player2 = player_new(NULL);
     incantation_t *incantation = incantation_new(7, player1);
 
     cr_assert_eq(incantation->players->len, 1);
@@ -158,9 +158,9 @@ Test(incantation_tests, simple_remove_player_requester)
 
 Test(incantation_tests, remove_non_participant_player)
 {
-    player_t *player1 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player2 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
-    player_t *player3 = player_new(NULL, NULL, (vector2u_t) { 1, 1 });
+    player_t *player1 = player_new(NULL);
+    player_t *player2 = player_new(NULL);
+    player_t *player3 = player_new(NULL);
     incantation_t *incantation = incantation_new(7, player1);
 
     cr_assert_eq(incantation->players->len, 1);

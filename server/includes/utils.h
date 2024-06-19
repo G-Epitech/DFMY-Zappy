@@ -30,4 +30,4 @@ int my_asprintf(char **strp, const char *fmt,
  * @return The number of characters copied
  */
 int my_vasprintf(char **strp, const char *fmt, va_list args)
-    __attribute__((format(printf, 2, 0)));
+__attribute__((format(printf, 2, 0)));

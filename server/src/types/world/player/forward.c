@@ -12,13 +12,13 @@ static void increment_player_position(map_t *map, player_t *player)
 {
     switch (player->direction) {
         case DIR_NORTH:
-            player->position.y = (player->position.y + 1) % map->size.y;
+            player->position.y = (player->position.y - 1) % map->size.y;
             break;
         case DIR_EAST:
             player->position.x = (player->position.x + 1) % map->size.x;
             break;
         case DIR_SOUTH:
-            player->position.y = (player->position.y - 1) % map->size.y;
+            player->position.y = (player->position.y + 1) % map->size.y;
             break;
         default:
             player->position.x = (player->position.x - 1) % map->size.x;

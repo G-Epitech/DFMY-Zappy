@@ -11,6 +11,12 @@
 #include "types/vector2.h"
 #include "types/world/resource.h"
 
+// Forward declaration
+typedef struct player_s player_t;
+
+// @brief Map player cell accessor
+#define MAP_PLAYER_CELL(m, p) (&(m->cells[p->position.y][p->position.x]))
+
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell
@@ -74,3 +80,18 @@ void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
  */
 void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
+
+/**
+ * @brief Add a player to the current to a random map cell
+ * @param map Map to add the player to
+ * @param player Player to add
+ * @return true if the player was added, false otherwise
+ */
+bool map_add_player(map_t *map, player_t *player);
+
+/**
+ * @brief Remove a player from the current map cell
+ * @param map Map to remove the player from
+ * @param player Player to remove
+ */
+void map_remove_player(map_t *map, player_t *player);

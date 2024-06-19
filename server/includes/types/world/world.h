@@ -22,6 +22,8 @@ typedef struct world_s {
     list_t *teams;
     // @brief List of players in the world
     list_t *players;
+    // @brief List of dead players in the world
+    list_t *dead_players;
     // @brief Clock of the world
     chrono_t chrono;
     // @brief Resources manager of the world
@@ -74,20 +76,22 @@ void world_reset_event_delay(world_t *world);
  * @brief Register a player in the world
  * @param world World to register the player in
  * @param player Player to register
+ * @param team Team of the player
  */
-void world_player_register(world_t *world, player_t *player);
+bool world_register_player(world_t *world, player_t *player, team_t *team);
 
 /**
- * @brief Add a player to the world
- * @param world World to add the player to
- * @param player Player to add
- * @return Success status
+ * @brief Unregister a player from the world
+ * @param world World to unregister the player from
+ * @param player Player to unregister
  */
-bool world_add_player(world_t *world, player_t *player);
+void world_unregister_player(world_t *world, player_t *player);
 
 /**
  * @brief Remove a player from the world
  * @param world World to remove the player from
  * @param player Player to remove
+ * @param zombie Specify if the player is a zombie and should not be
+ * handled as a dead player. It will be freed.
  */
-void world_remove_player(world_t *world, player_t *player);
+void world_kill_player(world_t *world, player_t *player, bool zombie);

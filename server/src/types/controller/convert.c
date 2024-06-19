@@ -16,8 +16,7 @@ bool controller_player_from_generic(controller_t *controller, team_t *team,
         return false;
     controller->player.type = CTRL_PLAYER;
     controller->player.cooldown = 0;
-    controller->player.player = player_new((player_controller_t *) controller,
-        team, position);
+    controller->player.player = player_new((player_controller_t *) controller);
     if (!controller->player.player)
         return false;
     return true;
