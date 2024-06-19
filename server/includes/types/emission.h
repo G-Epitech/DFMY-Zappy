@@ -59,3 +59,14 @@ void emission_free(emission_t *emission);
  * @param data Data to free as node data
  */
 void emission_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Create emission parameters from format
+ * @param params Emission parameters
+ * @param flags Flags for the emission
+ * @param format Format string
+ * @return true if success, false otherwise
+ * @warning Parameters buffer will be allocated and should be freed
+ */
+bool emission_params_from_format(emission_params_t *params, int flags,
+    const char *format, ...) __attribute__((format(printf, 3, 4)));
