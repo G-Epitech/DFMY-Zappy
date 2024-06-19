@@ -11,8 +11,7 @@
 
 bool incantation_start(player_t *player, world_t *world)
 {
-    map_cell_t *cell = &MAP_CELL_AT_POS(world->map, player->position);
-    incantation_t *incantation = incantation_new(cell, player->level);
+    incantation_t *incantation = incantation_new(player->level, player);
 
     if (!incantation)
         return false;
