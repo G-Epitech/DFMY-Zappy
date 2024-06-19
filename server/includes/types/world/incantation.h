@@ -14,6 +14,16 @@
 // @brief Duration of an incantation
 #define INCANTATION_DURATION 300
 
+// @brief Structure representing the requirements for an incantation
+typedef struct incantation_requirements_s {
+    // @brief The level at the beginning of the incantation
+    size_t level;
+    // @brief Number of players with the same level required
+    size_t nb_players;
+    // @brief Resources required for the incantation
+    size_t resources[RES_LEN];
+} incantation_requirements_t;
+
 // @brief Represents a world incantation
 typedef struct incantation_s {
     // @brief List of players involved in the incantation
@@ -46,3 +56,11 @@ void incantation_free(incantation_t *incantation);
  * @param incantation Incantation to free as node data
  */
 void incantation_free_as_node_data(node_data_t incantation);
+
+/**
+ * @brief Check if an incantation is valid
+ * @param incantation Incantation to check
+ * @param map Map of the world
+ * @return Incantation is valid or not
+ */
+bool incantation_is_valid(incantation_t *incantation, map_t *map);
