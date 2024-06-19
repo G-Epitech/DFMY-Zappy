@@ -32,7 +32,7 @@ static void send_victory_msg(list_t *all_ctrls, char *winning_team_name)
 {
     emission_params_t params = {0};
 
-    if (my_asprintf(&params.buffer, "seg %s\n", winning_team_name) == -1)
+    if (my_asprintf(&params.buffer, "seg %s", winning_team_name) == -1)
         return;
     params.buffer_size = strlen(params.buffer);
     params.flags = EMISSION_COMPLETE;

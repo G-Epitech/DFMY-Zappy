@@ -29,11 +29,10 @@ void world_routine_resources_generation(world_t *world)
     if (world->resources_manager.next_generation > 0.0f)
         return;
     resource_manager = &world->resources_manager;
-    for (int i = 0; i < RES_LEN; i++) {
-        if (resource_manager->stats[i].actual <
-            resource_manager->stats[i].limit) {
-            world_routine_generate_resource(world->map, resource_manager,
-                (resource_t)i);
+    for (resource_t res = 0; res < RES_LEN; res++) {
+        if (resource_manager->stats[res].actual <
+            resource_manager->stats[res].limit) {
+            world_routine_generate_resource(world->map, resource_manager, res);
         }
     }
     resource_manager->next_generation += RES_MANAGER_NEXT_GENERATION_DELAY;

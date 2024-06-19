@@ -106,4 +106,4 @@ void app_handle_timeout(app_t *app, timeval_t *timeout);
  * @brief Handle application routines step
  * @param app Application to handle the routines
  */
-void app_handle_routines(app_t *app);
+void app_handle_world_routines(app_t *app);
