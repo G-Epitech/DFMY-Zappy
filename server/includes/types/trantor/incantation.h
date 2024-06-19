@@ -91,3 +91,19 @@ bool incantation_is_valid(incantation_t *incantation, map_t *map);
  * @return The incantation requirements
  */
 incantation_requirements_t *incantation_get_requirements(unsigned int level);
+
+/**
+ * @brief Complete a successful incantation
+ * @param incantation Incantation to complete
+ * @param map Map of the world
+ */
+void incantation_complete_success(incantation_t *incantation,
+    map_t *map);
+
+/**
+ * @brief Add players from a cell to an incantation
+ * @param incantation Incantation to add players to
+ * @param cell Cell to get players from
+ */
+void incantation_add_players_from_cell(incantation_t *incantation,
+    map_cell_t *cell);

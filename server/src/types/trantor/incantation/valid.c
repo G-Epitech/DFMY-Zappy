@@ -28,7 +28,7 @@ static bool incantation_check_resources(list_t *players,
     const size_t resources[RES_LEN], map_t *map)
 {
     player_t *first_player = NODE_TO_PTR(players->first, player_t *);
-    map_cell_t *cell = MAP_CELL_AT_POS(map, first_player->position);
+    map_cell_t *cell = MAP_PLAYER_CELL(map, first_player);
 
     for (size_t i = 0; i < RES_LEN; i++) {
         if (cell->resources[i] < resources[i])
