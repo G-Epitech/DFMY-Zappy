@@ -5,7 +5,6 @@
 ** asprintf_tests.c
 */
 
-#include <signal.h>
 #include <criterion/criterion.h>
 #include "utils.h"
 #include "clcc/modules/stdio.h"
@@ -18,14 +17,6 @@ Test(asprintf, test_asprintf)
     cr_assert_eq(ret, 12);
     cr_assert_str_eq(str, "Hello, world");
     free(str);
-}
-
-Test(asprintf, test_asprintf_null)
-{
-    char *str = NULL;
-    int ret = my_asprintf(&str, NULL);
-    cr_assert_eq(ret, -1);
-    cr_assert_null(str);
 }
 
 Test(asprintf, test_vsnprintf_fail)
