@@ -96,11 +96,11 @@ Test(player_forward_tests, simple_forward)
     world_add_player(world, player);
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 4);
-    cr_assert_eq(player->position.y, 5);
+    cr_assert_eq(player->position.y, 3);
     player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 5);
-    cr_assert_eq(player->position.y, 5);
+    cr_assert_eq(player->position.y, 3);
     player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 5);
@@ -109,6 +109,26 @@ Test(player_forward_tests, simple_forward)
     player_forward(world->map, player);
     cr_assert_eq(player->position.x, 4);
     cr_assert_eq(player->position.y, 4);
+    world_free(world);
+    team_free(team);
+}
+
+Test(player_forward_tests, forward_outside_map_bounds)
+{
+    vector2u_t size = { 5, 5 };
+    world_t *world = world_new(size, 100);
+    vector2u_t position = { 0, 0 };
+    team_t *team = team_new("Team1", 1);
+    player_t *player = player_new(NULL, team, position);
+
+    world_add_player(world, player);
+    player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 0);
+    cr_assert_eq(player->position.y, 4);
+    player->direction = DIR_SOUTH;
+    player_forward(world->map, player);
+    cr_assert_eq(player->position.x, 0);
+    cr_assert_eq(player->position.y, 0);
     world_free(world);
     team_free(team);
 }
