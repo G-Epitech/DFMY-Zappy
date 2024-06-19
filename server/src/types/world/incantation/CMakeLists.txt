@@ -4,4 +4,6 @@ target_sources(zappy_server_core PUBLIC
         valid.c
         start.c
         registrations.c
+        end.c
+        cleanup.c
 )

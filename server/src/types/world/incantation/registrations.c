@@ -30,3 +30,15 @@ void incantation_remove_player(incantation_t *incantation, player_t *player)
     if (player->incantation == incantation)
         player->incantation = NULL;
 }
+
+void incantation_remove_all_players(incantation_t *incantation)
+{
+    node_t *node = incantation->players->first;
+    player_t *player = NULL;
+
+    while (node) {
+        player = NODE_TO_PTR(node, player_t *);
+        incantation_remove_player(incantation, player);
+        node = node->next;
+    }
+}

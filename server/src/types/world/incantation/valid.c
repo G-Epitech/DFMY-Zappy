@@ -19,20 +19,9 @@ static const incantation_requirements_t incantation_requirements[] = {
     {6, {0, 2, 2, 2, 2, 2, 1}},
 };
 
-static bool incantation_check_player_levels(list_t *players, size_t level,
-    size_t nb_players)
+incantation_requirements_t incantation_requirement(unsigned int level)
 {
-    node_t *node = players->first;
-    player_t *player = NULL;
-    size_t count = 0;
-
-    while (node) {
-        player = NODE_TO_PTR(node, player_t *);
-        if (player->level == level)
-            count += 1;
-        node = node->next;
-    }
-    return count >= nb_players;
+    return incantation_requirements[level - 1];
 }
 
 static bool incantation_check_resources(list_t *players,
@@ -54,11 +43,8 @@ bool incantation_is_valid(incantation_t *incantation, map_t *map)
 
     if (incantation->level > 7)
         return false;
-    requirement = incantation_requirements[incantation->level - 1];
+    requirement = incantation_requirement(incantation->level);
     if (incantation->players->len < requirement.nb_players)
-        return false;
-    if (!incantation_check_player_levels(incantation->players,
-        incantation->level, requirement.nb_players))
         return false;
     if (!incantation_check_resources(incantation->players,
         requirement.resources, map))

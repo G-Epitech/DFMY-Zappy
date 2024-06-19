@@ -11,6 +11,8 @@
 #include "types/controller.h"
 #include "map.h"
 
+typedef struct world_s world_t;
+
 // @brief Duration of an incantation
 #define INCANTATION_DURATION 300
 
@@ -57,6 +59,12 @@ void incantation_free(incantation_t *incantation);
 void incantation_remove_player(incantation_t *incantation, player_t *player);
 
 /**
+ * @brief Remove all players from the incantation
+ * @param incantation Incantation to remove all players from
+ */
+void incantation_remove_all_players(incantation_t *incantation);
+
+/**
  * @brief Add a player to the incantation
  * @param incantation Incantation to add the player to
  * @param player Player to add to the incantation
@@ -77,3 +85,35 @@ void incantation_free_as_node_data(node_data_t incantation);
  * @return Incantation is valid or not
  */
 bool incantation_is_valid(incantation_t *incantation, map_t *map);
+
+/**
+ * @brief Cleanup up an incantation (remove all players, remove from
+ * world and free)
+ * @param incantation Incantation to cleanup
+ * @param world World of the incantation
+ */
+void incantation_cleanup(incantation_t *incantation, world_t *world);
+
+/**
+ * @brief Get the incantation requirements for a given level
+ * @param level Level of the incantation
+ * @return The incantation requirements
+ */
+incantation_requirements_t incantation_requirement(unsigned int level);
+
+/**
+ * @brief Start an incantation
+ * @param player Player who requested the incantation
+ * @param world World of the incantation
+ * @return Started incantation or NULL if failed
+ */
+incantation_t *incantation_start(player_t *player, world_t *world);
+
+/**
+ * @brief End an incantation (increment player levels, remove resources and
+ * cleanup)
+ * @param incantation Incantation to end
+ * @param world World of the incantation
+ * @return Incantation end was successful or not
+ */
+bool incantation_end(incantation_t *incantation, world_t *world);
