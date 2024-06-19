@@ -16,8 +16,6 @@
 
 // @brief Structure representing the requirements for an incantation
 typedef struct incantation_requirements_s {
-    // @brief The level at the beginning of the incantation
-    size_t level;
     // @brief Number of players with the same level required
     size_t nb_players;
     // @brief Resources required for the incantation
