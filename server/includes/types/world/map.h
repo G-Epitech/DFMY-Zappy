@@ -74,3 +74,11 @@ void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
  */
 void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
+
+/**
+ * @brief Resolve a position on the map
+ * @param pos Position to resolve
+ * @param map Size of the map
+ * @return Resolved position
+ */
+vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
