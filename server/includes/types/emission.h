@@ -10,6 +10,11 @@
 #include "types/list.h"
 #include "types/smart_ptr.h"
 
+
+// @brief Specify that the emission is complete and
+// end char should be sent
+#define EMISSION_COMPLETE 0
+
 // @brief Specify that the emission is partial and
 // end char should not be sent
 #define EMISSION_PARTIAL 1
@@ -59,3 +64,14 @@ void emission_free(emission_t *emission);
  * @param data Data to free as node data
  */
 void emission_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Create emission parameters from format
+ * @param params Emission parameters
+ * @param flags Flags for the emission
+ * @param format Format string
+ * @return true if success, false otherwise
+ * @warning Parameters buffer will be allocated and should be freed
+ */
+bool emission_params_from_format(emission_params_t *params, int flags,
+    const char *format, ...) __attribute__((format(printf, 3, 4)));

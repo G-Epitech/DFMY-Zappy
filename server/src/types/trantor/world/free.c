@@ -18,5 +18,6 @@ void world_free(world_t *world)
     list_free(world->teams, &team_free_as_node_data);
     list_free(world->players, &player_free_as_node_data);
     list_free(world->incantations, &incantation_free_as_node_data);
+    list_free(world->dead_players, &player_free_as_node_data);
     free(world);
 }

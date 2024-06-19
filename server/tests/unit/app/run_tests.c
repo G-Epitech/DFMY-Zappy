@@ -187,7 +187,7 @@ Test(run_tests, select_timeout)
     app.world = world_new((vector2u_t) { 10, 10 }, 2);
     list_push(app.server->controllers, NODE_DATA_FROM_PTR(controller));
     app.world->next_event_delay = 10;
-    app_handle_timeout(&app, &timeout);
+    app_get_timeout(&app, &timeout);
     cr_assert_eq(timeout.tv_sec, 5);
     cr_assert_eq(timeout.tv_usec, 0);
 }

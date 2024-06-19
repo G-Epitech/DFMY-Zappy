@@ -7,22 +7,24 @@
 
 #include "app.h"
 
-void app_handle_timeout(app_t *app, timeval_t *timeout)
+timeval_t *app_get_timeout(app_t *app, timeval_t *timeout)
 {
-    if (app->server->controllers->len == 0) {
-        timeout = NULL;
-    } else {
-        chrono_units_to_timeval(&app->world->chrono,
-            app->world->next_event_delay, timeout);
+    if (app->server->controllers->len == 0 ||
+        app->world->next_event_delay < 0) {
+        return NULL;
     }
+    chrono_units_to_timeval(&app->world->chrono,
+            app->world->next_event_delay, timeout);
+    return timeout;
 }
 
 void app_handle_server_connections(app_t *app)
 {
     timeval_t timeout = { 0, 0 };
+    timeval_t *timeout_ptr = app_get_timeout(app, &timeout);
 
-    app_handle_timeout(app, &timeout);
-    if (server_poll(app->server, &timeout) > 0) {
+    server_remove_disconnected_controllers(app->server);
+    if (server_poll(app->server, timeout_ptr) > 0) {
         server_handle_new_connections(app->server);
         server_handle_emissions(app->server);
         server_handle_requests(app->server);

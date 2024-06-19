@@ -18,6 +18,11 @@
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
 
+// Check if controller can emit data
+#define CTRL_CAN_EMIT(c) ((c)->generic.state & CTRL_ALLOW_EMIT)
+// Check if controller can receive requests
+#define CTRL_CAN_REQ(c) ((c)->generic.state & CTRL_ALLOW_REQ)
+
 // Forward declaration
 typedef struct player_s player_t;
 
@@ -33,10 +38,14 @@ typedef enum controller_type_e {
 
 // @brief Controller states
 typedef enum controller_read_state_e {
-    // @brief Controller is connected
-    CTRL_CONNECTED,
     // @brief Controller is disconnected
-    CTRL_DISCONNECTED,
+    CTRL_DISCONNECTED = 0,
+    // @brief Controller is allowed to receive requests
+    CTRL_ALLOW_REQ = 1,
+    // @brief Controller is allowed to emit data
+    CTRL_ALLOW_EMIT = 2,
+    // @brief Controller is connected
+    CTRL_CONNECTED = CTRL_ALLOW_EMIT | CTRL_ALLOW_REQ
 } controller_state_t;
 
 // @brief Represent a generic controller
