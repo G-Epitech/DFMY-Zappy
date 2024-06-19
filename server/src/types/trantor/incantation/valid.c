@@ -46,8 +46,6 @@ bool incantation_is_valid(incantation_t *incantation, map_t *map)
     requirement = incantation_get_requirements(incantation->level);
     if (incantation->players->len < requirement->nb_players)
         return false;
-    if (!incantation_check_resources(incantation->players,
-        requirement->resources, map))
-        return false;
-    return true;
+    return incantation_check_resources(incantation->players,
+        requirement->resources, map);
 }

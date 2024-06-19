@@ -8,7 +8,7 @@
 #include "types/trantor/world.h"
 #include "types/trantor/incantation.h"
 
-static void incantation_increment_player_levels(incantation_t *incantation)
+static void increment_player_levels(incantation_t *incantation)
 {
     node_t *node = incantation->players->first;
     player_t *player = NULL;
@@ -20,7 +20,7 @@ static void incantation_increment_player_levels(incantation_t *incantation)
     }
 }
 
-static void incantation_remove_resources(incantation_t *incantation,
+static void remove_resources(incantation_t *incantation,
     map_t *map)
 {
     node_t *node = incantation->players->first;
@@ -35,10 +35,11 @@ static void incantation_remove_resources(incantation_t *incantation,
     }
 }
 
-static void incantation_end_success(incantation_t *incantation, map_t *map)
+static void end_success(incantation_t *incantation,
+    map_t *map)
 {
-    incantation_increment_player_levels(incantation);
-    incantation_remove_resources(incantation, map);
+    increment_player_levels(incantation);
+    remove_resources(incantation, map);
 }
 
 bool world_end_incantation(world_t *world, incantation_t *incantation)
@@ -47,7 +48,7 @@ bool world_end_incantation(world_t *world, incantation_t *incantation)
         world_remove_incantation(world, incantation);
         return false;
     }
-    incantation_end_success(incantation, world->map);
+    end_success(incantation, world->map);
     world_remove_incantation(world, incantation);
     return true;
 }

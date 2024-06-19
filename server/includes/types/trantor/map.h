@@ -11,14 +11,14 @@
 #include "types/vector2.h"
 #include "types/trantor/resource.h"
 
-// @brief Get the map cell at given position
-#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
-
 // Forward declaration
 typedef struct player_s player_t;
 
+// @brief Get the map cell at given position
+#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
+
 // @brief Map player cell accessor
-#define MAP_PLAYER_CELL(m, p) (&(m->cells[p->position.y][p->position.x]))
+#define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)
 
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
