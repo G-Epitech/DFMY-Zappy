@@ -40,10 +40,9 @@ typedef struct incantation_s {
  * @brief Create a new incantation
  * @param cell Cell on which the incantation is happening
  * @param level Desired level of the incantation
- * @param requester Player who requested the incantation
  * @return Created incantation or NULL if failed
  */
-incantation_t *incantation_new(unsigned int level, player_t *requester);
+incantation_t *incantation_new(unsigned int level);
 
 /**
 * @brief Free given incantation
@@ -99,7 +98,7 @@ void incantation_cleanup(incantation_t *incantation, world_t *world);
  * @param level Level of the incantation
  * @return The incantation requirements
  */
-incantation_requirements_t incantation_get_requirements(unsigned int level);
+incantation_requirements_t *incantation_get_requirements(unsigned int level);
 
 /**
  * @brief Start an incantation

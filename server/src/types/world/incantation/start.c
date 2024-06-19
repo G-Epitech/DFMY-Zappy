@@ -17,8 +17,7 @@ static void incantation_add_players_from_cell(incantation_t *incantation,
 
     while (node) {
         player = NODE_TO_PTR(node, player_t *);
-        if (player != incantation->requester &&
-            player->level == incantation->level) {
+        if (player->level == (incantation->level - 1)) {
             incantation_add_player(incantation, player);
         }
         node = node->next;
@@ -27,13 +26,14 @@ static void incantation_add_players_from_cell(incantation_t *incantation,
 
 incantation_t *incantation_start(player_t *player, world_t *world)
 {
-    incantation_t *incantation = incantation_new(player->level, player);
+    incantation_t *incantation = incantation_new(player->level + 1);
     map_cell_t *cell = NULL;
 
     if (!incantation)
         return NULL;
-    cell = &MAP_CELL_AT_POS(world->map, player->position);
+    cell = MAP_CELL_AT_POS(world->map, player->position);
     incantation_add_players_from_cell(incantation, cell);
+    incantation->requester = player;
     if (!incantation_is_valid(incantation, world->map)) {
         incantation_remove_all_players(incantation);
         incantation_free(incantation);

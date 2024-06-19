@@ -34,11 +34,14 @@ void incantation_remove_player(incantation_t *incantation, player_t *player)
 void incantation_remove_all_players(incantation_t *incantation)
 {
     node_t *node = incantation->players->first;
+    node_t *next = NULL;
     player_t *player = NULL;
 
     while (node) {
+        next = node->next;
         player = NODE_TO_PTR(node, player_t *);
-        incantation_remove_player(incantation, player);
-        node = node->next;
+        player->incantation = NULL;
+        list_erase(incantation->players, node, NULL);
+        node = next;
     }
 }

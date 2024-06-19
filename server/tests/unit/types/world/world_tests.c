@@ -213,10 +213,11 @@ Test(world_remove_player_tests, remove_player_from_everything)
     vector2u_t position = { 5, 5 };
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(NULL, team, position);
-    incantation_t *incantation = incantation_new(1, player);
+    incantation_t *incantation = incantation_new(1);
 
     world_add_player(world, player);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
+    incantation_add_player(incantation, player);
     cr_assert_eq(world->players->len, 1);
     cr_assert_eq(world->incantations->len, 1);
     world_remove_player(world, player);
@@ -232,9 +233,10 @@ Test(world_remove_player_tests, remove_unadded_player_from_everything)
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(NULL, team, position);
     player_t *player2 = player_new(NULL, team, position);
-    incantation_t *incantation = incantation_new(1, player2);
+    incantation_t *incantation = incantation_new(1);
 
     world_add_player(world, player2);
+    incantation_add_player(incantation, player2);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
     cr_assert_eq(world->next_player_id, 1);
     cr_assert_eq(player->id, 0);

@@ -12,7 +12,7 @@
 #include "types/world/resource.h"
 
 // @brief Get the map cell at given position
-#define MAP_CELL_AT_POS(map, pos) (map->cells[pos.y][pos.x])
+#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
 
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {

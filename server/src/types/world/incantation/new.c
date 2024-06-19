@@ -7,15 +7,13 @@
 
 #include "types/world/incantation.h"
 
-void incantation_init(incantation_t *incantation, unsigned int level,
-    player_t *requester)
+void incantation_init(incantation_t *incantation, unsigned int level)
 {
     incantation->level = level;
     incantation->cooldown = INCANTATION_DURATION;
-    incantation->requester = requester;
 }
 
-incantation_t *incantation_new(unsigned int level, player_t *requester)
+incantation_t *incantation_new(unsigned int level)
 {
     incantation_t *incantation = calloc(1, sizeof(incantation_t));
 
@@ -26,10 +24,6 @@ incantation_t *incantation_new(unsigned int level, player_t *requester)
         incantation_free(incantation);
         return NULL;
     }
-    if (!incantation_add_player(incantation, requester)) {
-        incantation_free(incantation);
-        return NULL;
-    }
-    incantation_init(incantation, level, requester);
+    incantation_init(incantation, level);
     return incantation;
 }
