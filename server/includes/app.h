@@ -11,7 +11,7 @@
 #include "log.h"
 #include "types/server.h"
 #include "types/args.h"
-#include "types/world/world.h"
+#include "types/trantor/world.h"
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84

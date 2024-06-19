@@ -9,8 +9,8 @@
 
 #include "list.h"
 #include "types/request.h"
-#include "types/world/chrono.h"
-#include "types/world/team.h"
+#include "types/trantor/chrono.h"
+#include "types/trantor/team.h"
 #include "types/vector2.h"
 #include "smart_ptr.h"
 #include "emission.h"
