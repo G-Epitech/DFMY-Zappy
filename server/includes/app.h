@@ -11,7 +11,7 @@
 #include "log.h"
 #include "types/server.h"
 #include "types/args.h"
-#include "types/world/world.h"
+#include "types/trantor/world.h"
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
@@ -135,4 +135,3 @@ void app_handle_world_routine_resources_generation(world_t *world);
  * @return true if a team has won, false otherwise
  */
 bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
-

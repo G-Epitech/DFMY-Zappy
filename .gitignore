@@ -19,3 +19,4 @@ zappy_ai
 *.gcno
 *.gcda
 *.gcov
+build

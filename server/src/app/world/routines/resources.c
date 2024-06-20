@@ -5,8 +5,8 @@
 ** resources.c
 */
 
-#include "types/world/world.h"
-#include "types/world/resource.h"
+#include "types/trantor/world.h"
+#include "types/trantor/resource.h"
 
 static void generate_resource(map_t *map,
     resources_manager_t *resources_manager, resource_t type)

@@ -8,5 +8,5 @@ target_sources(zappy_server_tests PUBLIC
         vector2_tests.c
 )
 add_subdirectory(args)
-add_subdirectory(world)
+add_subdirectory(trantor)
 add_subdirectory(server)

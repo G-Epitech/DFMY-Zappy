@@ -6,7 +6,7 @@
 */
 
 #include "types/controller.h"
-#include "types/world/player.h"
+#include "types/trantor/player.h"
 #include "types/vector2.h"
 
 bool controller_player_from_generic(controller_t *controller, team_t *team,
