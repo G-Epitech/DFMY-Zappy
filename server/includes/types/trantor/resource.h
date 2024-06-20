@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <stdbool.h>
 #include <stddef.h>
 #include "chrono.h"
 #include "types/vector2.h"
@@ -81,3 +82,18 @@ typedef struct resources_manager_s {
  */
 void resources_manager_init(resources_manager_t *manager,
     vector2u_t map_size);
+
+/**
+ * @brief Get resource from string
+ * @param resource Pointer to store the resource
+ * @param str String to convert
+ * @return True if the conversion was found, false otherwise
+ */
+bool resource_from_str(resource_t *resource, const char *str);
+
+/**
+ * @brief Convert resource to string
+ * @param resource Resource to convert
+ * @param str Pointer to store the string
+ */
+void resource_to_str(resource_t resource, char **str);

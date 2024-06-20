@@ -55,3 +55,24 @@ Test(resources_manager_new_tests, simple_new_with_map_10)
     cr_assert_eq(resources_manager.next_generation,
     RES_MANAGER_NEXT_GENERATION_DELAY);
 }
+
+Test(resources_string_conversion, conversion_tests)
+{
+    char *str = NULL;
+    resource_t resource = RES_FOOD;
+
+    resource_to_str(resource, &str);
+    cr_assert_str_eq(str, "food");
+    free(str);
+    resource = RES_LINEMATE;
+    resource_to_str(resource, &str);
+    cr_assert_str_eq(str, "linemate");
+    free(str);
+    str = strdup("food");
+    resource_from_str(&resource, str);
+    cr_assert_eq(resource, RES_FOOD);
+    free(str);
+    str = strdup("unknown");
+    cr_assert_eq(resource_from_str(&resource, str), false);
+    free(str);
+}
