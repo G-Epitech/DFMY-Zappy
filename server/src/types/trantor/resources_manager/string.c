@@ -15,8 +15,7 @@ static char *resource_str[] = {
     "sibur",
     "mendiane",
     "phiras",
-    "thystame",
-    NULL
+    "thystame"
 };
 
 size_t resource_string_len(resource_t resource)
@@ -38,7 +37,7 @@ bool resource_from_string(resource_t *resource, const char *str)
 {
     for (resource_t i = RES_FOOD; i < RES_LEN; i++) {
         if (strcmp(str, resource_str[i]) == 0) {
-            *resource = i;
+            (*resource) = i;
             return true;
         }
     }

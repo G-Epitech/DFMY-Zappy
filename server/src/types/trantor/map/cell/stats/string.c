@@ -33,7 +33,7 @@ static void map_cell_stats_resources_string(map_cell_stats_t *cell_stats,
         memcpy(&buffer[(*buf_idx)], resource_str, strlen(resource_str));
         (*buf_idx) += strlen(resource_str);
         buffer[(*buf_idx)] = ' ';
-        *buf_idx += 1;
+        (*buf_idx) += 1;
     }
 }
 
@@ -45,7 +45,7 @@ static void map_cell_stats_string(char *buffer, map_cell_stats_t *cell_stats,
     }
     for (size_t j = 0; j < cell_stats->players; j++) {
         memcpy(&buffer[(*buf_idx)], "player ", 7);
-        *buf_idx += 7;
+        (*buf_idx) += 7;
     }
     for (size_t j = 0; j < cell_stats->eggs; j++) {
         memcpy(&buffer[(*buf_idx)], "egg ", 4);
@@ -58,7 +58,7 @@ static void map_cell_stats_string(char *buffer, map_cell_stats_t *cell_stats,
 char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
     size_t buf_size)
 {
-    char *buffer = malloc(sizeof(char) * buf_size + 3);
+    char *buffer = calloc(buf_size + 3, sizeof(char));
     size_t buf_idx = 1;
 
     if (buffer == NULL)
