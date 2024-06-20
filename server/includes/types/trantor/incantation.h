@@ -40,11 +40,11 @@ typedef struct incantation_s {
 
 /**
  * @brief Create a new incantation
- * @param cell Cell on which the incantation is happening
  * @param level Desired level of the incantation
+ * @param location Location of the incantation
  * @return Created incantation or NULL if failed
  */
-incantation_t *incantation_new(unsigned int level);
+incantation_t *incantation_new(unsigned int level, vector2u_t location);
 
 /**
 * @brief Free given incantation
@@ -110,12 +110,3 @@ bool incantation_complete_success(incantation_t *incantation,
  */
 bool incantation_add_players_from_cell(incantation_t *incantation,
     map_cell_t *cell);
-
-/**
- * @brief Get the location of the incantation
- * @param incantation Incantation to get the location from
- * @param location Location of the incantation will be stored here
- * @return true if the location was found, false otherwise
- */
-bool incantation_get_location(incantation_t *incantation,
-    vector2u_t *location);

@@ -134,15 +134,6 @@ void world_kill_egg(world_t *world, egg_t *egg);
 incantation_t *world_start_incantation(world_t *world, player_t *player);
 
 /**
- * @brief End an incantation (increment player levels, remove resources and
- * cleanup)
- * @param incantation Incantation to end
- * @param world World of the incantation
- * @return Incantation end was successful or not
- */
-bool world_end_incantation(world_t *world, incantation_t *incantation);
-
-/**
  * @brief Cleanup up an incantation (remove all players, remove from
  * world and free)
  * @param incantation Incantation to cleanup

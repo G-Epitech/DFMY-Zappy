@@ -4,5 +4,4 @@ target_sources(zappy_server_core PRIVATE
         valid.c
         complete.c
         registrations.c
-        location.c
 )
