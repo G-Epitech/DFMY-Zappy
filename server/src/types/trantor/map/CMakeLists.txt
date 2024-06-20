@@ -6,5 +6,6 @@ target_sources(zappy_server_core PRIVATE
         position.c
         cell/init.c
         cell/free.c
-        cell/stats.c
+        cell/stats/get.c
+        cell/stats/string.c
 )

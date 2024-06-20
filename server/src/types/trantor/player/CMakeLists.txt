@@ -8,5 +8,5 @@ target_sources(zappy_server_core PRIVATE
         life.c
         look/look.c
         look/vector.c
-        look/string.c
+        look/axis.c
 )

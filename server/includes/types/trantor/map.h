@@ -148,3 +148,20 @@ vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
  * @param stats Stats to fill
  */
 void map_cell_get_stats(map_cell_t *cell, map_cell_stats_t *stats);
+
+/**
+ * @brief Get the buffer size of a cell stats (used for vision)
+ * @param stats Stats to get the buffer size from
+ * @return Buffer size
+ */
+size_t map_cell_stats_str_len(map_cell_stats_t *stats);
+
+/**
+ * @brief Get the string of a cell stats (used for vision)
+ * @param cell_stats Cell stats to get the look string from
+ * @param nb_cells Number of cells to get the look string from
+ * @param buf_size Buffer size to store the look string
+ * @return Look string
+ */
+char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
+    size_t buf_size);

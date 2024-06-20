@@ -89,21 +89,21 @@ void resources_manager_init(resources_manager_t *manager,
  * @param str String to convert
  * @return True if the conversion was found, false otherwise
  */
-bool resource_from_str(resource_t *resource, const char *str);
+bool resource_from_string(resource_t *resource, const char *str);
 
 /**
  * @brief Convert resource to string by memory allocation and copy
  * @param resource Resource to convert
  * @param str Pointer to store the string
  */
-void resource_to_str(resource_t resource, char **str);
+void resource_to_string(resource_t resource, char **str);
 
 /**
  * @brief Get the pointer to the resource string
  * @param resource Resource to get the string from
  * @return Pointer to the resource string
  */
-char *resource_to_str_ptr(resource_t resource);
+char *resource_to_string_ptr(resource_t resource);
 
 /**
  * @brief Get the length of a resource string

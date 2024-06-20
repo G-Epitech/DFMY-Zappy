@@ -29,6 +29,14 @@
 // @brief Generate a random player direction
 #define PLAYER_RANDOM_DIRECTION() ((random() % DIR_LEN) + 1)
 
+// @brief Structure representing a player look info
+typedef struct player_look_info_s {
+    // @brief Buffer size
+    size_t buf_size;
+    // @brief Look vector
+    vector2l_t vector;
+} player_look_info_t;
+
 // @brief Structure representing a Trantorian player's direction
 typedef enum player_direction_e {
     // @brief North direction
@@ -140,16 +148,16 @@ char *player_look(player_t *player, map_t *map);
 /**
  * @brief Get the player's look vector
  * @param player Player to get the look vector from
- * @param look_vector Look vector to store the result
+ * @param info Look info to get the look vector from
  */
-void player_look_vector(player_t *player, vector2l_t *look_vector);
+void player_look_vector(player_t *player, player_look_info_t *info);
 
 /**
- * @brief Get the player's look string
- * @param cell_stats Cell stats to get the look string from
- * @param nb_cells Number of cells to get the look string from
- * @param buf_size Buffer size to store the look string
- * @return Look string
+ * @brief Get the player's look on vertical or horizontal axis
+ * @param player Player to get the look from
+ * @param map Map to get the look from
+ * @param info Look info to get the look fro
+ * @param cell_stats Cell stats to get the look from
  */
-char *player_look_string(map_cell_stats_t *cell_stats, size_t nb_cells,
-    size_t buf_size);
+void player_look_axis(player_t *player, map_t *map, player_look_info_t *info,
+    map_cell_stats_t *cell_stats);

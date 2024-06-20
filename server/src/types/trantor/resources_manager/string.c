@@ -9,14 +9,14 @@
 #include "types/trantor/resource.h"
 
 static char *resource_str[] = {
-        "food",
-        "linemate",
-        "deraumere",
-        "sibur",
-        "mendiane",
-        "phiras",
-        "thystame",
-        NULL
+    "food",
+    "linemate",
+    "deraumere",
+    "sibur",
+    "mendiane",
+    "phiras",
+    "thystame",
+    NULL
 };
 
 size_t resource_string_len(resource_t resource)
@@ -24,17 +24,17 @@ size_t resource_string_len(resource_t resource)
     return strlen(resource_str[resource]);
 }
 
-char *resource_to_str_ptr(resource_t resource)
+char *resource_to_string_ptr(resource_t resource)
 {
     return resource_str[resource];
 }
 
-void resource_to_str(resource_t resource, char **str)
+void resource_to_string(resource_t resource, char **str)
 {
     (*str) = strdup(resource_str[resource]);
 }
 
-bool resource_from_str(resource_t *resource, const char *str)
+bool resource_from_string(resource_t *resource, const char *str)
 {
     for (resource_t i = RES_FOOD; i < RES_LEN; i++) {
         if (strcmp(str, resource_str[i]) == 0) {
@@ -44,4 +44,3 @@ bool resource_from_str(resource_t *resource, const char *str)
     }
     return false;
 }
-
