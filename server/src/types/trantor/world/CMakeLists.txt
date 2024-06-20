@@ -11,4 +11,5 @@ target_sources(zappy_server_core PUBLIC
         teams/slots.c
         eggs/register.c
         eggs/kill.c
+        eggs/hatching.c
 )

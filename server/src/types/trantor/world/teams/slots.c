@@ -7,7 +7,8 @@
 
 #include "types/trantor/world.h"
 
-size_t world_ensure_team_slots(world_t *world, team_t *team)
+// TODO: Use this code to generate minimal eggs
+/*size_t world_ensure_team_slots(world_t *world, team_t *team)
 {
     size_t current = team->players->len + team->eggs->len;
 
@@ -18,4 +19,4 @@ size_t world_ensure_team_slots(world_t *world, team_t *team)
             return i - current;
     }
     return team->min_slots - current;
-}
+}*/

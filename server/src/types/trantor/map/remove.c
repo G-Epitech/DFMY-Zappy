@@ -23,11 +23,8 @@ void map_remove_player(map_t *map, player_t *player)
     map_cell_t *cell = NULL;
     node_t *node = NULL;
 
-    if (player->position.y >= map->size.y ||
-        player->position.x >= map->size.x
-    ) {
+    if (MAP_OUT_POSITION(map, player->position))
         return;
-    }
     cell = MAP_PLAYER_CELL(map, player);
     node = list_find(cell->players, data);
     if (node)
@@ -40,11 +37,8 @@ void map_remove_egg(map_t *map, egg_t *egg)
     map_cell_t *cell = NULL;
     node_t *node = NULL;
 
-    if (egg->position.y >= map->size.y ||
-        egg->position.x >= map->size.x
-    ) {
+    if (MAP_OUT_POSITION(map, egg->position))
         return;
-    }
     cell = MAP_EGG_CELL(map, egg);
     node = list_find(cell->eggs, data);
     if (node)

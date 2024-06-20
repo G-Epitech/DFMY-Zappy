@@ -14,24 +14,30 @@
 // @brief Structure representing a Trantorian egg
 typedef struct egg_s {
     // @brief Identifier of the egg
-    size_t id;
+    unsigned long id;
     // @brief Position of the egg on the map
     vector2u_t position;
     // @brief Link to the team that laid the egg
     team_t *team;
+    // @brief ID of the player that laid the egg
+    long laid_by;
 } egg_t;
 
 /**
  * @brief Initialize an egg
  * @param egg Egg to initialize
+ * @param laid_by ID of the player that laid the egg
+ * @param id ID of the egg
  */
-void egg_init(egg_t *egg);
+void egg_init(egg_t *egg, long laid_by, size_t id);
 
 /**
  * @brief Create a new egg
+ * @param laid_by ID of the player that laid the egg
+ * @param id ID of the egg
  * @return A pointer to the newly created egg
  */
-egg_t *egg_new(void);
+egg_t *egg_new(long laid_by, size_t id);
 
 /**
  * @brief Free an egg

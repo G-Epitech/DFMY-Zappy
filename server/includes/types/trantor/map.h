@@ -26,6 +26,9 @@ typedef struct egg_s egg_t;
 // @brief Map egg cell accessor
 #define MAP_EGG_CELL(m, e) MAP_CELL_AT_POS(m, e->position)
 
+// @brief Look for position out of map
+#define MAP_OUT_POSITION(m, p) ((p).x >= m->size.x || (p).y >= m->size.y)
+
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell

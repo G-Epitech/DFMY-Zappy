@@ -7,13 +7,22 @@
 
 #include "types/trantor/world.h"
 
+static bool create_eggs(world_t *world, team_t *team)
+{
+    for (size_t i = 0; i < team->min_slots; i++) {
+        if (!world_add_egg(world, team, -1))
+            return false;
+    }
+    return true;
+}
+
 bool world_create_team(world_t *world, char *team_name, size_t min_slots)
 {
     team_t *team = team_new(team_name, min_slots);
 
     if (!team)
         return false;
-    if (world_ensure_team_slots(world, team) != min_slots ||
+    if (!create_eggs(world, team) ||
         !list_push(world->teams, NODE_DATA_FROM_PTR(team))
     ) {
         team_free(team);

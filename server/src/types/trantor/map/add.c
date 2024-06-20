@@ -19,25 +19,22 @@ void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
 
 bool map_add_player(map_t *map, player_t *player)
 {
-    vector2u_t position;
+    vector2u_t *position = player ? &player->position : NULL;
 
-    if (!map)
+    if (!map || !player || MAP_OUT_POSITION(map, *position))
         return false;
-    vector2u_random(&position, &map->size);
-    if (!list_push(map->cells[position.y][position.x].players,
+    player->direction = PLAYER_RANDOM_DIRECTION();
+    return list_push(
+        map->cells[position->y][position->x].players,
         NODE_DATA_FROM_PTR(player)
-    )) {
-        return false;
-    }
-    player->position = position;
-    return true;
+    );
 }
 
 bool map_add_egg(map_t *map, egg_t *egg)
 {
     vector2u_t position;
 
-    if (!map)
+    if (!map || !egg)
         return false;
     vector2u_random(&position, &map->size);
     if (!list_push(map->cells[position.y][position.x].eggs,
