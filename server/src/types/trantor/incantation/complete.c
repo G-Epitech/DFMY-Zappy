@@ -38,7 +38,7 @@ static void remove_resources(incantation_t *incantation,
 bool incantation_complete_success(incantation_t *incantation,
     map_t *map)
 {
-    if (!incantation || !map)
+    if (!incantation || !map || !incantation->players->first)
         return false;
     increment_player_levels(incantation);
     remove_resources(incantation, map);
