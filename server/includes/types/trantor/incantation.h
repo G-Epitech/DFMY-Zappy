@@ -34,6 +34,8 @@ typedef struct incantation_s {
     player_t *requester;
     // @brief The level of the incantation
     unsigned int level;
+    // @brief Location of the incantation
+    vector2u_t location;
 } incantation_t;
 
 /**
@@ -108,3 +110,12 @@ bool incantation_complete_success(incantation_t *incantation,
  */
 bool incantation_add_players_from_cell(incantation_t *incantation,
     map_cell_t *cell);
+
+/**
+ * @brief Get the location of the incantation
+ * @param incantation Incantation to get the location from
+ * @param location Location of the incantation will be stored here
+ * @return true if the location was found, false otherwise
+ */
+bool incantation_get_location(incantation_t *incantation,
+    vector2u_t *location);

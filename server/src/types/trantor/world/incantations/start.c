@@ -24,6 +24,7 @@ incantation_t *world_start_incantation(world_t *world, player_t *player)
         incantation_free(incantation);
         return NULL;
     }
+    incantation->location = player->position;
     incantation->requester = player;
     return incantation;
 }

@@ -1,4 +1,4 @@
-target_sources(zappy_server_core PUBLIC
+target_sources(zappy_server_core PRIVATE
         free.c
         init.c
         parse.c

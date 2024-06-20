@@ -12,6 +12,8 @@ void incantation_init(incantation_t *incantation, unsigned int level)
     incantation->level = level;
     incantation->cooldown = INCANTATION_DURATION;
     incantation->requester = NULL;
+    incantation->location.x = 0;
+    incantation->location.y = 0;
 }
 
 incantation_t *incantation_new(unsigned int level)

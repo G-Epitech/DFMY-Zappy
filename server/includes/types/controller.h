@@ -191,6 +191,12 @@ controller_state_t controller_read(controller_t *controller);
 request_t *controller_get_last_request(controller_t *controller);
 
 /**
+ * @brief Clear first request of a controller
+ * @param controller Controller to clear first request from
+ */
+void controller_clear_first_request(controller_t *controller);
+
+/**
  * @brief Read next token from a buffer
  * @param start Start of the buffer
  * @param size Size of the buffer
@@ -233,3 +239,14 @@ bool controller_end_emission(controller_t *controller);
  */
 bool controller_player_from_generic(controller_t *controller,
     player_t *player);
+
+/**
+ * @brief Add an emission to the controller from a shared buffer
+ * @param controller Controller to add the emission to
+ * @param buffer_ptr Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @param flags Flags of the emission
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_add_emission_from_shared_buffer(controller_t *controller,
+    smart_ptr_t *buffer_ptr, size_t buffer_size, int flags);

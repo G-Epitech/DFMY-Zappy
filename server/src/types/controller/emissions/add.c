@@ -11,7 +11,7 @@
 #include "types/list.h"
 #include "log.h"
 
-static bool controller_add_emission_final(controller_t *controller,
+bool controller_add_emission_from_shared_buffer(controller_t *controller,
     smart_ptr_t *buffer_ptr, size_t buffer_size, int flags)
 {
     emission_t *emission = emission_new(buffer_ptr, buffer_size, flags);
@@ -46,7 +46,7 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     buffer_ptr = smart_ptr_new(buffer);
     if (!buffer_ptr)
         return false;
-    return controller_add_emission_final(controller, buffer_ptr,
+    return controller_add_emission_from_shared_buffer(controller, buffer_ptr,
         buffer_size, flags);
 }
 
@@ -84,7 +84,7 @@ bool controllers_add_emission(list_t *controllers,
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type & types && CTRL_CAN_EMIT(controller)) {
-            controller_add_emission_final(controller, buffer_ptr,
+            controller_add_emission_from_shared_buffer(controller, buffer_ptr,
                 params->buffer_size, params->flags);
         }
         node = node->next;

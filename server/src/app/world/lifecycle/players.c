@@ -93,7 +93,7 @@ void app_handle_world_lifecycle_dead_players(world_t *world,
     }
 }
 
-void app_handle_world_lifecycle_players(world_t *world,server_t *server)
+void app_handle_world_lifecycle_players(world_t *world, server_t *server)
 {
     app_handle_world_lifecycle_dead_players(world, server);
     app_handle_world_lifecycle_players_lives(world, server);
