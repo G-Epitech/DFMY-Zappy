@@ -7,19 +7,21 @@
 
 #include "types/trantor/egg.h"
 
-void egg_init(egg_t *egg, team_t *team, vector2u_t position)
+void egg_init(egg_t *egg, long laid_by, size_t id)
 {
-    egg->team = team;
-    egg->position = position;
-    egg->id = 0;
+    egg->team = NULL;
+    egg->position.x = 0;
+    egg->position.y = 0;
+    egg->id = id;
+    egg->laid_by = laid_by;
 }
 
-egg_t *egg_new(team_t *team, vector2u_t position)
+egg_t *egg_new(long laid_by, size_t id)
 {
     egg_t *egg = calloc(1, sizeof(egg_t));
 
     if (!egg)
         return NULL;
-    egg_init(egg, team, position);
+    egg_init(egg, laid_by, id);
     return egg;
 }

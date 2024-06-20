@@ -14,6 +14,7 @@
 #include "types/list.h"
 #include "types/controller.h"
 #include "types/emission.h"
+#include "types/trantor/player.h"
 
 static void redirect_all_std(void)
 {
@@ -834,38 +835,25 @@ Test(controller_emissions_tests, end_emission_on_null_emission, .init = redirect
 Test(controller_conversion_tests, controller_player_from_generic)
 {
     controller_t *controller = controller_new(0);
-    team_t team = { 0 };
-    vector2u_t position = { 0 };
+    player_t *player = player_new(1);
 
-    cr_assert_eq(controller_player_from_generic(controller, &team, position), true);
+    cr_assert_eq(controller_player_from_generic(controller, player), true);
     cr_assert_eq(controller->player.type, CTRL_PLAYER);
     cr_assert_eq(controller->player.cooldown, 0);
-    cr_assert_not_null(controller->player.player);
+    cr_assert_eq(controller->player.player, player);
 }
 
 Test(controller_conversion_tests, null_controller)
 {
-    team_t team = { 0 };
     vector2u_t position = { 0 };
+    player_t *player = player_new(1);
 
-    cr_assert_eq(controller_player_from_generic(NULL, &team, position), false);
+    cr_assert_eq(controller_player_from_generic(NULL, player), false);
 }
 
-Test(controller_conversion_tests, null_team)
+Test(controller_conversion_tests, null_player)
 {
     controller_t *controller = controller_new(0);
-    vector2u_t position = { 0 };
 
-    cr_assert_eq(controller_player_from_generic(controller, NULL, position), false);
-}
-
-Test(controller_conversion_tests, controller_player_init_fail)
-{
-    controller_t *controller = controller_new(0);
-    team_t team = { 0 };
-    vector2u_t position = { 0 };
-
-    clcc_return_now(calloc, NULL);
-    cr_assert_eq(controller_player_from_generic(controller, &team, position), false);
-    clcc_disable_control(calloc);
+    cr_assert_eq(controller_player_from_generic(controller, NULL), false);
 }

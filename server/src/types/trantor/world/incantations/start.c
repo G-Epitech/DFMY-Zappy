@@ -11,12 +11,15 @@
 
 incantation_t *world_start_incantation(world_t *world, player_t *player)
 {
-    incantation_t *incantation = incantation_new(player->level + 1);
     map_cell_t *cell = NULL;
+    incantation_t *incantation = incantation_new(
+        player->level + 1,
+        player->position
+    );
 
     if (!incantation)
         return NULL;
-    cell = MAP_PLAYER_CELL(world->map, player);
+    cell = MAP_CELL_AT_POS(world->map, incantation->location);
     if (!incantation_add_players_from_cell(incantation, cell) ||
         !incantation_is_valid(incantation, world->map) ||
         !list_push(world->incantations, NODE_DATA_FROM_PTR(incantation))) {

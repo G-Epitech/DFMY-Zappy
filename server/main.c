@@ -13,7 +13,7 @@
 int main(int argc, char **argv)
 {
     map_t *map = map_new((vector2u_t){10, 10});
-    player_t *player = player_new(NULL);
+    player_t *player = player_new(3);
     char *res = NULL;
 
     if (map == NULL)

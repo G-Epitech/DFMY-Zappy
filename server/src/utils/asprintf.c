@@ -27,9 +27,9 @@ int my_vasprintf(char **strp, const char *fmt, va_list args)
     va_end(copy);
     if (len < 0) {
         free(*strp);
-        return -1;
+        *strp = NULL;
     }
-    return len;
+    return *strp ? len : -1;
 }
 
 int my_asprintf(char **strp, const char *fmt, ...)

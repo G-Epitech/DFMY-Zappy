@@ -10,7 +10,6 @@
 #include "types/list.h"
 #include "types/smart_ptr.h"
 
-
 // @brief Specify that the emission is complete and
 // end char should be sent
 #define EMISSION_COMPLETE 0

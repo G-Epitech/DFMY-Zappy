@@ -24,6 +24,10 @@
 #define PLAYER_DIRECTION_LEFT_OFFSET (-1)
 // @brief Player direction offset when turning left or right
 #define PLAYER_DIRECTION_RIGHT_OFFSET 1
+// @brief Number of player directions
+#define DIR_LEN 4
+// @brief Generate a random player direction
+#define PLAYER_RANDOM_DIRECTION() ((random() % DIR_LEN) + 1)
 
 // @brief Structure representing a Trantorian player's direction
 typedef enum player_direction_e {
@@ -61,10 +65,10 @@ typedef struct player_s {
 
 /**
  * @brief Create a new player
- * @param controller Player controller
+ * @param id ID of the player
  * @return Created player or NULL if an error occurred
  */
-player_t *player_new(player_controller_t *controller);
+player_t *player_new(size_t id);
 
 /**
  * @brief Free a player
@@ -91,22 +95,22 @@ void player_change_direction(player_t *player, int direction_offset);
  * @param player Player to take the object
  * @param resource Resource to take
  */
-bool player_take_object(map_t *map, player_t *player, resource_t resource);
+bool player_take_object(player_t *player, map_t *map, resource_t resource);
 
 /**
  * @brief Set an object to the current map cell at current player position
- * @param map Map to set the object to
  * @param player Player to set the object
+ * @param map Map to set the object to
  * @param resource Resource to set
  */
-bool player_set_object(map_t *map, player_t *player, resource_t resource);
+bool player_set_object(player_t *player, map_t *map, resource_t resource);
 
 /**
  * @brief Move a player forward in the world
- * @param map World to move the player in
  * @param player Player to move
+ * @param map World to move the player in
  */
-void player_forward(map_t *map, player_t *player);
+void player_forward(player_t *player, map_t *map);
 
 /**
  * @brief Update player food units

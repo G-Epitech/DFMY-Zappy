@@ -34,15 +34,17 @@ typedef struct incantation_s {
     player_t *requester;
     // @brief The level of the incantation
     unsigned int level;
+    // @brief Location of the incantation
+    vector2u_t location;
 } incantation_t;
 
 /**
  * @brief Create a new incantation
- * @param cell Cell on which the incantation is happening
  * @param level Desired level of the incantation
+ * @param location Location of the incantation
  * @return Created incantation or NULL if failed
  */
-incantation_t *incantation_new(unsigned int level);
+incantation_t *incantation_new(unsigned int level, vector2u_t location);
 
 /**
 * @brief Free given incantation

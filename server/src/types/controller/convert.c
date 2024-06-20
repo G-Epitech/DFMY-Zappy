@@ -7,17 +7,15 @@
 
 #include "types/controller.h"
 #include "types/trantor/player.h"
-#include "types/vector2.h"
 
-bool controller_player_from_generic(controller_t *controller, team_t *team,
-    vector2u_t position)
+bool controller_player_from_generic(controller_t *controller,
+    player_t *player)
 {
-    if (!controller || !team)
+    if (!controller || !player)
         return false;
     controller->player.type = CTRL_PLAYER;
     controller->player.cooldown = 0;
-    controller->player.player = player_new((player_controller_t *) controller);
-    if (!controller->player.player)
-        return false;
+    controller->player.player = player;
+    player->controller = (player_controller_t *) controller;
     return true;
 }

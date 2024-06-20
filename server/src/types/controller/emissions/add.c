@@ -11,7 +11,7 @@
 #include "types/list.h"
 #include "log.h"
 
-static bool controller_add_emission_final(controller_t *controller,
+bool controller_add_emission_from_shared_buffer(controller_t *controller,
     smart_ptr_t *buffer_ptr, size_t buffer_size, int flags)
 {
     emission_t *emission = emission_new(buffer_ptr, buffer_size, flags);
@@ -46,8 +46,27 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     buffer_ptr = smart_ptr_new(buffer);
     if (!buffer_ptr)
         return false;
-    return controller_add_emission_final(controller, buffer_ptr,
+    return controller_add_emission_from_shared_buffer(controller, buffer_ptr,
         buffer_size, flags);
+}
+
+bool controller_add_emission_from_format(controller_t *controller,
+    int flags, char *format, ...)
+{
+    va_list args;
+    char *buffer = NULL;
+    int buffer_size = 0;
+    bool success = false;
+
+    if (!controller || !format || !CTRL_CAN_EMIT(controller))
+        return false;
+    va_start(args, format);
+    buffer_size = my_vasprintf(&buffer, format, args);
+    va_end(args);
+    if (buffer_size == -1)
+        return false;
+    success = controller_add_emission(controller, buffer, buffer_size, flags);
+    return success;
 }
 
 bool controllers_add_emission(list_t *controllers,
@@ -65,7 +84,7 @@ bool controllers_add_emission(list_t *controllers,
     while (node) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type & types && CTRL_CAN_EMIT(controller)) {
-            controller_add_emission_final(controller, buffer_ptr,
+            controller_add_emission_from_shared_buffer(controller, buffer_ptr,
                 params->buffer_size, params->flags);
         }
         node = node->next;

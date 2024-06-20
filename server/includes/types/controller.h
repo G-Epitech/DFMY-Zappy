@@ -148,6 +148,17 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     size_t buffer_size, int flags);
 
 /**
+ * @brief Add an emission to the controller from a format
+ * @param controller Controller to add the emission to
+ * @param flags Flags of the emission
+ * @param format Format string as in printf
+ * @param ... Arguments for the format string
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_add_emission_from_format(controller_t *controller,
+    int flags, char *format, ...) __attribute__((format(printf, 3, 4)));
+
+/**
  * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
  * @param controllers List of controllers
  * @param params Emission parameters
@@ -178,6 +189,12 @@ controller_state_t controller_read(controller_t *controller);
  * @return Last request or NULL if no request
  */
 request_t *controller_get_last_request(controller_t *controller);
+
+/**
+ * @brief Clear first request of a controller
+ * @param controller Controller to clear first request from
+ */
+void controller_clear_first_request(controller_t *controller);
 
 /**
  * @brief Read next token from a buffer
@@ -217,9 +234,19 @@ bool controller_end_emission(controller_t *controller);
 /**
  * @brief Initialize a player controller from a generic controller
  * @param controller Controller to initialize
- * @param team Player team
- * @param position Player position
- * @return Success status
+ * @param player Player to link to the controller
+ * @return true if the controller was initialized, false otherwise
  */
-bool controller_player_from_generic(controller_t *controller, team_t *team,
-    vector2u_t position);
+bool controller_player_from_generic(controller_t *controller,
+    player_t *player);
+
+/**
+ * @brief Add an emission to the controller from a shared buffer
+ * @param controller Controller to add the emission to
+ * @param buffer_ptr Buffer to add to the emission
+ * @param buffer_size Buffer size
+ * @param flags Flags of the emission
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_add_emission_from_shared_buffer(controller_t *controller,
+    smart_ptr_t *buffer_ptr, size_t buffer_size, int flags);

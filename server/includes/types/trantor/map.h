@@ -11,14 +11,23 @@
 #include "types/vector2.h"
 #include "types/trantor/resource.h"
 
-// Forward declaration
+// Forward declaration of player_t
 typedef struct player_s player_t;
+
+// Forward declaration of egg_t
+typedef struct egg_s egg_t;
 
 // @brief Get the map cell at given position
 #define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
 
 // @brief Map player cell accessor
 #define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)
+
+// @brief Map egg cell accessor
+#define MAP_EGG_CELL(m, e) MAP_CELL_AT_POS(m, e->position)
+
+// @brief Look for position out of map
+#define MAP_OUT_POSITION(m, p) ((p).x >= m->size.x || (p).y >= m->size.y)
 
 // @brief Structure representing map cell statistics, mainly used for
 // the vision functionality
@@ -109,6 +118,21 @@ bool map_add_player(map_t *map, player_t *player);
  * @param player Player to remove
  */
 void map_remove_player(map_t *map, player_t *player);
+
+/**
+ * @brief Add an egg to the current to a random map cell
+ * @param map Map to add the egg to
+ * @param egg Egg to add
+ * @return true if the egg was added, false otherwise
+ */
+bool map_add_egg(map_t *map, egg_t *egg);
+
+/**
+ * @brief Remove an egg from the current map cell
+ * @param map Map to remove the egg from
+ * @param egg Egg to remove
+ */
+void map_remove_egg(map_t *map, egg_t *egg);
 
 /**
  * @brief Resolve a position on the map
