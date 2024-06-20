@@ -20,6 +20,17 @@ typedef struct player_s player_t;
 // @brief Map player cell accessor
 #define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)
 
+// @brief Structure representing map cell statistics, mainly used for
+// the vision functionality
+typedef struct map_cell_stats_s {
+    // @brief Resources on the cell
+    size_t resources[RES_LEN];
+    // @brief Number of players on the cell
+    size_t players;
+    // @brief Number of eggs on the cell
+    size_t eggs;
+} map_cell_stats_t;
+
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell
@@ -106,3 +117,10 @@ void map_remove_player(map_t *map, player_t *player);
  * @return Resolved position
  */
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
+
+/**
+ * @brief Get the stats of a cell
+ * @param cell Cell to get the stats from
+ * @param stats Stats to fill
+ */
+void map_cell_get_stats(map_cell_t *cell, map_cell_stats_t *stats);

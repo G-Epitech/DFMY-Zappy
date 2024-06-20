@@ -7,4 +7,5 @@ target_sources(zappy_server_core PUBLIC
         take.c
         inventory.c
         life.c
+        look.c
 )

@@ -123,3 +123,12 @@ void player_update_lives(player_t *player, time_unit_t time_units);
  */
 bool player_set_inventory_resource(player_t *player, resource_t resource,
     int quantity);
+
+/**
+ * @brief Get the player's vision string containing all the resources
+ * he can see
+ * @param player Player to get the vision from
+ * @param map Map to get the vision from
+ * @return Vision string
+ */
+char *player_look(player_t *player, map_t *map);
