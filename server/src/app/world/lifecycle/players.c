@@ -21,12 +21,7 @@ static void notify_graphics_of_player_death(server_t *server, player_t *player)
 
 static void notify_player_of_death(controller_t *controller)
 {
-    controller_add_emission(
-        controller,
-        strdup("dead"),
-        4,
-        0
-    );
+    controller_add_emission_from_format(controller, 0, "dead");
 }
 
 static void app_handle_player_death(world_t *world, server_t *server,
@@ -98,7 +93,7 @@ void app_handle_world_lifecycle_dead_players(world_t *world,
     }
 }
 
-void app_handle_world_lifecycle_players(server_t *server, world_t *world)
+void app_handle_world_lifecycle_players(world_t *world, server_t *server)
 {
     app_handle_world_lifecycle_dead_players(world, server);
     app_handle_world_lifecycle_players_lives(world, server);

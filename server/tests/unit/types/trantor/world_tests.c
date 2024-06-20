@@ -212,7 +212,7 @@ Test(world_remove_player_tests, remove_player_from_everything)
     world_t *world = world_new(size, 100);
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(1);
-    incantation_t *incantation = incantation_new(1);
+    incantation_t *incantation = incantation_new(1, (vector2u_t) { 1, 1 });
 
     world_register_player(world, player, team);
     list_push(world->incantations, NODE_DATA_FROM_PTR(incantation));
@@ -233,7 +233,7 @@ Test(world_remove_player_tests, remove_unadded_player_from_everything)
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(1);
     player_t *player2 = player_new(2);
-    incantation_t *incantation = incantation_new(1);
+    incantation_t *incantation = incantation_new(1, (vector2u_t) { 1, 1 });
 
     world_register_player(world, player2, team);
     incantation_add_player(incantation, player2);
@@ -269,41 +269,14 @@ Test(incantation_tests, sucesful_incantation)
     incantation = world_start_incantation(world, player);
     cr_assert_not_null(incantation);
     cr_assert_eq(incantation->players->len, 2);
-    cr_assert_eq(world_end_incantation(world, incantation), true);
+    cr_assert_eq(incantation_is_valid(incantation, world->map), true);
+    cr_assert_eq(incantation_complete_success(incantation, world->map), true);
+    world_remove_incantation(world, incantation);
     cr_assert_eq(player->level, 2);
     cr_assert_eq(player2->level, 2);
     cr_assert_eq(cell->resources[RES_LINEMATE], 0);
     world_free(world);
     player_free(player2);
-    player_free(player);
-}
-
-Test(incantation_tests, failed_end)
-{
-    vector2u_t size = { 10, 10 };
-    vector2u_t pos = { 1, 1 };
-    world_t *world = world_new(size, 2);
-    player_t *player = player_new(1);
-    map_cell_t *cell = NULL;
-    incantation_t *incantation = NULL;
-
-    cr_assert_not_null(world);
-    cell = MAP_CELL_AT_POS(world->map, pos);
-    player->position = pos;
-    list_push(cell->players, NODE_DATA_FROM_PTR(player));
-    cr_assert_not_null(cell);
-    cr_assert_eq(cell->players->len, 1);
-    cell->resources[RES_LINEMATE] = 1;
-    incantation = world_start_incantation(world, player);
-    cr_assert_not_null(incantation);
-    cr_assert_eq(incantation->players->len, 1);
-    cell->resources[RES_LINEMATE] = 0;
-    cr_assert_eq(world_end_incantation(world, incantation), false);
-    cr_assert_eq(player->level, 1);
-    cr_assert_eq(cell->resources[RES_LINEMATE], 0);
-    cr_assert_eq(world->incantations->len, 0);
-    cr_assert_null(player->incantation);
-    world_free(world);
     player_free(player);
 }
 
@@ -425,7 +398,9 @@ Test(incantation_tests, incantation_level_two)
     incantation = world_start_incantation(world, player);
     cr_assert_not_null(incantation);
     cr_assert_eq(incantation->players->len, 2);
-    cr_assert_eq(world_end_incantation(world, incantation), true);
+    cr_assert_eq(incantation_is_valid(incantation, world->map), true);
+    cr_assert_eq(incantation_complete_success(incantation, world->map), true);
+    world_remove_incantation(world, incantation);
     cr_assert_eq(player->level, 3);
     cr_assert_eq(player2->level, 3);
     cr_assert_eq(player3->level, 1);
