@@ -24,18 +24,14 @@ typedef struct egg_s {
 /**
  * @brief Initialize an egg
  * @param egg Egg to initialize
- * @param team Team to link to the egg
- * @param position Position of the egg on the map
  */
-void egg_init(egg_t *egg, team_t *team, vector2u_t position);
+void egg_init(egg_t *egg);
 
 /**
  * @brief Create a new egg
- * @param team The team that laid the egg
- * @param position The position of the egg on the map
  * @return A pointer to the newly created egg
  */
-egg_t *egg_new(team_t *team, vector2u_t position);
+egg_t *egg_new(void);
 
 /**
  * @brief Free an egg

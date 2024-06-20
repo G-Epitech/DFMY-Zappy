@@ -35,6 +35,8 @@ typedef struct world_s {
     list_t *incantations;
     // @brief The current number that will be assigned to the next player
     size_t next_player_id;
+    // @brief The current number that will be assigned to the next egg
+    size_t next_egg_id;
 } world_t;
 
 /**
@@ -98,6 +100,29 @@ void world_unregister_player(world_t *world, player_t *player);
  * handled as a dead player. It will be freed.
  */
 void world_kill_player(world_t *world, player_t *player, bool zombie);
+
+/**
+ * @brief Create an egg in the world for a team
+ * @param world World to create the egg in
+ * @param team Team of the egg
+ * @return Created egg or NULL if failed
+ */
+egg_t *world_add_egg(world_t *world, team_t *team);
+
+/**
+ * @brief Ensure a team has a minimum number of slots
+ * @param world World to ensure the slots in
+ * @param team Team to ensure the slots in
+ * @return Number of slots that have been added
+ */
+size_t world_ensure_team_slots(world_t *world, team_t *team);
+
+/**
+ * @brief Kill an egg in the world
+ * @param world World to kill the egg in
+ * @param egg Egg to kill
+ */
+void world_kill_egg(world_t *world, egg_t *egg);
 
 /**
  * @brief Start an incantation

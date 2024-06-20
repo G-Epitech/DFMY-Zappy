@@ -12,37 +12,30 @@
 
 Test(egg_new_tests, simple_new)
 {
-    vector2u_t position = { 10, 5 };
-    team_t *team = team_new("Team1", 1);
-    egg_t *egg = egg_new(team, position);
+    egg_t *egg = egg_new();
 
-    cr_assert_eq(egg->team, team);
-    cr_assert_eq(egg->position.x, 10);
-    cr_assert_eq(egg->position.y, 5);
+    cr_assert_eq(egg->team, NULL);
+    cr_assert_eq(egg->position.x, 0);
+    cr_assert_eq(egg->position.y, 0);
     cr_assert_eq(egg->id, 0);
     egg_free(egg);
-    team_free(team);
 }
 
 Test(egg_new_tests, new_egg_with_malloc_fail)
 {
-    vector2u_t position = { 10, 5 };
-
     clcc_return_now(calloc, NULL);
-    cr_assert_null(egg_new(NULL, position));
+    cr_assert_null(egg_new());
     clcc_disable_control(calloc);
 }
 
 Test(egg_free_tests, free_list_of_eggs)
 {
-    vector2u_t position = { 10, 5 };
-    team_t *team = team_new("Team1", 1);
     egg_t *egg = NULL;
     list_t *eggs = list_new();
 
     cr_assert_eq(eggs->len, 0);
     for (int i = 0; i < 10; i++) {
-        egg = egg_new(team, position);
+        egg = egg_new();
         list_push(eggs, NODE_DATA_FROM_PTR(egg));
         cr_assert_eq(eggs->len, i + 1);
     }
@@ -50,5 +43,4 @@ Test(egg_free_tests, free_list_of_eggs)
     list_clear(eggs, &egg_free_as_node_data);
     cr_assert_eq(eggs->len, 0);
     list_free(eggs, NULL);
-    team_free(team);
 }

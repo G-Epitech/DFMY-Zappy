@@ -8,6 +8,7 @@
 #include <criterion/criterion.h>
 #include <stdio.h>
 #include "clcc/modules/stdlib.h"
+#include "types/trantor/egg.h"
 #include "types/trantor/world.h"
 #include "types/trantor/incantation.h"
 
@@ -29,6 +30,9 @@ Test(world_new_tests, simple_new)
     cr_assert_eq(world->map->size.y, 10);
     cr_assert_eq(world->players->len, 0);
     cr_assert_eq(world->teams->len, 0);
+    cr_assert_eq(world->dead_players->len, 0);
+    cr_assert_eq(world->next_player_id, 0);
+    cr_assert_eq(world->next_egg_id, 0);
     cr_assert_eq(world->incantations->len, 0);
     cr_assert_eq(world->next_event_delay, -1.0f);
     for (resource_t i = 0; i < RES_LEN; i++) {
@@ -433,4 +437,42 @@ Test(incantation_tests, incantation_level_two)
     player_free(player3);
     player_free(player2);
     player_free(player);
+}
+
+Test(world_create_teams_tests, create_2_teams_3_slots)
+{
+    vector2u_t size = { 10, 10 };
+    world_t *world = world_new(size, 2);
+    team_t *team1, *team2 = NULL;
+    size_t egg_counter = 0;
+    char *teams_names[3] = { "Team1", "Team2", NULL };
+
+    cr_assert_not_null(world);
+    cr_assert_eq(world_create_teams(world, teams_names, 3), true);
+    cr_assert_eq(world->teams->len, 2);
+    team1 = NODE_TO_PTR(world->teams->first, team_t *);
+    team2 = NODE_TO_PTR(world->teams->first->next, team_t *);
+
+    cr_assert_str_eq(team1->name, "Team1");
+    cr_assert_str_eq(team2->name, "Team2");
+
+    for (node_t *node = world->teams->first; node; node = node->next) {
+        team_t *team = NODE_TO_PTR(node, team_t *);
+
+        cr_assert_not_null(team);
+        cr_assert_eq(team->min_slots, 3);
+        cr_assert_eq(team->players->len, 0);
+        cr_assert_eq(team->eggs->len, 3);
+
+        for (node_t *egg_node = team->eggs->first; egg_node; egg_node = egg_node->next) {
+            egg_t *egg = NODE_TO_PTR(egg_node, egg_t *);
+
+            cr_assert_not_null(egg);
+            cr_assert_eq(egg->id, egg_counter);
+            cr_assert_eq(egg->team, team);
+            egg_counter += 1;
+        }
+    }
+    cr_assert_eq(world->next_egg_id, 6);
+    world_free(world);
 }
