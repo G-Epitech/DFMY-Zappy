@@ -17,14 +17,11 @@ static size_t cell_stats_buf_size(map_cell_stats_t stats)
 
     for (resource_t i = RES_FOOD; i < RES_LEN; i++) {
         if (stats.resources[i] > 0) {
-            buf_size += (stats.resources[i] *
-                resource_string_len(i)) + stats.resources[i];
+            buf_size += (stats.resources[i] * (resource_string_len(i) + 1));
         }
     }
-    buf_size += (stats.players * 7) + stats.players;
-    buf_size += (stats.eggs * 4) + stats.eggs;
-    if (buf_size == 0)
-        return 2;
+    buf_size += (stats.players * 7);
+    buf_size += (stats.eggs * 5);
     return buf_size + 1;
 }
 
@@ -101,7 +98,7 @@ char *player_look(player_t *player, map_t *map)
     vector2l_t look_vector = { 0 };
     size_t nb_cells = player->level * player->level;
     map_cell_stats_t *cell_stats = calloc(nb_cells, sizeof(map_cell_stats_t));
-    size_t buffer_size = 2;
+    size_t buffer_size = 3;
     char *res = NULL;
 
     if (cell_stats == NULL || map == NULL)
@@ -114,6 +111,7 @@ char *player_look(player_t *player, map_t *map)
     else
         buffer_size += horizontal_look(player, map, &look_vector, cell_stats);
     display_stats(cell_stats, nb_cells);
+    printf("Buffer size: %zu\n", buffer_size);
     res = player_look_string(cell_stats, nb_cells, buffer_size);
     free(cell_stats);
     return res;

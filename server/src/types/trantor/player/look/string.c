@@ -49,7 +49,7 @@ char *player_look_string(map_cell_stats_t *cell_stats, size_t nb_cells,
         look_string_cell(buffer, &cell_stats[i], &buf_idx);
     }
     buffer[buf_idx] = ']';
-    printf("%zu\n", buf_idx);
+    printf("%zu\n", buf_idx + 1);
     buffer[buf_idx + 1] = '\0';
     return buffer;
 }
