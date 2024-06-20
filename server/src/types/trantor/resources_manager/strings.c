@@ -19,6 +19,11 @@ const char *resource_str[] = {
         NULL
 };
 
+size_t resource_string_len(resource_t resource)
+{
+    return strlen(resource_str[resource]);
+}
+
 void resource_to_str(resource_t resource, char **str)
 {
     (*str) = strdup(resource_str[resource]);

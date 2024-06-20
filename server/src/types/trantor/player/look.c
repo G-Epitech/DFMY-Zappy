@@ -5,6 +5,7 @@
 ** look.c
 */
 
+#include <stdio.h>
 #include "types/trantor/resource.h"
 #include "types/trantor/player.h"
 #include "types/trantor/map.h"
@@ -36,14 +37,15 @@ static size_t cell_stats_buf_size(map_cell_stats_t stats)
 {
     size_t buf_size = 0;
 
-    for (size_t i = 0; i < RES_LEN; i++)
-        buf_size += (stats.resources[i] * 10) + 1;
-    buf_size += (stats.players * 8) + stats.players;
-    buf_size += (stats.eggs * 8) + stats.eggs;
-    return buf_size;
+    for (resource_t i = RES_FOOD; i < RES_LEN; i++)
+        if (stats.resources[i] > 0)
+            buf_size += (stats.resources[i] * resource_string_len(i)) + stats.resources[i];
+    buf_size += (stats.players * 7) + stats.players;
+    buf_size += (stats.eggs * 4) + stats.eggs;
+    printf("Buf size: %zu\n", buf_size + 1);
+    return buf_size + 1;
 }
 
-#include <stdio.h>
 
 static size_t vertical_look(player_t *player, map_t *map,
     vector2l_t *look_vector, map_cell_stats_t *cell_stats)
@@ -52,7 +54,7 @@ static size_t vertical_look(player_t *player, map_t *map,
     vector2u_t real_look_position;
     size_t wing_size = 1;
     map_cell_t *cell = NULL;
-    size_t cells_visited = 0;
+    size_t cells_visited = 1;
     size_t buf_size = 0;
 
     for (size_t i = 1; i < player->level; i++) {
@@ -79,7 +81,7 @@ static size_t horizontal_look(player_t *player, map_t *map,
     vector2u_t real_look_position;
     size_t wing_size = 1;
     map_cell_t *cell = NULL;
-    size_t cells_visited = 0;
+    size_t cells_visited = 1;
     size_t buf_size = 0;
 
     for (size_t i = 1; i < player->level; i++) {
@@ -99,20 +101,37 @@ static size_t horizontal_look(player_t *player, map_t *map,
     return buf_size;
 }
 
+static void display_stats(map_cell_stats_t *cell_stats, size_t nb_cells)
+{
+    for (size_t i = 0; i < nb_cells; i++) {
+        printf("Resources: ");
+        for (size_t j = 0; j < RES_LEN; j++)
+            printf("%zu ", cell_stats[i].resources[j]);
+        printf("| Players: ");
+        printf("%zu ", cell_stats[i].players);
+        printf("| Eggs: ");
+        printf("%zu\n", cell_stats[i].eggs);
+    }
+}
+
 char *player_look(player_t *player, map_t *map)
 {
     vector2l_t look_vector = { 0 };
     size_t nb_cells = player->level * player->level;
     map_cell_stats_t *cell_stats = malloc(sizeof(map_cell_stats_t) * nb_cells);
-    size_t buffer_size = 0;
+    size_t buffer_size = 3;
 
     if (cell_stats == NULL)
         return NULL;
+    map_cell_get_stats(MAP_PLAYER_CELL(map, player), &cell_stats[0]);
+    buffer_size += cell_stats_buf_size(cell_stats[0]);
     get_look_vector(&look_vector, player->direction);
     if (player->direction == DIR_NORTH || player->direction == DIR_SOUTH)
-        buffer_size = vertical_look(player, map, &look_vector, cell_stats);
+        buffer_size += vertical_look(player, map, &look_vector, cell_stats);
     else
-        buffer_size = horizontal_look(player, map, &look_vector, cell_stats);
+        buffer_size += horizontal_look(player, map, &look_vector, cell_stats);
+    printf("Buffer size: %zu\n", buffer_size);
+    display_stats(cell_stats, nb_cells);
     free(cell_stats);
     return NULL;
 }

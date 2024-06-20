@@ -17,7 +17,15 @@ int main(int argc, char **argv)
     if (map == NULL)
         return 84;
     player->position = (vector2u_t){5, 5};
+    map->cells[5][5].resources[RES_FOOD] = 1;
+    map->cells[6][4].resources[RES_FOOD] = 2;
+    map->cells[6][5].resources[RES_FOOD] = 1;
+    map->cells[6][6].resources[RES_FOOD] = 3;
+    map->cells[7][5].players->len = 1;
     player->level = 3;
     player->direction = DIR_NORTH;
     player_look(player, map);
+    map_free(map);
+    player_free(player);
+    return 0;
 }

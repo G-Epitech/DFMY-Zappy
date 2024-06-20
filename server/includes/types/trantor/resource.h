@@ -97,3 +97,10 @@ bool resource_from_str(resource_t *resource, const char *str);
  * @param str Pointer to store the string
  */
 void resource_to_str(resource_t resource, char **str);
+
+/**
+ * @brief Get the length of a resource string
+ * @param resource Resource to get the length from
+ * @return Length of the resource string
+ */
+size_t resource_string_len(resource_t resource);
