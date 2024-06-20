@@ -97,10 +97,18 @@ void app_handle_server_connections(app_t *app);
 
 /**
  * @brief Handle world lifecycle of players
- * @param server Server to handle the world lifecycle of players
  * @param world World to handle the world lifecycle of players
+ * @param server Server to handle the world lifecycle of players
  */
-void app_handle_world_lifecycle_players(server_t *server, world_t *world);
+void app_handle_world_lifecycle_players(world_t *world, server_t *server);
+
+/**
+ * @brief Handle world lifecycle update of events delays
+ * @param world World to handle the world lifecycle update of events delays
+ * @param server Server to handle the world lifecycle update of events delays
+ */
+void app_handle_world_lifecycle_events_delay(world_t *world,
+    server_t *server);
 
 /**
  * @brief Handle world lifecycle

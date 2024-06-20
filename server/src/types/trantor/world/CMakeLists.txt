@@ -12,4 +12,5 @@ target_sources(zappy_server_core PUBLIC
         eggs/register.c
         eggs/kill.c
         eggs/hatching.c
+        resources_manager/update_delay.c
 )

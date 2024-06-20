@@ -148,6 +148,17 @@ bool controller_add_emission(controller_t *controller, char *buffer,
     size_t buffer_size, int flags);
 
 /**
+ * @brief Add an emission to the controller from a format
+ * @param controller Controller to add the emission to
+ * @param flags Flags of the emission
+ * @param format Format string as in printf
+ * @param ... Arguments for the format string
+ * @return true if the emission was added, false otherwise
+ */
+bool controller_add_emission_from_format(controller_t *controller,
+    int flags, char *format, ...) __attribute__((format(printf, 3, 4)));
+
+/**
  * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
  * @param controllers List of controllers
  * @param params Emission parameters
