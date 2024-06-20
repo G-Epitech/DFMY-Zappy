@@ -29,7 +29,7 @@ static void increment_player_position(map_t *map, player_t *player)
     player->position = map_resolve_position(map, pos);
 }
 
-void player_forward(map_t *map, player_t *player)
+void player_forward(player_t *player, map_t *map)
 {
     node_t *node = NULL;
     map_cell_t *cell;

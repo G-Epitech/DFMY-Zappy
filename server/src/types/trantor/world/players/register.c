@@ -20,8 +20,6 @@ bool world_register_player(world_t *world, player_t *player, team_t *team)
         world_unregister_player(world, player);
         return false;
     }
-    player->id = world->next_player_id;
-    world->next_player_id += 1;
     return true;
 }
 

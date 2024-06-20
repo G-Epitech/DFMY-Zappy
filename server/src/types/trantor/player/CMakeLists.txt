@@ -3,8 +3,7 @@ target_sources(zappy_server_core PUBLIC
         free.c
         direction.c
         forward.c
-        set.c
-        take.c
+        objects.c
         inventory.c
         life.c
 )

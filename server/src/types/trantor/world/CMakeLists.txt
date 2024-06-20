@@ -7,4 +7,9 @@ target_sources(zappy_server_core PUBLIC
         incantations/end.c
         incantations/start.c
         incantations/remove.c
+        teams/create.c
+        teams/slots.c
+        eggs/register.c
+        eggs/kill.c
+        eggs/hatching.c
 )

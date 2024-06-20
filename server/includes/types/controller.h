@@ -217,9 +217,8 @@ bool controller_end_emission(controller_t *controller);
 /**
  * @brief Initialize a player controller from a generic controller
  * @param controller Controller to initialize
- * @param team Player team
- * @param position Player position
- * @return Success status
+ * @param player Player to link to the controller
+ * @return true if the controller was initialized, false otherwise
  */
-bool controller_player_from_generic(controller_t *controller, team_t *team,
-    vector2u_t position);
+bool controller_player_from_generic(controller_t *controller,
+    player_t *player);

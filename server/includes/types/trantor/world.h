@@ -35,6 +35,8 @@ typedef struct world_s {
     list_t *incantations;
     // @brief The current number that will be assigned to the next player
     size_t next_player_id;
+    // @brief The current number that will be assigned to the next egg
+    size_t next_egg_id;
 } world_t;
 
 /**
@@ -100,6 +102,30 @@ void world_unregister_player(world_t *world, player_t *player);
 void world_kill_player(world_t *world, player_t *player, bool zombie);
 
 /**
+ * @brief Create an egg in the world for a team
+ * @param world World to create the egg in
+ * @param team Team of the egg
+ * @param laid_by Player who laid the egg
+ * @return Created egg or NULL if failed
+ */
+egg_t *world_add_egg(world_t *world, team_t *team, long laid_by);
+
+/**
+ * @brief Ensure a team has a minimum number of slots
+ * @param world World to ensure the slots in
+ * @param team Team to ensure the slots in
+ * @return Number of slots that have been added
+ */
+size_t world_ensure_team_slots(world_t *world, team_t *team);
+
+/**
+ * @brief Kill an egg in the world
+ * @param world World to kill the egg in
+ * @param egg Egg to kill
+ */
+void world_kill_egg(world_t *world, egg_t *egg);
+
+/**
  * @brief Start an incantation
  * @param player Player who requested the incantation
  * @param world World of the incantation
@@ -123,3 +149,11 @@ bool world_end_incantation(world_t *world, incantation_t *incantation);
  * @param world World of the incantation
  */
 void world_remove_incantation(world_t *world, incantation_t *incantation);
+
+/**
+ * @brief Hatch an egg in the world and create a player
+ * @param world World to hatch the egg in
+ * @param egg Egg to hatch
+ * @return Created player or NULL if failed
+ */
+player_t *world_hatch_egg(world_t *world, egg_t *egg);
