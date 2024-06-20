@@ -132,3 +132,20 @@ bool player_set_inventory_resource(player_t *player, resource_t resource,
  * @return Vision string
  */
 char *player_look(player_t *player, map_t *map);
+
+/**
+ * @brief Get the player's look vector
+ * @param player Player to get the look vector from
+ * @param look_vector Look vector to store the result
+ */
+void player_look_vector(player_t *player, vector2l_t *look_vector);
+
+/**
+ * @brief Get the player's look string
+ * @param cell_stats Cell stats to get the look string from
+ * @param nb_cells Number of cells to get the look string from
+ * @param buf_size Buffer size to store the look string
+ * @return Look string
+ */
+char *player_look_string(map_cell_stats_t *cell_stats, size_t nb_cells,
+    size_t buf_size);

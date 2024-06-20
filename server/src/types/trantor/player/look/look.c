@@ -6,43 +6,23 @@
 */
 
 #include <stdio.h>
+#include <string.h>
 #include "types/trantor/resource.h"
 #include "types/trantor/player.h"
 #include "types/trantor/map.h"
-
-static void get_look_vector(vector2l_t *look_vector,
-    player_direction_t player_direction)
-{
-    switch (player_direction) {
-        case DIR_NORTH:
-            look_vector->x = 1;
-            look_vector->y = 1;
-            break;
-        case DIR_EAST:
-            look_vector->x = 1;
-            look_vector->y = -1;
-            break;
-        case DIR_SOUTH:
-            look_vector->x = -1;
-            look_vector->y = -1;
-            break;
-        default:
-            look_vector->x = -1;
-            look_vector->y = 1;
-            break;
-    }
-}
 
 static size_t cell_stats_buf_size(map_cell_stats_t stats)
 {
     size_t buf_size = 0;
 
-    for (resource_t i = RES_FOOD; i < RES_LEN; i++)
-        if (stats.resources[i] > 0)
-            buf_size += (stats.resources[i] * resource_string_len(i)) + stats.resources[i];
+    for (resource_t i = RES_FOOD; i < RES_LEN; i++) {
+        if (stats.resources[i] > 0) {
+            buf_size += (stats.resources[i] *
+                resource_string_len(i)) + stats.resources[i];
+        }
+    }
     buf_size += (stats.players * 7) + stats.players;
     buf_size += (stats.eggs * 4) + stats.eggs;
-    printf("Buf size: %zu\n", buf_size + 1);
     return buf_size + 1;
 }
 
@@ -119,19 +99,21 @@ char *player_look(player_t *player, map_t *map)
     vector2l_t look_vector = { 0 };
     size_t nb_cells = player->level * player->level;
     map_cell_stats_t *cell_stats = malloc(sizeof(map_cell_stats_t) * nb_cells);
-    size_t buffer_size = 3;
+    size_t buffer_size = 2;
+    char *res = NULL;
 
     if (cell_stats == NULL)
         return NULL;
     map_cell_get_stats(MAP_PLAYER_CELL(map, player), &cell_stats[0]);
     buffer_size += cell_stats_buf_size(cell_stats[0]);
-    get_look_vector(&look_vector, player->direction);
+    player_look_vector(player, &look_vector);
     if (player->direction == DIR_NORTH || player->direction == DIR_SOUTH)
         buffer_size += vertical_look(player, map, &look_vector, cell_stats);
     else
         buffer_size += horizontal_look(player, map, &look_vector, cell_stats);
     printf("Buffer size: %zu\n", buffer_size);
     display_stats(cell_stats, nb_cells);
+    res = player_look_string(cell_stats, nb_cells, buffer_size);
     free(cell_stats);
-    return NULL;
+    return res;
 }
