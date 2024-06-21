@@ -29,17 +29,6 @@ static bool team_has_won(team_t *team)
     return false;
 }
 
-static void send_victory_msg(list_t *all_ctrls, char *winning_team_name)
-{
-    emission_params_t params = {0};
-
-    if (my_asprintf(&params.buffer, "seg %s", winning_team_name) == -1)
-        return;
-    params.buffer_size = strlen(params.buffer);
-    params.flags = EMISSION_COMPLETE;
-    controllers_add_emission(all_ctrls, &params, CTRL_GRAPHIC);
-}
-
 bool app_handle_world_routine_team_victory(world_t *world, server_t *server)
 {
     node_t *node = world->teams->first;
@@ -48,7 +37,9 @@ bool app_handle_world_routine_team_victory(world_t *world, server_t *server)
     while (node) {
         team = NODE_TO_PTR(node, team_t *);
         if (team_has_won(team)) {
-            send_victory_msg(server->controllers, team->name);
+            controllers_add_emission(server->controllers, CTRL_GRAPHIC,
+                "seg %s\n", team->name
+            );
             return true;
         }
         node = node->next;

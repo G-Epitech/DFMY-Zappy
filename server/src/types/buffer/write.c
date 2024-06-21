@@ -23,21 +23,38 @@ size_t buffer_write(buffer_t *buffer, const char *data, size_t size)
     return size;
 }
 
+ssize_t buffer_vwritef(buffer_t *buffer, const char *format, va_list args)
+{
+    va_list copy;
+    size_t available = buffer ? buffer->size - buffer->bytes : 0;
+    ssize_t needed;
+    ssize_t written;
+
+    va_copy(copy, args);
+    needed = vsnprintf(NULL, 0, format, args);
+    va_end(copy);
+    printf("needed: %ld, available: %ld\n", needed, available);
+    if (!buffer || needed < 0 || needed > available)
+        return -1;
+    va_copy(copy, args);
+    written = vsnprintf(&buffer->data[buffer->bytes],available, format, args);
+    va_end(copy);
+    if (written < 0)
+        return -1;
+    written = written == available ? written - 1 : written;
+    buffer->bytes += written;
+    return written;
+}
+
 ssize_t buffer_writef(buffer_t *buffer, const char *format, ...)
 {
     va_list args;
-    size_t size;
     ssize_t written;
 
     if (!buffer)
         return 0;
-    size = buffer->size - buffer->bytes;
     va_start(args, format);
-    written = vsnprintf(&buffer->data[buffer->bytes],size, format, args);
+    written = buffer_vwritef(buffer, format, args);
     va_end(args);
-    if (written < 0)
-        return -1;
-    written = written == size ? written - 1 : written;
-    buffer->bytes += written;
     return written;
 }

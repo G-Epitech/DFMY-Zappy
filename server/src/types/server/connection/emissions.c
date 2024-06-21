@@ -13,7 +13,7 @@ void server_handle_controller_emissions(server_t *server,
     if (controller &&
         controller->generic.state == CTRL_CONNECTED &&
         FD_ISSET(controller->generic.socket, &server->fd_actual.writable) &&
-        controller->generic.emissions->len > 0
+        controller->generic.emissions->bytes > 0
     ) {
         controller_emit(controller);
     }

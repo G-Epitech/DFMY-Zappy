@@ -8,11 +8,9 @@
 #include <stdlib.h>
 #include "types/buffer.h"
 
-void buffer_init(buffer_t *buffer)
+void buffer_init(buffer_t *buffer, size_t size)
 {
-    buffer->size = 0;
-    buffer->tail = 0;
-    buffer->head = 0;
+    buffer->size = size;
     buffer->bytes = 0;
 }
 
@@ -27,6 +25,6 @@ buffer_t *buffer_new(size_t size)
         free(buffer);
         return NULL;
     }
-    buffer_init(buffer);
+    buffer_init(buffer, size);
     return buffer;
 }

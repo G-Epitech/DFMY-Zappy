@@ -10,6 +10,7 @@
 
 void buffer_free(buffer_t *buffer)
 {
-    free(buffer->data);
+    if (buffer)
+        free(buffer->data);
     free(buffer);
 }

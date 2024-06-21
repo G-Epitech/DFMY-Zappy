@@ -3,4 +3,5 @@ target_sources(zappy_server_core PRIVATE
         free.c
         write.c
         flush.c
+        resize.c
 )

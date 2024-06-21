@@ -18,7 +18,7 @@ void server_update_fd_watch_write(server_t *server)
     fd_states_clear(&server->fd_watch, FD_STATES_W);
     while (node) {
         controller = NODE_TO_PTR(node, controller_t *);
-        if (controller->generic.emissions->len > 0
+        if (controller->generic.emissions->bytes > 0
             && CTRL_CAN_EMIT(controller)
         ) {
             fd_states_set(&server->fd_watch, controller->generic.socket,

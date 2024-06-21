@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdarg.h>
 #include <unistd.h>
 
 // @brief Buffer structure
@@ -34,6 +35,14 @@ buffer_t *buffer_new(size_t size);
 void buffer_free(buffer_t *buffer);
 
 /**
+ * @brief Resize buffer
+ * @param buffer Buffer to resize
+ * @param new_size New size of buffer
+ * @return Resized buffer or NULL if an error occurred
+ */
+buffer_t *buffer_resize(buffer_t *buffer, size_t new_size);
+
+/**
  * @brief Write data to buffer
  * @param buffer Buffer to write to
  * @param data Data to write
@@ -41,6 +50,15 @@ void buffer_free(buffer_t *buffer);
  * @return Number of bytes written
  */
 size_t buffer_write(buffer_t *buffer, const char *data, size_t size);
+
+/**
+ * @brief Write formatted data to buffer
+ * @param buffer Buffer to write to
+ * @param format Format string
+ * @param args Arguments for the format string
+ * @return Number of bytes written
+ */
+ssize_t buffer_vwritef(buffer_t *buffer, const char *format, va_list args);
 
 /**
  * @brief Write formatted data to buffer
