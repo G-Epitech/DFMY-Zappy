@@ -12,70 +12,46 @@
 static void notify_graphics(server_t *server, bool success,
     vector2u_t *position)
 {
-    emission_params_t params = { 0 };
-    bool created = emission_params_from_format(&params, EMISSION_COMPLETE,
-        "pie %lu %lu %s",
+    bool sent = controllers_add_emission(server->controllers, CTRL_GRAPHIC,
+        "pie %lu %lu %s\n",
         position->x, position->y, success ? "ok" : "ko"
     );
 
-    if (!created ||
-        !controllers_add_emission(server->controllers, &params, CTRL_GRAPHIC)
-    ) {
+    if (!sent) {
         return log_error("Failed to format incantation end"
             " emission for graphics");
     }
 }
 
-static bool get_participants_notification(incantation_t *incantation,
-    smart_ptr_t **buffer_ptr, size_t *buffer_size, bool success)
-{
-    char *buffer = NULL;
-    ssize_t size = -1;
-
-    if (success) {
-        size = my_asprintf(&buffer, "Current level: %u", incantation->level);
-    } else {
-        buffer = strdup("ko");
-        size = 2;
-    }
-    *buffer_ptr = buffer ? smart_ptr_new(buffer) : NULL;
-    *buffer_size = *buffer_ptr ? size : 0;
-    return *buffer_ptr != NULL;
-}
-
-static void notify_participant(smart_ptr_t *buffer_ptr, size_t buffer_size,
+static void notify_participant(incantation_t *incantation, bool success,
     player_t *player)
 {
     controller_t *controller = (controller_t *) player->controller;
+    bool sent = false;
 
     if (!controller)
         return;
-    if (!controller_add_emission_from_shared_buffer(controller, buffer_ptr,
-        buffer_size, EMISSION_COMPLETE)
-    ) {
+    if (success) {
+        sent = controller_add_emission(controller, "Current level: %u\n",
+            incantation->level);
+    } else {
+        sent = controller_add_emission(controller, "ko\n");
+    }
+    if (!sent) {
         log_error("Failed to notify player %d of incantation end",
             controller->generic.socket
         );
     }
 }
 
-static void notify_participants(server_t *server, bool success,
-    incantation_t *incantation)
+static void notify_participants(bool success, incantation_t *incantation)
 {
     node_t *node = incantation->players->first;
     player_t *player = NULL;
-    smart_ptr_t *buffer_ptr = NULL;
-    size_t buffer_size = 0;
 
-    if (!get_participants_notification(incantation, &buffer_ptr,
-        &buffer_size, success)
-    ) {
-        return log_error("Failed to format incantation end"
-            " emission for participants");
-    }
     while (node) {
         player = NODE_TO_PTR(node, player_t *);
-        notify_participant(buffer_ptr, buffer_size, player);
+        notify_participant(incantation, success, player);
         node = node->next;
     }
 }
@@ -105,7 +81,7 @@ void app_handle_world_lifecycle_incantation(world_t *world, server_t *server,
     if (success)
         incantation_complete_success(incantation, world->map);
     if (incantation->players->len > 0)
-        notify_participants(server, success, incantation);
+        notify_participants(success, incantation);
     clear_incantation_requester_request(incantation);
     world_remove_incantation(world, incantation);
 }

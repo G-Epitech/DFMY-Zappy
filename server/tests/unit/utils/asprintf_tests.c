@@ -22,7 +22,7 @@ Test(asprintf, test_asprintf)
 Test(asprintf, test_vsnprintf_fail)
 {
     char *str = NULL;
-    int ret = 0;
+    int ret;
 
     clcc_return_now(vsnprintf, -1);
     ret = my_asprintf(&str, "Hello, %s", "world");
@@ -33,7 +33,7 @@ Test(asprintf, test_vsnprintf_fail)
 Test(asprintf, test_vsnprintf_fail_on_second_call)
 {
     char *str = NULL;
-    int ret = 0;
+    int ret;
 
     clcc_return_value_after(vsnprintf, -1, 1);
     clcc_enable_control(vsnprintf);
@@ -45,7 +45,7 @@ Test(asprintf, test_vsnprintf_fail_on_second_call)
 Test(asprintf, test_malloc_fail)
 {
     char *str = NULL;
-    int ret = 0;
+    int ret;
 
     clcc_return_now(calloc, NULL);
     ret = my_asprintf(&str, "Hello, %s", "world");
