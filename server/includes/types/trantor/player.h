@@ -29,6 +29,14 @@
 // @brief Generate a random player direction
 #define PLAYER_RANDOM_DIRECTION() ((random() % DIR_LEN) + 1)
 
+// @brief Structure representing a player look info
+typedef struct player_look_info_s {
+    // @brief Buffer size
+    size_t buf_size;
+    // @brief Look vector
+    vector2l_t vector;
+} player_look_info_t;
+
 // @brief Structure representing a Trantorian player's direction
 typedef enum player_direction_e {
     // @brief North direction
@@ -127,3 +135,29 @@ void player_update_lives(player_t *player, time_unit_t time_units);
  */
 bool player_set_inventory_resource(player_t *player, resource_t resource,
     int quantity);
+
+/**
+ * @brief Get the player's vision string containing all the resources
+ * he can see
+ * @param player Player to get the vision from
+ * @param map Map to get the vision from
+ * @return Vision string
+ */
+char *player_look(player_t *player, map_t *map);
+
+/**
+ * @brief Get the player's look vector
+ * @param player Player to get the look vector from
+ * @param info Look info to get the look vector from
+ */
+void player_get_look_vector(player_t *player, player_look_info_t *info);
+
+/**
+ * @brief Get the player's look on vertical or horizontal axis
+ * @param player Player to get the look from
+ * @param map Map to get the look from
+ * @param info Look info to get the look fro
+ * @param cell_stats Cell stats to get the look from
+ */
+void player_get_look_axis(player_t *player, map_t *map,
+    player_look_info_t *info, map_cell_stats_t *cell_stats);

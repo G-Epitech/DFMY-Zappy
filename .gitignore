@@ -20,3 +20,4 @@ zappy_ai
 *.gcda
 *.gcov
 build
+cmake-build-debug-wsl
