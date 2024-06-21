@@ -33,5 +33,6 @@ void world_kill_eggs(world_t *world, list_t *eggs, server_t *server)
         egg = NODE_TO_PTR(node, egg_t *);
         notify_graphics_egg_death(server->controllers, egg);
         world_kill_egg(world, egg);
+        node = node->next;
     }
 }
