@@ -25,6 +25,7 @@ clean:
 fclean:
 	@make -C graphic fclean
 	@make -C server fclean
+	@rm -f *.log
 	@rm -f zappy_server
 	@rm -f zappy_ai
 	@rm -f zappy_gui

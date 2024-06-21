@@ -9,6 +9,7 @@
 
 #include "types/list.h"
 #include "types/vector2.h"
+#include "types/direction.h"
 #include "types/trantor/resource.h"
 
 // Forward declaration of player_t
@@ -130,3 +131,12 @@ void map_remove_egg(map_t *map, egg_t *egg);
  * @return Resolved position
  */
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
+
+/**
+ * @brief Move a position forward in a given direction
+ * @param map Map to move the position in
+ * @param position Position to move
+ * @param direction Direction to move the position to
+ */
+void map_forward_position(map_t *map, vector2u_t *position,
+    direction_t direction);

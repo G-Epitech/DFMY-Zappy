@@ -24,3 +24,14 @@ vector2u_t map_resolve_position(map_t *map, vector2l_t pos)
         resolved_pos.y = pos.y;
     return resolved_pos;
 }
+
+void map_forward_position(map_t *map, vector2u_t *position,
+    direction_t direction)
+{
+    vector2l_t move_vector = direction_get_move_vector(direction);
+    vector2l_t new_pos = { 0, 0 };
+
+    new_pos.x = (long)position->x + move_vector.x;
+    new_pos.y = (long)position->y + move_vector.y;
+    *position = map_resolve_position(map, new_pos);
+}
