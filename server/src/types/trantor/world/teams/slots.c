@@ -5,8 +5,6 @@
 ** slots.c
 */
 
-#include "types/trantor/world.h"
-
 // TODO: Use this code to generate minimal eggs
 /*size_t world_ensure_team_slots(world_t *world, team_t *team)
 {

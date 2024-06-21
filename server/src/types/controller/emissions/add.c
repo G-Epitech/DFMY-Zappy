@@ -13,7 +13,7 @@
 static bool controller_add_emission_final(controller_t *controller,
     char *format, va_list args)
 {
-    ssize_t written = 0;
+    ssize_t written;
 
     written = buffer_vwritef(controller->generic.emissions, format, args);
     if (written < 0) {
@@ -55,7 +55,7 @@ bool controllers_add_emission(list_t *controllers, controller_type_t types,
         va_copy(copy, args);
         controller = NODE_TO_PTR(node, controller_t *);
         if (controller->generic.type & types)
-            controller_add_emission(controller, format, copy);
+            controller_add_emission_final(controller, format, copy);
         node = node->next;
         va_end(copy);
     }

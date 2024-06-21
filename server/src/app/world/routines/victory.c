@@ -6,7 +6,6 @@
 */
 
 #include <string.h>
-#include "utils.h"
 #include "types/trantor/world.h"
 #include "types/server.h"
 

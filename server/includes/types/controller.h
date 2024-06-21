@@ -12,7 +12,6 @@
 #include "types/trantor/chrono.h"
 #include "types/trantor/team.h"
 #include "types/vector2.h"
-#include "smart_ptr.h"
 #include "buffer.h"
 
 // Max number of requests a player can have
@@ -122,16 +121,6 @@ void controller_free(controller_t *controller);
  * @param data Node data to free as controller
  */
 void controller_free_as_node_data(node_data_t data);
-
-/**
- * @brief Write to the controller (wrapper around write(2))
- * @param controller Controller to write to
- * @param msg Message to write
- * @param len Message length
- * @return Number of bytes written or -1 if an error occurred
- */
-ssize_t controller_write(controller_t *controller, const char *msg,
-    size_t len);
 
 /**
  * @brief Emit as much emissions as possible of the controller

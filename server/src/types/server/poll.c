@@ -32,7 +32,7 @@ void server_update_fd_watch_write(server_t *server)
 int server_poll(server_t *server, timeval_t *timeout)
 {
     fd_states_t *actual = &server->fd_actual;
-    int res = 0;
+    int res;
 
     server_update_fd_watch_write(server);
     *actual = server->fd_watch;
