@@ -10,16 +10,15 @@
 
 void player_forward(player_t *player, map_t *map)
 {
-    node_t *node = NULL;
+    node_t *node;
     map_cell_t *cell;
 
     if (!map || !player)
         return;
-    cell = &(map->cells[player->position.y][player->position.x]);
-    node = list_find(cell->players, NODE_DATA_FROM_PTR(player));
+    cell = MAP_PLAYER_CELL(map, player);
+    node = map_cell_pop_player(cell, player);
     if (!node)
         return;
-    list_pop(cell->players, node);
     map_forward_position(map, &player->position, player->direction);
     cell = MAP_PLAYER_CELL(map, player);
     list_append(cell->players, node);
