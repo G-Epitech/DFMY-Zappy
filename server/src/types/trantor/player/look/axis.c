@@ -60,8 +60,8 @@ static void player_look_axis_horizontal(player_t *player, map_t *map,
     }
 }
 
-void player_look_axis(player_t *player, map_t *map, player_look_info_t *info,
-    map_cell_stats_t *cell_stats)
+void player_get_look_axis(player_t *player, map_t *map, player_look_info_t *info,
+                          map_cell_stats_t *cell_stats)
 {
     if (player->direction == DIR_NORTH || player->direction == DIR_SOUTH)
         player_look_axis_vertical(player, map, info, cell_stats);

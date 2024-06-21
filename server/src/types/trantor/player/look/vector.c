@@ -7,7 +7,7 @@
 
 #include "types/trantor/player.h"
 
-void player_look_vector(player_t *player, player_look_info_t *info)
+void player_get_look_vector(player_t *player, player_look_info_t *info)
 {
     switch (player->direction) {
         case DIR_NORTH:

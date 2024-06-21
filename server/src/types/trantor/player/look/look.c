@@ -18,10 +18,10 @@ char *player_look(player_t *player, map_t *map)
 
     if (cell_stats == NULL || map == NULL)
         return NULL;
-    player_look_vector(player, &look_info);
+    player_get_look_vector(player, &look_info);
     map_cell_get_stats(MAP_PLAYER_CELL(map, player), &cell_stats[0]);
     look_info.buf_size += map_cell_stats_str_len(&cell_stats[0]);
-    player_look_axis(player, map, &look_info, cell_stats);
+    player_get_look_axis(player, map, &look_info, cell_stats);
     res = map_cells_stats_string(cell_stats, nb_cells, look_info.buf_size);
     free(cell_stats);
     return res;

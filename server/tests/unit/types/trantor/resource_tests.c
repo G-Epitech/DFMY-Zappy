@@ -61,13 +61,6 @@ Test(resources_string_conversion, conversion_tests)
     char *str = NULL;
     resource_t resource = RES_FOOD;
 
-    resource_to_string(resource, &str);
-    cr_assert_str_eq(str, "food");
-    free(str);
-    resource = RES_LINEMATE;
-    resource_to_string(resource, &str);
-    cr_assert_str_eq(str, "linemate");
-    free(str);
     str = strdup("food");
     resource_from_string(&resource, str);
     cr_assert_eq(resource, RES_FOOD);

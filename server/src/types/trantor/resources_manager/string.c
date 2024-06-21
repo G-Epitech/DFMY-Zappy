@@ -23,14 +23,9 @@ size_t resource_string_len(resource_t resource)
     return strlen(resource_str[resource]);
 }
 
-char *resource_to_string_ptr(resource_t resource)
+char *resource_to_string(resource_t resource)
 {
     return resource_str[resource];
-}
-
-void resource_to_string(resource_t resource, char **str)
-{
-    (*str) = strdup(resource_str[resource]);
 }
 
 bool resource_from_string(resource_t *resource, const char *str)
