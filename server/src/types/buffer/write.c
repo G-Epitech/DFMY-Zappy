@@ -36,7 +36,8 @@ ssize_t buffer_vwritef(buffer_t *buffer, const char *format, va_list args)
     if (!buffer || needed < 0 || needed > available)
         return -1;
     va_copy(copy, args);
-    written = vsnprintf(&buffer->data[buffer->bytes],available, format, copy);
+    written = vsnprintf(&buffer->data[buffer->bytes], available,
+        format, copy);
     va_end(copy);
     if (written < 0)
         return -1;

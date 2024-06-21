@@ -16,7 +16,7 @@ void buffer_init(buffer_t *buffer, size_t size)
 
 buffer_t *buffer_new(size_t size)
 {
-    buffer_t *buffer = calloc(1,sizeof(buffer_t));
+    buffer_t *buffer = calloc(1, sizeof(buffer_t));
 
     if (!buffer)
         return NULL;

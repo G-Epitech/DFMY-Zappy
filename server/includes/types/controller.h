@@ -214,4 +214,3 @@ void controller_handle_buffer(controller_t *controller,
  */
 bool controller_player_from_generic(controller_t *controller,
     player_t *player);
-

@@ -19,7 +19,6 @@ static void notify_graphics_of_player_death(server_t *server, player_t *player)
     }
 }
 
-
 static void app_handle_player_death(world_t *world, server_t *server,
     player_t *player)
 {
