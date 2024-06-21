@@ -707,12 +707,7 @@ Test(controller_emissions_tests, add_shared_emissions_with_calloc_fail, .init = 
     list_push(list, NODE_DATA_FROM_PTR(controller2));
     list_push(list, NODE_DATA_FROM_PTR(controller3));
     clcc_return_now(calloc, NULL);
-    cr_assert_eq(controllers_add_emission(list, &params, CTRL_UNKNOWN),
-                 false);
-    cr_assert_eq(controllers_add_emission(list, &params, CTRL_UNKNOWN),
-                 false);
-    cr_assert_eq(controllers_add_emission(list, &params, CTRL_UNKNOWN),
-                 false);
+    cr_assert_not(controllers_add_emission(list, &params, CTRL_UNKNOWN));
     clcc_disable_control(calloc);
     cr_assert_eq(controller->generic.emissions->len, 0);
     cr_assert_eq(controller2->generic.emissions->len, 0);

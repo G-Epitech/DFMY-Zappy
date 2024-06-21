@@ -80,8 +80,8 @@ bool controllers_add_emission(list_t *controllers,
         return false;
     buffer_ptr = smart_ptr_new(params->buffer);
     if (!buffer_ptr)
-        return false;
-    while (node) {
+        free(params->buffer);
+    while (node && buffer_ptr) {
         controller = NODE_DATA_TO_PTR(node->data, controller_t *);
         if (controller->generic.type & types && CTRL_CAN_EMIT(controller)) {
             controller_add_emission_from_shared_buffer(controller, buffer_ptr,
@@ -89,5 +89,5 @@ bool controllers_add_emission(list_t *controllers,
         }
         node = node->next;
     }
-    return true;
+    return buffer_ptr != NULL;
 }

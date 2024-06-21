@@ -17,7 +17,6 @@
 
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
-
 // Check if controller can emit data
 #define CTRL_CAN_EMIT(c) ((c)->generic.state & CTRL_ALLOW_EMIT)
 // Check if controller can receive requests
@@ -53,9 +52,9 @@ typedef struct generic_controller_s {
     // @brief Controller socket
     int socket;
     // @brief List of pending requests
-    list_t *requests;
+    char request[REQ_MAX_BUFF_SIZE];
     // @brief List of pending emissions
-    list_t *emissions;
+    char emission[4096];
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
