@@ -58,3 +58,9 @@ __attribute__((format(printf, 2, 3)));
  * @return Number of bytes written
  */
 ssize_t buffer_flush(buffer_t *buffer, int fd);
+
+/**
+ * @brief Clear buffer
+ * @param buffer Buffer to clear
+ */
+void buffer_clear(buffer_t *buffer);

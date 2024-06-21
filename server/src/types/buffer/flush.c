@@ -6,11 +6,11 @@
 */
 
 #include <string.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include "types/buffer.h"
 
-ssize_t buffer_flush(buffer_t *buffer, int fd) {
+ssize_t buffer_flush(buffer_t *buffer, int fd)
+{
     ssize_t written;
 
     if (!buffer || !buffer->bytes)
@@ -27,7 +27,8 @@ ssize_t buffer_flush(buffer_t *buffer, int fd) {
     return written;
 }
 
-void buffer_clear(buffer_t *buffer) {
+void buffer_clear(buffer_t *buffer)
+{
     if (!buffer)
         return;
     buffer->bytes = 0;
