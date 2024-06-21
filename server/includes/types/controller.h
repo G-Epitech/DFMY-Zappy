@@ -14,6 +14,7 @@
 #include "types/vector2.h"
 #include "smart_ptr.h"
 #include "emission.h"
+#include "buffer.h"
 
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
@@ -54,8 +55,8 @@ typedef struct generic_controller_s {
     int socket;
     // @brief List of pending requests
     list_t *requests;
-    // @brief List of pending emissions
-    list_t *emissions;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
@@ -69,10 +70,10 @@ typedef generic_controller_t graphic_controller_t;
 typedef struct player_controller_s {
     // @brief Controller socket
     int socket;
-    // @brief Requests that the player made
+    // @brief List of pending requests
     list_t *requests;
-    // @brief List of data to emit to client
-    list_t *emissions;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state

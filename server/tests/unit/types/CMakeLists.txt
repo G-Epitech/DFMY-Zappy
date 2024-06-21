@@ -6,6 +6,7 @@ target_sources(zappy_server_tests PUBLIC
         emission_tests.c
         smart_ptr_tests.c
         vector2_tests.c
+        buffer_tests.c
 )
 add_subdirectory(args)
 add_subdirectory(trantor)
