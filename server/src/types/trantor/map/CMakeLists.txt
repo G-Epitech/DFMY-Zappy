@@ -6,4 +6,5 @@ target_sources(zappy_server_core PRIVATE
         add.c
         remove.c
         position.c
+        eject.c
 )

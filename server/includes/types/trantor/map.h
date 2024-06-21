@@ -140,3 +140,11 @@ vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
  */
 void map_forward_position(map_t *map, vector2u_t *position,
     direction_t direction);
+
+/**
+ * @brief Eject players from a cell
+ * @param map Map to eject players from
+ * @param player Player that initiated the ejection
+ * @return Success status
+ */
+bool map_eject_players(map_t *map, player_t *player);
