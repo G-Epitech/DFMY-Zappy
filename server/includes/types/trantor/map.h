@@ -165,3 +165,12 @@ size_t map_cell_stats_str_len(map_cell_stats_t *stats);
  */
 char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
     size_t buf_size);
+
+/**
+ * @brief Get the sound angle between two positions
+ * @param map Map to get the sound angle from
+ * @param src Sound emitter position
+ * @param dest Sound receiver position
+ * @return Sound angle (normalized between 0 and 360)
+ */
+double map_get_sound_angle(map_t *map, vector2u_t src, vector2u_t dest);
