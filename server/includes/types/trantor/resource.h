@@ -96,7 +96,7 @@ bool resource_from_string(resource_t *resource, const char *str);
  * @param resource Resource to get the string from
  * @return Pointer to the resource string
  */
-char *resource_to_string(resource_t resource);
+const char *resource_to_string(resource_t resource);
 
 /**
  * @brief Get the length of a resource string

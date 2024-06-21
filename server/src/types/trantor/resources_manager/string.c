@@ -8,7 +8,7 @@
 #include <string.h>
 #include "types/trantor/resource.h"
 
-static char *resource_str[] = {
+static const char *resource_str[] = {
     "food",
     "linemate",
     "deraumere",
@@ -23,7 +23,7 @@ size_t resource_string_len(resource_t resource)
     return strlen(resource_str[resource]);
 }
 
-char *resource_to_string(resource_t resource)
+const char *resource_to_string(resource_t resource)
 {
     return resource_str[resource];
 }

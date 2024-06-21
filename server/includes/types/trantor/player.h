@@ -159,5 +159,5 @@ void player_get_look_vector(player_t *player, player_look_info_t *info);
  * @param info Look info to get the look fro
  * @param cell_stats Cell stats to get the look from
  */
-void player_get_look_axis(player_t *player, map_t *map, player_look_info_t *info,
-    map_cell_stats_t *cell_stats);
+void player_get_look_axis(player_t *player, map_t *map,
+    player_look_info_t *info, map_cell_stats_t *cell_stats);

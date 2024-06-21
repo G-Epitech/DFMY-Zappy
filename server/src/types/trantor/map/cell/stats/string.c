@@ -27,7 +27,7 @@ size_t map_cell_stats_str_len(map_cell_stats_t *stats)
 static void map_cell_stats_resources_string(map_cell_stats_t *cell_stats,
     resource_t resource, size_t *buf_idx, char *buffer)
 {
-    char *resource_str = NULL;
+    const char *resource_str = NULL;
     size_t resource_len = 0;
 
     for (size_t k = 0; k < cell_stats->resources[resource]; k++) {
