@@ -424,9 +424,9 @@ Test(server_update_fd_write_tests, update_3_controllers_without_emissions)
     controller_t *controller2 = server_register_client(server, 43);
     controller_t *controller3 = server_register_client(server, 44);
 
-    list_clear(controller1->generic.emissions, &emission_free_as_node_data);
-    list_clear(controller2->generic.emissions, &emission_free_as_node_data);
-    list_clear(controller3->generic.emissions, &emission_free_as_node_data);
+    buffer_clear(controller1->generic.emissions);
+    buffer_clear(controller2->generic.emissions);
+    buffer_clear(controller3->generic.emissions);
 
     server_start(server, 4242);
 
