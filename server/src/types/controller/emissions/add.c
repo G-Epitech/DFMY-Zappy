@@ -7,74 +7,72 @@
 
 #include <memory.h>
 #include "types/controller.h"
-#include "types/emission.h"
 #include "types/list.h"
 #include "log.h"
 
-static bool controller_add_emission_final(controller_t *controller,
-    smart_ptr_t *buffer_ptr, size_t buffer_size, int flags)
+static ssize_t controller_try_add_emission(controller_t *controller,
+    char *format, va_list args)
 {
-    emission_t *emission = NULL;
-    char *buffer = NULL;
-    bool success = false;
+    ssize_t written = buffer_vwritef(controller->generic.emissions,
+        format, args);
 
-    emission = emission_new(buffer_ptr, buffer_size, flags);
-    if (!emission) {
-        smart_ptr_free(buffer_ptr);
+    if (written >= 0)
+        return written;
+    log_warn("Failed to add emission to controller %d. "
+            "Trying to flush buffer", controller->generic.socket);
+    if (controller_try_emit(controller))
+        return buffer_vwritef(controller->generic.emissions, format, args);
+    return written;
+}
+
+static bool controller_add_emission_from_va_args(controller_t *controller,
+    char *format, va_list args)
+{
+    ssize_t written = controller_try_add_emission(controller, format, args);
+
+    if (written < 0) {
+        log_error("Failed to add emission to controller %d",
+            controller->generic.socket
+        );
         return false;
     }
-    buffer = SMART_PTR_CAST(char *, buffer_ptr);
-    success = list_push(controller->generic.emissions,
-                        NODE_DATA_FROM_PTR(emission));
-    if (success) {
-        log_debug("Added emission [%s] to controller %d", buffer,
-            controller->generic.socket);
-    } else {
-        log_error("Failed to add emission [%s] to controller %d", buffer,
-            controller->generic.socket);
-        emission_free(emission);
-    }
+    log_debug("Added %ld bytes to emit to controller %d", written,
+        controller->generic.socket);
+    return true;
+}
+
+bool controller_add_emission(controller_t *controller, char *format, ...)
+{
+    va_list args;
+    bool success = false;
+
+    if (!controller || !CTRL_CAN_EMIT(controller))
+        return false;
+    va_start(args, format);
+    success = controller_add_emission_from_va_args(controller, format, args);
+    va_end(args);
     return success;
 }
 
-bool controller_add_emission(controller_t *controller, char *buffer,
-    size_t buffer_size, int flags)
+bool controllers_add_emission(list_t *controllers, controller_type_t types,
+    char *format, ...)
 {
-    smart_ptr_t *buffer_ptr = NULL;
-
-    if (!controller || !buffer ||
-        controller->generic.state == CTRL_DISCONNECTED
-    ) {
-        return false;
-    }
-    buffer_ptr = smart_ptr_new(buffer);
-    if (!buffer_ptr)
-        return false;
-    return controller_add_emission_final(controller, buffer_ptr,
-        buffer_size, flags);
-}
-
-bool controllers_add_emission(list_t *controllers,
-    emission_params_t *params, controller_type_t types)
-{
-    smart_ptr_t *buffer_ptr = NULL;
+    va_list args;
+    va_list copy;
     controller_t *controller = NULL;
     node_t *node = controllers ? controllers->first : NULL;
 
-    if (!controllers || !params || !params->buffer)
+    if (!controllers)
         return false;
-    buffer_ptr = smart_ptr_new(params->buffer);
-    if (!buffer_ptr)
-        return false;
+    va_start(args, format);
     while (node) {
-        controller = NODE_DATA_TO_PTR(node->data, controller_t *);
-        if (controller->generic.type & types &&
-            controller->generic.state != CTRL_DISCONNECTED
-        ) {
-            controller_add_emission_final(controller, buffer_ptr,
-                params->buffer_size, params->flags);
-        }
+        va_copy(copy, args);
+        controller = NODE_TO_PTR(node, controller_t *);
+        if (controller->generic.type & types)
+            controller_add_emission_from_va_args(controller, format, copy);
         node = node->next;
+        va_end(copy);
     }
+    va_end(args);
     return true;
 }

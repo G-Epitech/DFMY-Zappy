@@ -1,9 +1,11 @@
-target_sources(zappy_server_core PUBLIC
+target_sources(zappy_server_core PRIVATE
         start.c
         run.c
         usage.c
         stop.c
         init.c
         pipeline.c
-        steps/server.c
 )
+add_subdirectory(steps)
+add_subdirectory(world)
+add_subdirectory(requests)

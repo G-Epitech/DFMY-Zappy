@@ -11,6 +11,7 @@
 #include "log.h"
 #include "types/server.h"
 #include "types/args.h"
+#include "types/trantor/world.h"
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
@@ -21,6 +22,8 @@ typedef struct app_s {
     server_t *server;
     // @brief Program arguments
     args_t args;
+    // @brief World instance
+    world_t *world;
     // @brief Application running state
     volatile bool running;
 } app_t;
@@ -91,3 +94,111 @@ void app_run_pipeline(app_t *app);
  * @param app Application to handle the server connections
  */
 void app_handle_server_connections(app_t *app);
+
+/**
+ * @brief Handle world lifecycle of players
+ * @param world World to handle the world lifecycle of players
+ * @param server App server instance
+ */
+void app_handle_world_lifecycle_players(world_t *world, server_t *server);
+
+/**
+ * @brief Handle world lifecycle update of events delays
+ * @param world World to handle the world lifecycle update of events delays
+ * @param server App server instance
+ */
+void app_handle_world_lifecycle_events_delay(world_t *world,
+    server_t *server);
+
+/**
+ * @brief Handle world lifecycle incantations
+ * @param world World to handle the world lifecycle incantations
+ * @param server App server instance
+ */
+void app_handle_world_lifecycle_incantations(world_t *world,
+    server_t *server);
+
+/**
+ * @brief Handle world lifecycle
+ * @param app Application to handle the world lifecycle
+ */
+void app_handle_world_lifecycle(app_t *app);
+
+/**
+ * @brief Handle server select timeout
+ * @param app Application to handle the server select timeout
+ * @param timeout Timeout to change
+ * @return Pointer to given timeout or NULL if no timeout have to be set
+ */
+timeval_t *app_get_timeout(app_t *app, timeval_t *timeout);
+
+/**
+ * @brief Handle application routines step
+ * @param app Application to handle the routines
+ */
+void app_handle_world_routines(app_t *app);
+
+/**
+ * @brief Handle world routine resources generation
+ * @param world World to handle the routine resources generation
+ */
+void app_handle_world_routine_resources_generation(world_t *world);
+
+/**
+ * @brief Handle world routine team victory
+ * @param world World to handle the routine team victory
+ * @param server Server to handle the routine team victory
+ * @return true if a team has won, false otherwise
+ */
+bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
+
+/**
+ * @brief Handle controllers requests
+ * @param app App instance
+ */
+void app_handle_controllers_requests(app_t *app);
+
+/**
+ * @brief Promote an unknown controller to graphic controller
+ * @param app App instance
+ * @param controller Controller to promote
+ */
+void app_try_promote_controller_to_graphic(app_t *app,
+    controller_t *controller);
+
+/**
+ * @brief Promote an unknown controller to player controller
+ * @param app App instance
+ * @param controller Controller to promote
+ * @param request Request to promote
+ * @param team_name_len Length of the team name
+ */
+void app_try_promote_controller_to_player(app_t *app,
+    controller_t *controller, request_t *request, size_t team_name_len);
+
+/**
+ * @brief Handle request of an unknown controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_unknown_request(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle request of a graphic controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_graphic_request(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle request of a player controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_player_request(app_t *app, controller_t *controller,
+    request_t *request);

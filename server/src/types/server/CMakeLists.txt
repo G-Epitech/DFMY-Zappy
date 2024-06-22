@@ -1,4 +1,4 @@
-target_sources(zappy_server_core PUBLIC
+target_sources(zappy_server_core PRIVATE
         new.c
         free.c
         start.c
@@ -7,7 +7,6 @@ target_sources(zappy_server_core PUBLIC
         connection/accept.c
         connection/close.c
         connection/get.c
-        connection/status.c
         connection/requests.c
         connection/emissions.c
 )

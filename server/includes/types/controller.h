@@ -9,25 +9,34 @@
 
 #include "list.h"
 #include "types/request.h"
-#include "types/world/chrono.h"
-#include "smart_ptr.h"
-#include "emission.h"
+#include "types/trantor/chrono.h"
+#include "types/trantor/team.h"
+#include "types/trantor/map.h"
+#include "types/vector2.h"
+#include "buffer.h"
+
+// Forward declaration of server
+typedef struct server_s server_t;
 
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
 
+// Max number of requests a generic controller can have
+#define CTRL_GENERIC_MAX_REQ 3
+
+// Average size of emission line for graphic controller
+#define CTRL_GRAPHIC_AVERAGE_EMISSION_SIZE 40
+
+// Size of emission buffer
+#define CTRL_EMIT_BUFF_SIZE 4096
+
+// Check if controller can emit data
+#define CTRL_CAN_EMIT(c) ((c)->generic.state & CTRL_ALLOW_EMIT)
+// Check if controller can receive requests
+#define CTRL_CAN_REQ(c) ((c)->generic.state & CTRL_ALLOW_REQ)
+
 // Forward declaration
 typedef struct player_s player_t;
-
-// Frozen state of a player
-typedef enum frozen_state_e {
-    // @brief Not frozen
-    FROZ_NO,
-    // @brief Frozen by himself
-    FROZ_HIMSELF,
-    // @brief Frozen by another player
-    FROZ_BY_OTHER
-} frozen_state_t;
 
 // @brief Controller types
 typedef enum controller_type_e {
@@ -41,10 +50,14 @@ typedef enum controller_type_e {
 
 // @brief Controller states
 typedef enum controller_read_state_e {
-    // @brief Controller is connected
-    CTRL_CONNECTED,
     // @brief Controller is disconnected
-    CTRL_DISCONNECTED,
+    CTRL_DISCONNECTED = 0,
+    // @brief Controller is allowed to receive requests
+    CTRL_ALLOW_REQ = 1,
+    // @brief Controller is allowed to emit data
+    CTRL_ALLOW_EMIT = 2,
+    // @brief Controller is connected
+    CTRL_CONNECTED = CTRL_ALLOW_EMIT | CTRL_ALLOW_REQ
 } controller_state_t;
 
 // @brief Represent a generic controller
@@ -53,12 +66,14 @@ typedef struct generic_controller_s {
     int socket;
     // @brief List of pending requests
     list_t *requests;
-    // @brief List of pending emissions
-    list_t *emissions;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
     controller_state_t state;
+    // @brief Parent server
+    server_t *server;
 } generic_controller_t;
 
 // @brief Represent a graphic controller
@@ -68,20 +83,20 @@ typedef generic_controller_t graphic_controller_t;
 typedef struct player_controller_s {
     // @brief Controller socket
     int socket;
-    // @brief Requests that the player made
+    // @brief List of pending requests
     list_t *requests;
-    // @brief List of data to emit to client
-    list_t *emissions;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
     controller_state_t state;
+    // @brief Parent server
+    server_t *server;
     // @brief Link to player instance
     player_t *player;
     // @brief Player cooldown (time units locked for)
     time_unit_t cooldown;
-    // @brief Specify if the player is frozen by an incantation
-    frozen_state_t frozen;
 } player_controller_t;
 
 // @brief Represent a controller
@@ -122,41 +137,40 @@ void controller_free(controller_t *controller);
 void controller_free_as_node_data(node_data_t data);
 
 /**
- * @brief Write to the controller (wrapper around write(2))
- * @param controller Controller to write to
- * @param msg Message to write
- * @param len Message length
- * @return Number of bytes written or -1 if an error occurred
- */
-ssize_t controller_write(controller_t *controller, const char *msg,
-    size_t len);
-
-/**
  * @brief Emit as much emissions as possible of the controller
  * @param controller Controller to emit
+ * @return true if the controller emitted, false otherwise
  */
-void controller_emit(controller_t *controller);
+bool controller_emit(controller_t *controller);
 
 /**
- * @brief Add an emission to the controller
+ * @brief Try to emit current buffer of a controller
+ * @param controller Controller to emit
+ * @return true if the controller emitted, false otherwise
+ */
+bool controller_try_emit(controller_t *controller);
+
+/**
+ * @brief Add an emission to the controller from a format
  * @param controller Controller to add the emission to
- * @param buffer_ptr Buffer to add to the emission
- * @param buffer_size Buffer size
- * @param flags Flags of the emission
+ * @param format Format string as in printf
+ * @param ... Arguments for the format string
  * @return true if the emission was added, false otherwise
  */
-bool controller_add_emission(controller_t *controller, char *buffer,
-    size_t buffer_size, int flags);
+bool controller_add_emission(controller_t *controller,
+    char *format, ...) __attribute__((format(printf, 2, 3)));
 
 /**
- * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
+ * @brief Add an emission to types controllers matching types in a list
  * @param controllers List of controllers
- * @param params Emission parameters
  * @param types Types of controllers to add emission to
+ * @param format Format string as in printf
+ * @param ... Arguments for the format string
  * @return true if the emission was added, false otherwise
  */
 bool controllers_add_emission(list_t *controllers,
-    emission_params_t *params, controller_type_t types);
+    controller_type_t types, char *format, ...)
+__attribute__((format(printf, 3, 4)));
 
 /**
  * @brief Get next pending request of a controller
@@ -179,6 +193,12 @@ controller_state_t controller_read(controller_t *controller);
  * @return Last request or NULL if no request
  */
 request_t *controller_get_last_request(controller_t *controller);
+
+/**
+ * @brief Clear first request of a controller
+ * @param controller Controller to clear first request from
+ */
+void controller_clear_first_request(controller_t *controller);
 
 /**
  * @brief Read next token from a buffer
@@ -209,8 +229,32 @@ void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size);
 
 /**
- * @brief Send emission last character
- * @param controller Controller on which send emission last char
- * @return Success of emission termination
+ * @brief Initialize a player controller from a generic controller
+ * @param controller Controller to initialize
+ * @param player Player to link to the controller
+ * @return true if the controller was initialized, false otherwise
  */
-bool controller_end_emission(controller_t *controller);
+bool controller_player_from_generic(controller_t *controller,
+    player_t *player);
+
+/**
+ * @brief Initialize a graphic controller from a generic controller
+ * @param controller Controller to initialize
+ * @param map Map to use to dynamically allocate buffer
+ * @return true if the controller was initialized, false otherwise
+ */
+bool controller_graphic_from_generic(controller_t *controller, map_t *map);
+
+/**
+ * @brief Check if a controller can emit data
+ * @param controller Controller to check
+ * @return Emission possibility
+ */
+bool controller_can_receive(controller_t *controller);
+
+/**
+ * @brief Check if a controller has content to read
+ * @param controller Controller to check
+ * @return Read possibility
+ */
+bool controller_has_content_to_read(controller_t *controller);

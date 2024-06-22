@@ -7,7 +7,6 @@
 
 #include <unistd.h>
 #include <memory.h>
-#include <stdio.h>
 #include "types/controller.h"
 #include "log.h"
 
@@ -65,16 +64,18 @@ controller_state_t controller_read(controller_t *controller)
 {
     char buffer[REQ_BUFF_SIZE] = { 0 };
     generic_controller_t *generic = controller ? &controller->generic : NULL;
-    ssize_t read_size = generic ? read(generic->socket, buffer,
-        REQ_BUFF_SIZE) : -1;
+    ssize_t read_size;
 
-    if (read_size == 0 || !generic)
+    if (!controller)
+        return CTRL_DISCONNECTED;
+    read_size = read(generic->socket, buffer, REQ_BUFF_SIZE);
+    if (read_size == 0)
         return CTRL_DISCONNECTED;
     if (read_size < 0) {
         log_error("Failed to read from socket %d", generic->socket);
-    } else {
+    } else if (CTRL_CAN_REQ(controller)) {
         log_debug("Received %ldB from %d", read_size, generic->socket);
         controller_handle_buffer(controller, buffer, read_size);
     }
-    return CTRL_CONNECTED;
+    return generic->state;
 }

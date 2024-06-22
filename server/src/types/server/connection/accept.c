@@ -30,7 +30,8 @@ controller_t *server_register_client(server_t *server, int socket)
         return NULL;
     }
     fd_states_set(&server->fd_watch, socket, FD_STATES_R | FD_STATES_E);
-    controller_add_emission(controller, strdup("WELCOME"), 7, 0);
+    controller->generic.server = server;
+    controller_add_emission(controller, "WELCOME\n");
     return controller;
 }
 
