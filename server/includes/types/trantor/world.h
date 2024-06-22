@@ -98,8 +98,9 @@ void world_unregister_player(world_t *world, player_t *player);
  * @param player Player to remove
  * @param zombie Specify if the player is a zombie and should not be
  * handled as a dead player. It will be freed.
+ * @return Added egg if needed or NULL if fail or not needed
  */
-void world_kill_player(world_t *world, player_t *player, bool zombie);
+egg_t *world_kill_player(world_t *world, player_t *player, bool zombie);
 
 /**
  * @brief Create an egg in the world for a team
@@ -114,9 +115,9 @@ egg_t *world_add_egg(world_t *world, team_t *team, long laid_by);
  * @brief Ensure a team has a minimum number of slots
  * @param world World to ensure the slots in
  * @param team Team to ensure the slots in
- * @return Number of slots that have been added
+ * @return Added egg or NULL if failed or not needed
  */
-size_t world_ensure_team_slots(world_t *world, team_t *team);
+egg_t *world_add_egg_if_needed(world_t *world, team_t *team);
 
 /**
  * @brief Kill an egg in the world

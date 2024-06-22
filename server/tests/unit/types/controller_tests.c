@@ -11,9 +11,11 @@
 #include <fcntl.h>
 #include "clcc/modules/unistd.h"
 #include "clcc/modules/stdlib.h"
+#include "clcc/modules/sys/socket.h"
 #include "types/list.h"
 #include "types/controller.h"
 #include "types/trantor/player.h"
+#include "types/server.h"
 
 static void redirect_all_std(void)
 {
@@ -508,10 +510,16 @@ Test(controller_tests, emit_test_in_1_try, .init = redirect_all_std)
     char buffer[1024] = { 0 };
     ssize_t buff_size_content = 0;
     controller_t *controller = NULL;
+    server_t *server = server_new();
 
     pipe(fds);
-    fcntl(fds[1], F_SETFL, O_NONBLOCK);
-    controller = controller_new(fds[1]);
+    fcntl(fds[0], F_SETFL, O_NONBLOCK);
+    clcc_return_now(accept, fds[1]);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    fd_states_set(&server->fd_actual, fds[1], FD_STATES_W);
+    buffer_clear(controller->generic.emissions);
     controller_add_emission(controller, "test\n");
 
     // Pre-assert
@@ -532,7 +540,14 @@ Test(controller_tests, emit_test_in_1_try, .init = redirect_all_std)
 
 Test(controller_tests, emit_test_in_2_tries, .init = redirect_all_std)
 {
-    controller_t *controller = controller_new(1);
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+    fd_states_set(&server->fd_actual, 4, FD_STATES_W);
+    buffer_clear(controller->generic.emissions);
 
     controller_add_emission(controller, "test\n");
 
@@ -559,9 +574,17 @@ Test(controller_tests, null_controller_emit, .init = redirect_all_std)
 
 Test(controller_tests, write_fail, .init = redirect_all_std)
 {
-    controller_t *controller = controller_new(0);
+    server_t *server = server_new();
+    controller_t *controller = NULL;
 
-    controller_add_emission(controller, "test");
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+    fd_states_set(&server->fd_actual, 4, FD_STATES_W);
+    buffer_clear(controller->generic.emissions);
+
+    cr_assert_eq(controller_add_emission(controller, "test"), true);
+    cr_assert_eq(controller->generic.emissions->bytes, 4);
 
     clcc_return_now(write, -1);
     controller_emit(controller);
@@ -571,7 +594,7 @@ Test(controller_tests, write_fail, .init = redirect_all_std)
     clcc_return_now(write, 4);
     controller_emit(controller);
     clcc_disable_control(write);
-    cr_assert_eq(controller->generic.emissions->bytes, 0);
+    cr_assert_eq(controller->generic.emissions->bytes, 0, "bytes: %ld", controller->generic.emissions->bytes);
 
     controller_free(controller);
 }
@@ -614,4 +637,38 @@ Test(controller_conversion_tests, null_player)
     controller_t *controller = controller_new(0);
 
     cr_assert_eq(controller_player_from_generic(controller, NULL), false);
+}
+
+Test(server_controller_has_content_to_read_tests, has_content, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    FD_SET(4, &server->fd_actual.readable);
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert(controller_has_content_to_read(controller));
+    server_free(server);
+}
+
+Test(server_controller_has_content_to_read_tests, no_content, .init = cr_redirect_stdout)
+{
+    // Arrange
+    server_t *server = server_new();
+    controller_t *controller = NULL;
+
+    // Act
+    FD_CLR(4, &server->fd_actual.readable);
+    clcc_return_now(accept, 4);
+    controller = server_accept_connection(server);
+    clcc_disable_control(accept);
+
+    // Assert
+    cr_assert_not(controller_has_content_to_read(controller));
+    server_free(server);
 }

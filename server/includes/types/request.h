@@ -81,3 +81,10 @@ void request_free_as_node_data(node_data_t data);
  * @param size Size of data (must be less or equal to REQUEST_BUFF_SIZE)
  */
 bool request_append(request_t *request, const char *data, size_t size);
+
+/**
+ * @brief Get the size of the first token in the request buffer
+ * @param request Request to get the first token size from
+ * @return Size of the first token
+ */
+size_t request_get_first_token_size(request_t *request);
