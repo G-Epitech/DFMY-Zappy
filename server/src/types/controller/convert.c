@@ -5,6 +5,7 @@
 ** init.c
 */
 
+#include <sys/user.h>
 #include "types/buffer.h"
 #include "types/controller.h"
 #include "types/trantor/player.h"
@@ -29,7 +30,10 @@ bool controller_graphic_from_generic(controller_t *controller, map_t *map)
     if (!controller || !map)
         return false;
     buff_size *= map->size.x * map->size.y;
-    buff_size = nearest_pow_of_two(MAX(buff_size, CTRL_EMIT_BUFF_SIZE));
+    buff_size = MAX(buff_size, CTRL_EMIT_BUFF_SIZE);
+    buff_size = buff_size % PAGE_SIZE != 0
+        ? buff_size + PAGE_SIZE - (buff_size % PAGE_SIZE)
+        : buff_size;
     controller->graphic.type = CTRL_GRAPHIC;
     buffer = &controller->graphic.emissions;
     if ((*buffer)->size < buff_size)

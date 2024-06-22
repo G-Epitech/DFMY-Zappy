@@ -42,17 +42,3 @@ int my_asprintf(char **strp, const char *fmt,
  */
 int my_vasprintf(char **strp, const char *fmt, va_list args)
 __attribute__((format(printf, 2, 0)));
-
-/**
- * @brief Check if a number is a power of two
- * @param n Number to check
- * @return true if the number is a power of 2, false otherwise
- */
-bool is_pow_of_two(unsigned int n);
-
-/**
- * @brief Get the nearest power of two of a number
- * @param n Number to get the nearest power of
- * @return Nearest power of two of the number
- */
-unsigned int nearest_pow_of_two(unsigned int n);
