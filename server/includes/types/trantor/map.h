@@ -30,6 +30,17 @@ typedef struct egg_s egg_t;
 // @brief Look for position out of map
 #define MAP_OUT_POSITION(m, p) ((p).x >= m->size.x || (p).y >= m->size.y)
 
+// @brief Structure representing map cell statistics, mainly used for
+// the vision functionality
+typedef struct map_cell_stats_s {
+    // @brief Resources on the cell
+    size_t resources[RES_LEN];
+    // @brief Number of players on the cell
+    size_t players;
+    // @brief Number of eggs on the cell
+    size_t eggs;
+} map_cell_stats_t;
+
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell
@@ -131,6 +142,30 @@ void map_remove_egg(map_t *map, egg_t *egg);
  * @return Resolved position
  */
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
+
+/**
+ * @brief Get the stats of a cell
+ * @param cell Cell to get the stats from
+ * @param stats Stats to fill
+ */
+void map_cell_get_stats(map_cell_t *cell, map_cell_stats_t *stats);
+
+/**
+ * @brief Get the buffer size of a cell stats (used for vision)
+ * @param stats Stats to get the buffer size from
+ * @return Buffer size
+ */
+size_t map_cell_stats_str_len(map_cell_stats_t *stats);
+
+/**
+ * @brief Get the string of a cell stats (used for vision)
+ * @param cell_stats Cell stats to get the look string from
+ * @param nb_cells Number of cells to get the look string from
+ * @param buf_size Buffer size to store the look string
+ * @return Look string
+ */
+char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
+    size_t buf_size);
 
 /**
  * @brief Move a position forward in a given direction

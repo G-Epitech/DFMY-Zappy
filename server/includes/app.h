@@ -151,3 +151,54 @@ void app_handle_world_routine_resources_generation(world_t *world);
  * @return true if a team has won, false otherwise
  */
 bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
+
+/**
+ * @brief Handle controllers requests
+ * @param app App instance
+ */
+void app_handle_controllers_requests(app_t *app);
+
+/**
+ * @brief Promote an unknown controller to graphic controller
+ * @param app App instance
+ * @param controller Controller to promote
+ */
+void app_try_promote_controller_to_graphic(app_t *app,
+    controller_t *controller);
+
+/**
+ * @brief Promote an unknown controller to player controller
+ * @param app App instance
+ * @param controller Controller to promote
+ * @param request Request to promote
+ * @param team_name_len Length of the team name
+ */
+void app_try_promote_controller_to_player(app_t *app,
+    controller_t *controller, request_t *request, size_t team_name_len);
+
+/**
+ * @brief Handle request of an unknown controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_unknown_request(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle request of a graphic controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_graphic_request(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle request of a player controller
+ * @param app App instance
+ * @param controller Controller to handle
+ * @param request Request to handle
+ */
+void app_handle_player_request(app_t *app, controller_t *controller,
+    request_t *request);

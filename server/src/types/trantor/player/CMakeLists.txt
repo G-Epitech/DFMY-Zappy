@@ -6,4 +6,7 @@ target_sources(zappy_server_core PRIVATE
         objects.c
         inventory.c
         life.c
+        look/look.c
+        look/vector.c
+        look/axis.c
 )

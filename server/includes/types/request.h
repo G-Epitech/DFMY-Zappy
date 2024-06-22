@@ -13,7 +13,7 @@
 #define REQ_BUFF_SIZE 4096
 
 // Max size of a request buffer
-#define REQ_MAX_BUFF_SIZE (10 * REQ_BUFF_SIZE)
+#define REQ_MAX_BUFF_SIZE (4 * REQ_BUFF_SIZE)
 
 // @brief Request token
 typedef struct request_token_s {
@@ -81,3 +81,10 @@ void request_free_as_node_data(node_data_t data);
  * @param size Size of data (must be less or equal to REQUEST_BUFF_SIZE)
  */
 bool request_append(request_t *request, const char *data, size_t size);
+
+/**
+ * @brief Get the size of the first token in the request buffer
+ * @param request Request to get the first token size from
+ * @return Size of the first token
+ */
+size_t request_get_first_token_size(request_t *request);

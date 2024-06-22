@@ -1,11 +1,11 @@
 target_sources(zappy_server_core PRIVATE
         new.c
         free.c
-        write.c
+        read.c
+        convert.c
         emissions/add.c
         emissions/emit.c
-        emissions/clear.c
-        read.c
-        request.c
-        convert.c
+        status.c
+        requests/clear.c
+        requests/create.c
 )

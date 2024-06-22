@@ -28,3 +28,17 @@ void team_remove_egg(team_t *team, egg_t *egg)
     else
         egg_free(egg);
 }
+
+egg_t *team_get_random_egg(team_t *team)
+{
+    size_t index = team->eggs->len ? random() % team->eggs->len : 0;
+    node_t *node = team->eggs->first;
+    egg_t *egg = NULL;
+
+    if (!node)
+        return NULL;
+    for (size_t i = 0; i < index; i++)
+        node = node->next;
+    egg = NODE_TO_PTR(node, egg_t *);
+    return egg;
+}

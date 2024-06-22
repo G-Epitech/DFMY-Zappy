@@ -152,23 +152,21 @@ void server_remove_disconnected_controllers(server_t *server);
 controller_t *server_get_controller_by_socket(server_t *server, int socket);
 
 /**
- * @brief Check if a controller has content to read
- * @param server Server to check
- * @param controller Controller to check
- * @return true If controller has content to read
- * @return false If controller has no content to read
- */
-bool server_controller_has_content_to_read(server_t *server,
-    controller_t *controller);
-
-/**
  * @brief Poll server controllers
  * @param server Server to poll
  * @param timeout Timeout to wait for
  * @return Number of controllers that have content to read
  * or -1 if an error occurred
  */
-int server_poll(server_t *server, timeval_t *timeout);
+int server_poll_all_controllers(server_t *server, timeval_t *timeout);
+
+/**
+ * @brief Poll server controller
+ * @param server Server to poll controller from
+ * @param controller Controller to poll
+ * @return Polling success
+ */
+bool server_poll_controller(server_t *server, controller_t *controller);
 
 /**
  * @brief Close all server connections

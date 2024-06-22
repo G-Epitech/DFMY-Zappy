@@ -66,7 +66,6 @@ Test(server_register_client_tests, simple_register) {
     // Arrange
     server_t *server = server_new();
     controller_t *controller = NULL;
-    emission_t *emission = NULL;
 
     // Pre-assert
     cr_assert_eq(server->controllers->len, 0);
@@ -80,11 +79,10 @@ Test(server_register_client_tests, simple_register) {
     cr_assert_eq(controller->generic.socket, 42);
     cr_assert_not_null(controller->generic.emissions);
     cr_assert_not_null(controller->generic.requests);
-    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller->generic.emissions->bytes, strlen("WELCOME\n"));
 
-    emission = NODE_TO_PTR(controller->generic.emissions->first, emission_t *);
-    cr_assert_not_null(emission);
-    cr_assert(memcmp(emission->buffer_ptr->target, "WELCOME", 7) == 0);
+    cr_assert_eq(controller->generic.emissions->bytes, 8);
+    cr_assert(memcmp(controller->generic.emissions->data, "WELCOME\n", 8) == 0);
 
     cr_assert_eq(controller->generic.requests->len, 0);
     cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
@@ -124,12 +122,12 @@ Test(server_register_clients_tests, register_fail_due_to_list_push)
 
     // Act and assert
     clcc_enable_control(malloc);
-    clcc_return_value_after(malloc, NULL, 2);
+    clcc_return_value_after(malloc, NULL, 1);
     controller = server_register_client(server, 42);
+    clcc_disable_control(malloc);
     cr_assert_null(controller);
     cr_assert_eq(server->controllers->len, 0);
     server_free(server);
-    clcc_disable_control(malloc);
 }
 
 Test(server_accept_connection_tests, simple_accept, .init = cr_redirect_stdout)
@@ -150,7 +148,7 @@ Test(server_accept_connection_tests, simple_accept, .init = cr_redirect_stdout)
     cr_assert_not_null(controller->generic.emissions);
     cr_assert_not_null(controller->generic.requests);
     cr_assert_eq(NODE_TO_PTR(server->controllers->first, controller_t *), controller);
-    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller->generic.emissions->bytes, 8);
     cr_assert_eq(controller->generic.requests->len, 0);
     cr_assert_eq(controller->generic.type, CTRL_UNKNOWN);
     cr_assert(FD_ISSET(4, &server->fd_watch.readable));
@@ -367,41 +365,6 @@ Test(server_get_controller_by_socket_tests, get_controller_with_several_clients,
     server_free(server);
 }
 
-Test(server_controller_has_content_to_read_tests, has_content, .init = cr_redirect_stdout)
-{
-    // Arrange
-    server_t *server = server_new();
-    controller_t *controller = NULL;
-
-    // Act
-    FD_SET(4, &server->fd_actual.readable);
-    clcc_return_now(accept, 4);
-    controller = server_accept_connection(server);
-    clcc_disable_control(accept);
-
-    // Assert
-    cr_assert(server_controller_has_content_to_read(server, controller));
-    server_free(server);
-}
-
-Test(server_controller_has_content_to_read_tests, no_content, .init = cr_redirect_stdout)
-{
-    // Arrange
-    server_t *server = server_new();
-    controller_t *controller = NULL;
-
-    // Act
-    FD_CLR(4, &server->fd_actual.readable);
-    clcc_return_now(accept, 4);
-    controller = server_accept_connection(server);
-    clcc_disable_control(accept);
-
-    // Assert
-    cr_assert_not(server_controller_has_content_to_read(server, controller));
-    server_free(server);
-}
-
-
 Test(server_handle_new_connections_tests, no_new_connections)
 {
     // Arrange
@@ -517,7 +480,7 @@ Test(server_handle_emissions_tests, emit_on_1_disconnected_controllers)
     // Act and assert
     server_handle_emissions(server);
     cr_assert_eq(server->controllers->len, 1);
-    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller->generic.emissions->bytes, strlen("WELCOME\n"));
 
     // Cleanup
     server_remove_disconnected_controllers(server);
@@ -539,7 +502,7 @@ Test(server_handle_emissions_tests, emit_on_1_controller_with_emissions)
     // Pre-assert
     cr_assert_not_null(controller);
     cr_assert_eq(server->controllers->len, 1);
-    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller->generic.emissions->bytes, strlen("WELCOME\n"));
     cr_assert_not(FD_ISSET(fd[1], &server->fd_watch.writable));
 
     // Act and assert
@@ -573,7 +536,7 @@ Test(server_handle_emissions_tests, emit_on_1_controller_with_no_emissions)
     // Pre-assert
     cr_assert_not_null(controller);
     cr_assert_eq(server->controllers->len, 1);
-    cr_assert_eq(controller->generic.emissions->len, 1);
+    cr_assert_eq(controller->generic.emissions->bytes, strlen("WELCOME\n"));
     cr_assert_not(FD_ISSET(fd[1], &server->fd_watch.writable));
 
     // Act and assert
@@ -586,7 +549,7 @@ Test(server_handle_emissions_tests, emit_on_1_controller_with_no_emissions)
     buff_content_size = read(fd[0], buffer, 1024);
     cr_assert_eq(buff_content_size, 8);
     cr_assert_str_eq(buffer, "WELCOME\n");
-    cr_assert_eq(controller->generic.emissions->len, 0);
+    cr_assert_eq(controller->generic.emissions->bytes, 0);
 
     // Second emissions
     server_handle_emissions(server);
@@ -624,8 +587,8 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions)
     cr_assert_not_null(controller1);
 
     cr_assert_eq(server->controllers->len, 2);
-    cr_assert_eq(controller1->generic.emissions->len, 1);
-    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_eq(controller1->generic.emissions->bytes, strlen("WELCOME\n"));
+    cr_assert_eq(controller2->generic.emissions->bytes, strlen("WELCOME\n"));
     cr_assert_not(FD_ISSET(fd_1[1], &server->fd_watch.writable));
     cr_assert_not(FD_ISSET(fd_2[1], &server->fd_watch.writable));
 
@@ -639,12 +602,12 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions)
     buff_content_size1 = read(fd_1[0], buffer1, 1024);
     cr_assert_eq(buff_content_size1, 8);
     cr_assert_str_eq(buffer1, "WELCOME\n");
-    cr_assert_eq(controller1->generic.emissions->len, 0);
+    cr_assert_eq(controller1->generic.emissions->bytes, 0);
 
     buff_content_size2 = read(fd_2[0], buffer2, 1024);
     cr_assert_eq(buff_content_size2, 8);
     cr_assert_str_eq(buffer2, "WELCOME\n");
-    cr_assert_eq(controller2->generic.emissions->len, 0);
+    cr_assert_eq(controller2->generic.emissions->bytes, 0);
 
     // Second emissions
     server_handle_emissions(server);
@@ -687,8 +650,8 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions_not_read
     cr_assert_not_null(controller1);
 
     cr_assert_eq(server->controllers->len, 2);
-    cr_assert_eq(controller1->generic.emissions->len, 1);
-    cr_assert_eq(controller1->generic.emissions->len, 1);
+    cr_assert_eq(controller1->generic.emissions->bytes, strlen("WELCOME\n"));
+    cr_assert_eq(controller2->generic.emissions->bytes, strlen("WELCOME\n"));
     cr_assert_not(FD_ISSET(fd_1[1], &server->fd_watch.writable));
     cr_assert_not(FD_ISSET(fd_2[1], &server->fd_watch.writable));
 
@@ -705,7 +668,7 @@ Test(server_handle_emissions_tests, emit_on_2_controller_with_emissions_not_read
     buff_content_size2 = read(fd_2[0], buffer2, 1024);
     cr_assert_eq(buff_content_size2, 8);
     cr_assert_str_eq(buffer2, "WELCOME\n");
-    cr_assert_eq(controller2->generic.emissions->len, 0);
+    cr_assert_eq(controller2->generic.emissions->bytes, 0);
 
     // Cleanup
     server_close_all_connections(server);

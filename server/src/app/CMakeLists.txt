@@ -8,3 +8,4 @@ target_sources(zappy_server_core PRIVATE
 )
 add_subdirectory(steps)
 add_subdirectory(world)
+add_subdirectory(requests)

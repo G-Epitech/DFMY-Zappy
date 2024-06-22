@@ -21,3 +21,12 @@ egg_t *world_add_egg(world_t *world, team_t *team, long laid_by)
     world->next_egg_id += 1;
     return egg;
 }
+
+egg_t *world_add_egg_if_needed(world_t *world, team_t *team)
+{
+    size_t current = team->players->len + team->eggs->len;
+
+    if (current >= team->min_slots)
+        return NULL;
+    return world_add_egg(world, team, -1);
+}

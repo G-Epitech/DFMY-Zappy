@@ -8,7 +8,7 @@
 #include "types/controller.h"
 #include "log.h"
 
-static request_t *generic_controller_create_request(
+static request_t *controller_create_request(
     generic_controller_t *generic)
 {
     request_t *req = request_new();
@@ -25,15 +25,26 @@ static request_t *generic_controller_create_request(
     return req;
 }
 
+static request_t *generic_controller_create_request(
+    generic_controller_t *generic)
+{
+    if (generic->requests->len == CTRL_GENERIC_MAX_REQ) {
+        log_warn("Generic controller %d reached max allowed pending requests."
+            " Ignored.", generic->socket);
+        return NULL;
+    }
+    return controller_create_request(generic);
+}
+
 static request_t *player_controller_create_request(
     player_controller_t *controller)
 {
     if (controller->requests->len == CTRL_PLAYER_MAX_REQ) {
-        log_info("Player controller %d reached max allowed pending requests. "
+        log_warn("Player controller %d reached max allowed pending requests. "
             "Ignored.", controller->socket);
         return NULL;
     }
-    return generic_controller_create_request(
+    return controller_create_request(
         (generic_controller_t *) controller
     );
 }
@@ -41,7 +52,7 @@ static request_t *player_controller_create_request(
 static request_t *graphic_controller_create_request(
     graphic_controller_t *controller)
 {
-    return generic_controller_create_request(
+    return controller_create_request(
         (generic_controller_t *) controller
     );
 }

@@ -72,14 +72,12 @@ Test(world_routine_team_victory, simple, .init = cr_redirect_stderr)
     player4->level = 8;
     player5->level = 8;
     player6->level = 8;
-    clcc_return_now(calloc, NULL);
     cr_assert_eq(app_handle_world_routine_team_victory(world, server), true);
-    clcc_disable_control(calloc);
-    cr_assert_eq(ctrl->generic.emissions->len, 0);
-    cr_assert_eq(ctrl2->generic.emissions->len, 0);
-    cr_assert_eq(app_handle_world_routine_team_victory(world, server), true);
-    cr_assert_eq(ctrl->generic.emissions->len, 1);
-    cr_assert_eq(ctrl2->generic.emissions->len, 0);
+
+    cr_assert_eq(ctrl->generic.emissions->bytes, 10);
+    cr_assert(memcmp(ctrl->generic.emissions->data, "seg Team1\n", 10) == 0);
+    cr_assert_eq(ctrl2->generic.emissions->bytes, 0);
+
     world_free(world);
     server_free(server);
 }
