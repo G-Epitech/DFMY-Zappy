@@ -7,6 +7,7 @@
 
 #include "types/trantor/world.h"
 #include "types/trantor/egg.h"
+#include "log.h"
 
 void world_kill_egg(world_t *world, egg_t *egg)
 {
@@ -16,11 +17,10 @@ void world_kill_egg(world_t *world, egg_t *egg)
 
 static void notify_graphics_egg_death(list_t *controllers, egg_t *egg)
 {
-    emission_params_t params = { 0 };
-
-    if (emission_params_from_format(&params, EMISSION_COMPLETE,
-        "edi %ld\n", egg->id)) {
-        controllers_add_emission(controllers, &params, CTRL_GRAPHIC);
+    if (!controllers_add_emission(controllers, CTRL_GRAPHIC, "edi %zu\n",
+        egg->id)) {
+        log_error("Failed to notify graphics of egg death (egg id: %zu)",
+            egg->id);
     }
 }
 

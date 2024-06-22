@@ -39,18 +39,6 @@ typedef struct player_look_info_s {
     vector2l_t vector;
 } player_look_info_t;
 
-// @brief Structure representing a Trantorian player's direction
-typedef enum player_direction_e {
-    // @brief North direction
-    DIR_NORTH = 1,
-    // @brief East direction
-    DIR_EAST,
-    // @brief South direction
-    DIR_SOUTH,
-    // @brief West direction
-    DIR_WEST
-} player_direction_t;
-
 // @brief Structure representing a Trantorian player
 typedef struct player_s {
     // @brief Inventory of player resources

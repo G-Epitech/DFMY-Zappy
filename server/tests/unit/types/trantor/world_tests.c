@@ -571,7 +571,7 @@ Test(world_kill_eggs, kill_eggs_list)
     // Assert
     cr_assert_eq(team->eggs->len, 0);
     cr_assert_eq(cell->eggs->len, 0);
-    cr_assert_eq(controller->generic.emissions->len, 2);
+    cr_assert_str_eq(controller->generic.emissions->data, "edi 0\nedi 1\n");
 
     // Cleanup
     world_free(world);

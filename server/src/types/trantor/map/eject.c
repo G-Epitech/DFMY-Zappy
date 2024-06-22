@@ -12,23 +12,17 @@ static void update_position_and_notify_players(list_t *players,
     vector2u_t new_pos, direction_t direction)
 {
     char *msg = NULL;
-    smart_ptr_t *smart_buf = NULL;
     node_t *node = NULL;
     player_t *player = NULL;
     size_t buf_size = 0;
+    controller_t *controller = NULL;
 
-    buf_size = my_asprintf(&msg, "eject: %d", direction);
-    if (buf_size > 0)
-        smart_buf = smart_ptr_new(msg);
     node = players->first;
     while (node) {
         player = NODE_TO_PTR(node, player_t *);
         player->position = new_pos;
-        if (smart_buf) {
-            controller_add_emission_from_shared_buffer(
-            (controller_t *)player->controller, smart_buf, buf_size,
-                EMISSION_COMPLETE);
-        }
+        controller = (controller_t *)player->controller;
+        controller_add_emission(controller, "eject %d\n", direction);
         node = node->next;
     }
 }
@@ -46,6 +40,5 @@ bool map_eject_players(map_t *map, player_t *player)
         return false;
     update_position_and_notify_players(old_cell->players, new_pos,
         player->direction);
-    list_merge(new_cell->players, old_cell->players);
-    return true;
+    return list_merge(new_cell->players, old_cell->players);
 }
