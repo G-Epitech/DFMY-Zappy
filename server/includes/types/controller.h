@@ -11,11 +11,18 @@
 #include "types/request.h"
 #include "types/trantor/chrono.h"
 #include "types/trantor/team.h"
+#include "types/trantor/map.h"
 #include "types/vector2.h"
 #include "buffer.h"
 
+// Forward declaration of server
+typedef struct server_s server_t;
+
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
+
+// Average size of emission line for graphic controller
+#define CTRL_GRAPHIC_AVERAGE_EMISSION_SIZE 40
 
 // Size of emission buffer
 #define CTRL_EMIT_BUFF_SIZE 4096
@@ -62,6 +69,8 @@ typedef struct generic_controller_s {
     controller_type_t type;
     // @brief Controller state
     controller_state_t state;
+    // @brief Parent server
+    server_t *server;
 } generic_controller_t;
 
 // @brief Represent a graphic controller
@@ -79,6 +88,8 @@ typedef struct player_controller_s {
     controller_type_t type;
     // @brief Controller state
     controller_state_t state;
+    // @brief Parent server
+    server_t *server;
     // @brief Link to player instance
     player_t *player;
     // @brief Player cooldown (time units locked for)
@@ -125,8 +136,16 @@ void controller_free_as_node_data(node_data_t data);
 /**
  * @brief Emit as much emissions as possible of the controller
  * @param controller Controller to emit
+ * @return true if the controller emitted, false otherwise
  */
-void controller_emit(controller_t *controller);
+bool controller_emit(controller_t *controller);
+
+/**
+ * @brief Try to emit current buffer of a controller
+ * @param controller Controller to emit
+ * @return true if the controller emitted, false otherwise
+ */
+bool controller_try_emit(controller_t *controller);
 
 /**
  * @brief Add an emission to the controller from a format
@@ -214,3 +233,25 @@ void controller_handle_buffer(controller_t *controller,
  */
 bool controller_player_from_generic(controller_t *controller,
     player_t *player);
+
+/**
+ * @brief Initialize a graphic controller from a generic controller
+ * @param controller Controller to initialize
+ * @param map Map to use to dynamically allocate buffer
+ * @return true if the controller was initialized, false otherwise
+ */
+bool controller_graphic_from_generic(controller_t *controller, map_t *map);
+
+/**
+ * @brief Check if a controller can emit data
+ * @param controller Controller to check
+ * @return Emission possibility
+ */
+bool controller_can_receive(controller_t *controller);
+
+/**
+ * @brief Check if a controller has content to read
+ * @param controller Controller to check
+ * @return Read possibility
+ */
+bool controller_has_content_to_read(controller_t *controller);

@@ -289,7 +289,7 @@ Test(server_poll_tests, simple_poll)
 
     // Act and assert
     clcc_return_now(select, 12);
-    cr_assert_eq(server_poll(server, &timeout), 12);
+    cr_assert_eq(server_poll_all_controllers(server, &timeout), 12);
     clcc_disable_control(select);
 
     // Cleanup
@@ -307,7 +307,7 @@ Test(server_poll_tests, poll_error_due_to_select, .init=cr_redirect_stderr)
 
     // Act and assert
     clcc_return_now(select, -1);
-    cr_assert_eq(server_poll(server, &timeout), -1);
+    cr_assert_eq(server_poll_all_controllers(server, &timeout), -1);
     clcc_disable_control(select);
 
     cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));
@@ -329,7 +329,7 @@ Test(server_poll_tests, poll_error_due_to_interruption, .init=cr_redirect_stderr
     // Act and
     errno = EINTR;
     clcc_return_now(select, -1);
-    status = server_poll(server, &timeout);
+    status = server_poll_all_controllers(server, &timeout);
     clcc_disable_control(select);
     cr_assert_eq(status, -1);
     cr_assert_stderr_eq_str("");
@@ -349,7 +349,7 @@ Test(server_poll_tests, poll_error_due_to_select_timeout, .init=cr_redirect_stde
     server_start(server, 4243);
 
     // Act and
-    status = server_poll(server, &timeout);
+    status = server_poll_all_controllers(server, &timeout);
     cr_assert_eq(status, 0);
     cr_assert_stderr_eq_str("");
     cr_assert_not(FD_ISSET(server->socket, &server->fd_actual.readable));

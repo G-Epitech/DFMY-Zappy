@@ -26,7 +26,7 @@ void app_handle_server_connections(app_t *app)
 
     server_remove_disconnected_controllers(app->server);
     chrono_start(&app->world->chrono);
-    res = server_poll(app->server, timeout_ptr);
+    res = server_poll_all_controllers(app->server, timeout_ptr);
     chrono_stop(&app->world->chrono);
     if (res > 0) {
         server_handle_new_connections(app->server);

@@ -17,6 +17,8 @@ void server_disconnect_controller(server_t *server, controller_t *controller)
         log_warn("Trying to disconnect a NULL controller");
         return;
     }
+    if (controller->generic.state == CTRL_DISCONNECTED)
+        return;
     close(controller->generic.socket);
     log_info("Client on socket %d disconnected", controller->generic.socket);
     if (server) {
@@ -27,6 +29,7 @@ void server_disconnect_controller(server_t *server, controller_t *controller)
     }
     controller->generic.socket = -1;
     controller->generic.state = CTRL_DISCONNECTED;
+    controller->generic.server = NULL;
 }
 
 void server_remove_disconnected_controllers(server_t *server)
@@ -60,6 +63,7 @@ void server_close_all_connections(server_t *server)
         close(controller->generic.socket);
         controller->generic.socket = -1;
         controller->generic.state = CTRL_DISCONNECTED;
+        controller->generic.server = NULL;
         node = node->next;
     }
     list_clear(server->controllers, &controller_free_as_node_data);

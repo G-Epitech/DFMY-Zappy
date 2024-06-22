@@ -7,18 +7,6 @@
 
 #include "types/server.h"
 
-void server_handle_controller_emissions(server_t *server,
-    controller_t *controller)
-{
-    if (controller &&
-        CTRL_CAN_EMIT(controller) &&
-        FD_ISSET(controller->generic.socket, &server->fd_actual.writable) &&
-        controller->generic.emissions->bytes > 0
-    ) {
-        controller_emit(controller);
-    }
-}
-
 void server_handle_emissions(server_t *server)
 {
     node_t *node = server->controllers->first;
@@ -26,7 +14,7 @@ void server_handle_emissions(server_t *server)
 
     while (node) {
         controller = NODE_TO_PTR(node, controller_t *);
-        server_handle_controller_emissions(server, controller);
+        controller_emit(controller);
         node = node->next;
     }
 }
