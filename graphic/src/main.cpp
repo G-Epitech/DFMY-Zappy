@@ -5,13 +5,17 @@
 ** main class
 */
 
-#include "app/App.hpp"
-#include "client/Client.hpp"
 #include <iostream>
+#include "app/App.hpp"
+#include "../client/Client.hpp"
 
-int main() {
+int main(int argc, char **argv)
+{
     try {
         App app;
+
+        if (!app.parseOptions(argc, argv))
+            return 84;
         app.initApp();
         app.getRoot()->startRendering();
         app.closeApp();

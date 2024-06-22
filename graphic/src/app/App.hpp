@@ -10,21 +10,35 @@
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
-#include "client/Client.hpp"
+#include "../../client/Client.hpp"
 #include "types/Map.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
+
+    typedef struct Options {
+        std::string host;
+        int port;
+    } Options;
 
     /**
      * @brief Construct a new App object
      */
     App();
 
+
     /**
      * @brief Setup the application
      */
     void setup() override;
+
+    /**
+     * @brief Parse the cli arguments
+     * @param argc Parameter count
+     * @param argv Parameter values
+     * @return true if the options are valid
+     */
+    bool parseOptions(int ac, char **av);
 
     /**
      * @brief Key pressed event
@@ -55,6 +69,9 @@ private:
 
     /// @brief Map of commands received from the server
     std::map<std::string, std::function<void(std::string &, Map &, Ogre::SceneManager *, Client &)>> _commands;
+
+    /// @brief Options of the application
+    Options _options;
 
     /**
      * @brief Load resources of the application
@@ -87,4 +104,9 @@ private:
      * @param segments Number of segments
      */
     void _updateSphere(Ogre::ManualObject* obj, float radius, int rings = BROADCAST_CIRCLE_SEGMENTS, int segments = BROADCAST_CIRCLE_SEGMENTS);
+
+    /**
+     * @brief Print the usage of the application
+     */
+     static void _printUsage() noexcept;
 };

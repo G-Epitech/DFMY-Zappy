@@ -7,13 +7,14 @@
 
 #include <iostream>
 #include <OgreCameraMan.h>
+#include <getopt.h>
 #include "App.hpp"
 #include "commands/Commands.hpp"
 
 using namespace Ogre;
 using namespace OgreBites;
 
-App::App() : OgreBites::ApplicationContext("Zappy"), _client(3001) {
+App::App() : OgreBites::ApplicationContext("Zappy"), _client(4444) {
     _client.write("mct\n");
     this->_commands["msz"] = &Commands::map_size;
     this->_commands["bct"] = &Commands::tile_content;
@@ -45,11 +46,12 @@ void App::setup() {
     addInputListener(this);
 
     Root *root = getRoot();
+    root->loadPlugin("Codec_FreeImage");
     scnMgr = root->createSceneManager();
 
     _loadResources();
 
-    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f)); // Soft white ambient light
+    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
 
     Camera *cam = scnMgr->createCamera("myCam");
     cam->setAutoAspectRatio(true);
@@ -229,3 +231,27 @@ void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int se
 
     obj->end();
 }
+
+void App::_printUsage() noexcept {
+    std::cout << "USAGE: ./zappy_ai -p port -h host" << std::endl;
+}
+
+bool App::parseOptions(int argc, char **argv) {
+    int opt;
+
+    while ((opt = getopt(argc, argv, "p:h:")) != -1) {
+        switch (opt) {
+            case 'p':
+                _options.port = static_cast<int>(std::strtol(optarg, nullptr, 10));
+                break;
+            case 'h':
+                _options.host = optarg;
+                break;
+            default:
+                App::_printUsage();
+                return false;
+        }
+    }
+    return true;
+}
+

@@ -11,7 +11,6 @@
 
 class Client {
 public:
-
     /**
      * @brief Construct a new Client object.
      * @details During the construction of the Client object, the connection to the server is established.
