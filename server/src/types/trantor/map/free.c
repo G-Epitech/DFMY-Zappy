@@ -19,6 +19,7 @@ static void map_free_cells(map_t *map)
         }
         free(map->cells[i]);
     }
+    free(map->cells);
 }
 
 void map_free(map_t *map)

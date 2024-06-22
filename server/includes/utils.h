@@ -7,8 +7,17 @@
 
 #pragma once
 
+#include <stdbool.h>
 #include <stdarg.h>
 
+// @brief Macro to get the max value between two values
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+// @brief Macro to get the min value between two values
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+// @brief Macro to get the size of a string without
+// the null-terminating character
 #define STR_STRICT_SIZEOF(s) (sizeof(s) - 1)
 
 // @brief Time value

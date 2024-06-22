@@ -77,3 +77,10 @@ void team_free(team_t *team);
  * @param data The team to free
  */
 void team_free_as_node_data(node_data_t data);
+
+/**
+ * @brief Get a random egg from the team
+ * @param team The team to get the egg from
+ * @return Random egg from the team or NULL if no egg is available
+ */
+egg_t *team_get_random_egg(team_t *team);
