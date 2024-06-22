@@ -5,7 +5,6 @@
 ** angle.c
 */
 
-#include <stdio.h>
 #include <math.h>
 #include "types/trantor/map.h"
 
