@@ -33,3 +33,18 @@ int my_asprintf(char **strp, const char *fmt,
  */
 int my_vasprintf(char **strp, const char *fmt, va_list args)
 __attribute__((format(printf, 2, 0)));
+
+/**
+ * @brief Get the quadrant of an angle
+ * @param angle The angle to get the quadrant of
+ * @return The quadrant of the angle
+ */
+int angle_to_quadrant(double angle);
+
+/**
+ * @brief Normalize a quadrant with a direction
+ * @param quadrant Quadrant to normalize (by default in a West direction)
+ * @param direction Direction to normalize the quadrant to
+ * @return The normalized quadrant
+ */
+int quandrant_normalize_with_direction(int quadrant, int direction);
