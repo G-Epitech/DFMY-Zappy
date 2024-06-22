@@ -163,7 +163,8 @@ void app_handle_controllers_requests(app_t *app);
  * @param app App instance
  * @param controller Controller to promote
  */
-void app_promote_controller_to_graphic(app_t *app, controller_t *controller);
+void app_try_promote_controller_to_graphic(app_t *app,
+    controller_t *controller);
 
 /**
  * @brief Promote an unknown controller to player controller

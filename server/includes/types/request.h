@@ -10,7 +10,7 @@
 #include "list.h"
 
 // @brief Size of request buffer section
-#define REQ_BUFF_SIZE 1024
+#define REQ_BUFF_SIZE 4096
 
 // Max size of a request buffer
 #define REQ_MAX_BUFF_SIZE (4 * REQ_BUFF_SIZE)

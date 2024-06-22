@@ -54,7 +54,9 @@ bool controller_try_emit(controller_t *controller)
     server = controller->generic.server;
     if (!server)
         return false;
-    writable = FD_ISSET(controller->generic.socket, &server->fd_actual.writable);
+    writable = FD_ISSET(controller->generic.socket,
+        &server->fd_actual.writable
+    );
     if (writable || server_poll_controller(server, controller))
         return controller_emit(controller);
     return false;

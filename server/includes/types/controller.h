@@ -21,6 +21,9 @@ typedef struct server_s server_t;
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
 
+// Max number of requests a generic controller can have
+#define CTRL_GENERIC_MAX_REQ 3
+
 // Average size of emission line for graphic controller
 #define CTRL_GRAPHIC_AVERAGE_EMISSION_SIZE 40
 

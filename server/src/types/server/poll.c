@@ -35,7 +35,7 @@ bool server_poll_controller(server_t *server, controller_t *controller)
     int sock = controller->generic.socket;
 
     fd_states_init(&states);
-    fd_states_set(&states, sock,FD_STATES_W | FD_STATES_E | FD_STATES_R);
+    fd_states_set(&states, sock, FD_STATES_W | FD_STATES_E | FD_STATES_R);
     if (select(states.max, &states.readable,
         &states.writable, &states.except, NULL) == -1
     ) {
@@ -44,11 +44,11 @@ bool server_poll_controller(server_t *server, controller_t *controller)
         return false;
     }
     if (FD_ISSET(sock, &states.writable))
-        fd_states_set(&server->fd_actual, sock,FD_STATES_W);
+        fd_states_set(&server->fd_actual, sock, FD_STATES_W);
     if (FD_ISSET(sock, &states.readable))
-        fd_states_set(&server->fd_actual, sock,FD_STATES_R);
+        fd_states_set(&server->fd_actual, sock, FD_STATES_R);
     if (FD_ISSET(sock, &states.except))
-        fd_states_set(&server->fd_actual, sock,FD_STATES_E);
+        fd_states_set(&server->fd_actual, sock, FD_STATES_E);
     return true;
 }
 
