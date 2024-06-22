@@ -8,7 +8,6 @@
 #include <criterion/criterion.h>
 #include <termios.h>
 #include <unistd.h>
-#include <stdio.h>
 #include "app.h"
 
 #include "clcc/modules/unistd.h"

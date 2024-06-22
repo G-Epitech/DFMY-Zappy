@@ -11,34 +11,27 @@
 
 static void notify_graphics_of_player_death(server_t *server, player_t *player)
 {
-    emission_params_t params = { 0 };
+    bool sent = controllers_add_emission(server->controllers, CTRL_GRAPHIC,
+        "pdi %zu\n", player->id);
 
-    if (!emission_params_from_format(&params, 0, "pdi %zu", player->id) ||
-        !controllers_add_emission(server->controllers, &params, CTRL_GRAPHIC)
-    ) {
-        log_error("Failed to format player death emission");
+    if (!sent) {
+        log_error("Failed to emit player death emission to "
+            "graphics controllers");
     }
-}
-
-static void notify_player_of_death(controller_t *controller)
-{
-    controller_add_emission_from_format(controller, 0, "dead");
 }
 
 static void notify_new_slot(server_t *server, egg_t *egg)
 {
-    emission_params_t params = { 0 };
     bool success = NULL;
 
     if (!egg)
         return;
-    success = emission_params_from_format(&params, 0,
-        "enw %zu %ld %zu %zu",
+    success = controllers_add_emission(server->controllers, CTRL_GRAPHIC,
+        "enw %zu %ld %zu %zu\n",
         egg->id, egg->laid_by, egg->position.x, egg->position.y
     );
     if (!success)
-        return log_error("Failed to format egg hatching emission");
-    controllers_add_emission(server->controllers, &params, CTRL_GRAPHIC);
+        return log_error("Failed to emit egg hatching message");
 }
 
 static void app_handle_player_death(world_t *world, server_t *server,
@@ -49,7 +42,7 @@ static void app_handle_player_death(world_t *world, server_t *server,
 
     notify_graphics_of_player_death(server, player);
     if (CTRL_CAN_EMIT(controller)) {
-        notify_player_of_death(controller);
+        controller_add_emission(controller, "dead\n");
         controller->generic.state = CTRL_ALLOW_EMIT;
     } else {
         server_disconnect_controller(server, controller);
@@ -103,7 +96,7 @@ void app_handle_world_lifecycle_dead_players(world_t *world,
             list_erase(world->dead_players, node, &player_free_as_node_data);
             continue;
         }
-        if (controller->emissions->len == 0) {
+        if (controller->emissions->bytes == 0) {
             server_disconnect_controller(server, (controller_t *) controller);
             list_erase(world->dead_players, node, &player_free_as_node_data);
         }

@@ -10,10 +10,7 @@
 static void app_handle_controller_invalid_request(controller_t *controller,
     request_t *request)
 {
-    bool sent = controller_add_emission_from_format(controller,
-        EMISSION_COMPLETE, "ko");
-
-    if (sent)
+    if (controller_add_emission(controller, "ko\n"))
         request->status = REQ_FINISHED;
 }
 

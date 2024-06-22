@@ -26,8 +26,8 @@ static team_t *get_team_by_name(world_t *world, char *name, size_t len)
 
 static void send_player_info(controller_t *controller, player_t *player)
 {
-    controller_add_emission_from_format(controller, EMISSION_COMPLETE,
-        "%zu\n%zu %zu",
+    controller_add_emission(controller,
+        "%zu\n%zu %zu\n",
         player->team->eggs->len,
         player->position.x,
         player->position.y
@@ -37,13 +37,12 @@ static void send_player_info(controller_t *controller, player_t *player)
 static void notify_graphics_of_new_player(server_t *server, player_t *p,
     egg_t *e)
 {
-    emission_params_t params = { 0 };
     size_t *ivt = p->inventory;
     vector2u_t *p_pos = &p->position;
-    bool success = emission_params_from_format(&params, 0,
+    bool success = controllers_add_emission(server->controllers, CTRL_GRAPHIC,
         "pnw %zu %zu %zu %u %zu %s\n"
         "pin %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n"
-        "ebo %zu",
+        "ebo %zu\n",
         p->id, p_pos->x, p_pos->y, p->direction, p->level, p->team->name,
         p->id, p_pos->x, p_pos->y, ivt[RES_FOOD], ivt[RES_LINEMATE],
         ivt[RES_DERAUMERE], ivt[RES_SIBUR], ivt[RES_MENDIANE],
@@ -52,7 +51,6 @@ static void notify_graphics_of_new_player(server_t *server, player_t *p,
 
     if (!success)
         return log_error("Failed to format new player emission");
-    controllers_add_emission(server->controllers, &params, CTRL_GRAPHIC);
 }
 
 void app_try_promote_controller_to_player(app_t *app,
@@ -64,7 +62,7 @@ void app_try_promote_controller_to_player(app_t *app,
     player_t *player = egg ? world_hatch_egg(app->world, egg) : NULL;
 
     if (!team || !egg || !player) {
-        controller_add_emission_from_format(controller, 0, "ko");
+        controller_add_emission(controller, "ko\n");
         return;
     }
     controller_player_from_generic(controller, player);

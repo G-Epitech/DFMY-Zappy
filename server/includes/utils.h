@@ -9,6 +9,8 @@
 
 #include <stdarg.h>
 
+#define STR_STRICT_SIZEOF(s) (sizeof(s) - 1)
+
 // @brief Time value
 typedef struct timeval timeval_t;
 

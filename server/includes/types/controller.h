@@ -12,11 +12,14 @@
 #include "types/trantor/chrono.h"
 #include "types/trantor/team.h"
 #include "types/vector2.h"
-#include "smart_ptr.h"
-#include "emission.h"
+#include "buffer.h"
 
 // Max number of requests a player can have
 #define CTRL_PLAYER_MAX_REQ 10
+
+// Size of emission buffer
+#define CTRL_EMIT_BUFF_SIZE 4096
+
 // Check if controller can emit data
 #define CTRL_CAN_EMIT(c) ((c)->generic.state & CTRL_ALLOW_EMIT)
 // Check if controller can receive requests
@@ -52,9 +55,9 @@ typedef struct generic_controller_s {
     // @brief Controller socket
     int socket;
     // @brief List of pending requests
-    char request[REQ_MAX_BUFF_SIZE];
-    // @brief List of pending emissions
-    char emission[4096];
+    list_t *requests;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
@@ -68,10 +71,10 @@ typedef generic_controller_t graphic_controller_t;
 typedef struct player_controller_s {
     // @brief Controller socket
     int socket;
-    // @brief Requests that the player made
+    // @brief List of pending requests
     list_t *requests;
-    // @brief List of data to emit to client
-    list_t *emissions;
+    // @brief Buffer of data to emit to client
+    buffer_t *emissions;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
@@ -120,52 +123,32 @@ void controller_free(controller_t *controller);
 void controller_free_as_node_data(node_data_t data);
 
 /**
- * @brief Write to the controller (wrapper around write(2))
- * @param controller Controller to write to
- * @param msg Message to write
- * @param len Message length
- * @return Number of bytes written or -1 if an error occurred
- */
-ssize_t controller_write(controller_t *controller, const char *msg,
-    size_t len);
-
-/**
  * @brief Emit as much emissions as possible of the controller
  * @param controller Controller to emit
  */
 void controller_emit(controller_t *controller);
 
 /**
- * @brief Add an emission to the controller
- * @param controller Controller to add the emission to
- * @param buffer_ptr Buffer to add to the emission
- * @param buffer_size Buffer size
- * @param flags Flags of the emission
- * @return true if the emission was added, false otherwise
- */
-bool controller_add_emission(controller_t *controller, char *buffer,
-    size_t buffer_size, int flags);
-
-/**
  * @brief Add an emission to the controller from a format
  * @param controller Controller to add the emission to
- * @param flags Flags of the emission
  * @param format Format string as in printf
  * @param ... Arguments for the format string
  * @return true if the emission was added, false otherwise
  */
-bool controller_add_emission_from_format(controller_t *controller,
-    int flags, char *format, ...) __attribute__((format(printf, 3, 4)));
+bool controller_add_emission(controller_t *controller,
+    char *format, ...) __attribute__((format(printf, 2, 3)));
 
 /**
- * @brief Add an emission to all CTRL_GRAPHIC controllers in a list
+ * @brief Add an emission to types controllers matching types in a list
  * @param controllers List of controllers
- * @param params Emission parameters
  * @param types Types of controllers to add emission to
+ * @param format Format string as in printf
+ * @param ... Arguments for the format string
  * @return true if the emission was added, false otherwise
  */
 bool controllers_add_emission(list_t *controllers,
-    emission_params_t *params, controller_type_t types);
+    controller_type_t types, char *format, ...)
+__attribute__((format(printf, 3, 4)));
 
 /**
  * @brief Get next pending request of a controller
@@ -224,13 +207,6 @@ void controller_handle_buffer(controller_t *controller,
     char buffer[REQ_BUFF_SIZE], size_t size);
 
 /**
- * @brief Send emission last character
- * @param controller Controller on which send emission last char
- * @return Success of emission termination
- */
-bool controller_end_emission(controller_t *controller);
-
-/**
  * @brief Initialize a player controller from a generic controller
  * @param controller Controller to initialize
  * @param player Player to link to the controller
@@ -238,14 +214,3 @@ bool controller_end_emission(controller_t *controller);
  */
 bool controller_player_from_generic(controller_t *controller,
     player_t *player);
-
-/**
- * @brief Add an emission to the controller from a shared buffer
- * @param controller Controller to add the emission to
- * @param buffer_ptr Buffer to add to the emission
- * @param buffer_size Buffer size
- * @param flags Flags of the emission
- * @return true if the emission was added, false otherwise
- */
-bool controller_add_emission_from_shared_buffer(controller_t *controller,
-    smart_ptr_t *buffer_ptr, size_t buffer_size, int flags);

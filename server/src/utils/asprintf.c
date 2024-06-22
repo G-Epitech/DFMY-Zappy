@@ -35,7 +35,7 @@ int my_vasprintf(char **strp, const char *fmt, va_list args)
 int my_asprintf(char **strp, const char *fmt, ...)
 {
     va_list args;
-    int size = 0;
+    int size;
 
     va_start(args, fmt);
     size = my_vasprintf(strp, fmt, args);
