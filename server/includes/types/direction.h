@@ -7,6 +7,9 @@
 
 #pragma once
 
+// @brief Forward declaration of vector2l_t
+typedef struct vector2l_s vector2l_t;
+
 // @brief Structure representing a Trantorian direction
 typedef enum direction_e {
     // @brief North direction
@@ -25,3 +28,10 @@ typedef enum direction_e {
  * @return Move vector of the direction
  */
 vector2l_t direction_get_move_vector(direction_t direction);
+
+/**
+ * @brief Reverse a direction
+ * @param direction Direction to reverse
+ * @return Reversed direction
+ */
+direction_t direction_reverse(direction_t direction);

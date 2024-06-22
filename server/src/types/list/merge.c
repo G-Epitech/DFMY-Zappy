@@ -15,21 +15,18 @@ static void list_reset(list_t *list)
     list->len = 0;
 }
 
-bool list_merge(list_t *dest, list_t *src)
+void list_merge(list_t *dest, list_t *src)
 {
-    if (!dest || !src)
-        return false;
     if (src->len == 0)
-        return true;
+        return;
     if (dest->len == 0) {
         *dest = *src;
         list_reset(src);
-        return true;
+        return;
     }
     dest->last->next = src->first;
     src->first->prev = dest->last;
     dest->last = src->last;
     dest->len += src->len;
     list_reset(src);
-    return true;
 }

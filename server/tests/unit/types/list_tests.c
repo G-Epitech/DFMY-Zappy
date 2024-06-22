@@ -319,27 +319,6 @@ Test(types_list, list_merge)
     list_clear(&list2, NULL);
 }
 
-Test(types_list, list_merge_null_list)
-{
-    list_t list1;
-    list_t list2;
-    char *str = "HELLO";
-    char *str2 = "WORLD";
-    char *str3 = "FOO";
-
-    list_init(&list1);
-    list_init(&list2);
-    list_push(&list1, NODE_DATA_FROM_PTR(str));
-    list_push(&list2, NODE_DATA_FROM_PTR(str2));
-    list_push(&list2, NODE_DATA_FROM_PTR(str3));
-    list_merge(NULL, &list2);
-    list_merge(&list1, NULL);
-    cr_assert_eq(list1.len, 1);
-    cr_assert_eq(list2.len, 2);
-    list_clear(&list1, NULL);
-    list_clear(&list2, NULL);
-}
-
 Test(types_list, list_merge_empty_list)
 {
     list_t list1;

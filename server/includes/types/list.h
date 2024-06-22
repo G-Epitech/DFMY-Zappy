@@ -100,4 +100,4 @@ bool list_some(list_t *list, list_predicate_t predicate);
  * @param src List to merge
  * @return Merge success status
  */
-bool list_merge(list_t *dest, list_t *src);
+void list_merge(list_t *dest, list_t *src);
