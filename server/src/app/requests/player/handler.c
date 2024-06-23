@@ -45,7 +45,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_set_onstart,
         &app_handle_player_request_set_onfinish
     },
-    { "Incantation", 300, NULL, NULL }
+    { "Incantation", 300,
+        &app_handle_player_request_incantation_onstart,
+        NULL
+    }
 };
 
 static const size_t handlers_size =

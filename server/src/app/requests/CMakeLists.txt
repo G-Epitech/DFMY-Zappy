@@ -17,4 +17,5 @@ target_sources(zappy_server_core PRIVATE
         player/fork.c
         player/take.c
         player/set.c
+        player/incantation.c
 )
