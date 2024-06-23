@@ -10,7 +10,7 @@
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
-#include "../../client/Client.hpp"
+#include "client/Client.hpp"
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
 
