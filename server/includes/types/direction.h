@@ -44,9 +44,9 @@ vector2l_t direction_get_move_vector(direction_t direction);
 direction_t direction_reverse(direction_t direction);
 
 /**
- * @brief Normalize a quadrant with a direction
- * @param quadrant Quadrant to normalize (by default in a West direction)
- * @param direction Direction to normalize the quadrant to
- * @return The normalized quadrant
+ * @brief Get the quadrant of a direction
+ * @param direction Direction to get the quadrant
+ * @param quadrant Quadrant to get
+ * @return Quadrant of the direction
  */
 int direction_get_quadrant(direction_t direction, int quadrant);
