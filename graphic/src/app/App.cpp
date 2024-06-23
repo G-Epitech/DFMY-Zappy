@@ -9,7 +9,6 @@
 #include <OgreCameraMan.h>
 #include <getopt.h>
 #include "App.hpp"
-#include "commands/Commands.hpp"
 
 using namespace Ogre;
 using namespace OgreBites;

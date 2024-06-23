@@ -50,10 +50,9 @@ public:
 
     /**
      * @brief Check if the server has data to read.
-     * @param block If true, the function will block until data is available.
      * @return True if the server has data to read in the pending buffer, false otherwise.
      */
-    [[nodiscard]] bool hasData(bool block = false) const;
+    [[nodiscard]] bool hasData() const;
 
     /**
      * @brief Get the next command from the pending buffer.
@@ -117,9 +116,4 @@ private:
      * @brief Read data from the server.
      */
     void _readServer();
-
-    /**
-     * @brief Handle a timeout.
-     */
-    timeval *_handleTimeout(bool block, timeval *timeout);
 };

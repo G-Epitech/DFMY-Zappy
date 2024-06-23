@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include "app/App.hpp"
-#include "../client/Client.hpp"
 
 int main(int argc, char **argv)
 {

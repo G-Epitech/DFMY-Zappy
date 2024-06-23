@@ -12,6 +12,7 @@
 #include <OgreTrays.h>
 #include "../../client/Client.hpp"
 #include "types/Map.hpp"
+#include "commands/Commands.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:

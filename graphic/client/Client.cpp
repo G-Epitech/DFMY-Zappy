@@ -6,6 +6,7 @@
 */
 
 #include <cstring>
+#include <utility>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -22,7 +23,7 @@ Client::~Client()
     this->_disconnect();
 }
 
-Client::Exception::Exception(std::string message) : _message(message) {}
+Client::Exception::Exception(std::string message) : _message(std::move(message)) {}
 
 const char *Client::Exception::what() const noexcept
 {
@@ -32,7 +33,7 @@ const char *Client::Exception::what() const noexcept
 bool Client::establishConnection(const std::string &host, int port)
 {
     std::string response;
-    ssize_t bytesWritten = 0;
+    ssize_t bytesWritten;
 
     this->_connect(host, port);
     while (true) {
@@ -111,7 +112,7 @@ ssize_t Client::write(const std::string &buffer, std::size_t size) const
         throw Client::Exception("Socket not connected");
     }
 
-    ssize_t bytesWritten = ::write(this->_socket, buffer.data(), size);
+    ssize_t bytesWritten = send(this->_socket, buffer.c_str(), size, MSG_DONTWAIT);
     if (bytesWritten < 0) {
         if (errno == EAGAIN || errno == EWOULDBLOCK) {
             return 0;
@@ -130,9 +131,9 @@ ssize_t Client::write(const std::string& buffer) const
 
 void Client::_readServer() {
     char buffer[1024] = {0};
-    ssize_t bytesRead = 0;
+    ssize_t bytesRead;
 
-    bytesRead = ::read(this->_socket, buffer, 1024);
+    bytesRead = recv(this->_socket, buffer, sizeof(buffer), MSG_DONTWAIT);
     if (bytesRead < 0) {
         if (errno != EAGAIN || errno != EWOULDBLOCK) {
             throw Client::Exception("Error reading from socket");
@@ -144,7 +145,7 @@ void Client::_readServer() {
     _pendingBytes += bytesRead;
 }
 
-bool Client::hasData(bool block) const
+bool Client::hasData() const
 {
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
@@ -167,27 +168,18 @@ std::string Client::getCommandFromPendingBuffer()
     return command;
 }
 
-timeval *Client::_handleTimeout(bool block, timeval *timeout) {
-    timeval *timeoutPtr = nullptr;
-
-    if (!block) {
-        timeoutPtr = timeout;
-    }
-    return timeoutPtr;
-}
-
 void Client::pollClient(bool block)
 {
     timeval timeout = {0, 0};
-    timeval *timeoutPtr = nullptr;
-    int activity = 0;
+    timeval *timeoutPtr;
+    int activity;
 
     FD_ZERO(&_readSet);
     FD_SET(_socket, &_readSet);
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
     }
-    timeoutPtr = _handleTimeout(block, &timeout);
+    timeoutPtr = block ? nullptr : &timeout;
     activity = select(this->_socket + 1, &_readSet, nullptr, nullptr, timeoutPtr);
     if (activity < 0) {
         throw Client::Exception("Error polling client socket");
