@@ -28,7 +28,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_inventory_onfinish
     },
     { "Broadcast", 7, NULL, NULL },
-    { "Connect_nbr", 0, NULL, NULL },
+    { "Connect_nbr", 0,
+        &app_handle_player_request_connect_nbr_onstart,
+        &app_handle_player_request_connect_nbr_onfinish
+    },
     { "Fork", 42, NULL, NULL },
     { "Eject", 7, NULL, NULL },
     { "Take", 7, NULL, NULL },
@@ -86,7 +89,7 @@ static void app_handle_player_request_start(app_t *app,
     if (!handler) {
         request->status = REQ_FINISHED;
         controller_add_emission(controller, "ko\n");
-        return log_warn("Unknown command '%s'", cmd);
+        return;
     }
     set_cooldown_or_exec(app, controller, request, handler);
 }
