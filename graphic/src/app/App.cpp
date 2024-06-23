@@ -118,15 +118,13 @@ void App::_loadResources() {
 
     ConfigFile cf;
     cf.load("resources.cfg");
-    ConfigFile::SectionIterator section = cf.getSectionIterator();
+    ConfigFile::SettingsBySection_ section = cf.getSettingsBySection();
     String typeName, archName;
 
-    while (section.hasMoreElements()) {
-        ConfigFile::SettingsMultiMap *settings = section.getNext();
-        ConfigFile::SettingsMultiMap::iterator i;
-        for (i = settings->begin(); i != settings->end(); ++i) {
-            typeName = i->first;
-            archName = i->second;
+    for (auto &i : section) {
+        for (auto &j : i.second) {
+            typeName = j.first;
+            archName = j.second;
             rgm.addResourceLocation(archName, typeName, "Main");
         }
     }
