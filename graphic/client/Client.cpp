@@ -5,7 +5,6 @@
 ** Client
 */
 
-#include <iostream>
 #include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
@@ -15,18 +14,8 @@
 #include <netinet/in.h>
 #include "Client.hpp"
 
-Client::Client(int port, const std::string &host)
-    : _socket(-1), _readSet(), _writeSet()
-{
-    this->_connect(host, port);
-    this->pollClient();
-    std::string command = this->getCommandFromPendingBuffer();
-/*    if (command != "WELCOME") {
-        std::cout << command << std::endl;
-        throw Client::Exception("Invalid welcome message");
-    }*/
-    this->write("GRAPHIC\n");
-}
+Client::Client()
+    : _socket(-1), _pendingBuffer(), _pendingBytes(0), _readSet() {}
 
 Client::~Client()
 {
@@ -38,6 +27,29 @@ Client::Exception::Exception(std::string message) : _message(message) {}
 const char *Client::Exception::what() const noexcept
 {
     return this->_message.c_str();
+}
+
+bool Client::establishConnection(const std::string &host, int port)
+{
+    std::string response;
+    ssize_t bytesWritten = 0;
+
+    this->_connect(host, port);
+    while (true) {
+        this->pollClient(true);
+        response = this->getCommandFromPendingBuffer();
+        if (response == "WELCOME") {
+            break;
+        }
+        if (response == "KO") {
+            return false;
+        }
+    }
+    bytesWritten = this->write("GRAPHIC\n");
+    if (bytesWritten == 0) {
+        return false;
+    }
+    return true;
 }
 
 void Client::_connect(const std::string& host, int port)
@@ -65,7 +77,6 @@ void Client::_connect(const std::string& host, int port)
     }
 
     this->_socket = sockfd;
-
     this->_setNonBlocking();
 }
 
@@ -93,7 +104,7 @@ void Client::_setNonBlocking() const
     }
 }
 
-std::size_t Client::write(const std::string &buffer, std::size_t size) const
+ssize_t Client::write(const std::string &buffer, std::size_t size) const
 {
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
@@ -111,7 +122,7 @@ std::size_t Client::write(const std::string &buffer, std::size_t size) const
     return bytesWritten;
 }
 
-std::size_t Client::write(const std::string& buffer) const
+ssize_t Client::write(const std::string& buffer) const
 {
     return this->write(buffer, buffer.size());
 }
@@ -155,9 +166,19 @@ std::string Client::getCommandFromPendingBuffer()
     return command;
 }
 
-void Client::pollClient()
+timeval *Client::_handleTimeout(bool block, timeval *timeout) {
+    timeval *timeoutPtr = nullptr;
+
+    if (block) {
+        timeoutPtr = timeout;
+    }
+    return timeoutPtr;
+}
+
+void Client::pollClient(bool block)
 {
     timeval timeout = {0, 0};
+    timeval *timeoutPtr = nullptr;
     int activity = 0;
 
     FD_ZERO(&_readSet);
@@ -165,7 +186,8 @@ void Client::pollClient()
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
     }
-    activity = select(this->_socket + 1, &_readSet, nullptr, nullptr, &timeout);
+    timeoutPtr = _handleTimeout(block, &timeout);
+    activity = select(this->_socket + 1, &_readSet, nullptr, nullptr, timeoutPtr);
     if (activity < 0) {
         throw Client::Exception("Error polling client socket");
     }

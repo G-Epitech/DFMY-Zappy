@@ -8,7 +8,7 @@
 #pragma once
 
 #include "types/Map.hpp"
-#include "client/Client.hpp"
+#include "../client/Client.hpp"
 #include "constants/Broadcast.hpp"
 #include "constants/Player.hpp"
 

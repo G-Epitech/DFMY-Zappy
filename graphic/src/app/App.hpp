@@ -41,6 +41,12 @@ public:
     bool parseOptions(int ac, char **av);
 
     /**
+     * @brief Establish a connection to the server
+     * @return true if the connection was successful
+     */
+    bool establishConnection();
+
+    /**
      * @brief Key pressed event
      * @param evt Keyboard event
      * @return true if the event was handled

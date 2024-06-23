@@ -14,8 +14,7 @@
 using namespace Ogre;
 using namespace OgreBites;
 
-App::App() : OgreBites::ApplicationContext("Zappy"), _client(4444) {
-    _client.write("mct\n");
+App::App() : OgreBites::ApplicationContext("Zappy"), _client() {
     this->_commands["msz"] = &Commands::map_size;
     this->_commands["bct"] = &Commands::tile_content;
     this->_commands["tna"] = &Commands::teams_names;
@@ -81,6 +80,7 @@ void App::setup() {
     trayMgr->showFrameStats(TL_BOTTOMLEFT);
     trayMgr->showLogo(TL_BOTTOMRIGHT);
     trayMgr->hideCursor();
+    _client.write("mct\n");
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
@@ -228,6 +228,10 @@ void App::_printUsage() noexcept {
 bool App::parseOptions(int argc, char **argv) {
     int opt;
 
+    if (argc != 5) {
+        App::_printUsage();
+        return false;
+    }
     while ((opt = getopt(argc, argv, "p:h:")) != -1) {
         switch (opt) {
             case 'p':
@@ -237,10 +241,12 @@ bool App::parseOptions(int argc, char **argv) {
                 _options.host = optarg;
                 break;
             default:
-                App::_printUsage();
-                return false;
+                break;
         }
     }
     return true;
 }
 
+bool App::establishConnection() {
+    return _client.establishConnection(_options.host, _options.port);
+}

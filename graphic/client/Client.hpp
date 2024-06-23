@@ -15,7 +15,7 @@ public:
      * @brief Construct a new Client object.
      * @details During the construction of the Client object, the connection to the server is established.
      */
-    Client(int port, const std::string &host = "127.0.0.1");
+    Client();
 
     /**
      * @brief Destroy the Client object.
@@ -24,19 +24,29 @@ public:
     ~Client();
 
     /**
+     * @brief Establish a connection to the server.
+     * @details This starts the connection and handles the welcome
+     * and registering of the client.
+     * @param host Hostname or IP address of the server
+     * @param port Port of the server
+     * @return Success or failure
+     */
+    bool establishConnection(const std::string &host, int port);
+
+    /**
      * @brief Write data to the server.
      * @param buffer The data to write
      * @param size The size of the data
      * @return The number of bytes written
      */
-    [[nodiscard]] std::size_t write(const std::string &buffer, std::size_t size) const;
+    ssize_t write(const std::string &buffer, std::size_t size) const;
 
     /**
      * @brief Write data to the server.
      * @param buffer The data to write
      * @return The number of bytes written
      */
-    [[nodiscard]] std::size_t write(const std::string &buffer) const;
+    ssize_t write(const std::string &buffer) const;
 
     /**
      * @brief Check if the server has data to read.
@@ -54,8 +64,9 @@ public:
     /**
      * @brief Poll the client for new data.
      * @details Call select to check if the server has data to read or if we can write.
+     * @param block If true, the function will block until data is available.
      */
-    void pollClient();
+    void pollClient(bool block = false);
 
     /**
      * @brief Exception class for the Client class.
@@ -86,7 +97,6 @@ private:
     std::string _pendingBuffer;
     std::size_t _pendingBytes;
     fd_set _readSet;
-    fd_set _writeSet;
 
     /**
      * @brief Connect to the server.
@@ -107,4 +117,9 @@ private:
      * @brief Read data from the server.
      */
     void _readServer();
+
+    /**
+     * @brief Handle a timeout.
+     */
+    timeval *_handleTimeout(bool block, timeval *timeout);
 };

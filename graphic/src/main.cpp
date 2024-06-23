@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     try {
         App app;
 
-        if (!app.parseOptions(argc, argv))
+        if (!app.parseOptions(argc, argv) || !app.establishConnection())
             return 84;
         app.initApp();
         app.getRoot()->startRendering();
