@@ -4,4 +4,9 @@ target_sources(zappy_server_core PRIVATE
         unknown/promote_player.c
         player/handler.c
         graphic/handler.c
+        graphic/map_size.c
+        graphic/map_content.c
+        graphic/player.c
+        graphic/teams.c
+        graphic/time.c
 )

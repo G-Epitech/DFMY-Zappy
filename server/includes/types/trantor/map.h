@@ -18,7 +18,7 @@ typedef struct player_s player_t;
 typedef struct egg_s egg_t;
 
 // @brief Get the map cell at given position
-#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
+#define MAP_CELL_AT_POS(map, pos) (&(map->cells[(pos).y][(pos).x]))
 
 // @brief Map player cell accessor
 #define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)

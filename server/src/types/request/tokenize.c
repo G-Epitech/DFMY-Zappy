@@ -33,7 +33,7 @@ bool request_get_token(request_t *request, size_t index,
         size -= (size > 0 ? 1 : 0);
         i += 1;
     }
-    if (i != index)
+    if (i != index || size == 0)
         return false;
     get_next_token(start, size, token);
     return true;

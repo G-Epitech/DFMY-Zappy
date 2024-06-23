@@ -202,3 +202,57 @@ void app_handle_graphic_request(app_t *app, controller_t *controller,
  */
 void app_handle_player_request(app_t *app, controller_t *controller,
     request_t *request);
+
+/**
+ * @brief Handle gui request for teams names
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_teams_names(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for map size
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_size(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for map content
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_content(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for player position
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_position(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for player level
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_level(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for player inventory
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_inventory(app_t *app,
+    controller_t *controller, request_t *request);

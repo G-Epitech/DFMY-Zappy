@@ -9,6 +9,7 @@
 
 #include <stdbool.h>
 #include <stdarg.h>
+#include <stdint.h>
 
 // @brief Macro to get the max value between two values
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
