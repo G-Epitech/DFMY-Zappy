@@ -42,7 +42,7 @@ bool Client::establishConnection(const std::string &host, int port)
         if (response == "WELCOME") {
             break;
         }
-        if (response == "KO") {
+        if (response == "ko") {
             return false;
         }
     }
