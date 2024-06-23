@@ -41,7 +41,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_take_onstart,
         &app_handle_player_request_take_onfinish
     },
-    { "Set", 7, NULL, NULL },
+    { "Set", 7,
+        &app_handle_player_request_set_onstart,
+        &app_handle_player_request_set_onfinish
+    },
     { "Incantation", 300, NULL, NULL }
 };
 
