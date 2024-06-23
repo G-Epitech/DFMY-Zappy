@@ -291,3 +291,92 @@ Test(map_broadcast_angle_tests, wrap_on_x_src_bigger)
     free(world);
 }
 
+
+Test(map_eject_players_tests, eject_players)
+{
+    vector2u_t size = { 6, 6 };
+    vector2u_t pos = { 4, 4 };
+    world_t *world = world_new(size, 100);
+    player_t *player = player_new(1);
+    player_t *player2 = player_new(2);
+    map_cell_t *cell = NULL;
+
+    player->position = pos;
+    player2->position = pos;
+    player2->controller = (player_controller_t *)controller_new(0);
+    map_add_player(world->map, player);
+    map_add_player(world->map, player2);
+    player->direction = DIR_NORTH;
+    player->position = pos;
+    player2->position = pos;
+    cell = MAP_CELL_AT_POS(world->map, pos);
+    cr_assert_eq(cell->players->len, 2);
+    cr_assert_eq(map_eject_players(world->map, player), true);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 4);
+    cr_assert_eq(player2->position.x, 4);
+    cr_assert_eq(player2->position.y, 3);
+    cr_assert_str_eq(player2->controller->emissions->data, "eject 3\n");
+    cr_assert_eq(cell->players->len, 1);
+    player_free(player);
+    player_free(player2);
+    controller_free((controller_t *)player2->controller);
+    world_free(world);
+}
+
+Test(map_eject_players_tests, eject_players_with_ejecter_not_found)
+{
+    vector2u_t size = { 6, 6 };
+    vector2u_t pos = { 4, 4 };
+    world_t *world = world_new(size, 100);
+    player_t *player = player_new(1);
+    player_t *player2 = player_new(2);
+    map_cell_t *cell = NULL;
+
+    player->position = pos;
+    player2->position = pos;
+    map_add_player(world->map, player2);
+    player->direction = DIR_NORTH;
+    player->position = pos;
+    player2->position = pos;
+    cell = MAP_CELL_AT_POS(world->map, pos);
+    cr_assert_eq(cell->players->len, 1);
+    cr_assert_eq(map_eject_players(world->map, player), false);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 4);
+    cr_assert_eq(player2->position.x, 4);
+    cr_assert_eq(player2->position.y, 4);
+    cr_assert_eq(cell->players->len, 1);
+    player_free(player);
+    player_free(player2);
+    world_free(world);
+}
+
+Test(map_eject_players_tests, eject_players_impossible_to_move_players)
+{
+    vector2u_t size = { 6, 6 };
+    vector2u_t pos = { 4, 4 };
+    world_t *world = world_new(size, 100);
+    player_t *player = player_new(1);
+    player_t *player2 = player_new(2);
+    map_cell_t *cell = NULL;
+
+    player->position = pos;
+    player2->position = pos;
+    map_add_player(world->map, player);
+    map_add_player(world->map, player2);
+    player->direction = DIR_NORTH;
+    player->position = pos;
+    player2->position = pos;
+    cell = MAP_CELL_AT_POS(world->map, pos);
+    cr_assert_eq(cell->players->len, 2);
+    cell->players = NULL;
+    cr_assert_eq(map_eject_players(world->map, player), false);
+    cr_assert_eq(player->position.x, 4);
+    cr_assert_eq(player->position.y, 4);
+    cr_assert_eq(player2->position.x, 4);
+    cr_assert_eq(player2->position.y, 4);
+    player_free(player);
+    player_free(player2);
+    world_free(world);
+}

@@ -9,6 +9,7 @@
 
 #include "types/list.h"
 #include "types/vector2.h"
+#include "types/direction.h"
 #include "types/trantor/resource.h"
 
 // Forward declaration of player_t
@@ -174,3 +175,20 @@ char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
  * @return Sound angle (normalized between 0 and 360)
  */
 double map_get_sound_angle(map_t *map, vector2u_t src, vector2u_t dest);
+
+/**
+ * @brief Move a position forward in a given direction
+ * @param map Map to move the position in
+ * @param position Position to move
+ * @param direction Direction to move the position to
+ */
+void map_forward_position(map_t *map, vector2u_t *position,
+    direction_t direction);
+
+/**
+ * @brief Eject players from a cell
+ * @param map Map to eject players from
+ * @param player Player that initiated the ejection
+ * @return Success status
+ */
+bool map_eject_players(map_t *map, player_t *player);
