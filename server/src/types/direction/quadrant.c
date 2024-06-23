@@ -16,7 +16,7 @@ static const direction_quadrant_t direction_quadrants[] = {
 
 int direction_get_quadrant(direction_t direction, int quadrant)
 {
-    if (quadrant == -1)
+    if (quadrant == -1 || quadrant > 7)
         return (-1);
     return (direction_quadrants[direction - 1].quadrants[quadrant]);
 }
