@@ -63,6 +63,13 @@ public:
      */
     bool frameRenderingQueued(const Ogre::FrameEvent &evt) override;
 
+    /**
+     * @brief Frame ended event
+     * @param evt Frame event
+     * @return true if the event was handled
+     */
+    bool frameEnded(const Ogre::FrameEvent &evt) override;
+
 private:
     /// @brief Client object used to communicate with the server
     Client _client;

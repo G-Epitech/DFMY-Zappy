@@ -96,7 +96,10 @@ void App::_setupMaterials() {
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
+    return true;
+}
 
+bool App::frameEnded(const Ogre::FrameEvent &evt) {
     _client.pollClient();
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
