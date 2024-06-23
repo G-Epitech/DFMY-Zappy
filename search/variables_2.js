@@ -3,7 +3,7 @@ var searchData=
   ['called_5fby_5fmother_1251',['called_by_mother',['../classhamster_1_1Hamster.html#a104eddfd205c0fbc90224f0ebe146fef',1,'hamster::Hamster']]],
   ['cannibal_5fparent_1252',['cannibal_parent',['../classhamster_1_1Hamster.html#afcf9dbd4fb7f3c0553d164f570ac2ed1',1,'hamster::Hamster']]],
   ['cells_1253',['cells',['../structmap__s.html#a3183b12cfcff01f61f90f85b7265d3df',1,'map_s']]],
-  ['chrono_1254',['chrono',['../group__server__world.html#gae4ce066bd86520ac56efd977a2e404db',1,'world_s']]],
+  ['chrono_1254',['chrono',['../structworld__s.html#ae4ce066bd86520ac56efd977a2e404db',1,'world_s']]],
   ['client_1255',['client',['../namespaceclient.html#aa851ba64aab53bb0035ea1e482af353a',1,'client']]],
   ['clients_5fnb_1256',['clients_nb',['../structargs__s.html#a310d597c25a4124df0d7424149e65a76',1,'args_s']]],
   ['color_5fblue_1257',['COLOR_BLUE',['../namespacehamster.html#a604b70c851d68566f11070e7aac00ba5',1,'hamster.COLOR_BLUE()'],['../namespaceprocess.html#a55c2cb548937519ac19bbc22333c0435',1,'process.COLOR_BLUE()']]],

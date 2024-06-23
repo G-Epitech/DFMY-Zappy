@@ -8,7 +8,7 @@ var searchData=
   ['cannibalism_5faccepted_109',['cannibalism_accepted',['../classhamster_1_1Hamster.html#afc20382944c1c37af674197a9710cb03',1,'hamster::Hamster']]],
   ['cannibalism_5ffetch_5fnew_5fhamster_5fid_110',['cannibalism_fetch_new_hamster_id',['../classhamster_1_1Hamster.html#abd1800856cf4b69bd3556a98acebbfda',1,'hamster::Hamster']]],
   ['cells_111',['cells',['../structmap__s.html#a3183b12cfcff01f61f90f85b7265d3df',1,'map_s']]],
-  ['chrono_112',['chrono',['../group__server__world.html#gae4ce066bd86520ac56efd977a2e404db',1,'world_s']]],
+  ['chrono_112',['chrono',['../structworld__s.html#ae4ce066bd86520ac56efd977a2e404db',1,'world_s']]],
   ['chrono_2eh_113',['chrono.h',['../chrono_8h.html',1,'']]],
   ['chrono_5fget_5felapsed_5funits_114',['chrono_get_elapsed_units',['../chrono_8h.html#a358c2bf7ddda3da8565d5fe00f8bb67d',1,'chrono_get_elapsed_units(chrono_t *chrono):&#160;utils.c'],['../utils_8c.html#a358c2bf7ddda3da8565d5fe00f8bb67d',1,'chrono_get_elapsed_units(chrono_t *chrono):&#160;utils.c']]],
   ['chrono_5finit_115',['chrono_init',['../chrono_8h.html#a508503f7a97931ff59d1d337e4cc7239',1,'chrono_init(chrono_t *chrono, size_t frequency):&#160;init.c'],['../types_2trantor_2chrono_2init_8c.html#a508503f7a97931ff59d1d337e4cc7239',1,'chrono_init(chrono_t *chrono, size_t frequency):&#160;init.c']]],

@@ -62,7 +62,7 @@ var searchData=
   ['resource_5fto_5fstring_589',['resource_to_string',['../resource_8h.html#a15e87b3869d9916376c4c3ba1fac8c68',1,'resource_to_string(resource_t resource):&#160;string.c'],['../src_2types_2trantor_2resources__manager_2string_8c.html#a15e87b3869d9916376c4c3ba1fac8c68',1,'resource_to_string(resource_t resource):&#160;string.c']]],
   ['resources_590',['resources',['../structmap__cell__s.html#a4544751fd52d5c3404088f830925cc14',1,'map_cell_s::resources()'],['../structmap__cell__stats__s.html#ad28ea8d6601c4e4229055dc5e246fb57',1,'map_cell_stats_s::resources()'],['../structincantation__requirements__s.html#a9135d010c52e7055ee695d774cf68dec',1,'incantation_requirements_s::resources()']]],
   ['resources_2ec_591',['resources.c',['../resources_8c.html',1,'']]],
-  ['resources_5fmanager_592',['resources_manager',['../group__server__world.html#ga78fa1d04b1975ec45115717f184e9740',1,'world_s']]],
+  ['resources_5fmanager_592',['resources_manager',['../structworld__s.html#a78fa1d04b1975ec45115717f184e9740',1,'world_s']]],
   ['resources_5fmanager_5finit_593',['resources_manager_init',['../resource_8h.html#a3cecdfca89f2dc84e7620c682d4e6ceb',1,'resources_manager_init(resources_manager_t *manager, vector2u_t map_size):&#160;init.c'],['../types_2trantor_2resources__manager_2init_8c.html#a3cecdfca89f2dc84e7620c682d4e6ceb',1,'resources_manager_init(resources_manager_t *manager, vector2u_t map_size):&#160;init.c']]],
   ['resources_5fmanager_5fs_594',['resources_manager_s',['../structresources__manager__s.html',1,'']]],
   ['resources_5fmanager_5ft_595',['resources_manager_t',['../resource_8h.html#a15b859fba88c51e08a6d26822a4bafcd',1,'resource.h']]],

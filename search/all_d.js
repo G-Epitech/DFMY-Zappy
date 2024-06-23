@@ -8,7 +8,7 @@ var searchData=
   ['manage_5fbroadcast_5fcannibalism_410',['manage_broadcast_cannibalism',['../classhamster_1_1Hamster.html#ab2b2c442d80ea28e4af6106a2153077c',1,'hamster::Hamster']]],
   ['manage_5fbroadcast_5fcannibalism_5fid_411',['manage_broadcast_cannibalism_id',['../classhamster_1_1Hamster.html#a46633c3ece7b34240556cd565c6e7ffb',1,'hamster::Hamster']]],
   ['manage_5fbroadcast_5fmessage_412',['manage_broadcast_message',['../classhamster_1_1Hamster.html#a146cda86a4ece489530819d985f4ebcc',1,'hamster::Hamster']]],
-  ['map_413',['map',['../group__server__world.html#ga29db720699fab179f7912ffcdc0905af',1,'world_s']]],
+  ['map_413',['map',['../structworld__s.html#a29db720699fab179f7912ffcdc0905af',1,'world_s']]],
   ['map_2eh_414',['map.h',['../map_8h.html',1,'']]],
   ['map_5fadd_5fegg_415',['map_add_egg',['../trantor_2map_2add_8c.html#a54514658d2f3cc85b5c79d69fba6849c',1,'map_add_egg(map_t *map, egg_t *egg):&#160;add.c'],['../map_8h.html#a54514658d2f3cc85b5c79d69fba6849c',1,'map_add_egg(map_t *map, egg_t *egg):&#160;add.c']]],
   ['map_5fadd_5fplayer_416',['map_add_player',['../map_8h.html#aa5565a99de8aa8af6e5feb36836f8e34',1,'map_add_player(map_t *map, player_t *player):&#160;add.c'],['../trantor_2map_2add_8c.html#aa5565a99de8aa8af6e5feb36836f8e34',1,'map_add_player(map_t *map, player_t *player):&#160;add.c']]],

@@ -21,7 +21,7 @@ var searchData=
   ['incantation_5fs_349',['incantation_s',['../structincantation__s.html',1,'']]],
   ['incantation_5ft_350',['incantation_t',['../incantation_8h.html#ac5f01523ea966702dfffd50cbde62274',1,'incantation.h']]],
   ['incantation_5ftests_2ec_351',['incantation_tests.c',['../incantation__tests_8c.html',1,'']]],
-  ['incantations_352',['incantations',['../group__server__world.html#ga959cb4152536e36728e2663b00a8410e',1,'world_s']]],
+  ['incantations_352',['incantations',['../structworld__s.html#a959cb4152536e36728e2663b00a8410e',1,'world_s']]],
   ['incantations_2ec_353',['incantations.c',['../incantations_8c.html',1,'']]],
   ['init_2ec_354',['init.c',['../app_2init_8c.html',1,'(Global Namespace)'],['../types_2args_2init_8c.html',1,'(Global Namespace)'],['../types_2args__parser_2init_8c.html',1,'(Global Namespace)'],['../types_2trantor_2resources__manager_2init_8c.html',1,'(Global Namespace)'],['../types_2trantor_2map_2cell_2init_8c.html',1,'(Global Namespace)'],['../types_2trantor_2chrono_2init_8c.html',1,'(Global Namespace)']]],
   ['init_5fhamster_355',['init_hamster',['../classhamster_1_1Hamster.html#a46d564906672a0e40fd4969a3a7f4d13',1,'hamster::Hamster']]],
