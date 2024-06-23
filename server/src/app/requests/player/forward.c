@@ -23,7 +23,7 @@ bool app_handle_player_request_forward_onstart(
     request_token_t token = { 0 };
 
     if (request_get_token(request, 1, &token)) {
-        log_warn("No arguments expected for 'forward' command");
+        log_warn("No arguments expected for 'Forward' command");
         return false;
     }
     return true;

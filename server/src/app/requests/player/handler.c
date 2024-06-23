@@ -14,8 +14,14 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_forward_onstart,
         &app_handle_player_request_forward_onfinish
     },
-    { "Right", 7, NULL, NULL },
-    { "Left", 7, NULL, NULL },
+    { "Right", 7,
+        &app_handle_player_request_turn_right_onstart,
+        &app_handle_player_request_turn_right_onfinish
+    },
+    { "Left", 7,
+        &app_handle_player_request_turn_left_onstart,
+        &app_handle_player_request_turn_left_onfinish
+    },
     { "Look", 7, NULL, NULL },
     { "Inventory", 1, NULL, NULL },
     { "Broadcast", 7, NULL, NULL },

@@ -11,4 +11,5 @@ target_sources(zappy_server_core PRIVATE
         graphic/set_time.c
         player/handler.c
         player/forward.c
+        player/turn.c
 )

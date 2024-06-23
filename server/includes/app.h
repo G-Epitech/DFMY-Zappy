@@ -295,3 +295,41 @@ bool app_handle_player_request_forward_onstart(app_t *app,
  */
 void app_handle_player_request_forward_onfinish(app_t *app,
     player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for right
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_turn_right_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for right at end of cooldown
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_turn_right_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for left
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_turn_left_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for left at end of cooldown
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_turn_left_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
