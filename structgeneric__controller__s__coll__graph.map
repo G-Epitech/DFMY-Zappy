@@ -1,0 +1,9 @@
+<map id="generic_controller_s" name="generic_controller_s">
+<area shape="rect" id="node1" title=" " alt="" coords="74,395,227,421"/>
+<area shape="rect" id="node2" href="$structbuffer__s.html" title=" " alt="" coords="12,305,87,332"/>
+<area shape="rect" id="node3" href="$structserver__s.html" title=" " alt="" coords="111,305,188,332"/>
+<area shape="rect" id="node4" href="$structfd__states__s.html" title=" " alt="" coords="5,201,101,228"/>
+<area shape="rect" id="node5" href="$structs__list.html" title=" " alt="" coords="169,201,225,228"/>
+<area shape="rect" id="node6" href="$structs__node.html" title=" " alt="" coords="163,96,231,123"/>
+<area shape="rect" id="node7" href="$unionu__node__data.html" title=" " alt="" coords="145,5,250,32"/>
+</map>

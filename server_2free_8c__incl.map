@@ -1,0 +1,26 @@
+<map id="server/src/types/server/free.c" name="server/src/types/server/free.c">
+<area shape="rect" id="node1" title=" " alt="" coords="752,5,923,47"/>
+<area shape="rect" id="node2" href="$unistd_8h.html" title=" " alt="" coords="693,393,768,420"/>
+<area shape="rect" id="node6" href="$server_8h.html" title=" " alt="" coords="780,95,895,121"/>
+<area shape="rect" id="node11" href="$controller_8h.html" title=" " alt="" coords="499,169,594,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="693,468,789,495"/>
+<area shape="rect" id="node4" href="$clcc_8h.html" title=" " alt="" coords="814,468,943,495"/>
+<area shape="rect" id="node5" title=" " alt="" coords="609,543,692,569"/>
+<area shape="rect" id="node7" title=" " alt="" coords="832,169,928,196"/>
+<area shape="rect" id="node8" href="$list_8h.html" title=" " alt="" coords="685,319,739,345"/>
+<area shape="rect" id="node24" title=" " alt="" coords="952,169,1016,196"/>
+<area shape="rect" id="node9" href="$stdlib_8h.html" title=" " alt="" coords="883,393,954,420"/>
+<area shape="rect" id="node10" href="$node_8h.html" title=" " alt="" coords="792,393,859,420"/>
+<area shape="rect" id="node12" href="$request_8h.html" title=" " alt="" coords="584,244,707,271"/>
+<area shape="rect" id="node13" href="$chrono_8h.html" title=" " alt="" coords="401,393,567,420"/>
+<area shape="rect" id="node18" href="$team_8h.html" title=" " alt="" coords="302,244,458,271"/>
+<area shape="rect" id="node19" href="$map_8h.html" title=" " alt="" coords="127,244,278,271"/>
+<area shape="rect" id="node20" href="$vector2_8h.html" title=" " alt="" coords="5,393,128,420"/>
+<area shape="rect" id="node23" href="$buffer_8h.html" title=" " alt="" coords="558,319,629,345"/>
+<area shape="rect" id="node14" title=" " alt="" coords="275,468,349,495"/>
+<area shape="rect" id="node15" title=" " alt="" coords="389,468,480,495"/>
+<area shape="rect" id="node16" href="$utils_8h.html" title=" " alt="" coords="505,468,567,495"/>
+<area shape="rect" id="node17" title=" " alt="" coords="507,543,581,569"/>
+<area shape="rect" id="node21" href="$direction_8h.html" title=" " alt="" coords="277,319,408,345"/>
+<area shape="rect" id="node22" href="$resource_8h.html" title=" " alt="" coords="75,319,253,345"/>
+</map>

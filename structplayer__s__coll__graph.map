@@ -1,0 +1,13 @@
+<map id="player_s" name="player_s">
+<area shape="rect" id="node1" title=" " alt="" coords="352,395,429,421"/>
+<area shape="rect" id="node6" href="$structincantation__s.html" title=" " alt="" coords="525,484,635,511"/>
+<area shape="rect" id="node8" href="$structplayer__controller__s.html" title=" " alt="" coords="144,484,291,511"/>
+<area shape="rect" id="node2" href="$structteam__s.html" title=" " alt="" coords="321,305,391,332"/>
+<area shape="rect" id="node3" href="$structs__list.html" title=" " alt="" coords="279,201,335,228"/>
+<area shape="rect" id="node10" href="$structserver__s.html" title=" " alt="" coords="111,305,188,332"/>
+<area shape="rect" id="node4" href="$structs__node.html" title=" " alt="" coords="273,96,341,123"/>
+<area shape="rect" id="node5" href="$unionu__node__data.html" title=" " alt="" coords="254,5,359,32"/>
+<area shape="rect" id="node7" href="$structvector2u__s.html" title=" " alt="" coords="523,305,616,332"/>
+<area shape="rect" id="node9" href="$structbuffer__s.html" title=" " alt="" coords="32,395,107,421"/>
+<area shape="rect" id="node11" href="$structfd__states__s.html" title=" " alt="" coords="5,201,101,228"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="server/src/types/trantor/incantation/registrations.c" name="server/src/types/trantor/incantation/registrations.c">
+<area shape="rect" id="node1" title=" " alt="" coords="594,5,790,47"/>
+<area shape="rect" id="node2" href="$player_8h.html" title=" " alt="" coords="704,95,867,121"/>
+<area shape="rect" id="node23" href="$incantation_8h.html" title=" " alt="" coords="477,169,672,196"/>
+<area shape="rect" id="node3" title=" " alt="" coords="725,543,800,569"/>
+<area shape="rect" id="node4" href="$team_8h.html" title=" " alt="" coords="566,319,634,345"/>
+<area shape="rect" id="node5" href="$list_8h.html" title=" " alt="" coords="182,393,277,420"/>
+<area shape="rect" id="node10" href="$resource_8h.html" title=" " alt="" coords="616,393,707,420"/>
+<area shape="rect" id="node15" href="$vector2_8h.html" title=" " alt="" coords="733,468,856,495"/>
+<area shape="rect" id="node16" href="$controller_8h.html" title=" " alt="" coords="507,244,642,271"/>
+<area shape="rect" id="node18" href="$map_8h.html" title=" " alt="" coords="710,319,861,345"/>
+<area shape="rect" id="node19" href="$direction_8h.html" title=" " alt="" coords="832,393,963,420"/>
+<area shape="rect" id="node6" title=" " alt="" coords="337,617,420,644"/>
+<area shape="rect" id="node7" href="$stdlib_8h.html" title=" " alt="" coords="179,468,250,495"/>
+<area shape="rect" id="node9" href="$node_8h.html" title=" " alt="" coords="5,468,72,495"/>
+<area shape="rect" id="node8" href="$clcc_8h.html" title=" " alt="" coords="147,543,277,569"/>
+<area shape="rect" id="node11" href="$chrono_8h.html" title=" " alt="" coords="529,468,607,495"/>
+<area shape="rect" id="node12" title=" " alt="" coords="523,543,613,569"/>
+<area shape="rect" id="node13" href="$utils_8h.html" title=" " alt="" coords="638,543,701,569"/>
+<area shape="rect" id="node14" title=" " alt="" coords="504,617,579,644"/>
+<area shape="rect" id="node17" href="$request_8h.html" title=" " alt="" coords="317,319,440,345"/>
+<area shape="rect" id="node20" href="$buffer_8h.html" title=" " alt="" coords="379,393,450,420"/>
+<area shape="rect" id="node21" href="$unistd_8h.html" title=" " alt="" coords="277,468,352,495"/>
+<area shape="rect" id="node22" title=" " alt="" coords="301,543,397,569"/>
+</map>

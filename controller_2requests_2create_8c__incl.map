@@ -1,0 +1,24 @@
+<map id="server/src/types/controller/requests/create.c" name="server/src/types/controller/requests/create.c">
+<area shape="rect" id="node1" title=" " alt="" coords="483,5,675,47"/>
+<area shape="rect" id="node2" href="$controller_8h.html" title=" " alt="" coords="453,95,587,121"/>
+<area shape="rect" id="node22" href="$log_8h.html" title=" " alt="" coords="611,95,666,121"/>
+<area shape="rect" id="node3" href="$list_8h.html" title=" " alt="" coords="558,244,613,271"/>
+<area shape="rect" id="node8" href="$request_8h.html" title=" " alt="" coords="608,169,731,196"/>
+<area shape="rect" id="node9" href="$chrono_8h.html" title=" " alt="" coords="318,319,485,345"/>
+<area shape="rect" id="node14" href="$team_8h.html" title=" " alt="" coords="326,169,482,196"/>
+<area shape="rect" id="node15" href="$map_8h.html" title=" " alt="" coords="151,169,302,196"/>
+<area shape="rect" id="node16" href="$vector2_8h.html" title=" " alt="" coords="5,319,128,345"/>
+<area shape="rect" id="node19" href="$buffer_8h.html" title=" " alt="" coords="789,244,859,271"/>
+<area shape="rect" id="node4" title=" " alt="" coords="589,468,672,495"/>
+<area shape="rect" id="node5" href="$stdlib_8h.html" title=" " alt="" coords="702,319,773,345"/>
+<area shape="rect" id="node7" href="$node_8h.html" title=" " alt="" coords="509,319,576,345"/>
+<area shape="rect" id="node6" href="$clcc_8h.html" title=" " alt="" coords="721,393,850,420"/>
+<area shape="rect" id="node10" title=" " alt="" coords="243,393,317,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="356,393,447,420"/>
+<area shape="rect" id="node12" href="$utils_8h.html" title=" " alt="" coords="634,393,697,420"/>
+<area shape="rect" id="node13" title=" " alt="" coords="833,468,908,495"/>
+<area shape="rect" id="node17" href="$direction_8h.html" title=" " alt="" coords="292,244,423,271"/>
+<area shape="rect" id="node18" href="$resource_8h.html" title=" " alt="" coords="89,244,268,271"/>
+<area shape="rect" id="node20" href="$unistd_8h.html" title=" " alt="" coords="797,319,872,345"/>
+<area shape="rect" id="node21" title=" " alt="" coords="875,393,971,420"/>
+</map>

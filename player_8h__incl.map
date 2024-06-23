@@ -1,0 +1,24 @@
+<map id="server/includes/types/trantor/player.h" name="server/includes/types/trantor/player.h">
+<area shape="rect" id="node1" title=" " alt="" coords="209,5,370,47"/>
+<area shape="rect" id="node2" title=" " alt="" coords="141,468,216,495"/>
+<area shape="rect" id="node3" href="$team_8h.html" title=" " alt="" coords="145,244,213,271"/>
+<area shape="rect" id="node4" href="$list_8h.html" title=" " alt="" coords="682,319,777,345"/>
+<area shape="rect" id="node9" href="$resource_8h.html" title=" " alt="" coords="323,319,413,345"/>
+<area shape="rect" id="node14" href="$vector2_8h.html" title=" " alt="" coords="131,393,253,420"/>
+<area shape="rect" id="node15" href="$controller_8h.html" title=" " alt="" coords="407,169,542,196"/>
+<area shape="rect" id="node17" href="$map_8h.html" title=" " alt="" coords="289,244,439,271"/>
+<area shape="rect" id="node18" href="$direction_8h.html" title=" " alt="" coords="808,319,939,345"/>
+<area shape="rect" id="node22" href="$incantation_8h.html" title=" " alt="" coords="377,95,572,121"/>
+<area shape="rect" id="node5" title=" " alt="" coords="524,543,607,569"/>
+<area shape="rect" id="node6" href="$stdlib_8h.html" title=" " alt="" coords="694,393,765,420"/>
+<area shape="rect" id="node8" href="$node_8h.html" title=" " alt="" coords="869,393,936,420"/>
+<area shape="rect" id="node7" href="$clcc_8h.html" title=" " alt="" coords="665,468,794,495"/>
+<area shape="rect" id="node10" href="$chrono_8h.html" title=" " alt="" coords="329,393,407,420"/>
+<area shape="rect" id="node11" title=" " alt="" coords="328,468,419,495"/>
+<area shape="rect" id="node12" href="$utils_8h.html" title=" " alt="" coords="241,468,303,495"/>
+<area shape="rect" id="node13" title=" " alt="" coords="360,543,435,569"/>
+<area shape="rect" id="node16" href="$request_8h.html" title=" " alt="" coords="565,244,688,271"/>
+<area shape="rect" id="node19" href="$buffer_8h.html" title=" " alt="" coords="515,319,586,345"/>
+<area shape="rect" id="node20" href="$unistd_8h.html" title=" " alt="" coords="584,393,659,420"/>
+<area shape="rect" id="node21" title=" " alt="" coords="544,468,640,495"/>
+</map>
