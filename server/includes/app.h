@@ -371,3 +371,22 @@ bool app_handle_player_request_connect_nbr_onstart(app_t *app,
  */
 void app_handle_player_request_connect_nbr_onfinish(app_t *app,
     player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for fork
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_fork_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for fork at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_fork_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);

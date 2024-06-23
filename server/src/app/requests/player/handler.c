@@ -32,7 +32,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_connect_nbr_onstart,
         &app_handle_player_request_connect_nbr_onfinish
     },
-    { "Fork", 42, NULL, NULL },
+    { "Fork", 42,
+        &app_handle_player_request_fork_onstart,
+        &app_handle_player_request_fork_onfinish
+    },
     { "Eject", 7, NULL, NULL },
     { "Take", 7, NULL, NULL },
     { "Set", 7, NULL, NULL },
