@@ -93,8 +93,11 @@ public:
 private:
     /// @brief The socket used to communicate with the server.
     int _socket;
-    std::string _pendingBuffer;
-    std::size_t _pendingBytes;
+    /// @brief The buffer used to read data from the server.
+    std::string _readBuffer;
+    /// @brief The size of the read buffer.
+    std::size_t _readBufferSize;
+    /// @brief The file descriptor set used for polling.
     fd_set _readSet;
 
     /**

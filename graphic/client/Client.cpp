@@ -16,7 +16,7 @@
 #include "Client.hpp"
 
 Client::Client()
-    : _socket(-1), _pendingBuffer(), _pendingBytes(0), _readSet() {}
+    : _socket(-1), _readBuffer(), _readBufferSize(0), _readSet() {}
 
 Client::~Client()
 {
@@ -141,8 +141,8 @@ void Client::_readServer() {
     } else if (bytesRead == 0) {
         throw Client::Exception("Connection closed");
     }
-    this->_pendingBuffer.append(buffer, bytesRead);
-    _pendingBytes += bytesRead;
+    this->_readBuffer.append(buffer, bytesRead);
+    _readBufferSize += bytesRead;
 }
 
 bool Client::hasData() const
@@ -151,20 +151,20 @@ bool Client::hasData() const
         throw Client::Exception("Socket not connected");
     }
 
-    return this->_pendingBytes > 0;
+    return this->_readBufferSize > 0;
 }
 
 std::string Client::getCommandFromPendingBuffer()
 {
-    std::size_t pos = this->_pendingBuffer.find('\n');
+    std::size_t pos = this->_readBuffer.find('\n');
     std::string command;
 
     if (pos == std::string::npos) {
         return "";
     }
-    command = this->_pendingBuffer.substr(0, pos);
-    this->_pendingBuffer = this->_pendingBuffer.substr(pos + 1);
-    this->_pendingBytes -= pos + 1;
+    command = this->_readBuffer.substr(0, pos);
+    this->_readBuffer = this->_readBuffer.substr(pos + 1);
+    this->_readBufferSize -= pos + 1;
     return command;
 }
 
