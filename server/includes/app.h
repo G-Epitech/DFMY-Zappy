@@ -5,6 +5,11 @@
 ** zappy_server.h
 */
 
+/** @defgroup server_app Server App Module
+ *  Main server application module
+ *  @{
+ */
+
 #pragma once
 
 #include <stdbool.h>
@@ -202,3 +207,5 @@ void app_handle_graphic_request(app_t *app, controller_t *controller,
  */
 void app_handle_player_request(app_t *app, controller_t *controller,
     request_t *request);
+
+/** @} */ // end of server
