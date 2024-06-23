@@ -5,4 +5,5 @@ target_sources(zappy_server_core PRIVATE
         remove.c
         find.c
         some.c
+        merge.c
 )

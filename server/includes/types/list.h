@@ -93,3 +93,11 @@ node_t *list_find(list_t *list, node_data_t data);
  * @return Predicate success status
  */
 bool list_some(list_t *list, list_predicate_t predicate);
+
+/**
+ * @brief Merge src list into dest list
+ * @param dest List to merge into
+ * @param src List to merge
+ * @return Merge success status
+ */
+void list_merge(list_t *dest, list_t *src);
