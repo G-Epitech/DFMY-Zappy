@@ -100,7 +100,7 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
 }
 
 bool App::frameEnded(const Ogre::FrameEvent &evt) {
-    _client.pollClient();
+    _client.poll();
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
 
@@ -233,7 +233,7 @@ void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int se
 }
 
 void App::_printUsage() noexcept {
-    std::cout << "USAGE: ./zappy_ai -p port -h host" << std::endl;
+    std::cout << "USAGE: ./zappy_gui -p port -h host" << std::endl;
 }
 
 bool App::parseOptions(int argc, char **argv) {

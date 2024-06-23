@@ -37,7 +37,7 @@ bool Client::establishConnection(const std::string &host, int port)
 
     this->_connect(host, port);
     while (true) {
-        this->pollClient(true);
+        this->poll(true);
         response = this->getCommandFromPendingBuffer();
         if (response == "WELCOME") {
             break;
@@ -168,7 +168,7 @@ std::string Client::getCommandFromPendingBuffer()
     return command;
 }
 
-void Client::pollClient(bool block)
+void Client::poll(bool block)
 {
     timeval timeout = {0, 0};
     timeval *timeoutPtr;
