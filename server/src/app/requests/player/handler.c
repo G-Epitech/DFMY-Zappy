@@ -37,7 +37,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_fork_onfinish
     },
     { "Eject", 7, NULL, NULL },
-    { "Take", 7, NULL, NULL },
+    { "Take", 7,
+        &app_handle_player_request_take_onstart,
+        &app_handle_player_request_take_onfinish
+    },
     { "Set", 7, NULL, NULL },
     { "Incantation", 300, NULL, NULL }
 };

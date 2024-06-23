@@ -15,4 +15,5 @@ target_sources(zappy_server_core PRIVATE
         player/inventory.c
         player/connect_nbr.c
         player/fork.c
+        player/take.c
 )
