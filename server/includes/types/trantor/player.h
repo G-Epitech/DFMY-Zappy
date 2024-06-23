@@ -17,7 +17,7 @@
 #include "types/trantor/incantation.h"
 
 // @brief Number of life units per food collected
-#define PLAYER_LIFE_UNITS_PER_FOOD 126
+#define PLAYER_LIFE_UNITS_PER_FOOD 1260
 // @brief Default player direction
 #define PLAYER_DIRECTION_DEFAULT DIR_NORTH
 // @brief Player direction offset when turning left or right

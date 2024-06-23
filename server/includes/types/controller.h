@@ -258,3 +258,9 @@ bool controller_can_receive(controller_t *controller);
  * @return Read possibility
  */
 bool controller_has_content_to_read(controller_t *controller);
+
+/**
+ * @brief Clear all requests of a controller
+ * @param controller Controller to clear requests from
+ */
+void controller_clear_requests(controller_t *controller);

@@ -5,10 +5,113 @@
 ** handler.c
 */
 
+#include <string.h>
 #include "app.h"
+#include "protocols.h"
+
+static const player_request_handler_t handlers[] = {
+    { "Forward", 7,
+        &app_handle_player_request_forward_onstart,
+        &app_handle_player_request_forward_onfinish
+    },
+    { "Right", 7, NULL, NULL },
+    { "Left", 7, NULL, NULL },
+    { "Look", 7, NULL, NULL },
+    { "Inventory", 1, NULL, NULL },
+    { "Broadcast", 7, NULL, NULL },
+    { "Connect_nbr", 0, NULL, NULL },
+    { "Fork", 42, NULL, NULL },
+    { "Eject", 7, NULL, NULL },
+    { "Take", 7, NULL, NULL },
+    { "Set", 7, NULL, NULL },
+    { "Incantation", 300, NULL, NULL }
+};
+
+static const size_t handlers_size =
+sizeof(handlers) / sizeof(player_request_handler_t);
+
+static player_request_handler_t *find_handler(const char *name)
+{
+    for (size_t i = 0; i < handlers_size; i++) {
+        if (strcmp(handlers[i].command, name) == 0)
+            return (player_request_handler_t *) &handlers[i];
+    }
+    return NULL;
+}
+
+static void set_cooldown_or_exec(app_t *app, controller_t *controller,
+    request_t *request, player_request_handler_t *handler)
+{
+    player_controller_t *player_controller = &controller->player;
+
+    if (handler->onstart &&
+        !(handler->onstart(app, player_controller, request))
+    ) {
+        controller_add_emission(controller, "ko\n");
+        request->status = REQ_FINISHED;
+        return;
+    }
+    player_controller->cooldown = handler->cooldown;
+    request->status = REQ_HANDLING;
+    if (handler->cooldown == 0) {
+        if (handler->onfinish)
+            handler->onfinish(app, player_controller, request);
+        request->status = REQ_FINISHED;
+    } else {
+        world_register_event(app->world, player_controller->cooldown);
+    }
+}
+
+static void app_handle_player_request_start(app_t *app,
+    controller_t *controller, request_t *request)
+{
+    request_token_t token = { 0 };
+    player_request_handler_t *handler = NULL;
+    char cmd[PLAYER_PROTOCOL_MAX_CMD_LEN + 1] = { 0 };
+
+    request_get_token(request, 0, &token);
+    if (token.size <= PLAYER_PROTOCOL_MAX_CMD_LEN) {
+        memcpy(cmd, token.content, token.size);
+        handler = find_handler(cmd);
+    }
+    if (!handler) {
+        request->status = REQ_FINISHED;
+        controller_add_emission(controller, "ko\n");
+        return log_warn("Unknown command '%s'", cmd);
+    }
+    set_cooldown_or_exec(app, controller, request, handler);
+}
+
+static void app_handle_player_request_end(app_t *app, controller_t *controller,
+    request_t *request)
+{
+    request_token_t token = { 0 };
+    player_request_handler_t *handler = NULL;
+    player_controller_t *player_controller = &controller->player;
+    char cmd[PLAYER_PROTOCOL_MAX_CMD_LEN + 1] = { 0 };
+
+    request_get_token(request, 0, &token);
+    if (token.size <= PLAYER_PROTOCOL_MAX_CMD_LEN) {
+        memcpy(cmd, token.content, token.size);
+        handler = find_handler(cmd);
+    }
+    if (handler && handler->onfinish)
+        handler->onfinish(app, player_controller, request);
+    request->status = REQ_FINISHED;
+}
 
 void app_handle_player_request(app_t *app, controller_t *controller,
     request_t *request)
 {
-    request->status = REQ_FINISHED;
+    player_controller_t *player_controller = &controller->player;
+
+    if (player_controller->player->incantation ||
+        player_controller->cooldown > 0
+    ) {
+        return;
+    }
+    if (request->status == REQ_READY)
+        app_handle_player_request_start(app, controller, request);
+    else
+        app_handle_player_request_end(app, controller, request);
 }

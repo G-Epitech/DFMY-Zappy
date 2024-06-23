@@ -9,7 +9,7 @@
 #include "app.h"
 #include "protocols.h"
 
-static const protocol_request_handler_t handlers[] = {
+static const gui_request_handler_t handlers[] = {
     { "tna", &app_handle_gui_request_teams_names },
     { "msz", &app_handle_gui_request_map_size },
     { "mct", &app_handle_gui_request_map_content },
@@ -21,13 +21,13 @@ static const protocol_request_handler_t handlers[] = {
 };
 
 static const size_t handlers_size =
-sizeof(handlers) / sizeof(protocol_request_handler_t);
+sizeof(handlers) / sizeof(gui_request_handler_t);
 
-static protocol_request_handler_t *find_handler(const char *name)
+static gui_request_handler_t *find_handler(const char *name)
 {
     for (size_t i = 0; i < handlers_size; i++) {
         if (strcmp(handlers[i].command, name) == 0)
-            return (protocol_request_handler_t *)&handlers[i];
+            return (gui_request_handler_t *)&handlers[i];
     }
     return NULL;
 }
@@ -36,12 +36,12 @@ void app_handle_graphic_request(app_t *app, controller_t *controller,
     request_t *request)
 {
     request_token_t token = { 0 };
-    protocol_request_handler_t *handler = NULL;
+    gui_request_handler_t *handler = NULL;
     char cmd[GRAPHIC_PROTOCOL_CMD_LEN + 1] = { 0 };
 
     request_get_token(request, 0, &token);
     if (token.size == GRAPHIC_PROTOCOL_CMD_LEN) {
-        memcpy(cmd, token.content, GRAPHIC_PROTOCOL_CMD_LEN);
+        memcpy(cmd, token.content, token.size);
         handler = find_handler(cmd);
     }
     if (!handler)
