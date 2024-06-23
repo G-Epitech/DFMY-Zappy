@@ -8,5 +8,6 @@ target_sources(zappy_server_core PRIVATE
         graphic/map_content.c
         graphic/player.c
         graphic/teams.c
-        graphic/time.c
+        graphic/get_time.c
+        graphic/set_time.c
 )

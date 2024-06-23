@@ -16,6 +16,8 @@ static const protocol_request_handler_t handlers[] = {
     { "ppo", &app_handle_gui_request_player_position },
     { "plv", &app_handle_gui_request_player_level },
     { "pin", &app_handle_gui_request_player_inventory },
+    { "sgt", &app_handle_gui_request_get_time_unit },
+    { "sst", &app_handle_gui_request_set_time_unit },
 };
 
 static const size_t handlers_size =

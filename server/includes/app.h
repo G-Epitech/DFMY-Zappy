@@ -15,6 +15,8 @@
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
+#define APP_MAX_FREQ 10000
+#define APP_MIN_FREQ 1
 
 // @brief Application state
 typedef struct app_s {
@@ -256,3 +258,21 @@ void app_handle_gui_request_player_level(app_t *app,
  */
 void app_handle_gui_request_player_inventory(app_t *app,
     controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for time unit
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_get_time_unit(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for time unit
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_set_time_unit(app_t *app, controller_t *controller,
+    request_t *request);

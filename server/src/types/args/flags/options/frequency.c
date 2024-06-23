@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "types/args.h"
+#include "app.h"
 
 static void read_frequency_value(args_parser_t *parser, args_t *args)
 {
@@ -19,8 +20,12 @@ static void read_frequency_value(args_parser_t *parser, args_t *args)
     if (end == arg) {
         fprintf(stderr, "Invalid frequency\n");
         parser->error = true;
-    } else if (args->frequency < 2 || args->frequency > 10000) {
-        fprintf(stderr, "Frequency value must be in range [2, 10000]\n");
+    } else if (args->frequency < APP_MIN_FREQ ||
+        args->frequency > APP_MAX_FREQ
+    ) {
+        fprintf(stderr, "Frequency value must be in range [%d, %d]\n",
+            APP_MIN_FREQ, APP_MAX_FREQ
+        );
         parser->error = true;
     }
 }
