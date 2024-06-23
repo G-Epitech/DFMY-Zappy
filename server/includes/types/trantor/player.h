@@ -14,7 +14,9 @@
 #include "types/vector2.h"
 #include "types/controller.h"
 #include "types/trantor/map.h"
+#include "types/direction.h"
 #include "types/trantor/incantation.h"
+#include "types/direction.h"
 
 // @brief Number of life units per food collected
 #define PLAYER_LIFE_UNITS_PER_FOOD 126
@@ -37,18 +39,6 @@ typedef struct player_look_info_s {
     vector2l_t vector;
 } player_look_info_t;
 
-// @brief Structure representing a Trantorian player's direction
-typedef enum player_direction_e {
-    // @brief North direction
-    DIR_NORTH = 1,
-    // @brief East direction
-    DIR_EAST,
-    // @brief South direction
-    DIR_SOUTH,
-    // @brief West direction
-    DIR_WEST
-} player_direction_t;
-
 // @brief Structure representing a Trantorian player
 typedef struct player_s {
     // @brief Inventory of player resources
@@ -66,7 +56,7 @@ typedef struct player_s {
     // @brief Current player incantation
     incantation_t *incantation;
     // @brief Direction of the player
-    player_direction_t direction;
+    direction_t direction;
     // @brief Player number
     size_t id;
 } player_t;
