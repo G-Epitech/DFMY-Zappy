@@ -2,6 +2,8 @@ name: Generate and Deploy Docs
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   deploy:

@@ -168,3 +168,5 @@ void world_update_resources_generation_delay(world_t *world);
  * @param server Server to notify
  */
 void world_kill_eggs(world_t *world, list_t *eggs, server_t *server);
+
+/** @} */ // end of server
