@@ -42,10 +42,8 @@ bool app_handle_player_request_incantation_onstart(app_t *app,
         return false;
     }
     incantation = world_start_incantation(app->world, controller->player);
-    if (!incantation) {
-        controller_add_emission((controller_t *) controller, "ko\n");
+    if (!incantation)
         return false;
-    }
     notify_incantation_start(app->server, incantation);
     return true;
 }

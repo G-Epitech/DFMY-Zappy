@@ -29,7 +29,6 @@ bool app_handle_player_request_turn_right_onstart(
     return true;
 }
 
-
 bool app_handle_player_request_turn_left_onstart(
     __attribute_maybe_unused__ app_t *app,
     __attribute_maybe_unused__ player_controller_t *controller,
