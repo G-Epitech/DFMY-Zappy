@@ -15,29 +15,29 @@
 class Commands {
 public:
 
-    static void map_size(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void tile_content(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void teams_names(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_connect(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_position(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_level(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_inventory(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_eject(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void tileContent(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void teamsNames(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerConnect(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerPosition(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerLevel(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerInventory(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerEject(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
     static void broadcast(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void incantation_start(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void incantation_end(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_laying_egg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_resource_drop(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_resource_take(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_death(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void player_egg_laid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void egg_death(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void egg_hatching(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void time_unit_request(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void time_unit_modification(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void end_game(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void unknown_command(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
-    static void command_parameters(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void incantationStart(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void incantationEnd(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerLayingEgg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerResourceDrop(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerResourceTake(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void playerEggLaid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void eggDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void eggHatching(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void timeUnitRequest(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void timeUnitModification(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void endGame(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void unknownCommand(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
+    static void commandParameters(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client);
 
 private:
     static void _addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity);

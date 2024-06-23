@@ -14,30 +14,38 @@
 using namespace Ogre;
 using namespace OgreBites;
 
-App::App() : OgreBites::ApplicationContext("Zappy"), _client() {
-    this->_commands["msz"] = &Commands::map_size;
-    this->_commands["bct"] = &Commands::tile_content;
-    this->_commands["tna"] = &Commands::teams_names;
-    this->_commands["pnw"] = &Commands::player_connect;
-    this->_commands["ppo"] = &Commands::player_position;
-    this->_commands["plv"] = &Commands::player_level;
-    this->_commands["pin"] = &Commands::player_inventory;
-    this->_commands["pex"] = &Commands::player_eject;
+App::App() :
+    OgreBites::ApplicationContext("Zappy"),
+    _client(),
+    trayMgr(nullptr),
+    scnMgr(nullptr),
+    _map(),
+    _commands(),
+    _options()
+{
+    this->_commands["msz"] = &Commands::mapSize;
+    this->_commands["bct"] = &Commands::tileContent;
+    this->_commands["tna"] = &Commands::teamsNames;
+    this->_commands["pnw"] = &Commands::playerConnect;
+    this->_commands["ppo"] = &Commands::playerPosition;
+    this->_commands["plv"] = &Commands::playerLevel;
+    this->_commands["pin"] = &Commands::playerInventory;
+    this->_commands["pex"] = &Commands::playerEject;
     this->_commands["pbc"] = &Commands::broadcast;
-    this->_commands["pic"] = &Commands::incantation_start;
-    this->_commands["pie"] = &Commands::incantation_end;
-    this->_commands["pfk"] = &Commands::player_laying_egg;
-    this->_commands["pdr"] = &Commands::player_resource_drop;
-    this->_commands["pgt"] = &Commands::player_resource_take;
-    this->_commands["pdi"] = &Commands::player_death;
-    this->_commands["enw"] = &Commands::player_egg_laid;
-    this->_commands["edi"] = &Commands::egg_death;
-    this->_commands["ebo"] = &Commands::egg_hatching;
-    this->_commands["sgt"] = &Commands::time_unit_request;
-    this->_commands["sst"] = &Commands::time_unit_modification;
-    this->_commands["seg"] = &Commands::end_game;
-    this->_commands["suc"] = &Commands::unknown_command;
-    this->_commands["sbp"] = &Commands::command_parameters;
+    this->_commands["pic"] = &Commands::incantationStart;
+    this->_commands["pie"] = &Commands::incantationEnd;
+    this->_commands["pfk"] = &Commands::playerLayingEgg;
+    this->_commands["pdr"] = &Commands::playerResourceDrop;
+    this->_commands["pgt"] = &Commands::playerResourceTake;
+    this->_commands["pdi"] = &Commands::playerDeath;
+    this->_commands["enw"] = &Commands::playerEggLaid;
+    this->_commands["edi"] = &Commands::eggDeath;
+    this->_commands["ebo"] = &Commands::eggHatching;
+    this->_commands["sgt"] = &Commands::timeUnitRequest;
+    this->_commands["sst"] = &Commands::timeUnitModification;
+    this->_commands["seg"] = &Commands::endGame;
+    this->_commands["suc"] = &Commands::unknownCommand;
+    this->_commands["sbp"] = &Commands::commandParameters;
 }
 
 void App::setup() {
@@ -47,11 +55,20 @@ void App::setup() {
     Root *root = getRoot();
     root->loadPlugin("Codec_FreeImage");
     scnMgr = root->createSceneManager();
-
-    _loadResources();
-
     scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
 
+    _loadResources();
+    _setupCamera();
+    _setupMaterials();
+
+    trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
+    addInputListener(trayMgr);
+    trayMgr->showFrameStats(TL_BOTTOMLEFT);
+    trayMgr->showLogo(TL_BOTTOMRIGHT);
+    trayMgr->hideCursor();
+}
+
+void App::_setupCamera() {
     Camera *cam = scnMgr->createCamera("myCam");
     cam->setAutoAspectRatio(true);
     cam->setNearClipDistance(0.1);
@@ -61,25 +78,20 @@ void App::setup() {
     camNode->setPosition(0, 0, 20);
     camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
     camNode->attachObject(cam);
-
     getRenderWindow()->addViewport(cam);
 
+    auto *camMan = new CameraMan(camNode);
+    camMan->setStyle(CS_ORBIT);
+    addInputListener(camMan);
+}
+
+void App::_setupMaterials() {
     MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial",
         ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
     material->setDiffuse(1, 1, 1, 0.5);
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
     material->setDepthWriteEnabled(false);
-
-    CameraMan *camMan = new CameraMan(camNode);
-    camMan->setStyle(CS_ORBIT);
-    addInputListener(camMan);
-
-    TrayManager *trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
-    addInputListener(trayMgr);
-    trayMgr->showFrameStats(TL_BOTTOMLEFT);
-    trayMgr->showLogo(TL_BOTTOMRIGHT);
-    trayMgr->hideCursor();
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {

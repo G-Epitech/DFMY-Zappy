@@ -16,8 +16,11 @@
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
 public:
 
+    // @brief Options of the application
     typedef struct Options {
+        // @brief Host of the server
         std::string host;
+        // @brief Port of the server
         int port;
     } Options;
 
@@ -25,7 +28,6 @@ public:
      * @brief Construct a new App object
      */
     App();
-
 
     /**
      * @brief Setup the application
@@ -65,7 +67,7 @@ private:
     Client _client;
 
     /// @brief Tray manager used to display GUI elements
-    OgreBites::TrayManager *trayManager;
+    OgreBites::TrayManager *trayMgr;
 
     /// @brief Scene manager used to manage the scene
     Ogre::SceneManager *scnMgr;
@@ -83,6 +85,16 @@ private:
      * @brief Load resources of the application
      */
     static void _loadResources();
+
+    /**
+     * @brief Setup the camera
+     */
+    void _setupCamera();
+
+    /**
+     * @rief Setup the materials of the application
+     */
+    void _setupMaterials();
 
     /**
      * @brief Update the map

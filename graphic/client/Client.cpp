@@ -170,7 +170,7 @@ std::string Client::getCommandFromPendingBuffer()
 timeval *Client::_handleTimeout(bool block, timeval *timeout) {
     timeval *timeoutPtr = nullptr;
 
-    if (block) {
+    if (!block) {
         timeoutPtr = timeout;
     }
     return timeoutPtr;
