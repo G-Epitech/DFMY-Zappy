@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['vector2d_5ft_1412',['vector2d_t',['../vector2_8h.html#aa77f8bba4388250b35a6dd5baaf5cd1f',1,'vector2.h']]],
-  ['vector2l_5ft_1413',['vector2l_t',['../direction_8h.html#a783ab02b78aef311611b24e20f3fdac8',1,'vector2l_t():&#160;direction.h'],['../vector2_8h.html#a783ab02b78aef311611b24e20f3fdac8',1,'vector2l_t():&#160;vector2.h']]],
-  ['vector2u_5ft_1414',['vector2u_t',['../vector2_8h.html#aa81f81a1b904ff2a1e189bcba7c7b885',1,'vector2.h']]]
+  ['team_5ft_1589',['team_t',['../team_8h.html#aaae062356783d193f58677fc3de7a946',1,'team.h']]],
+  ['time_5funit_5ft_1590',['time_unit_t',['../chrono_8h.html#a58ee7a1690a0bc9cf247ebd18a6d4453',1,'chrono.h']]],
+  ['timeval_5ft_1591',['timeval_t',['../utils_8h.html#aeba0d8f51eb0a83c2b01ecf27e0b3260',1,'utils.h']]]
 ];

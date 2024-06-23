@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['team_5ft_1409',['team_t',['../team_8h.html#aaae062356783d193f58677fc3de7a946',1,'team.h']]],
-  ['time_5funit_5ft_1410',['time_unit_t',['../chrono_8h.html#a58ee7a1690a0bc9cf247ebd18a6d4453',1,'chrono.h']]],
-  ['timeval_5ft_1411',['timeval_t',['../utils_8h.html#aeba0d8f51eb0a83c2b01ecf27e0b3260',1,'utils.h']]]
+  ['server_5ft_1586',['server_t',['../controller_8h.html#a0d46b4d18005bd6a95dddba0e65bddf6',1,'server_t():&#160;controller.h'],['../group__server__network.html#ga0d46b4d18005bd6a95dddba0e65bddf6',1,'server_t():&#160;server.h']]],
+  ['sighandler_5ft_1587',['sighandler_t',['../signal_8c.html#a754cdc0bcfffe07baa426dc252c9101a',1,'signal.c']]],
+  ['sockaddr_5fin_5ft_1588',['sockaddr_in_t',['../group__server__network.html#ga833d9365af0fc2308a2172dea4a18094',1,'server.h']]]
 ];

@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['world_5ft_1415',['world_t',['../incantation_8h.html#ad55869c5e54f717062ec699d20fa8886',1,'world_t():&#160;incantation.h'],['../group__server__world.html#gad55869c5e54f717062ec699d20fa8886',1,'world_t():&#160;world.h']]]
+  ['vector2d_5ft_1592',['vector2d_t',['../vector2_8h.html#aa77f8bba4388250b35a6dd5baaf5cd1f',1,'vector2.h']]],
+  ['vector2l_5ft_1593',['vector2l_t',['../direction_8h.html#a783ab02b78aef311611b24e20f3fdac8',1,'vector2l_t():&#160;direction.h'],['../vector2_8h.html#a783ab02b78aef311611b24e20f3fdac8',1,'vector2l_t():&#160;vector2.h']]],
+  ['vector2u_5ft_1594',['vector2u_t',['../vector2_8h.html#aa81f81a1b904ff2a1e189bcba7c7b885',1,'vector2.h']]]
 ];

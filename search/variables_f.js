@@ -1,15 +1,11 @@
 var searchData=
 [
-  ['server_1347',['server',['../structgeneric__controller__s.html#a052a0c69c68c6524c2f9eb19c1044d5f',1,'generic_controller_s::server()'],['../structplayer__controller__s.html#a914fe793e7cd4357c120715822723684',1,'player_controller_s::server()'],['../structapp__s.html#a0624c17020b30236d9ea6f589e078674',1,'app_s::server()']]],
-  ['sighandler_5ft_1348',['sighandler_t',['../signal_8h.html#afc70d1abecedf7b84f8e5d983e91ef48',1,'signal.h']]],
-  ['size_1349',['size',['../structrequest__token__s.html#a53a6400d9f4d99c5ee486e914623b6f1',1,'request_token_s::size()'],['../structmap__s.html#ab4070b5081bc35404afaf7f2467a3f9b',1,'map_s::size()'],['../structbuffer__s.html#a67f9abd8975519e025716d0d2df3470e',1,'buffer_s::size()']]],
-  ['sock_1350',['sock',['../classclient_1_1SocketClient.html#a9d719a16ef163b7c7f5988885fcff897',1,'client::SocketClient']]],
-  ['socket_1351',['socket',['../structgeneric__controller__s.html#a11a3dbc9cef1c8a803ff074f0a3d5e97',1,'generic_controller_s::socket()'],['../structplayer__controller__s.html#a540f3be80144afa11bd31c0f072d7db8',1,'player_controller_s::socket()'],['../structserver__s.html#afd1d0178f6bed4b4902a4515dc096ef7',1,'server_s::socket()']]],
-  ['started_5fat_1352',['started_at',['../structchrono__s.html#adf05614bcd02d27cc101fb90383aef3c',1,'chrono_s']]],
-  ['starting_5ftimestamp_1353',['starting_timestamp',['../classhamster_1_1Hamster.html#a207dd45dc193ddb60bd8313f2a212466',1,'hamster::Hamster']]],
-  ['state_1354',['state',['../structgeneric__controller__s.html#a9cd513f5580626b647a59b84f0211ac4',1,'generic_controller_s::state()'],['../structplayer__controller__s.html#a6a2ed8e54a33b24f9b5ebd18594d5efc',1,'player_controller_s::state()']]],
-  ['stats_1355',['stats',['../structresources__manager__s.html#a5cfdf308640575680f17ce1169a9b859',1,'resources_manager_s']]],
-  ['status_1356',['status',['../structrequest__s.html#adaa964418bd0dfb0f51021e0f3df61df',1,'request_s']]],
-  ['stopped_5fat_1357',['stopped_at',['../structchrono__s.html#af359c48feb735ff6ef4f5dcb6d07de24',1,'chrono_s']]],
-  ['sync_5fwith_5fother_5fhamsters_1358',['sync_with_other_hamsters',['../classhamster_1_1Hamster.html#a5bc21918fea90015c52d6b52c76d0e30',1,'hamster::Hamster']]]
+  ['radius_1512',['radius',['../structCircle.html#a47644132ec8bec0f3a4e8d0e15bcd5d3',1,'Circle::radius()'],['../structSphere.html#ae6f42f0da6679a2f0b4a22681ccccf38',1,'Sphere::radius()']]],
+  ['readable_1513',['readable',['../structfd__states__s.html#a900bcc28f9828c31706ab7aac270b049',1,'fd_states_s']]],
+  ['requester_1514',['requester',['../structincantation__s.html#a8b72e7a72b192364ee84d85a86966a7e',1,'incantation_s']]],
+  ['requests_1515',['requests',['../structgeneric__controller__s.html#ad21e63424b9edd22d852355d32c35f45',1,'generic_controller_s::requests()'],['../structplayer__controller__s.html#a2106bede7e6889aa4018c753f81327c4',1,'player_controller_s::requests()']]],
+  ['resources_1516',['resources',['../structincantation__requirements__s.html#a9135d010c52e7055ee695d774cf68dec',1,'incantation_requirements_s::resources()'],['../structmap__cell__stats__s.html#ad28ea8d6601c4e4229055dc5e246fb57',1,'map_cell_stats_s::resources()'],['../structmap__cell__s.html#a4544751fd52d5c3404088f830925cc14',1,'map_cell_s::resources()']]],
+  ['resources_5fmanager_1517',['resources_manager',['../structworld__s.html#a78fa1d04b1975ec45115717f184e9740',1,'world_s']]],
+  ['response_1518',['response',['../namespaceclient.html#a38136955188a8f5daa72048468d9f5c8',1,'client']]],
+  ['running_1519',['running',['../structapp__s.html#a71d61b697f6a8925aaa34ce7737fe17a',1,'app_s']]]
 ];

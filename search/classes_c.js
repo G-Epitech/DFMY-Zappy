@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['s_5flist_789',['s_list',['../structs__list.html',1,'']]],
-  ['s_5fnode_790',['s_node',['../structs__node.html',1,'']]],
-  ['server_5fs_791',['server_s',['../structserver__s.html',1,'']]],
-  ['socketclient_792',['SocketClient',['../classclient_1_1SocketClient.html',1,'client']]],
-  ['subprocess_793',['SubProcess',['../classprocess_1_1SubProcess.html',1,'process']]]
+  ['request_5fs_889',['request_s',['../structrequest__s.html',1,'']]],
+  ['request_5ftoken_5fs_890',['request_token_s',['../structrequest__token__s.html',1,'']]],
+  ['resource_5fstat_5fs_891',['resource_stat_s',['../structresource__stat__s.html',1,'']]],
+  ['resources_5fmanager_5fs_892',['resources_manager_s',['../structresources__manager__s.html',1,'']]]
 ];

@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['map_5fcell_5fat_5fpos_1489',['MAP_CELL_AT_POS',['../map_8h.html#a508457ba7ff006b1218923a0ea617694',1,'map.h']]],
-  ['map_5fegg_5fcell_1490',['MAP_EGG_CELL',['../map_8h.html#ad626b4e8a0b509ec22429c0ad22a0d87',1,'map.h']]],
-  ['map_5fout_5fposition_1491',['MAP_OUT_POSITION',['../map_8h.html#a48df78da29915515ffe4547362e2805c',1,'map.h']]],
-  ['map_5fplayer_5fcell_1492',['MAP_PLAYER_CELL',['../map_8h.html#ac2e34844149232ae6bd63fd93d1b0ebe',1,'map.h']]],
-  ['max_1493',['MAX',['../utils_8h.html#afa99ec4acc4ecb2dc3c2d05da15d0e3f',1,'utils.h']]],
-  ['min_1494',['MIN',['../utils_8h.html#a3acffbd305ee72dcd4593c0d8af64a4f',1,'utils.h']]]
+  ['incantation_5fduration_1672',['INCANTATION_DURATION',['../incantation_8h.html#ab4acf2606fcab5f788941b6b621c18c0',1,'incantation.h']]],
+  ['incantation_5fsphere_5fmax_5fradius_1673',['INCANTATION_SPHERE_MAX_RADIUS',['../Incantation_8hpp.html#a218eaf74b7c5f4550116e301c89845d6',1,'Incantation.hpp']]],
+  ['incantation_5fsphere_5fradius_1674',['INCANTATION_SPHERE_RADIUS',['../Incantation_8hpp.html#a5c6258d2f72973fce58cfc2d654cd12b',1,'Incantation.hpp']]],
+  ['incantation_5fsphere_5frings_1675',['INCANTATION_SPHERE_RINGS',['../Incantation_8hpp.html#a14ccbf32ea6f078af8309e8f03478752',1,'Incantation.hpp']]],
+  ['incantation_5fsphere_5fsegments_1676',['INCANTATION_SPHERE_SEGMENTS',['../Incantation_8hpp.html#af23dc34e74d72a156a81f6490f6a7a69',1,'Incantation.hpp']]],
+  ['incantation_5fsphere_5fspeed_1677',['INCANTATION_SPHERE_SPEED',['../Incantation_8hpp.html#a4e234fa675b31a3d142158123db84517',1,'Incantation.hpp']]]
 ];

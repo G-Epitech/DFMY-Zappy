@@ -1,8 +1,9 @@
 <map id="server/tests/libs/clcc/modules/sys/socket.h" name="server/tests/libs/clcc/modules/sys/socket.h">
-<area shape="rect" id="node1" title=" " alt="" coords="366,5,533,47"/>
+<area shape="rect" id="node1" title=" " alt="" coords="467,5,634,47"/>
 <area shape="rect" id="node2" href="$socket_8c.html" title=" " alt="" coords="5,95,160,136"/>
 <area shape="rect" id="node3" href="$run__tests_8c.html" title=" " alt="" coords="185,95,341,136"/>
 <area shape="rect" id="node4" href="$controller__tests_8c.html" title=" " alt="" coords="365,95,533,136"/>
 <area shape="rect" id="node5" href="$connection__tests_8c.html" title=" " alt="" coords="557,95,749,136"/>
 <area shape="rect" id="node6" href="$server__tests_8c.html" title=" " alt="" coords="773,95,941,136"/>
+<area shape="rect" id="node7" href="$Client_8cpp.html" title=" " alt="" coords="965,95,1099,136"/>
 </map>

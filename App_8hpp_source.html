@@ -81,24 +81,82 @@ $(function() {
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;Ogre.h&gt;</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;OgreApplicationContext.h&gt;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;OgreTrays.h&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classApp.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="classApp.html">App</a> : <span class="keyword">public</span> OgreBites::ApplicationContext, <span class="keyword">public</span> OgreBites::InputListener {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="group__graphic__app.html#gacb8cbf3e285b91d0170ffe87df5989c5">App</a>();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc">setup</a>() <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#ga2532336d5fcfdb7c22a66ee5efbe386a">keyPressed</a>(<span class="keyword">const</span> OgreBites::KeyboardEvent &amp;evt) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> _loadResources();</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    OgreBites::TrayManager *trayManager;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;};</div>
-<div class="ttc" id="aclassApp_html"><div class="ttname"><a href="classApp.html">App</a></div><div class="ttdef"><b>Definition:</b> App.hpp:20</div></div>
-<div class="ttc" id="agroup__graphic__app_html_ga2532336d5fcfdb7c22a66ee5efbe386a"><div class="ttname"><a href="group__graphic__app.html#ga2532336d5fcfdb7c22a66ee5efbe386a">App::keyPressed</a></div><div class="ttdeci">bool keyPressed(const OgreBites::KeyboardEvent &amp;evt) override</div><div class="ttdoc">Key pressed event.</div><div class="ttdef"><b>Definition:</b> App.cpp:89</div></div>
-<div class="ttc" id="agroup__graphic__app_html_gacb8cbf3e285b91d0170ffe87df5989c5"><div class="ttname"><a href="group__graphic__app.html#gacb8cbf3e285b91d0170ffe87df5989c5">App::App</a></div><div class="ttdeci">App()</div><div class="ttdef"><b>Definition:</b> App.cpp:15</div></div>
-<div class="ttc" id="agroup__graphic__app_html_gaf41416c277fed01fe9c96c437afd41dc"><div class="ttname"><a href="group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc">App::setup</a></div><div class="ttdeci">void setup() override</div><div class="ttdoc">Setup the application.</div><div class="ttdef"><b>Definition:</b> App.cpp:18</div></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Client_8hpp.html">client/Client.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Map_8hpp.html">types/Map.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Commands_8hpp.html">commands/Commands.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classApp.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="classApp.html">App</a> : <span class="keyword">public</span> OgreBites::ApplicationContext, <span class="keyword">public</span> OgreBites::InputListener {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">// @brief Options of the application</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structApp_1_1Options.html">   27</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structApp_1_1Options.html">Options</a> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="comment">// @brief Host of the server</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="group__graphic__app.html#gafd98e218ec25273b0e3918a06d4c1680">   29</a></span>&#160;        std::string <a class="code" href="group__graphic__app.html#gafd98e218ec25273b0e3918a06d4c1680">host</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="comment">// @brief Port of the server</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="group__graphic__app.html#gacc12f8ef0d098cc356916396c06f3095">   31</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="group__graphic__app.html#gacc12f8ef0d098cc356916396c06f3095">port</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="group__graphic__app.html#gaab167e9ad115fd61bff470c31e5d380c">   32</a></span>&#160;    } <a class="code" href="group__graphic__app.html#gaab167e9ad115fd61bff470c31e5d380c">Options</a>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="group__graphic__app.html#gacb8cbf3e285b91d0170ffe87df5989c5">App</a>();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc">setup</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#ga1cbe79e1660af8ef17f5a3fb948e7f66">parseOptions</a>(<span class="keywordtype">int</span> ac, <span class="keywordtype">char</span> **av);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#ga26cb4a0f0e6b4b5622c5188b6a51c7ce">establishConnection</a>();</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#ga2532336d5fcfdb7c22a66ee5efbe386a">keyPressed</a>(<span class="keyword">const</span> OgreBites::KeyboardEvent &amp;evt) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#ga82bd1c8e61e94214b9b178388b4cbf92">frameRenderingQueued</a>(<span class="keyword">const</span> Ogre::FrameEvent &amp;evt) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__graphic__app.html#gafb19942ef7c8dd2b0ff8155e3522b4f9">frameEnded</a>(<span class="keyword">const</span> Ogre::FrameEvent &amp;evt) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <a class="code" href="classClient.html">Client</a> _client;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    OgreBites::TrayManager *trayMgr;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    Ogre::SceneManager *scnMgr;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <a class="code" href="structMap.html">Map</a> _map;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    std::map&lt;std::string, std::function&lt;void(std::string &amp;, <a class="code" href="structMap.html">Map</a> &amp;, Ogre::SceneManager *, <a class="code" href="classClient.html">Client</a> &amp;)&gt;&gt; _commands;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="group__graphic__app.html#gaab167e9ad115fd61bff470c31e5d380c">Options</a> _options;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> _loadResources();</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keywordtype">void</span> _setupCamera();</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">void</span> _setupMaterials();</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> _updateMap(std::string &amp;command);</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordtype">void</span> _updateBroadcastCircles(<span class="keyword">const</span> Ogre::FrameEvent &amp;evt);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">void</span> _updateIncantationSpheres(<span class="keyword">const</span> Ogre::FrameEvent &amp;evt);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordtype">void</span> _updateSphere(Ogre::ManualObject* obj, <span class="keywordtype">float</span> radius, <span class="keywordtype">int</span> rings = <a class="code" href="Broadcast_8hpp.html#ac927eb2998a566a000495a78509bb25c">BROADCAST_CIRCLE_SEGMENTS</a>, <span class="keywordtype">int</span> segments = <a class="code" href="Broadcast_8hpp.html#ac927eb2998a566a000495a78509bb25c">BROADCAST_CIRCLE_SEGMENTS</a>);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;     <span class="keyword">static</span> <span class="keywordtype">void</span> _printUsage() noexcept;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;};</div>
+<div class="ttc" id="aBroadcast_8hpp_html_ac927eb2998a566a000495a78509bb25c"><div class="ttname"><a href="Broadcast_8hpp.html#ac927eb2998a566a000495a78509bb25c">BROADCAST_CIRCLE_SEGMENTS</a></div><div class="ttdeci">#define BROADCAST_CIRCLE_SEGMENTS</div><div class="ttdef"><b>Definition:</b> Broadcast.hpp:12</div></div>
+<div class="ttc" id="aClient_8hpp_html"><div class="ttname"><a href="Client_8hpp.html">Client.hpp</a></div></div>
+<div class="ttc" id="aCommands_8hpp_html"><div class="ttname"><a href="Commands_8hpp.html">Commands.hpp</a></div></div>
+<div class="ttc" id="aMap_8hpp_html"><div class="ttname"><a href="Map_8hpp.html">Map.hpp</a></div></div>
+<div class="ttc" id="aclassApp_html"><div class="ttname"><a href="classApp.html">App</a></div><div class="ttdef"><b>Definition:</b> App.hpp:23</div></div>
+<div class="ttc" id="aclassClient_html"><div class="ttname"><a href="classClient.html">Client</a></div><div class="ttdef"><b>Definition:</b> Client.hpp:12</div></div>
+<div class="ttc" id="agroup__graphic__app_html_ga1cbe79e1660af8ef17f5a3fb948e7f66"><div class="ttname"><a href="group__graphic__app.html#ga1cbe79e1660af8ef17f5a3fb948e7f66">App::parseOptions</a></div><div class="ttdeci">bool parseOptions(int ac, char **av)</div><div class="ttdoc">Parse the cli arguments.</div><div class="ttdef"><b>Definition:</b> App.cpp:239</div></div>
+<div class="ttc" id="agroup__graphic__app_html_ga2532336d5fcfdb7c22a66ee5efbe386a"><div class="ttname"><a href="group__graphic__app.html#ga2532336d5fcfdb7c22a66ee5efbe386a">App::keyPressed</a></div><div class="ttdeci">bool keyPressed(const OgreBites::KeyboardEvent &amp;evt) override</div><div class="ttdoc">Key pressed event.</div><div class="ttdef"><b>Definition:</b> App.cpp:137</div></div>
+<div class="ttc" id="agroup__graphic__app_html_ga26cb4a0f0e6b4b5622c5188b6a51c7ce"><div class="ttname"><a href="group__graphic__app.html#ga26cb4a0f0e6b4b5622c5188b6a51c7ce">App::establishConnection</a></div><div class="ttdeci">bool establishConnection()</div><div class="ttdoc">Establish a connection to the server.</div><div class="ttdef"><b>Definition:</b> App.cpp:261</div></div>
+<div class="ttc" id="agroup__graphic__app_html_ga82bd1c8e61e94214b9b178388b4cbf92"><div class="ttname"><a href="group__graphic__app.html#ga82bd1c8e61e94214b9b178388b4cbf92">App::frameRenderingQueued</a></div><div class="ttdeci">bool frameRenderingQueued(const Ogre::FrameEvent &amp;evt) override</div><div class="ttdoc">Frame rendering queued event.</div><div class="ttdef"><b>Definition:</b> App.cpp:96</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gaab167e9ad115fd61bff470c31e5d380c"><div class="ttname"><a href="group__graphic__app.html#gaab167e9ad115fd61bff470c31e5d380c">App::Options</a></div><div class="ttdeci">struct App::Options Options</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gacb8cbf3e285b91d0170ffe87df5989c5"><div class="ttname"><a href="group__graphic__app.html#gacb8cbf3e285b91d0170ffe87df5989c5">App::App</a></div><div class="ttdeci">App()</div><div class="ttdoc">Construct a new App object.</div><div class="ttdef"><b>Definition:</b> App.cpp:16</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gacc12f8ef0d098cc356916396c06f3095"><div class="ttname"><a href="group__graphic__app.html#gacc12f8ef0d098cc356916396c06f3095">App::Options::port</a></div><div class="ttdeci">int port</div><div class="ttdef"><b>Definition:</b> App.hpp:31</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gaf41416c277fed01fe9c96c437afd41dc"><div class="ttname"><a href="group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc">App::setup</a></div><div class="ttdeci">void setup() override</div><div class="ttdoc">Setup the application.</div><div class="ttdef"><b>Definition:</b> App.cpp:50</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gafb19942ef7c8dd2b0ff8155e3522b4f9"><div class="ttname"><a href="group__graphic__app.html#gafb19942ef7c8dd2b0ff8155e3522b4f9">App::frameEnded</a></div><div class="ttdeci">bool frameEnded(const Ogre::FrameEvent &amp;evt) override</div><div class="ttdoc">Frame ended event.</div><div class="ttdef"><b>Definition:</b> App.cpp:102</div></div>
+<div class="ttc" id="agroup__graphic__app_html_gafd98e218ec25273b0e3918a06d4c1680"><div class="ttname"><a href="group__graphic__app.html#gafd98e218ec25273b0e3918a06d4c1680">App::Options::host</a></div><div class="ttdeci">std::string host</div><div class="ttdef"><b>Definition:</b> App.hpp:29</div></div>
+<div class="ttc" id="astructApp_1_1Options_html"><div class="ttname"><a href="structApp_1_1Options.html">App::Options</a></div><div class="ttdef"><b>Definition:</b> App.hpp:27</div></div>
+<div class="ttc" id="astructMap_html"><div class="ttname"><a href="structMap.html">Map</a></div><div class="ttdef"><b>Definition:</b> Map.hpp:35</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

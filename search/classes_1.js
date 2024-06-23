@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['buffer_5fs_768',['buffer_s',['../structbuffer__s.html',1,'']]]
+  ['buffer_5fs_862',['buffer_s',['../structbuffer__s.html',1,'']]]
 ];
