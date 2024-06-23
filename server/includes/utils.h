@@ -49,11 +49,3 @@ __attribute__((format(printf, 2, 0)));
  * @return The quadrant of the angle
  */
 int angle_to_quadrant(double angle);
-
-/**
- * @brief Normalize a quadrant with a direction
- * @param quadrant Quadrant to normalize (by default in a West direction)
- * @param direction Direction to normalize the quadrant to
- * @return The normalized quadrant
- */
-int quandrant_normalize_with_direction(int quadrant, int direction);

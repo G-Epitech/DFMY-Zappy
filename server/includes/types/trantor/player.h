@@ -30,6 +30,7 @@
 #define DIR_LEN 4
 // @brief Generate a random player direction
 #define PLAYER_RANDOM_DIRECTION() ((random() % DIR_LEN) + 1)
+
 // @brief Structure representing a player look info
 typedef struct player_look_info_s {
     // @brief Buffer size
@@ -37,13 +38,6 @@ typedef struct player_look_info_s {
     // @brief Look vector
     vector2l_t vector;
 } player_look_info_t;
-
-typedef struct player_direction_quadrant_s {
-    // @brief Player direction
-    direction_t direction;
-    // @brief Quadrant of the player direction
-    int quadrants[8];
-} player_direction_quadrant_t;
 
 // @brief Structure representing a Trantorian player
 typedef struct player_s {

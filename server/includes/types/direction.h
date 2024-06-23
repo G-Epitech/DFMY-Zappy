@@ -22,6 +22,13 @@ typedef enum direction_e {
     DIR_WEST
 } direction_t;
 
+typedef struct direction_quadrant_s {
+    // @brief Player direction
+    direction_t direction;
+    // @brief Quadrant of the player direction
+    int quadrants[8];
+} direction_quadrant_t;
+
 /**
  * @brief Get the move vector of a direction
  * @param direction Direction to get the move vector
@@ -35,3 +42,11 @@ vector2l_t direction_get_move_vector(direction_t direction);
  * @return Reversed direction
  */
 direction_t direction_reverse(direction_t direction);
+
+/**
+ * @brief Normalize a quadrant with a direction
+ * @param quadrant Quadrant to normalize (by default in a West direction)
+ * @param direction Direction to normalize the quadrant to
+ * @return The normalized quadrant
+ */
+int direction_get_quadrant(direction_t direction, int quadrant);
