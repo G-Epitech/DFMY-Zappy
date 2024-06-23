@@ -23,7 +23,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_turn_left_onfinish
     },
     { "Look", 7, NULL, NULL },
-    { "Inventory", 1, NULL, NULL },
+    { "Inventory", 1,
+        &app_handle_player_request_inventory_onstart,
+        &app_handle_player_request_inventory_onfinish
+    },
     { "Broadcast", 7, NULL, NULL },
     { "Connect_nbr", 0, NULL, NULL },
     { "Fork", 42, NULL, NULL },

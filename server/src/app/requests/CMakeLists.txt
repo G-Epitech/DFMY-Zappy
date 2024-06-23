@@ -12,4 +12,5 @@ target_sources(zappy_server_core PRIVATE
         player/handler.c
         player/forward.c
         player/turn.c
+        player/inventory.c
 )
