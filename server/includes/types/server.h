@@ -5,6 +5,11 @@
 ** server.h
 */
 
+/** @defgroup server_network Server Network Module
+ *  Main server network module
+ *  @{
+ */
+
 #pragma once
 
 #include <netinet/in.h>
@@ -235,3 +240,5 @@ void fd_states_unset(fd_states_t *states, int fd, int flags);
  * @param flags States to clear
  */
 void fd_states_clear(fd_states_t *states, int flags);
+
+/** @} */ // end of server

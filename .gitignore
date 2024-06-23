@@ -21,3 +21,4 @@ zappy_ai
 *.gcov
 build
 cmake-build*
+html

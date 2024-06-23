@@ -5,6 +5,11 @@
 ** World
 */
 
+/** @defgroup server_world Server World Module
+ *  Main server log module
+ *  @{
+ */
+
 #pragma once
 
 #include <stddef.h>

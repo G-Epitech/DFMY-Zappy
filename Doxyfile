@@ -1,0 +1,14 @@
+INPUT = README.md server graphic ai
+RECURSIVE = YES
+GENERATE_LATEX = NO
+PROJECT_NAME = "DFMY-Zappy"
+GENERATE_HTML = YES
+USE_MDFILE_AS_MAINPAGE = "README.md"
+FILE_PATTERNS = *.c *.cc *.cpp *.cxx *.c++ *.h *.hh *.hpp *.hxx *.h++ *.md *.py
+EXTENSION_MAPPING = py=Python
+EXTRACT_ALL = YES
+
+ENABLE_GROUPS = YES
+@defgroup server Server Module
+@defgroup graphic Graphic Module
+@defgroup ai AI Module

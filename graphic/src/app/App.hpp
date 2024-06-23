@@ -5,6 +5,12 @@
 ** App class
 */
 
+/** @defgroup graphic_app Graphic App Module
+ *  Main graphic application module
+ *  @{
+ */
+
+
 #pragma once
 
 #include <Ogre.h>
