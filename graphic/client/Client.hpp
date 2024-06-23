@@ -15,7 +15,7 @@ public:
      * @brief Construct a new Client object.
      * @details During the construction of the Client object, the connection to the server is established.
      */
-    Client(int port, std::string host = "127.0.0.1");
+    Client(int port, const std::string &host = "127.0.0.1");
 
     /**
      * @brief Destroy the Client object.
@@ -29,35 +29,33 @@ public:
      * @param size The size of the data
      * @return The number of bytes written
      */
-    std::size_t write(const std::string &buffer, std::size_t size);
+    [[nodiscard]] std::size_t write(const std::string &buffer, std::size_t size) const;
 
     /**
      * @brief Write data to the server.
      * @param buffer The data to write
      * @return The number of bytes written
      */
-    std::size_t write(const std::string &buffer);
-
-    /**
-     * @brief Read data from the server.
-     * @param buffer The buffer to store the data
-     * @param size The size of the buffer
-     * @return The number of bytes read
-     */
-    std::size_t read(char *buffer, std::size_t size);
+    [[nodiscard]] std::size_t write(const std::string &buffer) const;
 
     /**
      * @brief Check if the server has data to read.
      * @param block If true, the function will block until data is available.
      * @return True if the server has data to read in the pending buffer, false otherwise.
      */
-    bool hasData(bool block = false);
+    [[nodiscard]] bool hasData(bool block = false) const;
 
     /**
      * @brief Get the next command from the pending buffer.
      * @return The command or an empty string if no command is available.
      */
     std::string getCommandFromPendingBuffer();
+
+    /**
+     * @brief Poll the client for new data.
+     * @details Call select to check if the server has data to read or if we can write.
+     */
+    void pollClient();
 
     /**
      * @brief Exception class for the Client class.
@@ -86,6 +84,9 @@ private:
     /// @brief The socket used to communicate with the server.
     int _socket;
     std::string _pendingBuffer;
+    std::size_t _pendingBytes;
+    fd_set _readSet;
+    fd_set _writeSet;
 
     /**
      * @brief Connect to the server.
@@ -100,5 +101,10 @@ private:
     /**
      * @brief Set the socket to non-blocking mode.
      */
-    void _setNonBlocking();
+    void _setNonBlocking() const;
+
+    /**
+     * @brief Read data from the server.
+     */
+    void _readServer();
 };

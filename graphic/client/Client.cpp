@@ -5,31 +5,26 @@
 ** Client
 */
 
+#include <iostream>
 #include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
-#include <iostream>
-#include <stdlib.h>
-#include <stdexcept>
 #include <sys/types.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include "Client.hpp"
 
-Client::Client(int port, std::string host)
+Client::Client(int port, const std::string &host)
+    : _socket(-1), _readSet(), _writeSet()
 {
-    this->_socket = -1;
     this->_connect(host, port);
-
-    this->hasData(true);
-
+    this->pollClient();
     std::string command = this->getCommandFromPendingBuffer();
-
-    if (command != "WELCOME") {
+/*    if (command != "WELCOME") {
+        std::cout << command << std::endl;
         throw Client::Exception("Invalid welcome message");
-    }
-
+    }*/
     this->write("GRAPHIC\n");
 }
 
@@ -54,7 +49,7 @@ void Client::_connect(const std::string& host, int port)
         throw Client::Exception("Socket creation failed");
     }
 
-    struct sockaddr_in serverAddr;
+    struct sockaddr_in serverAddr = {0};
     memset(&serverAddr, 0, sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(port);
@@ -82,7 +77,7 @@ void Client::_disconnect()
     }
 }
 
-void Client::_setNonBlocking()
+void Client::_setNonBlocking() const
 {
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
@@ -98,7 +93,7 @@ void Client::_setNonBlocking()
     }
 }
 
-std::size_t Client::write(const std::string &buffer, std::size_t size)
+std::size_t Client::write(const std::string &buffer, std::size_t size) const
 {
     if (this->_socket == -1) {
         throw Client::Exception("Socket not connected");
@@ -116,63 +111,65 @@ std::size_t Client::write(const std::string &buffer, std::size_t size)
     return bytesWritten;
 }
 
-std::size_t Client::write(const std::string& buffer)
+std::size_t Client::write(const std::string& buffer) const
 {
     return this->write(buffer, buffer.size());
 }
 
-std::size_t Client::read(char *buffer, std::size_t size)
-{
-    if (this->_socket == -1) {
-        throw Client::Exception("Socket not connected");
-    }
+void Client::_readServer() {
+    char buffer[1024] = {0};
+    ssize_t bytesRead = 0;
 
-    ssize_t bytesRead = ::read(this->_socket, buffer, size);
+    bytesRead = ::read(this->_socket, buffer, 1024);
     if (bytesRead < 0) {
-        if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            return 0;
-        } else {
+        if (errno != EAGAIN || errno != EWOULDBLOCK) {
             throw Client::Exception("Error reading from socket");
         }
     } else if (bytesRead == 0) {
         throw Client::Exception("Connection closed");
     }
-
-    return bytesRead;
+    this->_pendingBuffer.append(buffer, bytesRead);
+    _pendingBytes += bytesRead;
 }
 
-bool Client::hasData(bool block)
+bool Client::hasData(bool block) const
 {
-    char buffer[1024] = {0};
-    std::size_t bytesRead = 0;
-
-    bytesRead = this->read(buffer, 1024);
-    if (block) {
-        while (bytesRead == 0) {
-            bytesRead = this->read(buffer, 1024);
-        }
+    if (this->_socket == -1) {
+        throw Client::Exception("Socket not connected");
     }
 
-    if (bytesRead == 0) {
-        return false;
-    }
-
-    this->_pendingBuffer.append(buffer, bytesRead);
-
-    return true;
+    return this->_pendingBytes > 0;
 }
 
 std::string Client::getCommandFromPendingBuffer()
 {
     std::size_t pos = this->_pendingBuffer.find('\n');
+    std::string command;
 
     if (pos == std::string::npos) {
         return "";
     }
-    std::string command;
-
     command = this->_pendingBuffer.substr(0, pos);
     this->_pendingBuffer = this->_pendingBuffer.substr(pos + 1);
-
+    this->_pendingBytes -= pos + 1;
     return command;
+}
+
+void Client::pollClient()
+{
+    timeval timeout = {0, 0};
+    int activity = 0;
+
+    FD_ZERO(&_readSet);
+    FD_SET(_socket, &_readSet);
+    if (this->_socket == -1) {
+        throw Client::Exception("Socket not connected");
+    }
+    activity = select(this->_socket + 1, &_readSet, nullptr, nullptr, &timeout);
+    if (activity < 0) {
+        throw Client::Exception("Error polling client socket");
+    }
+    if (FD_ISSET(this->_socket, &_readSet)) {
+        _readServer();
+    }
 }

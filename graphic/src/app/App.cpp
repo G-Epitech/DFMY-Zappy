@@ -65,19 +65,8 @@ void App::setup() {
 
     getRenderWindow()->addViewport(cam);
 
-    // for (int i = -5; i <= 5; i++) {
-    //     for (int j = -5; j <= 5; j++) {
-    //         Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
-    //         SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
-    //         node->attachObject(cubeEntity);
-
-    //         AxisAlignedBox aab = cubeEntity->getBoundingBox();
-    //         Vector3 size = aab.getSize();
-    //         node->setPosition(i * size.x, 0, j * size.z);
-    //     }
-    // }
-
-    MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial", ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial",
+        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
     material->setDiffuse(1, 1, 1, 0.5);
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
@@ -98,6 +87,7 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
 
+    _client.pollClient();
     if (_client.hasData()) {
         std::string command = _client.getCommandFromPendingBuffer();
 
@@ -117,7 +107,6 @@ void App::_loadResources() {
 
     ConfigFile cf;
     cf.load("resources.cfg");
-
     ConfigFile::SectionIterator section = cf.getSectionIterator();
     String typeName, archName;
 
