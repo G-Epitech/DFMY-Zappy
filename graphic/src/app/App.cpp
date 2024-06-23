@@ -80,7 +80,6 @@ void App::setup() {
     trayMgr->showFrameStats(TL_BOTTOMLEFT);
     trayMgr->showLogo(TL_BOTTOMRIGHT);
     trayMgr->hideCursor();
-    _client.write("mct\n");
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
