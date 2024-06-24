@@ -60,10 +60,11 @@ void App::setup() {
     _setupCamera();
     _setupMaterials();
 
+    scnMgr->addRenderQueueListener(getOverlaySystem());
+
     trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
     addInputListener(trayMgr);
     trayMgr->showFrameStats(TL_BOTTOMLEFT);
-    trayMgr->showLogo(TL_BOTTOMRIGHT);
     trayMgr->hideCursor();
 }
 
@@ -94,6 +95,7 @@ void App::_setupMaterials() {
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
+    trayMgr->frameRendered(evt);
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
     return true;
