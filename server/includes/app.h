@@ -160,6 +160,13 @@ void app_handle_world_routine_resources_generation(world_t *world);
 bool app_handle_world_routine_team_victory(world_t *world, server_t *server);
 
 /**
+ * @brief Handle world routine map updates
+ * @param world World to handle the routine map updates
+ * @param server Server to handle the routine map updates
+ */
+void app_handle_world_routine_map_updates(world_t *world, server_t *server);
+
+/**
  * @brief Handle controllers requests
  * @param app App instance
  */
