@@ -9,17 +9,19 @@
 #include "types/trantor/egg.h"
 
 static void notify_and_move_players(app_t *app, map_cell_t *cell,
-    direction_t direction, vector2u_t *destination)
+    player_t *ejector, vector2u_t *destination)
 {
     node_t *node = cell->players->first;
     player_t *player = NULL;
-    direction_t incoming_direction = direction_reverse(direction);
+    direction_t incoming_direction = direction_reverse(ejector->direction);
 
     while (node) {
         player = NODE_TO_PTR(node, player_t *);
-        controller_add_emission((controller_t *) player->controller,
-            "eject %d\n", incoming_direction);
-        map_move_player_node(app->world->map, node, destination);
+        if (player != ejector) {
+            controller_add_emission((controller_t *) player->controller,
+                "eject %d\n", incoming_direction);
+            map_move_player_node(app->world->map, node, destination);
+        }
         node = node->next;
     }
 }
@@ -85,8 +87,7 @@ void app_handle_player_request_eject_onfinish(app_t *app,
     map_cell_t *cell = MAP_PLAYER_CELL(app->world->map, player);
 
     map_forward_position(app->world->map, &destination, player->direction);
-    map_move_player(app->world->map, player, &destination);
-    notify_and_move_players(app, cell, player->direction, &destination);
+    notify_and_move_players(app, cell, player, &destination);
     notify_graphics_ejection(app->server, player);
     kill_eggs_and_notify_graphics(app, &destination);
     controller_add_emission((controller_t *) controller, "ok\n");

@@ -18,6 +18,11 @@ static void emit_message_to_player(world_t *world, player_t *emitter,
     int normalized_quadrant = direction_get_quadrant(player->direction,
         quadrant);
 
+    if (emitter->position.x == player->position.x &&
+        emitter->position.y == player->position.y
+    ) {
+        normalized_quadrant = 0;
+    }
     controller_add_emission(controller, "message %d, ", normalized_quadrant);
     controller_add_emission_raw(controller, token->content, token->size);
     controller_add_emission_raw(controller, "\n", 1);
@@ -49,7 +54,7 @@ static void notify_graphics(server_t *server, player_t *player,
 
 bool app_handle_player_request_broadcast_onstart(
     __attribute_maybe_unused__ app_t *app,
-    player_controller_t *controller,
+    __attribute_maybe_unused__ player_controller_t *controller,
     request_t *request)
 {
     request_token_t token = { 0 };
@@ -73,4 +78,5 @@ void app_handle_player_request_broadcast_onfinish(app_t *app,
     }
     emit_message_to_players(app->world, controller->player, &token);
     notify_graphics(app->server, controller->player, &token);
+    controller_add_emission((controller_t *) controller, "ok\n");
 }

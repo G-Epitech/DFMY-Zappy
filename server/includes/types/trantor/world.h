@@ -111,10 +111,10 @@ egg_t *world_kill_player(world_t *world, player_t *player, bool zombie);
  * @brief Create an egg in the world for a team
  * @param world World to create the egg in
  * @param team Team of the egg
- * @param laid_by Player who laid the egg
+ * @param player Player who laid the egg
  * @return Created egg or NULL if failed
  */
-egg_t *world_add_egg(world_t *world, team_t *team, long laid_by);
+egg_t *world_add_egg(world_t *world, team_t *team, player_t *player);
 
 /**
  * @brief Ensure a team has a minimum number of slots

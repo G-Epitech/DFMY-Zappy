@@ -31,18 +31,15 @@ bool map_add_player(map_t *map, player_t *player)
     );
 }
 
-bool map_add_egg(map_t *map, egg_t *egg)
+bool map_add_egg(map_t *map, egg_t *egg, vector2u_t *position)
 {
-    vector2u_t position;
-
     if (!map || !egg)
         return false;
-    vector2u_random(&position, &map->size);
-    if (!list_push(map->cells[position.y][position.x].eggs,
+    if (!list_push(map->cells[position->y][position->x].eggs,
         NODE_DATA_FROM_PTR(egg)
     )) {
         return false;
     }
-    egg->position = position;
+    egg->position = *position;
     return true;
 }

@@ -117,9 +117,10 @@ void map_remove_player(map_t *map, player_t *player);
  * @brief Add an egg to the current to a random map cell
  * @param map Map to add the egg to
  * @param egg Egg to add
+ * @param position Position of the egg
  * @return true if the egg was added, false otherwise
  */
-bool map_add_egg(map_t *map, egg_t *egg);
+bool map_add_egg(map_t *map, egg_t *egg, vector2u_t *position);
 
 /**
  * @brief Remove an egg from the current map cell

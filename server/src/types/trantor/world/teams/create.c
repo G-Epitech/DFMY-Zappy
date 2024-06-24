@@ -10,7 +10,7 @@
 static bool create_eggs(world_t *world, team_t *team)
 {
     for (size_t i = 0; i < team->min_slots; i++) {
-        if (!world_add_egg(world, team, -1))
+        if (!world_add_egg(world, team, NULL))
             return false;
     }
     return true;
