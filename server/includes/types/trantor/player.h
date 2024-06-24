@@ -33,8 +33,7 @@
 
 // @brief Structure representing a player look info
 typedef struct player_look_info_s {
-    // @brief Buffer size
-    size_t buf_size;
+    //
     // @brief Look vector
     vector2l_t vector;
 } player_look_info_t;
@@ -138,16 +137,13 @@ char *player_look(player_t *player, map_t *map);
 /**
  * @brief Get the player's look vector
  * @param player Player to get the look vector from
- * @param info Look info to get the look vector from
+ * @param look Vector to fill with the look
  */
-void player_get_look_vector(player_t *player, player_look_info_t *info);
+void player_get_look_vector(player_t *player, vector2l_t *look);
 
 /**
  * @brief Get the player's look on vertical or horizontal axis
  * @param player Player to get the look from
- * @param map Map to get the look from
- * @param info Look info to get the look fro
- * @param cell_stats Cell stats to get the look from
+ * @return Axis of the player's look
  */
-void player_get_look_axis(player_t *player, map_t *map,
-    player_look_info_t *info, map_cell_stats_t *cell_stats);
+axis_t player_get_look_axis(player_t *player);

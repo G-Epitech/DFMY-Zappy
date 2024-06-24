@@ -10,7 +10,15 @@
 // @brief Forward declaration of vector2l_t
 typedef struct vector2l_s vector2l_t;
 
-// @brief Structure representing a Trantorian direction
+// @brief Enumeration of axis
+typedef enum axis_e {
+    // @brief Vertical axis
+    AXIS_V = 0,
+    // @brief Horizontal axis
+    AXIS_H
+} axis_t;
+
+// @brief Enumeration of directions
 typedef enum direction_e {
     // @brief North direction
     DIR_NORTH = 1,

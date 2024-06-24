@@ -2,6 +2,23 @@ target_sources(zappy_server_core PRIVATE
         unknown/handler.c
         unknown/promote_graphic.c
         unknown/promote_player.c
-        player/handler.c
         graphic/handler.c
+        graphic/map_size.c
+        graphic/map_content.c
+        graphic/player.c
+        graphic/teams.c
+        graphic/get_time.c
+        graphic/set_time.c
+        player/handler.c
+        player/forward.c
+        player/turn.c
+        player/inventory.c
+        player/connect_nbr.c
+        player/fork.c
+        player/take.c
+        player/set.c
+        player/incantation.c
+        player/look.c
+        player/broadcast.c
+        player/eject.c
 )

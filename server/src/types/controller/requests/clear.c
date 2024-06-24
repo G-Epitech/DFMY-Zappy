@@ -19,3 +19,13 @@ void controller_clear_first_request(controller_t *controller)
     if (request)
         list_erase(requests, request, &request_free_as_node_data);
 }
+
+void controller_clear_requests(controller_t *controller)
+{
+    list_t *requests = NULL;
+
+    if (!controller)
+        return;
+    requests = controller->generic.requests;
+    list_clear(requests, &request_free_as_node_data);
+}

@@ -47,16 +47,25 @@ static void app_handle_player_death(world_t *world, server_t *server,
     } else {
         server_disconnect_controller(server, controller);
     }
+    controller->player.type = CTRL_UNKNOWN;
+    controller_clear_requests(controller);
     new_slot = world_kill_player(world, player, !CTRL_CAN_EMIT(controller));
     notify_new_slot(server, new_slot);
 }
 
-static void app_handle_world_lifecycle_player_lives(world_t *world,
-    server_t *server, player_t *player)
+static void app_handle_world_lifecycle_player_lives_and_cooldown(
+    world_t *world, server_t *server, player_t *player)
 {
     time_unit_t elapsed = chrono_get_elapsed_units(&world->chrono);
     time_unit_t new_lives = player->lives - elapsed;
 
+    if (player->controller) {
+        player->controller->cooldown -= elapsed;
+        if (player->controller->cooldown <= 0)
+            player->controller->cooldown = 0;
+        else
+            world_register_event(world, player->controller->cooldown);
+    }
     player_update_lives(player, new_lives);
     if (player->lives <= 0 || player->controller->state == CTRL_DISCONNECTED) {
         app_handle_player_death(world, server, player);
@@ -65,7 +74,7 @@ static void app_handle_world_lifecycle_player_lives(world_t *world,
     }
 }
 
-void app_handle_world_lifecycle_players_lives(world_t *world,
+void app_handle_world_lifecycle_players_lives_and_cooldown(world_t *world,
     server_t *server)
 {
     node_t *node = world->players->first;
@@ -75,7 +84,9 @@ void app_handle_world_lifecycle_players_lives(world_t *world,
     while (node) {
         next = node->next;
         player = NODE_TO_PTR(node, player_t *);
-        app_handle_world_lifecycle_player_lives(world, server, player);
+        app_handle_world_lifecycle_player_lives_and_cooldown(
+            world, server, player
+        );
         node = next;
     }
 }
@@ -107,5 +118,5 @@ void app_handle_world_lifecycle_dead_players(world_t *world,
 void app_handle_world_lifecycle_players(world_t *world, server_t *server)
 {
     app_handle_world_lifecycle_dead_players(world, server);
-    app_handle_world_lifecycle_players_lives(world, server);
+    app_handle_world_lifecycle_players_lives_and_cooldown(world, server);
 }

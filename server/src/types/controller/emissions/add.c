@@ -25,6 +25,24 @@ static ssize_t controller_try_add_emission(controller_t *controller,
     return written;
 }
 
+static bool controller_try_add_emission_raw(controller_t *controller,
+    const char *content, size_t size)
+{
+    size_t written = buffer_write(controller->generic.emissions,
+        content, size);
+    size_t remaining = size - written;
+
+    if (written == size)
+        return true;
+    log_warn("Failed to add full emission to controller %d. "
+        "Trying to flush buffer", controller->generic.socket);
+    if (controller_try_emit(controller)) {
+        written += buffer_write(controller->generic.emissions,
+            &content[written], remaining);
+    }
+    return written == size;
+}
+
 static bool controller_add_emission_from_va_args(controller_t *controller,
     char *format, va_list args)
 {
@@ -54,6 +72,14 @@ bool controller_add_emission(controller_t *controller, char *format, ...)
     return success;
 }
 
+bool controller_add_emission_raw(controller_t *controller, const char *content,
+    size_t size)
+{
+    if (!controller || !CTRL_CAN_EMIT(controller))
+        return false;
+    return controller_try_add_emission_raw(controller, content, size);
+}
+
 bool controllers_add_emission(list_t *controllers, controller_type_t types,
     char *format, ...)
 {
@@ -74,5 +100,22 @@ bool controllers_add_emission(list_t *controllers, controller_type_t types,
         va_end(copy);
     }
     va_end(args);
+    return true;
+}
+
+bool controllers_add_emission_raw(list_t *controllers,
+    controller_type_t types, const char *content, size_t size)
+{
+    controller_t *controller = NULL;
+    node_t *node = controllers ? controllers->first : NULL;
+
+    if (!controllers)
+        return false;
+    while (node) {
+        controller = NODE_TO_PTR(node, controller_t *);
+        if (controller->generic.type & types)
+            controller_add_emission_raw(controller, content, size);
+        node = node->next;
+    }
     return true;
 }
