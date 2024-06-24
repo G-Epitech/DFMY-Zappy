@@ -18,4 +18,5 @@ target_sources(zappy_server_core PRIVATE
         player/take.c
         player/set.c
         player/incantation.c
+        player/look.c
 )

@@ -22,7 +22,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_turn_left_onstart,
         &app_handle_player_request_turn_left_onfinish
     },
-    { "Look", 7, NULL, NULL },
+    { "Look", 7,
+        &app_handle_player_request_look_onstart,
+        &app_handle_player_request_look_onfinish
+    },
     { "Inventory", 1,
         &app_handle_player_request_inventory_onstart,
         &app_handle_player_request_inventory_onfinish

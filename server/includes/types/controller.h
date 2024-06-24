@@ -161,6 +161,16 @@ bool controller_add_emission(controller_t *controller,
     char *format, ...) __attribute__((format(printf, 2, 3)));
 
 /**
+ * @brief Add an emission to the controller from a raw content
+ * @param controller Controller to add the emission to
+ * @param content Content to add
+ * @param size Size of the content
+ * @return true if the emission was totally added, false otherwise
+ */
+bool controller_add_emission_raw(controller_t *controller,
+    const char *content, size_t size);
+
+/**
  * @brief Add an emission to types controllers matching types in a list
  * @param controllers List of controllers
  * @param types Types of controllers to add emission to
@@ -171,6 +181,17 @@ bool controller_add_emission(controller_t *controller,
 bool controllers_add_emission(list_t *controllers,
     controller_type_t types, char *format, ...)
 __attribute__((format(printf, 3, 4)));
+
+/**
+ * @brief Add an emission to types controllers matching types in a list
+ * @param controllers Controllers list
+ * @param types Types of controllers to add emission to
+ * @param content Content to add
+ * @param size Size of the content
+ * @return true if the emission was added, false otherwise
+ */
+bool controllers_add_emission_raw(list_t *controllers,
+    controller_type_t types, const char *content, size_t size);
 
 /**
  * @brief Get next pending request of a controller

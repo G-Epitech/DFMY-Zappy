@@ -33,8 +33,8 @@ bool app_handle_player_request_take_onstart(
 {
     request_token_t token = { 0 };
 
-    if (!request_get_token(request, 2, &token)) {
-        log_warn("Not enough arguments for 'Take' command");
+    if (request_get_token(request, 2, &token)) {
+        log_warn("Too many arguments for 'Take' command");
         return false;
     }
     if (!request_get_token(request, 1, &token)) {
