@@ -482,4 +482,23 @@ void app_handle_player_request_broadcast_onfinish(app_t *app,
 bool app_handle_player_request_broadcast_onstart(app_t *app,
     player_controller_t *controller, request_t *request);
 
+/**
+ * @brief Handle player request for eject at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_eject_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for eject
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_eject_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
 /** @} */ // end of server

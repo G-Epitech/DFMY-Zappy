@@ -42,7 +42,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_fork_onstart,
         &app_handle_player_request_fork_onfinish
     },
-    { "Eject", 7, NULL, NULL },
+    { "Eject", 7,
+        &app_handle_player_request_eject_onstart,
+        &app_handle_player_request_eject_onfinish
+    },
     { "Take", 7,
         &app_handle_player_request_take_onstart,
         &app_handle_player_request_take_onfinish
