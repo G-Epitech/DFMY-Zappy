@@ -15,6 +15,7 @@ void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     if (!map || map->cells[pos.y][pos.x].resources[resource] == 0)
         return;
     map->cells[pos.y][pos.x].resources[resource] -= quantity;
+    map_mark_cell_as_changed(map, MAP_CELL_AT_POS(map, pos));
 }
 
 void map_remove_player(map_t *map, player_t *player)

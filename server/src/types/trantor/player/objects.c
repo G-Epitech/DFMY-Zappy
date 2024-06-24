@@ -18,7 +18,7 @@ bool player_take_object(player_t *player, map_t *map, resource_t resource)
     cell = &map->cells[player->position.y][player->position.x];
     if (cell->resources[resource] > 0) {
         player_set_inventory_resource(player, resource, 1);
-        cell->resources[resource] -= 1;
+        map_remove_resource(map, player->position, resource, 1);
         return true;
     }
     return false;
@@ -26,13 +26,10 @@ bool player_take_object(player_t *player, map_t *map, resource_t resource)
 
 bool player_set_object(player_t *player, map_t *map, resource_t resource)
 {
-    map_cell_t *cell = NULL;
-
     if (!map || !player)
         return false;
-    cell = &map->cells[player->position.y][player->position.x];
     if (player_set_inventory_resource(player, resource, -1)) {
-        cell->resources[resource] += 1;
+        map_add_resource(map, player->position, resource, 1);
         return true;
     }
     return false;
