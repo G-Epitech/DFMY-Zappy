@@ -98,10 +98,21 @@ void App::_setupUI() {
     trayMgr->hideCursor();
 
     _setupButtons();
+    _setupDropdowns();
 }
 
 void App::_setupButtons() {
     _pauseButton = trayMgr->createButton(TL_BOTTOM, "Pause", "Pause", 200);
+}
+
+void App::_setupDropdowns() {
+    _teamsDropdown = trayMgr->createThickSelectMenu(TL_BOTTOMLEFT, "Teams", "Teams", 200, 200);
+    _teamsDropdown->addItem("All teams");
+    _teamsDropdown->selectItem(0);
+
+    // TODO: Add teams from the server
+    _teamsDropdown->addItem("team1");
+    _teamsDropdown->addItem("team2");
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
@@ -162,6 +173,25 @@ void App::buttonHit(OgreBites::Button* b)
         } else {
             _pauseButton->setCaption("Resume");
             _client.write("sst 0\n");
+        }
+    }
+}
+
+void App::itemSelected(OgreBites::SelectMenu *menu) {
+    if (menu->getName() == "Teams") {
+        auto selectedTeam = menu->getSelectedItem();
+        if (selectedTeam == "All teams") {
+            for (auto &player : _map.players) {
+                player.node->setVisible(true);
+            }
+        } else {
+            for (auto &player : _map.players) {
+                if (player.team == selectedTeam) {
+                    player.node->setVisible(true);
+                } else {
+                    player.node->setVisible(false);
+                }
+            }
         }
     }
 }

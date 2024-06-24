@@ -76,6 +76,12 @@ public:
      */
     void buttonHit(OgreBites::Button *b) override;
 
+    /**
+     * @brief Select menu selection changed event
+     * @param menu Select menu that was changed
+     */
+    void itemSelected(OgreBites::SelectMenu *menu) override;
+
 private:
     /// @brief Client object used to communicate with the server
     Client _client;
@@ -98,6 +104,9 @@ private:
     /// @brief Button used to pause the game
     OgreBites::Button* _pauseButton;
 
+    /// @brief Dropdown used to select the team
+    OgreBites::SelectMenu* _teamsDropdown;
+
     /**
      * @brief Load resources of the application
      */
@@ -114,14 +123,19 @@ private:
     void _setupMaterials();
 
     /**
+     * @brief Setup the UI of the application
+     */
+    void _setupUI();
+
+    /**
      * @brief Setup the buttons of the application
      */
     void _setupButtons();
 
     /**
-     * @brief Setup the UI of the application
+     * @brief Setup the dropdowns of the application
      */
-    void _setupUI();
+    void _setupDropdowns();
 
     /**
      * @brief Update the map
