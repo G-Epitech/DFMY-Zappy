@@ -6,7 +6,10 @@
 */
 
 #pragma once
+
 #include <list>
+#include <string>
+#include <algorithm>
 
 class Teams {
     public:

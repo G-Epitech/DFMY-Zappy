@@ -10,9 +10,9 @@
 #include "utils/String.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
+std::vector<std::string> playerModels = {"Barbar.mesh", "Queen.mesh"};
 
-void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity)
-{
+void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity) {
     Ogre::SceneNode *node = tile.node;
     if (!node || node->numAttachedObjects() == 0)
         return;
@@ -20,8 +20,7 @@ void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std
     Ogre::Vector3 pos = node->getPosition();
     Ogre::Vector3 size = node->getAttachedObject(0)->getBoundingBox().getSize();
 
-    for (int i = 0; i < quantity; i++)
-    {
+    for (int i = 0; i < quantity; i++) {
         Ogre::Entity *cubeEntity = scnMgr->createEntity(itemName + ".mesh");
         Ogre::SceneNode *itemNode = scnMgr->getRootSceneNode()->createChildSceneNode();
         auto itemSize = cubeEntity->getBoundingBox().getSize();
@@ -37,10 +36,8 @@ void Commands::_addItemsToTile(Tile &tile, Ogre::SceneManager *scnMgr, const std
     }
 }
 
-void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity)
-{
-    for (int i = 0; i < quantity; i++)
-    {
+void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, const std::string &itemName, int quantity) {
+    for (int i = 0; i < quantity; i++) {
         if (tile.items[itemName].empty())
             return;
         Ogre::SceneNode *node = tile.items[itemName].back();
@@ -49,9 +46,12 @@ void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, cons
     }
 }
 
-Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile)
-{
-    Ogre::Entity *cubeEntity = scnMgr->createEntity("Barbar.mesh");
+Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile, const std::string& teamName, Teams &teams) {
+    std::size_t teamIndex = teams.teamIndex(teamName);
+
+    if (teamIndex >= playerModels.size())
+        teamIndex = 0;
+    Ogre::Entity *cubeEntity = scnMgr->createEntity(playerModels[teamIndex]);
     Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
     node->attachObject(cubeEntity);
 
@@ -68,8 +68,7 @@ Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &t
     return node;
 }
 
-Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position)
-{
+Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position) {
     Circle circle;
     circle.circle = scnMgr->createManualObject();
     circle.node = scnMgr->getRootSceneNode()->createChildSceneNode();
@@ -78,8 +77,7 @@ Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::
     circle.radius = 0;
 
     circle.circle->begin("BaseWhiteNoLighting", Ogre::RenderOperation::OT_LINE_STRIP);
-    for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
-    {
+    for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i) {
         float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
         circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
     }
@@ -88,8 +86,7 @@ Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::
     return circle;
 }
 
-Sphere Commands::_createIncantationSphere(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position)
-{
+Sphere Commands::_createIncantationSphere(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position) {
     Sphere sphere;
     sphere.sphere = scnMgr->createManualObject();
     sphere.node = scnMgr->getRootSceneNode()->createChildSceneNode();
@@ -99,8 +96,7 @@ Sphere Commands::_createIncantationSphere(Ogre::SceneManager *scnMgr, const Ogre
     return sphere;
 }
 
-void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 2)
@@ -109,12 +105,10 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
     map.height = std::stoi(args[1]);
     int posx = map.width / 2;
     int posy = map.height / 2;
-    for (int i = 0; i < map.width; i++)
-    {
+    for (int i = 0; i < map.width; i++) {
         std::vector<Tile> row;
         posy = map.height / 2;
-        for (int j = 0; j < map.height; j++)
-        {
+        for (int j = 0; j < map.height; j++) {
             Ogre::Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
             Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
             node->attachObject(cubeEntity);
@@ -125,8 +119,7 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
 
             Tile tile;
 
-            for (int i = 0; i < stonesNames.size(); i++)
-            {
+            for (int i = 0; i < stonesNames.size(); i++) {
                 tile.items[stonesNames[i]] = {};
             }
             tile.node = node;
@@ -138,8 +131,7 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
     }
 }
 
-void Commands::tileContent(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::tileContent(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 9)
@@ -150,8 +142,7 @@ void Commands::tileContent(std::string &command, Map &map, Ogre::SceneManager *s
         return;
     int food = std::stoi(args[2]) - map.tiles[x][y].items["food"].size();
     std::vector<int> stones;
-    for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++)
-    {
+    for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++) {
         stones.push_back(std::stoi(args[3 + i]) - map.tiles[x][y].items[stonesNames[i]].size());
     }
 
@@ -159,8 +150,7 @@ void Commands::tileContent(std::string &command, Map &map, Ogre::SceneManager *s
         _addItemsToTile(map.tiles[x][y], scnMgr, "food", food);
     else if (food < 0)
         _removeItemsFromTile(map.tiles[x][y], scnMgr, "food", -food);
-    for (int i = 0; i < stonesNames.size(); i++)
-    {
+    for (int i = 0; i < stonesNames.size(); i++) {
         if (stones[i] > 0)
             _addItemsToTile(map.tiles[x][y], scnMgr, stonesNames[i], stones[i]);
         else if (stones[i] < 0)
@@ -168,17 +158,18 @@ void Commands::tileContent(std::string &command, Map &map, Ogre::SceneManager *s
     }
 }
 
-void Commands::teamsNames(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::teamsNames(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
         return;
-    map.teams.push_back(args[0]);
+
+    for (const auto &arg: args) {
+        map.teams.addTeam(arg);
+    }
 }
 
-void Commands::playerConnect(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerConnect(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 6)
@@ -193,17 +184,15 @@ void Commands::playerConnect(std::string &command, Map &map, Ogre::SceneManager 
     if (x < 0 || x >= map.width || y < 0 || y >= map.height)
         return;
 
-    for (const auto &player : map.players)
-    {
-        if (player.id == id)
-        {
+    for (const auto &player: map.players) {
+        if (player.id == id) {
             return;
         }
     }
 
     Player player;
     player.id = id;
-    player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], team, map.teams);
     player.orientation = orientation;
     player.level = level;
     player.team = team;
@@ -211,8 +200,7 @@ void Commands::playerConnect(std::string &command, Map &map, Ogre::SceneManager 
     map.players.push_back(player);
 }
 
-void Commands::playerPosition(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerPosition(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 4)
@@ -224,23 +212,22 @@ void Commands::playerPosition(std::string &command, Map &map, Ogre::SceneManager
     if (x < 0 || x >= map.width || y < 0 || y >= map.height)
         return;
 
-    for (auto &player : map.players)
-    {
-        if (player.id == id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == id) {
             player.position.x = x;
             player.position.y = y;
             player.orientation = orientation;
             if (!player.node)
-                player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
-            player.node->setPosition(map.tiles[x][y].node->getPosition().x, player.node->getPosition().y, map.tiles[x][y].node->getPosition().z);
+                player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player.team, map.teams);
+            player.node->setPosition(map.tiles[x][y].node->getPosition().x, player.node->getPosition().y,
+                                     map.tiles[x][y].node->getPosition().z);
             return;
         }
     }
 
     Player player;
     player.id = id;
-    player.node = _createPlayerItem(scnMgr, map.tiles[x][y]);
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player.team, map.teams);
     player.position.x = x;
     player.position.y = y;
     player.orientation = orientation;
@@ -251,8 +238,7 @@ void Commands::playerPosition(std::string &command, Map &map, Ogre::SceneManager
     client.write("plv " + std::to_string(id) + "\n");
 }
 
-void Commands::playerLevel(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerLevel(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 2)
@@ -260,10 +246,8 @@ void Commands::playerLevel(std::string &command, Map &map, Ogre::SceneManager *s
     int id = std::stoi(args[0]);
     int level = std::stoi(args[1]);
 
-    for (auto &player : map.players)
-    {
-        if (player.id == id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == id) {
             player.level = level;
             return;
         }
@@ -278,8 +262,7 @@ void Commands::playerLevel(std::string &command, Map &map, Ogre::SceneManager *s
     client.write("ppo " + std::to_string(id) + "\n");
 }
 
-void Commands::playerInventory(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerInventory(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 10)
@@ -300,10 +283,8 @@ void Commands::playerInventory(std::string &command, Map &map, Ogre::SceneManage
     inventory.phiras = std::stoi(args[8]);
     inventory.thystame = std::stoi(args[9]);
 
-    for (auto &player : map.players)
-    {
-        if (player.id == id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == id) {
             player.inventory = inventory;
             return;
         }
@@ -318,8 +299,7 @@ void Commands::playerInventory(std::string &command, Map &map, Ogre::SceneManage
     client.write("plv " + std::to_string(id) + "\n");
 }
 
-void Commands::playerEject(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerEject(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -330,8 +310,7 @@ void Commands::playerEject(std::string &command, Map &map, Ogre::SceneManager *s
     std::cout << "Player " << id << " have been ejected or eject others?" << std::endl;
 }
 
-void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() < 2)
@@ -339,10 +318,8 @@ void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scn
     int id = std::stoi(args[0]);
     std::string message = args[1];
 
-    for (auto &player : map.players)
-    {
-        if (player.id == id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == id) {
             Circle circle = _createBroadcastCircle(scnMgr, player.node->getPosition());
             map.broadcastCircles.push_back(circle);
             return;
@@ -350,8 +327,7 @@ void Commands::broadcast(std::string &command, Map &map, Ogre::SceneManager *scn
     }
 }
 
-void Commands::incantationStart(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::incantationStart(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() < 3)
@@ -365,8 +341,7 @@ void Commands::incantationStart(std::string &command, Map &map, Ogre::SceneManag
     map.incantationSpheres.push_back(sphere);
 }
 
-void Commands::incantationEnd(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::incantationEnd(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() < 3)
@@ -376,19 +351,18 @@ void Commands::incantationEnd(std::string &command, Map &map, Ogre::SceneManager
     int level = std::stoi(args[2]);
 
     // TODO: Implement incantation animation
-    for (auto &sphere : map.incantationSpheres)
-    {
-        if (sphere.node->getPosition() == map.tiles[x][y].node->getPosition())
-        {
+    for (auto &sphere: map.incantationSpheres) {
+        if (sphere.node->getPosition() == map.tiles[x][y].node->getPosition()) {
             scnMgr->destroySceneNode(sphere.node);
-            map.incantationSpheres.erase(std::remove(map.incantationSpheres.begin(), map.incantationSpheres.end(), sphere), map.incantationSpheres.end());
+            map.incantationSpheres.erase(
+                    std::remove(map.incantationSpheres.begin(), map.incantationSpheres.end(), sphere),
+                    map.incantationSpheres.end());
             return;
         }
     }
 }
 
-void Commands::playerLayingEgg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerLayingEgg(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -398,8 +372,7 @@ void Commands::playerLayingEgg(std::string &command, Map &map, Ogre::SceneManage
     // TODO: Implement egg laying animation
 }
 
-void Commands::playerResourceDrop(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerResourceDrop(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 3)
@@ -408,10 +381,8 @@ void Commands::playerResourceDrop(std::string &command, Map &map, Ogre::SceneMan
     std::string resource = args[1];
     int quantity = std::stoi(args[2]);
 
-    for (auto &player : map.players)
-    {
-        if (player.id == player_id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == player_id) {
             _addItemsToTile(map.tiles[player.position.x][player.position.y], scnMgr, resource, quantity);
             return;
         }
@@ -426,8 +397,7 @@ void Commands::playerResourceDrop(std::string &command, Map &map, Ogre::SceneMan
     client.write("plv " + std::to_string(player_id) + "\n");
 }
 
-void Commands::playerResourceTake(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerResourceTake(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 3)
@@ -436,10 +406,8 @@ void Commands::playerResourceTake(std::string &command, Map &map, Ogre::SceneMan
     std::string resource = args[1];
     int quantity = std::stoi(args[2]);
 
-    for (auto &player : map.players)
-    {
-        if (player.id == player_id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == player_id) {
             _removeItemsFromTile(map.tiles[player.position.x][player.position.y], scnMgr, resource, quantity);
             return;
         }
@@ -454,18 +422,15 @@ void Commands::playerResourceTake(std::string &command, Map &map, Ogre::SceneMan
     client.write("plv " + std::to_string(player_id) + "\n");
 }
 
-void Commands::playerDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
         return;
     int player_id = std::stoi(args[0]);
 
-    for (auto &player : map.players)
-    {
-        if (player.id == player_id)
-        {
+    for (auto &player: map.players) {
+        if (player.id == player_id) {
             if (player.node)
                 scnMgr->destroySceneNode(player.node);
             map.players.erase(std::remove(map.players.begin(), map.players.end(), player), map.players.end());
@@ -474,8 +439,7 @@ void Commands::playerDeath(std::string &command, Map &map, Ogre::SceneManager *s
     }
 }
 
-void Commands::playerEggLaid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::playerEggLaid(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 4)
@@ -488,8 +452,7 @@ void Commands::playerEggLaid(std::string &command, Map &map, Ogre::SceneManager 
     // TODO: Implement egg laying animation
 }
 
-void Commands::eggDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::eggDeath(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -499,8 +462,7 @@ void Commands::eggDeath(std::string &command, Map &map, Ogre::SceneManager *scnM
     // TODO: Implement egg death animation
 }
 
-void Commands::eggHatching(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::eggHatching(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -510,8 +472,7 @@ void Commands::eggHatching(std::string &command, Map &map, Ogre::SceneManager *s
     // TODO: Implement egg hatching animation
 }
 
-void Commands::timeUnitRequest(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::timeUnitRequest(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -521,8 +482,7 @@ void Commands::timeUnitRequest(std::string &command, Map &map, Ogre::SceneManage
     // TODO: Implement time unit request
 }
 
-void Commands::timeUnitModification(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::timeUnitModification(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -532,8 +492,7 @@ void Commands::timeUnitModification(std::string &command, Map &map, Ogre::SceneM
     // TODO: Implement time unit modification
 }
 
-void Commands::endGame(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::endGame(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
     if (args.size() != 1)
@@ -543,12 +502,10 @@ void Commands::endGame(std::string &command, Map &map, Ogre::SceneManager *scnMg
     std::cout << "Game ended, team " << winner << " won!" << std::endl;
 }
 
-void Commands::unknownCommand(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::unknownCommand(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::cout << "Unknown command: " << command << std::endl;
 }
 
-void Commands::commandParameters(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client)
-{
+void Commands::commandParameters(std::string &command, Map &map, Ogre::SceneManager *scnMgr, Client &client) {
     std::cout << "Command parameters: " << command << std::endl;
 }
