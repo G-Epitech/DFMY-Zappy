@@ -123,3 +123,56 @@ Test(request_tests, append_request_overflow_limit, .init = cr_redirect_stderr)
     cr_assert_eq(request->status, REQ_INVALID);
     request_free(request);
 }
+
+
+Test(request_tests, get_first_token)
+{
+    request_t *request = request_new();
+    request_token_t token = { 0 };
+    char data[] = "Hello World";
+
+    cr_assert(request_append(request, data, sizeof(data) - 1));
+    cr_assert(request_get_token(request, 0, &token));
+    cr_assert(memcmp(token.content, "Hello", 5) == 0);
+    cr_assert_eq(token.size, 5);
+    request_free(request);
+}
+
+Test(request_tests, get_second_token)
+{
+    request_t *request = request_new();
+    request_token_t token = { 0 };
+    char data[] = "Hello World";
+
+    cr_assert(request_append(request, data, sizeof(data) - 1));
+    cr_assert(request_get_token(request, 1, &token));
+    cr_assert_eq(token.size, 5, "Token size is %zu", token.size);
+    cr_assert(memcmp(token.content, "World", 5) == 0);
+    request_free(request);
+}
+
+Test(request_tests, get_token_out_of_bound)
+{
+    request_t *request = request_new();
+    request_token_t token = { 0 };
+    char data[] = "Hello World";
+
+    cr_assert(request_append(request, data, sizeof(data) - 1));
+    cr_assert_not(request_get_token(request, 12, &token));
+
+    request_free(request);
+}
+
+Test(request_tests, get_token_12)
+{
+    request_t *request = request_new();
+    request_token_t token = { 0 };
+    char data[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+
+    cr_assert(request_append(request, data, sizeof(data) - 1));
+    cr_assert(request_get_token(request, 12, &token));
+    cr_assert_eq(token.size, strlen("incididunt"));
+    cr_assert(memcmp(token.content, "incididunt", strlen("incididunt")) == 0);
+
+    request_free(request);
+}

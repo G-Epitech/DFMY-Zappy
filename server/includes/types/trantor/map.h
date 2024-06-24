@@ -19,7 +19,7 @@ typedef struct player_s player_t;
 typedef struct egg_s egg_t;
 
 // @brief Get the map cell at given position
-#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
+#define MAP_CELL_AT_POS(map, pos) (&(map->cells[(pos).y][(pos).x]))
 
 // @brief Map player cell accessor
 #define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)
@@ -144,30 +144,6 @@ void map_remove_egg(map_t *map, egg_t *egg);
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
 
 /**
- * @brief Get the stats of a cell
- * @param cell Cell to get the stats from
- * @param stats Stats to fill
- */
-void map_cell_get_stats(map_cell_t *cell, map_cell_stats_t *stats);
-
-/**
- * @brief Get the buffer size of a cell stats (used for vision)
- * @param stats Stats to get the buffer size from
- * @return Buffer size
- */
-size_t map_cell_stats_str_len(map_cell_stats_t *stats);
-
-/**
- * @brief Get the string of a cell stats (used for vision)
- * @param cell_stats Cell stats to get the look string from
- * @param nb_cells Number of cells to get the look string from
- * @param buf_size Buffer size to store the look string
- * @return Look string
- */
-char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
-    size_t buf_size);
-
-/**
  * @brief Get the sound angle between two positions
  * @param map Map to get the sound angle from
  * @param src Sound emitter position
@@ -186,9 +162,18 @@ void map_forward_position(map_t *map, vector2u_t *position,
     direction_t direction);
 
 /**
- * @brief Eject players from a cell
- * @param map Map to eject players from
- * @param player Player that initiated the ejection
- * @return Success status
+ * @brief Move a player to a new position
+ * @param map Map to move the player in
+ * @param player Player to move
+ * @param new_pos New position of the player
  */
-bool map_eject_players(map_t *map, player_t *player);
+void map_move_player(map_t *map, player_t *player, vector2u_t *new_pos);
+
+/**
+ * @brief Move a player node to a new position
+ * @param map Map to move the player in
+ * @param player_node Player node to move
+ * @param new_pos New position of the player
+ */
+void map_move_player_node(map_t *map, node_t *player_node,
+    vector2u_t *new_pos);

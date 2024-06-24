@@ -82,7 +82,7 @@ Test(args_options_freq_tests, invalid_freq_value, .init = cr_redirect_stderr)
 Test(args_options_freq_tests, freq_value_out_of_range, .init = cr_redirect_stderr)
 {
     args_t args;
-    char *argv[] = {"./zappy_server", "--frequency", "1"};
+    char *argv[] = {"./zappy_server", "--frequency", "0"};
     args_parser_t parser = {3, argv, 1, false};
 
     args_init(&args);
@@ -91,7 +91,7 @@ Test(args_options_freq_tests, freq_value_out_of_range, .init = cr_redirect_stder
     );
     cr_assert_eq(parser.error, true, "parser.error should be true");
     cr_assert_neq(args.frequency, ARGS_DEFAULT_FREQ, "Frequency should be different of default value");
-    cr_assert_stderr_eq_str("Frequency value must be in range [2, 10000]\n");
+    cr_assert_stderr_eq_str("Frequency value must be in range [1, 10000]\n");
 }
 
 Test(args_options_freq_tests, freq_value_out_of_range_2, .init = cr_redirect_stderr)
@@ -106,5 +106,5 @@ Test(args_options_freq_tests, freq_value_out_of_range_2, .init = cr_redirect_std
     );
     cr_assert_eq(parser.error, true, "parser.error should be true");
     cr_assert_eq(args.frequency, 10001, "Frequency value v be equal to 10001");
-    cr_assert_stderr_eq_str("Frequency value must be in range [2, 10000]\n");
+    cr_assert_stderr_eq_str("Frequency value must be in range [1, 10000]\n");
 }

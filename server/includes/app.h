@@ -20,6 +20,8 @@
 
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
+#define APP_MAX_FREQ 10000
+#define APP_MIN_FREQ 1
 
 // @brief Application state
 typedef struct app_s {
@@ -207,5 +209,305 @@ void app_handle_graphic_request(app_t *app, controller_t *controller,
  */
 void app_handle_player_request(app_t *app, controller_t *controller,
     request_t *request);
+
+/**
+ * @brief Handle gui request for teams names
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_teams_names(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for map size
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_size(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for map content
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_content(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for map cell content
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_cell_content(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for player position
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_position(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for player level
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_level(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for player inventory
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_player_inventory(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle gui request for time unit
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_get_time_unit(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle gui request for time unit
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_set_time_unit(app_t *app, controller_t *controller,
+    request_t *request);
+
+/**
+ * @brief Handle player request for forward
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_forward_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for forward at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_forward_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for right
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_turn_right_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for right at end of cooldown
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_turn_right_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for left
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_turn_left_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for left at end of cooldown
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_turn_left_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for inventory
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_inventory_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for inventory at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_inventory_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for connect_nbr
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_connect_nbr_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for connect_nbr at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_connect_nbr_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for fork
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_fork_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for fork at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_fork_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for take
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_take_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for take at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_take_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for set
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_set_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for set at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_set_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for incantation
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_incantation_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for look at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_look_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for look
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_look_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for broadcast at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_broadcast_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for broadcast
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_broadcast_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for eject at end of cooldown
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_player_request_eject_onfinish(app_t *app,
+    player_controller_t *controller, request_t *request);
+
+/**
+ * @brief Handle player request for eject
+ * @param app App instance
+ * @param controller Player controller that made the request
+ * @param request Request to handle
+ * @return true if the cooldown can be set, false otherwise
+ */
+bool app_handle_player_request_eject_onstart(app_t *app,
+    player_controller_t *controller, request_t *request);
 
 /** @} */ // end of server

@@ -79,6 +79,21 @@ static void send_current_incantations(controller_t *controller, world_t *world)
     }
 }
 
+static void send_map_size_and_teams_names(controller_t *controller,
+    world_t *world)
+{
+    node_t *node = world->teams->first;
+    team_t *team = NULL;
+
+    controller_add_emission(controller, "msz %zu %zu\n", world->map->size.x,
+        world->map->size.y);
+    while (node) {
+        team = NODE_TO_PTR(node, team_t *);
+        controller_add_emission(controller, "tna %s\n", team->name);
+        node = node->next;
+    }
+}
+
 void app_try_promote_controller_to_graphic(app_t *app,
     controller_t *controller)
 {
@@ -93,6 +108,7 @@ void app_try_promote_controller_to_graphic(app_t *app,
     log_info("Controller on socket %d has been promoted to graphic."
             " Emissions buffer smartly resized to %zu bytes.",
             controller->generic.socket, controller->graphic.emissions->size);
+    send_map_size_and_teams_names(controller, app->world);
     send_laid_eggs_info(controller, app->world);
     send_players_info(controller, app->world);
     send_current_incantations(controller, app->world);
