@@ -14,7 +14,7 @@
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
 
-class App : public OgreBites::ApplicationContext, public OgreBites::InputListener {
+class App : public OgreBites::ApplicationContext, public OgreBites::InputListener, public OgreBites::TrayListener {
 public:
 
     // @brief Options of the application
@@ -70,6 +70,12 @@ public:
      */
     bool frameEnded(const Ogre::FrameEvent &evt) override;
 
+    /**
+     * @brief Button hit event
+     * @param b Button that was hit
+     */
+    void buttonHit(OgreBites::Button *b) override;
+
 private:
     /// @brief Client object used to communicate with the server
     Client _client;
@@ -89,6 +95,9 @@ private:
     /// @brief Options of the application
     Options _options;
 
+    /// @brief Button used to pause the game
+    OgreBites::Button* _pauseButton;
+
     /**
      * @brief Load resources of the application
      */
@@ -100,9 +109,19 @@ private:
     void _setupCamera();
 
     /**
-     * @rief Setup the materials of the application
+     * @brief Setup the materials of the application
      */
     void _setupMaterials();
+
+    /**
+     * @brief Setup the buttons of the application
+     */
+    void _setupButtons();
+
+    /**
+     * @brief Setup the UI of the application
+     */
+    void _setupUI();
 
     /**
      * @brief Update the map

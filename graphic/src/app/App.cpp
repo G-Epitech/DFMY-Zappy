@@ -59,13 +59,7 @@ void App::setup() {
     _loadResources();
     _setupCamera();
     _setupMaterials();
-
-    scnMgr->addRenderQueueListener(getOverlaySystem());
-
-    trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
-    addInputListener(trayMgr);
-    trayMgr->showFrameStats(TL_BOTTOMLEFT);
-    trayMgr->hideCursor();
+    _setupUI();
 }
 
 void App::_setupCamera() {
@@ -92,6 +86,22 @@ void App::_setupMaterials() {
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
     material->setDepthWriteEnabled(false);
+}
+
+void App::_setupUI() {
+    scnMgr->addRenderQueueListener(getOverlaySystem());
+
+    trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
+    addInputListener(trayMgr);
+    trayMgr->setListener(this);
+    trayMgr->showFrameStats(TL_BOTTOMRIGHT);
+    trayMgr->hideCursor();
+
+    _setupButtons();
+}
+
+void App::_setupButtons() {
+    _pauseButton = trayMgr->createButton(TL_BOTTOM, "Pause", "Pause", 200);
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
@@ -143,6 +153,19 @@ bool App::keyPressed(const KeyboardEvent &evt) {
     return true;
 }
 
+void App::buttonHit(OgreBites::Button* b)
+{
+    if (b->getName() == "Pause") {
+        if (_pauseButton->getCaption() == "Resume") {
+            _pauseButton->setCaption("Pause");
+            _client.write("sst " + std::to_string(_map.timeUnit) + "\n");
+        } else {
+            _pauseButton->setCaption("Resume");
+            _client.write("sst 0\n");
+        }
+    }
+}
+
 void App::_updateMap(std::string &command) {
     std::string commandName = command.substr(0, 3);
     if (this->_commands.find(commandName) != this->_commands.end()) {
@@ -156,10 +179,10 @@ void App::_updateMap(std::string &command) {
 void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
     for (auto &circle : _map.broadcastCircles) {
         if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
-            if (circle.circle) {
+            if (circle.circle)
                 scnMgr->destroyManualObject(circle.circle);
-                circle.circle = nullptr;
-            }
+            if (circle.node)
+                scnMgr->destroySceneNode(circle.node);
             _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
             continue;
         }
