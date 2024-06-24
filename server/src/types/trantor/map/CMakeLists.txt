@@ -6,6 +6,7 @@ target_sources(zappy_server_core PRIVATE
         position.c
         angle.c
         move.c
+        cell/changed.c
         cell/init.c
         cell/free.c
 )

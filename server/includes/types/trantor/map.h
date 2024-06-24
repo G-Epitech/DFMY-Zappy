@@ -30,17 +30,6 @@ typedef struct egg_s egg_t;
 // @brief Look for position out of map
 #define MAP_OUT_POSITION(m, p) ((p).x >= m->size.x || (p).y >= m->size.y)
 
-// @brief Structure representing map cell statistics, mainly used for
-// the vision functionality
-typedef struct map_cell_stats_s {
-    // @brief Resources on the cell
-    size_t resources[RES_LEN];
-    // @brief Number of players on the cell
-    size_t players;
-    // @brief Number of eggs on the cell
-    size_t eggs;
-} map_cell_stats_t;
-
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell
@@ -49,6 +38,8 @@ typedef struct map_cell_s {
     size_t resources[RES_LEN];
     // @brief List of eggs on the cell
     list_t *eggs;
+    // @brief Specify if the cell has been changed
+    bool changed;
 } map_cell_t;
 
 // @brief Structure representing a Trantorian map
@@ -57,6 +48,8 @@ typedef struct map_s {
     vector2u_t size;
     // @brief Cells of the map
     map_cell_t **cells;
+    // @brief Number of cells changed
+    size_t cells_changed;
 } map_t;
 
 /**
@@ -177,3 +170,17 @@ void map_move_player(map_t *map, player_t *player, vector2u_t *new_pos);
  */
 void map_move_player_node(map_t *map, node_t *player_node,
     vector2u_t *new_pos);
+
+/**
+ * @brief Move an egg to a new position
+ * @param map Map on which mark the cell as changed
+ * @param cell Cell to mark as changed
+ */
+void map_mark_cell_as_changed(map_t *map, map_cell_t *cell);
+
+/**
+ * @brief Mark a cell as up to date
+ * @param map Map on which mark the cell as up to date
+ * @param cell Cell to mark as up to date
+ */
+void map_mark_cell_as_up_to_date(map_t *map, map_cell_t *cell);
