@@ -51,7 +51,7 @@ void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, cons
 
 Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile)
 {
-    Ogre::Entity *cubeEntity = scnMgr->createEntity("food.mesh");
+    Ogre::Entity *cubeEntity = scnMgr->createEntity("Barbar.mesh");
     Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
     node->attachObject(cubeEntity);
 
