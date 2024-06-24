@@ -46,8 +46,8 @@ void Commands::_removeItemsFromTile(Tile &tile, Ogre::SceneManager *scnMgr, cons
     }
 }
 
-Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile, const std::string& teamName, Teams &teams) {
-    std::size_t teamIndex = teams.teamIndex(teamName);
+Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &tile, Player &player, Teams &teams) {
+    std::size_t teamIndex = teams.teamIndex(player.team);
 
     if (teamIndex >= playerModels.size())
         teamIndex = 0;
@@ -55,17 +55,24 @@ Ogre::SceneNode *Commands::_createPlayerItem(Ogre::SceneManager *scnMgr, Tile &t
     Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
     node->attachObject(cubeEntity);
 
-    Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
-    Ogre::Vector3 size = aab.getSize();
-
-    float randX = tile.node->getPosition().x + static_cast<float>(std::rand()) / RAND_MAX * size.x - size.x / 2.0f;
-    float randZ = tile.node->getPosition().z + static_cast<float>(std::rand()) / RAND_MAX * size.z - size.z / 2.0f;
-    float itemY = size.y / 2.0f * PLAYER_SCALE;
-
-    node->setPosition(randX, itemY, randZ);
-    node->setScale(PLAYER_SCALE, PLAYER_SCALE, PLAYER_SCALE);
+    _updatePlayerItemSize(node, player, tile);
 
     return node;
+}
+
+void Commands::_updatePlayerItemSize(Ogre::SceneNode *node, Player &player, Tile &tile) {
+    Ogre::Entity *entity = static_cast<Ogre::Entity *>(node->getAttachedObject(0));
+    Ogre::AxisAlignedBox boundingBox = entity->getBoundingBox();
+    Ogre::Vector3 size = boundingBox.getSize();
+
+    float playerScale = static_cast<float>(player.level) * PLAYER_SCALE;
+    float randX = tile.node->getPosition().x + static_cast<float>(std::rand()) / RAND_MAX * size.x - size.x / 2.0f;
+    float randZ = tile.node->getPosition().z + static_cast<float>(std::rand()) / RAND_MAX * size.z - size.z / 2.0f;
+    float itemY = size.y / 2.0f * playerScale;
+
+    node->setPosition(randX, itemY, randZ);
+    node->setScale(playerScale, playerScale, playerScale);
+    std::cout << "Player " << player.id << " is now level " << player.level << " with size " << playerScale << std::endl;
 }
 
 Circle Commands::_createBroadcastCircle(Ogre::SceneManager *scnMgr, const Ogre::Vector3 &position) {
@@ -192,11 +199,11 @@ void Commands::playerConnect(std::string &command, Map &map, Ogre::SceneManager 
 
     Player player;
     player.id = id;
-    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], team, map.teams);
     player.orientation = orientation;
     player.level = level;
     player.team = team;
     player.position = {x, y};
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player, map.teams);
     map.players.push_back(player);
 }
 
@@ -217,20 +224,22 @@ void Commands::playerPosition(std::string &command, Map &map, Ogre::SceneManager
             player.position.x = x;
             player.position.y = y;
             player.orientation = orientation;
-            if (!player.node)
-                player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player.team, map.teams);
             player.node->setPosition(map.tiles[x][y].node->getPosition().x, player.node->getPosition().y,
                                      map.tiles[x][y].node->getPosition().z);
+            if (!player.node)
+                player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player, map.teams);
+            else
+                _updatePlayerItemSize(player.node, player, map.tiles[x][y]);
             return;
         }
     }
 
     Player player;
     player.id = id;
-    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player.team, map.teams);
     player.position.x = x;
     player.position.y = y;
     player.orientation = orientation;
+    player.node = _createPlayerItem(scnMgr, map.tiles[x][y], player, map.teams);
     map.players.push_back(player);
 
     // Because it's a new player, we need to get its level and inventory
