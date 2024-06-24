@@ -30,7 +30,10 @@ static const player_request_handler_t handlers[] = {
         &app_handle_player_request_inventory_onstart,
         &app_handle_player_request_inventory_onfinish
     },
-    { "Broadcast", 7, NULL, NULL },
+    { "Broadcast", 7,
+        &app_handle_player_request_broadcast_onstart,
+        &app_handle_player_request_broadcast_onfinish
+    },
     { "Connect_nbr", 0,
         &app_handle_player_request_connect_nbr_onstart,
         &app_handle_player_request_connect_nbr_onfinish
