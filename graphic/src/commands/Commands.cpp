@@ -107,12 +107,12 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
         return;
     map.width = std::stoi(args[0]);
     map.height = std::stoi(args[1]);
-    int posx = map.width / 2;
-    int posy = map.height / 2;
+    float posx = static_cast<float>(map.width) / 2;
+    float posy;
     for (int i = 0; i < map.width; i++)
     {
         std::vector<Tile> row;
-        posy = map.height / 2;
+        posy = static_cast<float>(map.width) / 2;
         for (int j = 0; j < map.height; j++)
         {
             Ogre::Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
@@ -121,20 +121,20 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
 
             Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
             Ogre::Vector3 size = aab.getSize();
-            node->setPosition(posx * size.x, -size.y / 2.0, posy * size.z);
+            node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
 
             Tile tile;
 
-            for (int i = 0; i < stonesNames.size(); i++)
+            for (const auto & stonesName : stonesNames)
             {
-                tile.items[stonesNames[i]] = {};
+                tile.items[stonesName] = {};
             }
             tile.node = node;
             row.push_back(tile);
-            posy = posy - 1;
+            posy = posy - 1 - MAP_TILE_Y_OFFSET;
         }
         map.tiles.push_back(row);
-        posx = posx - 1;
+        posx = posx - 1 - MAP_TILE_X_OFFSET;
     }
 }
 

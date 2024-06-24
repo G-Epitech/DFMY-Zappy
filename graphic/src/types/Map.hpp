@@ -14,6 +14,9 @@
 #include "constants/Broadcast.hpp"
 #include "constants/Incantation.hpp"
 
+#define MAP_TILE_Y_OFFSET 0.4f
+#define MAP_TILE_X_OFFSET 0.4f
+
 struct Tile {
     std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
     Ogre::SceneNode *node = nullptr;
