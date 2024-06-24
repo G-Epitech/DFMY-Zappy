@@ -5,6 +5,11 @@
 ** log.h
 */
 
+/** @defgroup server_log Server Log Module
+ *  Main server log module
+ *  @{
+ */
+
 #pragma once
 
 typedef enum e_log_level {
@@ -43,3 +48,5 @@ void log_error(const char *format, ...) __attribute__((format(printf, 1, 2)));
  * @param format Format of the message
  */
 void log_info(const char *format, ...) __attribute__((format(printf, 1, 2)));
+
+/** @} */ // end of server

@@ -5,6 +5,11 @@
 ** zappy_server.h
 */
 
+/** @defgroup server_app Server App Module
+ *  Main server application module
+ *  @{
+ */
+
 #pragma once
 
 #include <stdbool.h>
@@ -438,3 +443,5 @@ void app_handle_player_request_set_onfinish(app_t *app,
  */
 bool app_handle_player_request_incantation_onstart(app_t *app,
     player_controller_t *controller, request_t *request);
+
+/** @} */ // end of server
