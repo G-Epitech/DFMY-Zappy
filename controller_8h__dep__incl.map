@@ -20,7 +20,7 @@
 <area shape="rect" id="node5" href="$world_8h.html" title=" " alt="" coords="3701,273,3863,315"/>
 <area shape="rect" id="node6" href="$victory_8c.html" title=" " alt="" coords="4414,363,4569,404"/>
 <area shape="rect" id="node16" href="$emissions_8c.html" title=" " alt="" coords="3449,184,3627,225"/>
-<area shape="rect" id="node17" href="$server_2connection_2get_8c.html" title=" " alt="" coords="3651,184,3822,225"/>
+<area shape="rect" id="node17" href="$get_8c.html" title=" " alt="" coords="3651,184,3822,225"/>
 <area shape="rect" id="node18" href="$types_2server_2connection_2requests_8c.html" title=" " alt="" coords="3846,184,4017,225"/>
 <area shape="rect" id="node19" href="$fd__states_8c.html" title=" " alt="" coords="4041,184,4211,225"/>
 <area shape="rect" id="node21" href="$server_2new_8c.html" title=" " alt="" coords="4235,184,4406,225"/>
@@ -42,11 +42,11 @@
 <area shape="rect" id="node43" href="$trantor_2incantation_2free_8c.html" title=" " alt="" coords="5,184,180,225"/>
 <area shape="rect" id="node44" href="$trantor_2incantation_2new_8c.html" title=" " alt="" coords="204,184,379,225"/>
 <area shape="rect" id="node34" href="$trantor_2map_2add_8c.html" title=" " alt="" coords="1700,273,1875,315"/>
-<area shape="rect" id="node35" href="$eject_8c.html" title=" " alt="" coords="1899,273,2073,315"/>
+<area shape="rect" id="node35" href="$move_8c.html" title=" " alt="" coords="1899,273,2073,315"/>
 <area shape="rect" id="node36" href="$trantor_2map_2remove_8c.html" title=" " alt="" coords="2097,273,2272,315"/>
 <area shape="rect" id="node37" href="$direction_8c.html" title=" " alt="" coords="2296,273,2471,315"/>
-<area shape="rect" id="node38" href="$forward_8c.html" title=" " alt="" coords="2495,273,2669,315"/>
+<area shape="rect" id="node38" href="$types_2trantor_2player_2forward_8c.html" title=" " alt="" coords="2495,273,2669,315"/>
 <area shape="rect" id="node39" href="$trantor_2player_2free_8c.html" title=" " alt="" coords="2693,273,2868,315"/>
-<area shape="rect" id="node40" href="$inventory_8c.html" title=" " alt="" coords="2892,273,3067,315"/>
+<area shape="rect" id="node40" href="$types_2trantor_2player_2inventory_8c.html" title=" " alt="" coords="2892,273,3067,315"/>
 <area shape="rect" id="node41" href="$life_8c.html" title=" " alt="" coords="3091,273,3265,315"/>
 </map>

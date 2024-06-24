@@ -82,6 +82,10 @@ Macros</h2></td></tr>
 <tr class="separator:ga520f593e924afc5c85e3d001caf61c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad2655fdad6a9fcfc8d28a4cbb2d4f4e2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gad2655fdad6a9fcfc8d28a4cbb2d4f4e2">APP_EXIT_FAILURE</a>&#160;&#160;&#160;84</td></tr>
 <tr class="separator:gad2655fdad6a9fcfc8d28a4cbb2d4f4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabbe33f1fcd4652e762b05ade2fb7dc75"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gabbe33f1fcd4652e762b05ade2fb7dc75">APP_MAX_FREQ</a>&#160;&#160;&#160;10000</td></tr>
+<tr class="separator:gabbe33f1fcd4652e762b05ade2fb7dc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab95d1259977d9f6f97a8596e96d943ac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gab95d1259977d9f6f97a8596e96d943ac">APP_MIN_FREQ</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:gab95d1259977d9f6f97a8596e96d943ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -164,6 +168,102 @@ Functions</h2></td></tr>
 <tr class="memitem:gaa5984b3ca05a637ed18aff849738b191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa5984b3ca05a637ed18aff849738b191">app_handle_player_request</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
 <tr class="memdesc:gaa5984b3ca05a637ed18aff849738b191"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle request of a player controller.  <a href="group__server__app.html#gaa5984b3ca05a637ed18aff849738b191">More...</a><br /></td></tr>
 <tr class="separator:gaa5984b3ca05a637ed18aff849738b191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaea34f4f91c7cfec0222afa394f41a9a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaea34f4f91c7cfec0222afa394f41a9a1">app_handle_gui_request_teams_names</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaea34f4f91c7cfec0222afa394f41a9a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for teams names.  <a href="group__server__app.html#gaea34f4f91c7cfec0222afa394f41a9a1">More...</a><br /></td></tr>
+<tr class="separator:gaea34f4f91c7cfec0222afa394f41a9a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa287bc4d4417e1c271c6a39509964546"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa287bc4d4417e1c271c6a39509964546">app_handle_gui_request_map_size</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaa287bc4d4417e1c271c6a39509964546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for map size.  <a href="group__server__app.html#gaa287bc4d4417e1c271c6a39509964546">More...</a><br /></td></tr>
+<tr class="separator:gaa287bc4d4417e1c271c6a39509964546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1712fe448748720aab95db285ee6e921"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga1712fe448748720aab95db285ee6e921">app_handle_gui_request_map_content</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga1712fe448748720aab95db285ee6e921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for map content.  <a href="group__server__app.html#ga1712fe448748720aab95db285ee6e921">More...</a><br /></td></tr>
+<tr class="separator:ga1712fe448748720aab95db285ee6e921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8480d7a49ba24cfe1c5189412a2791a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga8480d7a49ba24cfe1c5189412a2791a6">app_handle_gui_request_map_cell_content</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga8480d7a49ba24cfe1c5189412a2791a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for map cell content.  <a href="group__server__app.html#ga8480d7a49ba24cfe1c5189412a2791a6">More...</a><br /></td></tr>
+<tr class="separator:ga8480d7a49ba24cfe1c5189412a2791a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga72e47979d5796709c687741939a2dca5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga72e47979d5796709c687741939a2dca5">app_handle_gui_request_player_position</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga72e47979d5796709c687741939a2dca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for player position.  <a href="group__server__app.html#ga72e47979d5796709c687741939a2dca5">More...</a><br /></td></tr>
+<tr class="separator:ga72e47979d5796709c687741939a2dca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga749392e4c18329f1d51dda2cf73dda55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga749392e4c18329f1d51dda2cf73dda55">app_handle_gui_request_player_level</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga749392e4c18329f1d51dda2cf73dda55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for player level.  <a href="group__server__app.html#ga749392e4c18329f1d51dda2cf73dda55">More...</a><br /></td></tr>
+<tr class="separator:ga749392e4c18329f1d51dda2cf73dda55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab132d722f1e58cca519ae881fe59fa0a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gab132d722f1e58cca519ae881fe59fa0a">app_handle_gui_request_player_inventory</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gab132d722f1e58cca519ae881fe59fa0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for player inventory.  <a href="group__server__app.html#gab132d722f1e58cca519ae881fe59fa0a">More...</a><br /></td></tr>
+<tr class="separator:gab132d722f1e58cca519ae881fe59fa0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga92c712aafcbd56e9262782214f14adcb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga92c712aafcbd56e9262782214f14adcb">app_handle_gui_request_get_time_unit</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga92c712aafcbd56e9262782214f14adcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for time unit.  <a href="group__server__app.html#ga92c712aafcbd56e9262782214f14adcb">More...</a><br /></td></tr>
+<tr class="separator:ga92c712aafcbd56e9262782214f14adcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6119873ed25d39835ba51ff97e547f66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga6119873ed25d39835ba51ff97e547f66">app_handle_gui_request_set_time_unit</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga6119873ed25d39835ba51ff97e547f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle gui request for time unit.  <a href="group__server__app.html#ga6119873ed25d39835ba51ff97e547f66">More...</a><br /></td></tr>
+<tr class="separator:ga6119873ed25d39835ba51ff97e547f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7da36c805139646c2ef47f5fb9ba673e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga7da36c805139646c2ef47f5fb9ba673e">app_handle_player_request_forward_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga7da36c805139646c2ef47f5fb9ba673e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for forward.  <a href="group__server__app.html#ga7da36c805139646c2ef47f5fb9ba673e">More...</a><br /></td></tr>
+<tr class="separator:ga7da36c805139646c2ef47f5fb9ba673e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6056addabd65edafd1535df1a024bc77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga6056addabd65edafd1535df1a024bc77">app_handle_player_request_forward_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga6056addabd65edafd1535df1a024bc77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for forward at end of cooldown.  <a href="group__server__app.html#ga6056addabd65edafd1535df1a024bc77">More...</a><br /></td></tr>
+<tr class="separator:ga6056addabd65edafd1535df1a024bc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaad13fccce3939c5ffb177770c7f6fb1e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaad13fccce3939c5ffb177770c7f6fb1e">app_handle_player_request_turn_right_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaad13fccce3939c5ffb177770c7f6fb1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for right.  <a href="group__server__app.html#gaad13fccce3939c5ffb177770c7f6fb1e">More...</a><br /></td></tr>
+<tr class="separator:gaad13fccce3939c5ffb177770c7f6fb1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae142b9703f204a8ede15fda18cd7da5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gae142b9703f204a8ede15fda18cd7da5c">app_handle_player_request_turn_right_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gae142b9703f204a8ede15fda18cd7da5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for right at end of cooldown.  <a href="group__server__app.html#gae142b9703f204a8ede15fda18cd7da5c">More...</a><br /></td></tr>
+<tr class="separator:gae142b9703f204a8ede15fda18cd7da5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3564401e2fc840bb141c08198b710e20"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga3564401e2fc840bb141c08198b710e20">app_handle_player_request_turn_left_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga3564401e2fc840bb141c08198b710e20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for left.  <a href="group__server__app.html#ga3564401e2fc840bb141c08198b710e20">More...</a><br /></td></tr>
+<tr class="separator:ga3564401e2fc840bb141c08198b710e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa9ceab7ea8a0a6bb7ad2ca650eb53597"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa9ceab7ea8a0a6bb7ad2ca650eb53597">app_handle_player_request_turn_left_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaa9ceab7ea8a0a6bb7ad2ca650eb53597"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for left at end of cooldown.  <a href="group__server__app.html#gaa9ceab7ea8a0a6bb7ad2ca650eb53597">More...</a><br /></td></tr>
+<tr class="separator:gaa9ceab7ea8a0a6bb7ad2ca650eb53597"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf66b1a3486f2c10bd61ac9b7f2b3909c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaf66b1a3486f2c10bd61ac9b7f2b3909c">app_handle_player_request_inventory_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaf66b1a3486f2c10bd61ac9b7f2b3909c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for inventory.  <a href="group__server__app.html#gaf66b1a3486f2c10bd61ac9b7f2b3909c">More...</a><br /></td></tr>
+<tr class="separator:gaf66b1a3486f2c10bd61ac9b7f2b3909c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga357acc90a19d210aab8b576837743b61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga357acc90a19d210aab8b576837743b61">app_handle_player_request_inventory_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga357acc90a19d210aab8b576837743b61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for inventory at end of cooldown.  <a href="group__server__app.html#ga357acc90a19d210aab8b576837743b61">More...</a><br /></td></tr>
+<tr class="separator:ga357acc90a19d210aab8b576837743b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8c2f542dc3ba581b269d5d9c1ea8eb56"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga8c2f542dc3ba581b269d5d9c1ea8eb56">app_handle_player_request_connect_nbr_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga8c2f542dc3ba581b269d5d9c1ea8eb56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for connect_nbr.  <a href="group__server__app.html#ga8c2f542dc3ba581b269d5d9c1ea8eb56">More...</a><br /></td></tr>
+<tr class="separator:ga8c2f542dc3ba581b269d5d9c1ea8eb56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8037df3484f61532ac606a6f98cacc13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga8037df3484f61532ac606a6f98cacc13">app_handle_player_request_connect_nbr_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga8037df3484f61532ac606a6f98cacc13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for connect_nbr at end of cooldown.  <a href="group__server__app.html#ga8037df3484f61532ac606a6f98cacc13">More...</a><br /></td></tr>
+<tr class="separator:ga8037df3484f61532ac606a6f98cacc13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3a8ae0991d54c4d590070e55470fa21a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga3a8ae0991d54c4d590070e55470fa21a">app_handle_player_request_fork_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga3a8ae0991d54c4d590070e55470fa21a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for fork.  <a href="group__server__app.html#ga3a8ae0991d54c4d590070e55470fa21a">More...</a><br /></td></tr>
+<tr class="separator:ga3a8ae0991d54c4d590070e55470fa21a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa17a523baa31106dc08c121e50838b75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa17a523baa31106dc08c121e50838b75">app_handle_player_request_fork_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaa17a523baa31106dc08c121e50838b75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for fork at end of cooldown.  <a href="group__server__app.html#gaa17a523baa31106dc08c121e50838b75">More...</a><br /></td></tr>
+<tr class="separator:gaa17a523baa31106dc08c121e50838b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1e34cbed22bfeadf9951a7db95604fcc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga1e34cbed22bfeadf9951a7db95604fcc">app_handle_player_request_take_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga1e34cbed22bfeadf9951a7db95604fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for take.  <a href="group__server__app.html#ga1e34cbed22bfeadf9951a7db95604fcc">More...</a><br /></td></tr>
+<tr class="separator:ga1e34cbed22bfeadf9951a7db95604fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad6fd530a9841adbaad4479d4465c56f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gad6fd530a9841adbaad4479d4465c56f6">app_handle_player_request_take_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gad6fd530a9841adbaad4479d4465c56f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for take at end of cooldown.  <a href="group__server__app.html#gad6fd530a9841adbaad4479d4465c56f6">More...</a><br /></td></tr>
+<tr class="separator:gad6fd530a9841adbaad4479d4465c56f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3a9750db17b2f6bf0c5d72e9822640a2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga3a9750db17b2f6bf0c5d72e9822640a2">app_handle_player_request_set_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga3a9750db17b2f6bf0c5d72e9822640a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for set.  <a href="group__server__app.html#ga3a9750db17b2f6bf0c5d72e9822640a2">More...</a><br /></td></tr>
+<tr class="separator:ga3a9750db17b2f6bf0c5d72e9822640a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3396ce0e4898898b0bd85521bb2eddc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga3396ce0e4898898b0bd85521bb2eddc3">app_handle_player_request_set_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga3396ce0e4898898b0bd85521bb2eddc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for set at end of cooldown.  <a href="group__server__app.html#ga3396ce0e4898898b0bd85521bb2eddc3">More...</a><br /></td></tr>
+<tr class="separator:ga3396ce0e4898898b0bd85521bb2eddc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4145cb94088004e3f36275fdabcec255"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga4145cb94088004e3f36275fdabcec255">app_handle_player_request_incantation_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga4145cb94088004e3f36275fdabcec255"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for incantation.  <a href="group__server__app.html#ga4145cb94088004e3f36275fdabcec255">More...</a><br /></td></tr>
+<tr class="separator:ga4145cb94088004e3f36275fdabcec255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa6f6b02edc018f721d3d4d8275695a04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa6f6b02edc018f721d3d4d8275695a04">app_handle_player_request_look_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaa6f6b02edc018f721d3d4d8275695a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for look at end of cooldown.  <a href="group__server__app.html#gaa6f6b02edc018f721d3d4d8275695a04">More...</a><br /></td></tr>
+<tr class="separator:gaa6f6b02edc018f721d3d4d8275695a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga23cb537a573c60039b7ac87fd427990a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga23cb537a573c60039b7ac87fd427990a">app_handle_player_request_look_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga23cb537a573c60039b7ac87fd427990a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for look.  <a href="group__server__app.html#ga23cb537a573c60039b7ac87fd427990a">More...</a><br /></td></tr>
+<tr class="separator:ga23cb537a573c60039b7ac87fd427990a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga52143bee35a6a80d6651685f797754c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga52143bee35a6a80d6651685f797754c0">app_handle_player_request_broadcast_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga52143bee35a6a80d6651685f797754c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for broadcast at end of cooldown.  <a href="group__server__app.html#ga52143bee35a6a80d6651685f797754c0">More...</a><br /></td></tr>
+<tr class="separator:ga52143bee35a6a80d6651685f797754c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa82e601b1d5ec1fbc2ab84a16f06c67f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#gaa82e601b1d5ec1fbc2ab84a16f06c67f">app_handle_player_request_broadcast_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:gaa82e601b1d5ec1fbc2ab84a16f06c67f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for broadcast.  <a href="group__server__app.html#gaa82e601b1d5ec1fbc2ab84a16f06c67f">More...</a><br /></td></tr>
+<tr class="separator:gaa82e601b1d5ec1fbc2ab84a16f06c67f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga79d5947f91f336f7773bc9538a8b1a04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga79d5947f91f336f7773bc9538a8b1a04">app_handle_player_request_eject_onfinish</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga79d5947f91f336f7773bc9538a8b1a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for eject at end of cooldown.  <a href="group__server__app.html#ga79d5947f91f336f7773bc9538a8b1a04">More...</a><br /></td></tr>
+<tr class="separator:ga79d5947f91f336f7773bc9538a8b1a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3793f14804db321e320c922c160d2db0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__server__app.html#ga3793f14804db321e320c922c160d2db0">app_handle_player_request_eject_onstart</a> (<a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *app, <a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *controller, <a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
+<tr class="memdesc:ga3793f14804db321e320c922c160d2db0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle player request for eject.  <a href="group__server__app.html#ga3793f14804db321e320c922c160d2db0">More...</a><br /></td></tr>
+<tr class="separator:ga3793f14804db321e320c922c160d2db0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Main server application module </p>
@@ -190,6 +290,34 @@ Functions</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define APP_EXIT_SUCCESS&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gabbe33f1fcd4652e762b05ade2fb7dc75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabbe33f1fcd4652e762b05ade2fb7dc75">&#9670;&nbsp;</a></span>APP_MAX_FREQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define APP_MAX_FREQ&#160;&#160;&#160;10000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="gab95d1259977d9f6f97a8596e96d943ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab95d1259977d9f6f97a8596e96d943ac">&#9670;&nbsp;</a></span>APP_MIN_FREQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define APP_MIN_FREQ&#160;&#160;&#160;1</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -372,6 +500,402 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ga92c712aafcbd56e9262782214f14adcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga92c712aafcbd56e9262782214f14adcb">&#9670;&nbsp;</a></span>app_handle_gui_request_get_time_unit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_get_time_unit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for time unit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga8480d7a49ba24cfe1c5189412a2791a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8480d7a49ba24cfe1c5189412a2791a6">&#9670;&nbsp;</a></span>app_handle_gui_request_map_cell_content()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_map_cell_content </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for map cell content. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga1712fe448748720aab95db285ee6e921"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1712fe448748720aab95db285ee6e921">&#9670;&nbsp;</a></span>app_handle_gui_request_map_content()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_map_content </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for map content. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa287bc4d4417e1c271c6a39509964546"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa287bc4d4417e1c271c6a39509964546">&#9670;&nbsp;</a></span>app_handle_gui_request_map_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_map_size </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for map size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gab132d722f1e58cca519ae881fe59fa0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gab132d722f1e58cca519ae881fe59fa0a">&#9670;&nbsp;</a></span>app_handle_gui_request_player_inventory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_player_inventory </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for player inventory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga749392e4c18329f1d51dda2cf73dda55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga749392e4c18329f1d51dda2cf73dda55">&#9670;&nbsp;</a></span>app_handle_gui_request_player_level()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_player_level </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for player level. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga72e47979d5796709c687741939a2dca5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga72e47979d5796709c687741939a2dca5">&#9670;&nbsp;</a></span>app_handle_gui_request_player_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_player_position </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for player position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga6119873ed25d39835ba51ff97e547f66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6119873ed25d39835ba51ff97e547f66">&#9670;&nbsp;</a></span>app_handle_gui_request_set_time_unit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_set_time_unit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for time unit. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaea34f4f91c7cfec0222afa394f41a9a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaea34f4f91c7cfec0222afa394f41a9a1">&#9670;&nbsp;</a></span>app_handle_gui_request_teams_names()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_gui_request_teams_names </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#a98f628579fa3571b684d6db328f2f5e3">controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle gui request for teams names. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="gaa5984b3ca05a637ed18aff849738b191"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaa5984b3ca05a637ed18aff849738b191">&#9670;&nbsp;</a></span>app_handle_player_request()</h2>
 
@@ -413,6 +937,1030 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ga52143bee35a6a80d6651685f797754c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga52143bee35a6a80d6651685f797754c0">&#9670;&nbsp;</a></span>app_handle_player_request_broadcast_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_broadcast_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for broadcast at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaa82e601b1d5ec1fbc2ab84a16f06c67f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa82e601b1d5ec1fbc2ab84a16f06c67f">&#9670;&nbsp;</a></span>app_handle_player_request_broadcast_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_broadcast_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for broadcast. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga8037df3484f61532ac606a6f98cacc13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8037df3484f61532ac606a6f98cacc13">&#9670;&nbsp;</a></span>app_handle_player_request_connect_nbr_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_connect_nbr_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for connect_nbr at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga8c2f542dc3ba581b269d5d9c1ea8eb56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga8c2f542dc3ba581b269d5d9c1ea8eb56">&#9670;&nbsp;</a></span>app_handle_player_request_connect_nbr_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_connect_nbr_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for connect_nbr. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga79d5947f91f336f7773bc9538a8b1a04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga79d5947f91f336f7773bc9538a8b1a04">&#9670;&nbsp;</a></span>app_handle_player_request_eject_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_eject_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for eject at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga3793f14804db321e320c922c160d2db0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3793f14804db321e320c922c160d2db0">&#9670;&nbsp;</a></span>app_handle_player_request_eject_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_eject_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for eject. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gaa17a523baa31106dc08c121e50838b75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa17a523baa31106dc08c121e50838b75">&#9670;&nbsp;</a></span>app_handle_player_request_fork_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_fork_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for fork at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga3a8ae0991d54c4d590070e55470fa21a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3a8ae0991d54c4d590070e55470fa21a">&#9670;&nbsp;</a></span>app_handle_player_request_fork_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_fork_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for fork. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga6056addabd65edafd1535df1a024bc77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6056addabd65edafd1535df1a024bc77">&#9670;&nbsp;</a></span>app_handle_player_request_forward_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_forward_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for forward at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga7da36c805139646c2ef47f5fb9ba673e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga7da36c805139646c2ef47f5fb9ba673e">&#9670;&nbsp;</a></span>app_handle_player_request_forward_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_forward_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for forward. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga4145cb94088004e3f36275fdabcec255"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga4145cb94088004e3f36275fdabcec255">&#9670;&nbsp;</a></span>app_handle_player_request_incantation_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_incantation_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for incantation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga357acc90a19d210aab8b576837743b61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga357acc90a19d210aab8b576837743b61">&#9670;&nbsp;</a></span>app_handle_player_request_inventory_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_inventory_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for inventory at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaf66b1a3486f2c10bd61ac9b7f2b3909c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf66b1a3486f2c10bd61ac9b7f2b3909c">&#9670;&nbsp;</a></span>app_handle_player_request_inventory_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_inventory_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for inventory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gaa6f6b02edc018f721d3d4d8275695a04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa6f6b02edc018f721d3d4d8275695a04">&#9670;&nbsp;</a></span>app_handle_player_request_look_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_look_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for look at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga23cb537a573c60039b7ac87fd427990a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga23cb537a573c60039b7ac87fd427990a">&#9670;&nbsp;</a></span>app_handle_player_request_look_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_look_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for look. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="ga3396ce0e4898898b0bd85521bb2eddc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3396ce0e4898898b0bd85521bb2eddc3">&#9670;&nbsp;</a></span>app_handle_player_request_set_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_set_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for set at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga3a9750db17b2f6bf0c5d72e9822640a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3a9750db17b2f6bf0c5d72e9822640a2">&#9670;&nbsp;</a></span>app_handle_player_request_set_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_set_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gad6fd530a9841adbaad4479d4465c56f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad6fd530a9841adbaad4479d4465c56f6">&#9670;&nbsp;</a></span>app_handle_player_request_take_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_take_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for take at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga1e34cbed22bfeadf9951a7db95604fcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1e34cbed22bfeadf9951a7db95604fcc">&#9670;&nbsp;</a></span>app_handle_player_request_take_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_take_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for take. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gaa9ceab7ea8a0a6bb7ad2ca650eb53597"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaa9ceab7ea8a0a6bb7ad2ca650eb53597">&#9670;&nbsp;</a></span>app_handle_player_request_turn_left_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_turn_left_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for left at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ga3564401e2fc840bb141c08198b710e20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga3564401e2fc840bb141c08198b710e20">&#9670;&nbsp;</a></span>app_handle_player_request_turn_left_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_turn_left_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for left. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
+
+</div>
+</div>
+<a id="gae142b9703f204a8ede15fda18cd7da5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gae142b9703f204a8ede15fda18cd7da5c">&#9670;&nbsp;</a></span>app_handle_player_request_turn_right_onfinish()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_handle_player_request_turn_right_onfinish </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for right at end of cooldown. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td>Controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="gaad13fccce3939c5ffb177770c7f6fb1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaad13fccce3939c5ffb177770c7f6fb1e">&#9670;&nbsp;</a></span>app_handle_player_request_turn_right_onstart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool app_handle_player_request_turn_right_onstart </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__server__app.html#gaf73fdd15c60e3fcc8648e44e3d9fc837">app_t</a> *&#160;</td>
+          <td class="paramname"><em>app</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="controller_8h.html#abe001939c6cbd8c76ea4014bcd676ff8">player_controller_t</a> *&#160;</td>
+          <td class="paramname"><em>controller</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Handle player request for right. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">app</td><td><a class="el" href="classApp.html">App</a> instance </td></tr>
+    <tr><td class="paramname">controller</td><td><a class="el" href="structPlayer.html">Player</a> controller that made the request </td></tr>
+    <tr><td class="paramname">request</td><td>Request to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the cooldown can be set, false otherwise </dd></dl>
 
 </div>
 </div>

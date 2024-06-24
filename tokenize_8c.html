@@ -91,35 +91,53 @@ Include dependency graph for tokenize.c:</div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aac102e51f08f3a22ff447f0748540267"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tokenize_8c.html#aac102e51f08f3a22ff447f0748540267">request_get_first_token_size</a> (<a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request)</td></tr>
-<tr class="memdesc:aac102e51f08f3a22ff447f0748540267"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of the first token in the request buffer.  <a href="tokenize_8c.html#aac102e51f08f3a22ff447f0748540267">More...</a><br /></td></tr>
-<tr class="separator:aac102e51f08f3a22ff447f0748540267"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afde720c012af5e7e051f1b0005acbe51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tokenize_8c.html#afde720c012af5e7e051f1b0005acbe51">request_get_token</a> (<a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *request, size_t index, <a class="el" href="request_8h.html#a42492cce75cdb96fb5a92c7c5cdf3f98">request_token_t</a> *token)</td></tr>
+<tr class="memdesc:afde720c012af5e7e051f1b0005acbe51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get token at given index in request buffer.  <a href="tokenize_8c.html#afde720c012af5e7e051f1b0005acbe51">More...</a><br /></td></tr>
+<tr class="separator:afde720c012af5e7e051f1b0005acbe51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aac102e51f08f3a22ff447f0748540267"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac102e51f08f3a22ff447f0748540267">&#9670;&nbsp;</a></span>request_get_first_token_size()</h2>
+<a id="afde720c012af5e7e051f1b0005acbe51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afde720c012af5e7e051f1b0005acbe51">&#9670;&nbsp;</a></span>request_get_token()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">size_t request_get_first_token_size </td>
+          <td class="memname">bool request_get_token </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="request_8h.html#a2fc1b64f51f8225195d32592e6fe8fc5">request_t</a> *&#160;</td>
-          <td class="paramname"><em>request</em></td><td>)</td>
+          <td class="paramname"><em>request</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="request_8h.html#a42492cce75cdb96fb5a92c7c5cdf3f98">request_token_t</a> *&#160;</td>
+          <td class="paramname"><em>token</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the size of the first token in the request buffer. </p>
+<p>Get token at given index in request buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">request</td><td>Request to get the first token size from </td></tr>
+    <tr><td class="paramname">request</td><td>Request to get token from </td></tr>
+    <tr><td class="paramname">index</td><td>Index of token to get </td></tr>
+    <tr><td class="paramname">token</td><td>Token to fill </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Size of the first token </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if token was found, false otherwise </dd></dl>
 
 </div>
 </div>

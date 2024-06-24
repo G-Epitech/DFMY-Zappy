@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['e_5flog_5flevel_1599',['e_log_level',['../group__server__log.html#gabb4347eaee14793ef7033848e1d73274',1,'log.h']]]
+  ['direction_5fe_1712',['direction_e',['../direction_8h.html#a7b6212532f22831f81387f285488dabd',1,'direction.h']]]
 ];

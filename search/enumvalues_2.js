@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['log_5fdebug_1613',['LOG_DEBUG',['../group__server__log.html#ggabb4347eaee14793ef7033848e1d73274ab9f002c6ffbfd511da8090213227454e',1,'log.h']]],
-  ['log_5ferror_1614',['LOG_ERROR',['../group__server__log.html#ggabb4347eaee14793ef7033848e1d73274a230506cce5c68c3bac5a821c42ed3473',1,'log.h']]],
-  ['log_5finfo_1615',['LOG_INFO',['../group__server__log.html#ggabb4347eaee14793ef7033848e1d73274a6e98ff471e3ce6c4ef2d75c37ee51837',1,'log.h']]],
-  ['log_5fwarn_1616',['LOG_WARN',['../group__server__log.html#ggabb4347eaee14793ef7033848e1d73274ac8041ffa22bc823d4726701cdb13fc13',1,'log.h']]]
+  ['dir_5feast_1725',['DIR_EAST',['../direction_8h.html#a7b6212532f22831f81387f285488dabda42e7113a3046ccc33a89838be245ddaf',1,'direction.h']]],
+  ['dir_5fnorth_1726',['DIR_NORTH',['../direction_8h.html#a7b6212532f22831f81387f285488dabda944af66843e2c071955de8dfc4e7f407',1,'direction.h']]],
+  ['dir_5fsouth_1727',['DIR_SOUTH',['../direction_8h.html#a7b6212532f22831f81387f285488dabdac389b73c4b4c522960337089a197269e',1,'direction.h']]],
+  ['dir_5fwest_1728',['DIR_WEST',['../direction_8h.html#a7b6212532f22831f81387f285488dabdad1a68523fb1c95ab84e942f8f00015c7',1,'direction.h']]]
 ];

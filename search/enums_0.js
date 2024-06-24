@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['controller_5fread_5fstate_5fe_1596',['controller_read_state_e',['../controller_8h.html#a5b1801a9c4553e39d67be9c8a540d6b7',1,'controller.h']]],
-  ['controller_5ftype_5fe_1597',['controller_type_e',['../controller_8h.html#afd17c179d0be1c2c18ce99fbbd5fd611',1,'controller.h']]]
+  ['axis_5fe_1709',['axis_e',['../direction_8h.html#a5ddeb7f8ed9e6f93cfd6ecebf1f0bf13',1,'direction.h']]]
 ];

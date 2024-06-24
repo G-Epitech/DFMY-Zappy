@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['🧌_20zappy_1715',['🧌 Zappy',['../index.html',1,'']]]
+  ['🧌_20zappy_1834',['🧌 Zappy',['../index.html',1,'']]]
 ];
