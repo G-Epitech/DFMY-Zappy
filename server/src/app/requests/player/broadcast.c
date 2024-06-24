@@ -72,10 +72,13 @@ void app_handle_player_request_broadcast_onfinish(app_t *app,
 {
     request_token_t token = { 0 };
 
-    if (!request_get_token(request, 1, &token)) {
+    if (!request_get_token(request, 1, &token) ||
+        (request->content_size - STR_STRICT_SIZEOF("Broadcast ") <= 0)
+    ) {
         controller_add_emission((controller_t *) controller, "ko\n");
         return;
     }
+    token.size = request->content_size - STR_STRICT_SIZEOF("Broadcast ");
     emit_message_to_players(app->world, controller->player, &token);
     notify_graphics(app->server, controller->player, &token);
     controller_add_emission((controller_t *) controller, "ok\n");
