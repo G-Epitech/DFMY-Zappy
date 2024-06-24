@@ -238,6 +238,15 @@ void app_handle_gui_request_map_content(app_t *app, controller_t *controller,
     request_t *request);
 
 /**
+ * @brief Handle gui request for map cell content
+ * @param app App instance
+ * @param controller Controller that made the request
+ * @param request Request to handle
+ */
+void app_handle_gui_request_map_cell_content(app_t *app,
+    controller_t *controller, request_t *request);
+
+/**
  * @brief Handle gui request for player position
  * @param app App instance
  * @param controller Controller that made the request

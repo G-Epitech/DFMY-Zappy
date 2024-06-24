@@ -12,6 +12,7 @@
 static const gui_request_handler_t handlers[] = {
     { "tna", &app_handle_gui_request_teams_names },
     { "msz", &app_handle_gui_request_map_size },
+    { "bct", &app_handle_gui_request_map_cell_content },
     { "mct", &app_handle_gui_request_map_content },
     { "ppo", &app_handle_gui_request_player_position },
     { "plv", &app_handle_gui_request_player_level },
