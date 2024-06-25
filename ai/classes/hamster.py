@@ -1102,6 +1102,7 @@ class Hamster:
             [self.walk_rotate_right, self.walk_forward],
             [self.walk_forward, self.walk_rotate_right, self.walk_forward]
         ]
+        self.debug(f"Direction called by mother: {self.direction_called_by_mother}")
         for move in possible_moves[self.direction_called_by_mother - 1]:
             move()
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
@@ -1306,7 +1307,9 @@ class Hamster:
         if response == "ko":
             self.debug("Server did not accept incantation")
             return False
+        self.debug("Incantation accepted")
         self.update_inventory()
+        self.debug(f"Incantation inventory: {self.inventory}")
         return True
 
     def hamster_give_authority(self):

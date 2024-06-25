@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
+#include <sys/time.h>
 #include "log.h"
 
 static void log_handle_level(log_level_t level, FILE *stream)
@@ -30,15 +31,15 @@ static void log_handle_level(log_level_t level, FILE *stream)
 
 static void log_current_time(FILE *stream)
 {
-    time_t now = 0;
-    struct tm *local = NULL;
-
-    time(&now);
-    local = localtime(&now);
-    fprintf(stream, "\033[3;90m%02d:%02d:%02d\033[0m ",
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    time_t now = tv.tv_sec;
+    struct tm *local = localtime(&now);
+    fprintf(stream, "\033[3;90m%02d:%02d:%02d.%03ld\033[0m ",
         local->tm_hour,
         local->tm_min,
-        local->tm_sec
+        local->tm_sec,
+        tv.tv_usec / 1000
     );
 }
 
