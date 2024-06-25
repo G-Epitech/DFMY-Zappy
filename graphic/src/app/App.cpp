@@ -52,7 +52,6 @@ void App::setup() {
     addInputListener(this);
 
     Root *root = getRoot();
-    root->loadPlugin("Codec_FreeImage");
     scnMgr = root->createSceneManager();
     scnMgr->setSkyBox(true, "skybox", 300, true);
 
@@ -60,6 +59,7 @@ void App::setup() {
     _setupCamera();
     _setupMaterials();
     _setupLights();
+    _setupAudio();
 
     trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
     addInputListener(trayMgr);
@@ -106,6 +106,14 @@ void App::_setupLights() {
     sunNode->attachObject(sunLight);
     sunNode->setDirection(Vector3(1, -1, 0));
     sunNode->setPosition(-200, -200, 400);
+}
+
+void App::_setupAudio() {
+    if (!_background_music.openFromFile("audio/background_music.wav")) {
+        std::cerr << "Failed to load music file!" << std::endl;
+    } else {
+        _background_music.play();
+    }
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
