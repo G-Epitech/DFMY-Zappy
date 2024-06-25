@@ -527,9 +527,8 @@ void Commands::timeUnitRequest(std::string &command) {
 
     if (args.size() != 1)
         return;
-    int time_unit = std::stoi(args[0]);
 
-    // TODO: Implement time unit request
+    _map.timeUnit = std::stoi(args[0]);
 }
 
 void Commands::timeUnitModification(std::string &command) {
@@ -537,9 +536,8 @@ void Commands::timeUnitModification(std::string &command) {
 
     if (args.size() != 1)
         return;
-    int time_unit = std::stoi(args[0]);
 
-    // TODO: Implement time unit modification
+    _map.timeUnit = std::stoi(args[0]);
 }
 
 void Commands::endGame(std::string &command) {

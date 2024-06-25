@@ -144,6 +144,11 @@ private:
     void _setupDropdowns();
 
     /**
+     * @brief Setup the informations of the application
+     */
+    void _setupInformations();
+
+    /**
      * @brief Update the map
      * @param command Command received from the server
      */

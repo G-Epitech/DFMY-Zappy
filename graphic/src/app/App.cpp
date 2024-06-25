@@ -14,13 +14,13 @@ using namespace Ogre;
 using namespace OgreBites;
 
 App::App() :
-    OgreBites::ApplicationContext("Zappy"),
-    _client(),
-    trayMgr(nullptr),
-    _scnMgr(nullptr),
-    _map(),
-    _commands(_client, _map, nullptr),
-    _options() {}
+        OgreBites::ApplicationContext("Zappy"),
+        _client(),
+        trayMgr(nullptr),
+        _scnMgr(nullptr),
+        _map(),
+        _commands(_client, _map, nullptr),
+        _options() {}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -57,7 +57,7 @@ void App::_setupCamera() {
 
 void App::_setupMaterials() {
     MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial",
-        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+                                                                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
     material->setDiffuse(1, 1, 1, 0.5);
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
@@ -75,6 +75,22 @@ void App::_setupUI() {
 
     _setupButtons();
     _setupDropdowns();
+    _setupInformations();
+}
+
+void App::_setupInformations() {
+    Ogre::OverlayManager& overlayMgr = Ogre::OverlayManager::getSingleton();
+    Ogre::OverlayContainer* panel = static_cast<Ogre::OverlayContainer*>(overlayMgr.createOverlayElement("Panel", "MyPanel"));
+    panel->setMetricsMode(Ogre::GMM_PIXELS);
+    panel->setPosition(0, 50);
+    panel->setDimensions(200, 158.7);
+    panel->setMaterialName("gepitech");
+
+    Ogre::Overlay* overlay = overlayMgr.create("MyOverlay");
+    overlay->add2D(panel);
+    overlay->show();
+
+    trayMgr->createButton(TL_TOPLEFT, "infos", "Informations", 185);
 }
 
 void App::_setupButtons() {
@@ -91,7 +107,7 @@ void App::_setupDropdowns() {
     _teamsDropdown->addItem("team2");
 }
 
-bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
+bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
     trayMgr->frameRendered(evt);
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
@@ -122,8 +138,8 @@ void App::_loadResources() {
     ConfigFile::SettingsBySection_ section = cf.getSettingsBySection();
     String typeName, archName;
 
-    for (auto &i : section) {
-        for (auto &j : i.second) {
+    for (auto &i: section) {
+        for (auto &j: i.second) {
             typeName = j.first;
             archName = j.second;
             rgm.addResourceLocation(archName, typeName, "Main");
@@ -140,16 +156,21 @@ bool App::keyPressed(const KeyboardEvent &evt) {
     return true;
 }
 
-void App::buttonHit(OgreBites::Button* b)
-{
+void App::buttonHit(OgreBites::Button *b) {
     if (b->getName() == "Pause") {
         if (_pauseButton->getCaption() == "Resume") {
             _pauseButton->setCaption("Pause");
-            _client.write("sst " + std::to_string(_map.timeUnit) + "\n");
+            _client.write("sst 100\n");
         } else {
             _pauseButton->setCaption("Resume");
-            _client.write("sst 2\n");
+            _client.write("sst 0\n");
         }
+    }
+    if (b->getName() == "infos") {
+        trayMgr->showOkDialog("Informations", "This is a Zappy GUI made by the G-Epitech team.\n\n"
+                                             "You can use the dropdown to select a team and see only its players.\n"
+                                             "You can also pause the game by clicking on the Pause button.\n"
+                                             "Enjoy the game!");
     }
 }
 
@@ -157,11 +178,11 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
     if (menu->getName() == "Teams") {
         auto selectedTeam = menu->getSelectedItem();
         if (selectedTeam == "All teams") {
-            for (auto &player : _map.players) {
+            for (auto &player: _map.players) {
                 player.node->setVisible(true);
             }
         } else {
-            for (auto &player : _map.players) {
+            for (auto &player: _map.players) {
                 if (player.team == selectedTeam) {
                     player.node->setVisible(true);
                 } else {
@@ -187,7 +208,7 @@ void App::_updateMap(std::string &command) {
 }
 
 void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
-    for (auto &circle : _map.broadcastCircles) {
+    for (auto &circle: _map.broadcastCircles) {
         if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
             circle.node->setVisible(false);
         }
@@ -202,7 +223,7 @@ void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
 }
 
 void App::_updateIncantationSpheres(const Ogre::FrameEvent &evt) {
-    for (auto &sphere : _map.incantationSpheres) {
+    for (auto &sphere: _map.incantationSpheres) {
         if (sphere.isGrowing) {
             sphere.radius += evt.timeSinceLastFrame * INCANTATION_SPHERE_SPEED;
             if (sphere.radius >= INCANTATION_SPHERE_MAX_RADIUS) {
@@ -218,8 +239,7 @@ void App::_updateIncantationSpheres(const Ogre::FrameEvent &evt) {
     }
 }
 
-void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int segments)
-{
+void App::_updateSphere(Ogre::ManualObject *obj, float radius, int rings, int segments) {
     obj->clear();
     obj->begin("TransparentMaterial", RenderOperation::OT_TRIANGLE_LIST);
 
@@ -228,24 +248,21 @@ void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int se
     unsigned short wVerticeIndex = 0;
 
     // Generate the group of rings for the sphere
-    for (int ring = 0; ring <= rings; ring++)
-    {
+    for (int ring = 0; ring <= rings; ring++) {
         float r0 = radius * sinf(ring * fDeltaRingAngle);
         float y0 = radius * cosf(ring * fDeltaRingAngle);
 
         // Generate the group of segments for the current ring
-        for (int seg = 0; seg <= segments; seg++)
-        {
+        for (int seg = 0; seg <= segments; seg++) {
             float x0 = r0 * sinf(seg * fDeltaSegAngle);
             float z0 = r0 * cosf(seg * fDeltaSegAngle);
 
             // Add one vertex to the strip which makes up the sphere
             obj->position(x0, y0, z0);
             obj->normal(Vector3(x0, y0, z0).normalisedCopy());
-            obj->textureCoord((float)seg / (float)segments, (float)ring / (float)rings);
+            obj->textureCoord((float) seg / (float) segments, (float) ring / (float) rings);
 
-            if (ring != rings)
-            {
+            if (ring != rings) {
                 // each vertex (except the last) has six indices pointing to it
                 obj->index(wVerticeIndex + segments + 1);
                 obj->index(wVerticeIndex);
