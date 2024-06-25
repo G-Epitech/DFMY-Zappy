@@ -74,7 +74,7 @@ void App::_setupCamera() {
     cam->setFarClipDistance(1000);
 
     SceneNode *camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
-    camNode->setPosition(0, 0, 20);
+    camNode->setPosition(20, -20, -20);
     camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
     camNode->attachObject(cam);
     getRenderWindow()->addViewport(cam);

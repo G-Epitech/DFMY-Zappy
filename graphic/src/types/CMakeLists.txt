@@ -4,4 +4,6 @@ target_sources(zappy_gui_src PRIVATE
         Player.hpp
         Player.cpp
         Utils.hpp
-        Egg.hpp)
+        Egg.hpp
+        Teams.cpp
+        Teams.hpp)
