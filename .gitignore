@@ -23,3 +23,4 @@ zappy_ai
 build
 cmake-build*
 html
+.DS_Store
