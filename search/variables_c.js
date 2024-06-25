@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['onfinish_1637',['onfinish',['../structplayer__request__handler__s.html#af4123ea3f7da56100021e044dff68d32',1,'player_request_handler_s']]],
-  ['onstart_1638',['onstart',['../structplayer__request__handler__s.html#ae5a61c35c6546b22ccd6534555acb0ae',1,'player_request_handler_s']]],
-  ['orientation_1639',['orientation',['../structPlayer.html#a967935f454736c04a9fd27d1f68cee97',1,'Player']]]
+  ['onfinish_1638',['onfinish',['../structplayer__request__handler__s.html#af4123ea3f7da56100021e044dff68d32',1,'player_request_handler_s']]],
+  ['onstart_1639',['onstart',['../structplayer__request__handler__s.html#ae5a61c35c6546b22ccd6534555acb0ae',1,'player_request_handler_s']]],
+  ['orientation_1640',['orientation',['../structPlayer.html#a967935f454736c04a9fd27d1f68cee97',1,'Player']]]
 ];
