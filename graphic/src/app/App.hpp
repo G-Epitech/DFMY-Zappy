@@ -106,9 +106,14 @@ private:
     void _setupCamera();
 
     /**
-     * @rief Setup the materials of the application
+     * @brief Setup the materials of the application
      */
     void _setupMaterials();
+
+    /**
+     * @brief Setup the lights of the application
+     */
+    void _setupLights();
 
     /**
      * @brief Update the map
