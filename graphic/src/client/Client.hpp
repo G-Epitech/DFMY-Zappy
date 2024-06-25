@@ -65,7 +65,7 @@ public:
      * @details Call select to check if the server has data to read or if we can write.
      * @param block If true, the function will block until data is available.
      */
-    void pollClient(bool block = false);
+    void poll(bool block = false);
 
     /**
      * @brief Exception class for the Client class.

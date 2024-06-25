@@ -24,6 +24,11 @@ typedef struct vector2l_s {
     long y;
 } vector2l_t;
 
+typedef struct vector2d_s {
+    double x;
+    double y;
+} vector2d_t;
+
 /**
  * @brief Get a random vector2u_t
  * @brief out The output vector2u_t

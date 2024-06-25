@@ -39,6 +39,9 @@
 // @brief Density of thystame resource
 #define RES_THYSTAME_DENSITY 0.05f
 
+// @brief Max length of a resource string
+#define RES_MAX_STRING_LEN 9
+
 // @brief The enum representing the type of resource
 typedef enum resource_e {
     // @brief Food resource

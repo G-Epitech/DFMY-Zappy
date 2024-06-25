@@ -37,12 +37,12 @@ bool Client::establishConnection(const std::string &host, int port)
 
     this->_connect(host, port);
     while (true) {
-        this->pollClient(true);
+        this->poll(true);
         response = this->getCommandFromPendingBuffer();
         if (response == "WELCOME") {
             break;
         }
-        if (response == "KO") {
+        if (response == "ko") {
             return false;
         }
     }
@@ -50,6 +50,7 @@ bool Client::establishConnection(const std::string &host, int port)
     if (bytesWritten == 0) {
         return false;
     }
+    this->write("tna\n");
     this->write("mct\n");
     return true;
 }
@@ -168,7 +169,7 @@ std::string Client::getCommandFromPendingBuffer()
     return command;
 }
 
-void Client::pollClient(bool block)
+void Client::poll(bool block)
 {
     timeval timeout = {0, 0};
     timeval *timeoutPtr;

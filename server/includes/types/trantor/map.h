@@ -19,7 +19,7 @@ typedef struct player_s player_t;
 typedef struct egg_s egg_t;
 
 // @brief Get the map cell at given position
-#define MAP_CELL_AT_POS(map, pos) (&(map->cells[pos.y][pos.x]))
+#define MAP_CELL_AT_POS(map, pos) (&(map->cells[(pos).y][(pos).x]))
 
 // @brief Map player cell accessor
 #define MAP_PLAYER_CELL(m, p) MAP_CELL_AT_POS(m, p->position)
@@ -30,17 +30,6 @@ typedef struct egg_s egg_t;
 // @brief Look for position out of map
 #define MAP_OUT_POSITION(m, p) ((p).x >= m->size.x || (p).y >= m->size.y)
 
-// @brief Structure representing map cell statistics, mainly used for
-// the vision functionality
-typedef struct map_cell_stats_s {
-    // @brief Resources on the cell
-    size_t resources[RES_LEN];
-    // @brief Number of players on the cell
-    size_t players;
-    // @brief Number of eggs on the cell
-    size_t eggs;
-} map_cell_stats_t;
-
 // @brief Structure representing a Trantorian map cell
 typedef struct map_cell_s {
     // @brief List of players references currently on the cell
@@ -49,6 +38,8 @@ typedef struct map_cell_s {
     size_t resources[RES_LEN];
     // @brief List of eggs on the cell
     list_t *eggs;
+    // @brief Specify if the cell has been changed
+    bool changed;
 } map_cell_t;
 
 // @brief Structure representing a Trantorian map
@@ -57,6 +48,8 @@ typedef struct map_s {
     vector2u_t size;
     // @brief Cells of the map
     map_cell_t **cells;
+    // @brief Number of cells changed
+    size_t cells_changed;
 } map_t;
 
 /**
@@ -144,28 +137,13 @@ void map_remove_egg(map_t *map, egg_t *egg);
 vector2u_t map_resolve_position(map_t *map, vector2l_t pos);
 
 /**
- * @brief Get the stats of a cell
- * @param cell Cell to get the stats from
- * @param stats Stats to fill
+ * @brief Get the sound angle between two positions
+ * @param map Map to get the sound angle from
+ * @param src Sound emitter position
+ * @param dest Sound receiver position
+ * @return Sound angle (normalized between 0 and 360)
  */
-void map_cell_get_stats(map_cell_t *cell, map_cell_stats_t *stats);
-
-/**
- * @brief Get the buffer size of a cell stats (used for vision)
- * @param stats Stats to get the buffer size from
- * @return Buffer size
- */
-size_t map_cell_stats_str_len(map_cell_stats_t *stats);
-
-/**
- * @brief Get the string of a cell stats (used for vision)
- * @param cell_stats Cell stats to get the look string from
- * @param nb_cells Number of cells to get the look string from
- * @param buf_size Buffer size to store the look string
- * @return Look string
- */
-char *map_cells_stats_string(map_cell_stats_t *cell_stats, size_t nb_cells,
-    size_t buf_size);
+double map_get_sound_angle(map_t *map, vector2u_t src, vector2u_t dest);
 
 /**
  * @brief Move a position forward in a given direction
@@ -177,9 +155,32 @@ void map_forward_position(map_t *map, vector2u_t *position,
     direction_t direction);
 
 /**
- * @brief Eject players from a cell
- * @param map Map to eject players from
- * @param player Player that initiated the ejection
- * @return Success status
+ * @brief Move a player to a new position
+ * @param map Map to move the player in
+ * @param player Player to move
+ * @param new_pos New position of the player
  */
-bool map_eject_players(map_t *map, player_t *player);
+void map_move_player(map_t *map, player_t *player, vector2u_t *new_pos);
+
+/**
+ * @brief Move a player node to a new position
+ * @param map Map to move the player in
+ * @param player_node Player node to move
+ * @param new_pos New position of the player
+ */
+void map_move_player_node(map_t *map, node_t *player_node,
+    vector2u_t *new_pos);
+
+/**
+ * @brief Move an egg to a new position
+ * @param map Map on which mark the cell as changed
+ * @param cell Cell to mark as changed
+ */
+void map_mark_cell_as_changed(map_t *map, map_cell_t *cell);
+
+/**
+ * @brief Mark a cell as up to date
+ * @param map Map on which mark the cell as up to date
+ * @param cell Cell to mark as up to date
+ */
+void map_mark_cell_as_up_to_date(map_t *map, map_cell_t *cell);

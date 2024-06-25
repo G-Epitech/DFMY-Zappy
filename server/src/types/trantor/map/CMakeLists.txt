@@ -4,9 +4,9 @@ target_sources(zappy_server_core PRIVATE
         add.c
         remove.c
         position.c
-        eject.c
+        angle.c
+        move.c
+        cell/changed.c
         cell/init.c
         cell/free.c
-        cell/stats/get.c
-        cell/stats/string.c
 )

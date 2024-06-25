@@ -83,8 +83,11 @@ void request_free_as_node_data(node_data_t data);
 bool request_append(request_t *request, const char *data, size_t size);
 
 /**
- * @brief Get the size of the first token in the request buffer
- * @param request Request to get the first token size from
- * @return Size of the first token
+ * @brief Get token at given index in request buffer
+ * @param request Request to get token from
+ * @param index Index of token to get
+ * @param token Token to fill
+ * @return true if token was found, false otherwise
  */
-size_t request_get_first_token_size(request_t *request);
+bool request_get_token(request_t *request, size_t index,
+    request_token_t *token);

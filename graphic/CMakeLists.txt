@@ -13,4 +13,3 @@ find_package(OGRE REQUIRED)
 
 # Add Subdirectories
 add_subdirectory(src)
-add_subdirectory(client)

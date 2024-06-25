@@ -5,6 +5,11 @@
 ** World
 */
 
+/** @defgroup server_world Server World Module
+ *  Main server log module
+ *  @{
+ */
+
 #pragma once
 
 #include <stddef.h>
@@ -156,10 +161,4 @@ player_t *world_hatch_egg(world_t *world, egg_t *egg);
  */
 void world_update_resources_generation_delay(world_t *world);
 
-/**
- * @brief Kill a list of eggs and notify the server
- * @param world World to kill the eggs in
- * @param eggs List of eggs to kill
- * @param server Server to notify
- */
-void world_kill_eggs(world_t *world, list_t *eggs, server_t *server);
+/** @} */ // end of server

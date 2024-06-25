@@ -10,8 +10,10 @@
 
 bool incantation_add_player(incantation_t *incantation, player_t *player)
 {
-    if (!player || player->incantation)
+    if (!player)
         return false;
+    if (player->incantation)
+        return true;
     if (!list_push(incantation->players, NODE_DATA_FROM_PTR(player)))
         return false;
     player->incantation = incantation;

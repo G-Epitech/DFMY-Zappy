@@ -17,7 +17,7 @@ static void generate_resource(map_t *map,
 
     for (size_t i = 0; i < quantity; i++) {
         vector2u_random(&pos, &map->size);
-        map->cells[pos.y][pos.x].resources[type] += 1;
+        map_add_resource(map, pos, type, 1);
     }
     resources_manager->stats[type].actual += quantity;
 }

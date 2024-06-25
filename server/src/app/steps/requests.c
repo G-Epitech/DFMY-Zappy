@@ -58,7 +58,8 @@ void app_handle_controller_requests(app_t *app, controller_t *controller)
         next = node->next;
         request = NODE_TO_PTR(node, request_t *);
         complete = app_handle_controller_request(app, controller, request);
-        controller_clear_first_request(controller);
+        if (complete)
+            controller_clear_first_request(controller);
         node = next;
     }
 }

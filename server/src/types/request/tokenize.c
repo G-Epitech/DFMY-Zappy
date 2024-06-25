@@ -8,12 +8,33 @@
 #include <memory.h>
 #include "types/request.h"
 
-size_t request_get_first_token_size(request_t *request)
+static void get_next_token(char *start, size_t size, request_token_t *token)
 {
     char *delim = NULL;
 
-    delim = memchr(request->buffer, ' ', request->content_size);
-    if (!delim)
-        return request->content_size;
-    return delim - request->buffer;
+    token->content = start;
+    token->size = size;
+    delim = memchr(start, ' ', size);
+    if (delim)
+        token->size = (delim - start);
+}
+
+bool request_get_token(request_t *request, size_t index,
+    request_token_t *token)
+{
+    char *start = request->buffer;
+    size_t size = request->content_size;
+    size_t i = 0;
+
+    while (i < index && size > 0) {
+        get_next_token(start, size, token);
+        start += token->size + 1;
+        size -= token->size;
+        size -= (size > 0 ? 1 : 0);
+        i += 1;
+    }
+    if (i != index || size == 0)
+        return false;
+    get_next_token(start, size, token);
+    return true;
 }

@@ -5,12 +5,18 @@
 ** App class
 */
 
+/** @defgroup graphic_app Graphic App Module
+ *  Main graphic application module
+ *  @{
+ */
+
+
 #pragma once
 
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
-#include "../../client/Client.hpp"
+#include "client/Client.hpp"
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
 

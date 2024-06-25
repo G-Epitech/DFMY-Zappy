@@ -22,3 +22,5 @@ zappy_ai
 *.gcov
 build
 cmake-build*
+html
+.DS_Store
