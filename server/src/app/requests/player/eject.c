@@ -19,7 +19,7 @@ static void notify_and_move_players(app_t *app, map_cell_t *cell,
         player = NODE_TO_PTR(node, player_t *);
         if (player != ejector) {
             controller_add_emission((controller_t *) player->controller,
-                "eject %d\n", incoming_direction);
+                "eject: %d\n", incoming_direction);
             map_move_player_node(app->world->map, node, destination);
         }
         node = node->next;
