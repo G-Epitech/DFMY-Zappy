@@ -55,6 +55,7 @@ void App::setup() {
     root->loadPlugin("Codec_FreeImage");
     scnMgr = root->createSceneManager();
     scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+    scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
     _setupCamera();
