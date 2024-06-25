@@ -19,17 +19,18 @@ App::App() :
     trayMgr(nullptr),
     _scnMgr(nullptr),
     _map(),
-    _commands(_client, _map, _scnMgr),
+    _commands(_client, _map, nullptr),
     _options() {}
 
 void App::setup() {
     ApplicationContext::setup();
     addInputListener(this);
     Root *root = getRoot();
-    root->loadPlugin("Codec_FreeImage");
-    auto *scnMgr = root->createSceneManager();
-    _scnMgr = std::make_unique<SceneManager>(scnMgr);
+
+    _scnMgr = root->createSceneManager();
     _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+
+    _commands.setScnMgr(_scnMgr);
 
     _loadResources();
     _setupCamera();

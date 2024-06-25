@@ -22,7 +22,7 @@ public:
      * @param map Map object to update the game state
      * @param scnMgr Ogre::SceneManager object to create entities
      */
-    Commands(Client &client, Map &map, std::shared_ptr<Ogre::SceneManager> scnMgr);
+    Commands(Client &client, Map &map, Ogre::SceneManager* scnMgr);
 
     /**
      * @brief Destroy the Commands object
@@ -35,6 +35,12 @@ public:
      * @param params The parameters of the command
      */
     void execute(std::string &command, std::string &params);
+
+    /**
+     * @brief Set the Ogre::SceneManager object
+     * @param scnMgr The Ogre::SceneManager object
+     */
+    void setScnMgr(Ogre::SceneManager* scnMgr);
 
     void mapSize(std::string &params);
     void tileContent(std::string &params);
@@ -70,6 +76,6 @@ private:
 
     Client &_client;
     Map &_map;
-    std::shared_ptr<Ogre::SceneManager> _scnMgr;
+    Ogre::SceneManager* _scnMgr;
     std::map<std::string, std::function<void(std::string &)>> _commands;
 };

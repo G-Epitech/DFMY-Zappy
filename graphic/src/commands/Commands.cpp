@@ -12,7 +12,7 @@
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 std::vector<std::string> playerModels = {"Barbar.mesh", "Queen.mesh"};
 
-Commands::Commands(Client &client, Map &map, std::shared_ptr<Ogre::SceneManager> scnMgr) : _client(client), _map(map), _scnMgr(scnMgr) {
+Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr) : _client(client), _map(map), _scnMgr(scnMgr) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
     _commands["bct"] = [this](std::string &params) { tileContent(params); };
     _commands["tna"] = [this](std::string &params) { teamsNames(params); };
@@ -46,6 +46,10 @@ void Commands::execute(std::string &command, std::string &params) {
     } else {
         unknownCommand(command);
     }
+}
+
+void Commands::setScnMgr(Ogre::SceneManager *scnMgr) {
+    _scnMgr = scnMgr;
 }
 
 void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quantity) {
@@ -108,7 +112,8 @@ void Commands::_updatePlayerItemSize(Ogre::SceneNode *node, Player &player, Tile
 
     node->setPosition(randX, itemY, randZ);
     node->setScale(playerScale, playerScale, playerScale);
-    std::cout << "Player " << player.id << " is now level " << player.level << " with size " << playerScale << std::endl;
+    std::cout << "Player " << player.id << " is now level " << player.level << " with size " << playerScale
+              << std::endl;
 }
 
 Circle Commands::_createBroadcastCircle(const Ogre::Vector3 &position) {

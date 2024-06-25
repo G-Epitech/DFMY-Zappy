@@ -96,7 +96,7 @@ private:
     OgreBites::TrayManager *trayMgr;
 
     /// @brief Scene manager used to manage the scene
-    std::shared_ptr<Ogre::SceneManager> _scnMgr;
+    Ogre::SceneManager *_scnMgr;
 
     /// @brief Map of the game with all the tiles, players...
     Map _map;
