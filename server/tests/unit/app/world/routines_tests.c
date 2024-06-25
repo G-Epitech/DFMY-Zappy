@@ -14,7 +14,7 @@ Test(world_routine_resource_generation_tests, simple)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    resources_manager_t *res_manager = &world->resources_manager;
+    resources_manager_t *res_manager = &world->map->resources_manager;
 
     for (resource_t i = 0; i < RES_LEN; i++) {
         res_manager->stats[i].actual = 8;

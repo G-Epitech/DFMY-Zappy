@@ -14,10 +14,10 @@ Test(direction, test_direction_get_move_vector)
     vector2l_t vec = direction_get_move_vector(DIR_NORTH);
 
     cr_assert_eq(vec.x, 0);
-    cr_assert_eq(vec.y, -1);
+    cr_assert_eq(vec.y, 1);
     vec = direction_get_move_vector(DIR_SOUTH);
     cr_assert_eq(vec.x, 0);
-    cr_assert_eq(vec.y, 1);
+    cr_assert_eq(vec.y, -1);
     vec = direction_get_move_vector(DIR_WEST);
     cr_assert_eq(vec.x, -1);
     cr_assert_eq(vec.y, 0);

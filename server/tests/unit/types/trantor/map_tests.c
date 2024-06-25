@@ -90,10 +90,11 @@ Test(map_remove_resource_tests, remove_resource_from_cell)
     vector2u_t size = { 6, 6 };
     vector2u_t position = { 4, 4 };
     world_t *world = world_new(size, 100);
+    size_t previous_resources = world->map->cells[4][4].resources[RES_FOOD];
 
     map_add_resource(world->map, position, RES_FOOD, 1);
     map_remove_resource(world->map, position, RES_FOOD, 1);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], previous_resources);
     world_free(world);
 }
 
@@ -151,9 +152,9 @@ Test(map_broadcast_angle_tests, subject_example)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 4);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 6);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 6);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 2);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 8);
@@ -171,9 +172,9 @@ Test(map_broadcast_angle_tests, reversed_x_subject_example)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 2);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 4);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 4);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 8);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 6);
@@ -191,9 +192,9 @@ Test(map_broadcast_angle_tests, reversed_y_subject_example)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 6);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 8);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 8);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 4);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 2);
@@ -211,9 +212,9 @@ Test(map_broadcast_angle_tests, reversed_y_x_subject_example)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 8);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 2);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 2);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 6);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 4);
@@ -230,8 +231,8 @@ Test(map_broadcast_angle_tests, same_tile)
     int quadrant  = angle_to_quadrant(final_angle);
 
     cr_assert_eq(direction_get_quadrant(DIR_EAST, quadrant), 1);
-    cr_assert_eq(direction_get_quadrant(DIR_SOUTH, quadrant), 3);
-    cr_assert_eq(direction_get_quadrant(DIR_NORTH, quadrant), 7);
+    cr_assert_eq(direction_get_quadrant(DIR_NORTH, quadrant), 3);
+    cr_assert_eq(direction_get_quadrant(DIR_SOUTH, quadrant), 7);
     cr_assert_eq(direction_get_quadrant(DIR_WEST, quadrant), 5);
     free(world);
 }
@@ -246,8 +247,8 @@ Test(map_broadcast_angle_tests, null_map)
     cr_assert_eq(final_angle, -1);
     cr_assert_eq(quadrant, -1);
     cr_assert_eq(direction_get_quadrant(DIR_EAST, quadrant), -1);
-    cr_assert_eq(direction_get_quadrant(DIR_SOUTH, quadrant), -1);
     cr_assert_eq(direction_get_quadrant(DIR_NORTH, quadrant), -1);
+    cr_assert_eq(direction_get_quadrant(DIR_SOUTH, quadrant), -1);
     cr_assert_eq(direction_get_quadrant(DIR_WEST, quadrant), -1);
 }
 
@@ -262,9 +263,9 @@ Test(map_broadcast_angle_tests, wrap_on_x_dest_bigger)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 1);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 3);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 3);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 7);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 5);
@@ -282,9 +283,9 @@ Test(map_broadcast_angle_tests, wrap_on_x_src_bigger)
     int normalized_quadrant = direction_get_quadrant(DIR_EAST, quadrant);
 
     cr_assert_eq(normalized_quadrant, 5);
-    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
-    cr_assert_eq(normalized_quadrant, 7);
     normalized_quadrant = direction_get_quadrant(DIR_NORTH, quadrant);
+    cr_assert_eq(normalized_quadrant, 7);
+    normalized_quadrant = direction_get_quadrant(DIR_SOUTH, quadrant);
     cr_assert_eq(normalized_quadrant, 3);
     normalized_quadrant = direction_get_quadrant(DIR_WEST, quadrant);
     cr_assert_eq(normalized_quadrant, 1);
