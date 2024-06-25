@@ -118,13 +118,15 @@ void Commands::mapSize(std::string &command, Map &map, Ogre::SceneManager *scnMg
         posy = static_cast<float>(map.width) / 2;
         for (int j = 0; j < map.height; j++)
         {
-            Ogre::Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
+            float mapScale = 0.1f;
+            Ogre::Entity *cubeEntity = scnMgr->createEntity("Island.mesh");
             Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
             node->attachObject(cubeEntity);
 
             Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
             Ogre::Vector3 size = aab.getSize();
-            node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
+            node->setPosition(posx * size.x * mapScale, (-(size.y * mapScale) / 2.0), posy * size.z * mapScale);
+            node->setScale(mapScale, mapScale, mapScale);
 
             Tile tile;
 
