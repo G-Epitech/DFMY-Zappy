@@ -96,13 +96,13 @@ private:
     OgreBites::TrayManager *trayMgr;
 
     /// @brief Scene manager used to manage the scene
-    Ogre::SceneManager *scnMgr;
+    std::shared_ptr<Ogre::SceneManager> _scnMgr;
 
     /// @brief Map of the game with all the tiles, players...
     Map _map;
 
-    /// @brief Map of commands received from the server
-    std::map<std::string, std::function<void(std::string &, Map &, Ogre::SceneManager *, Client &)>> _commands;
+    /// @brief Commands object used to execute commands
+    Commands _commands;
 
     /// @brief Options of the application
     Options _options;

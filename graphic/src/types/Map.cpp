@@ -9,7 +9,7 @@
 
 bool operator==(const Circle &lhs, const Circle &rhs)
 {
-    return lhs.node == rhs.node;
+    return lhs.node == rhs.node && lhs.radius == rhs.radius && lhs.circle == rhs.circle;
 }
 
 bool operator==(const Sphere &lhs, const Sphere &rhs)

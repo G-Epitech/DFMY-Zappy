@@ -17,44 +17,19 @@ App::App() :
     OgreBites::ApplicationContext("Zappy"),
     _client(),
     trayMgr(nullptr),
-    scnMgr(nullptr),
+    _scnMgr(nullptr),
     _map(),
-    _commands(),
-    _options()
-{
-    this->_commands["msz"] = &Commands::mapSize;
-    this->_commands["bct"] = &Commands::tileContent;
-    this->_commands["tna"] = &Commands::teamsNames;
-    this->_commands["pnw"] = &Commands::playerConnect;
-    this->_commands["ppo"] = &Commands::playerPosition;
-    this->_commands["plv"] = &Commands::playerLevel;
-    this->_commands["pin"] = &Commands::playerInventory;
-    this->_commands["pex"] = &Commands::playerEject;
-    this->_commands["pbc"] = &Commands::broadcast;
-    this->_commands["pic"] = &Commands::incantationStart;
-    this->_commands["pie"] = &Commands::incantationEnd;
-    this->_commands["pfk"] = &Commands::playerLayingEgg;
-    this->_commands["pdr"] = &Commands::playerResourceDrop;
-    this->_commands["pgt"] = &Commands::playerResourceTake;
-    this->_commands["pdi"] = &Commands::playerDeath;
-    this->_commands["enw"] = &Commands::playerEggLaid;
-    this->_commands["edi"] = &Commands::eggDeath;
-    this->_commands["ebo"] = &Commands::eggHatching;
-    this->_commands["sgt"] = &Commands::timeUnitRequest;
-    this->_commands["sst"] = &Commands::timeUnitModification;
-    this->_commands["seg"] = &Commands::endGame;
-    this->_commands["suc"] = &Commands::unknownCommand;
-    this->_commands["sbp"] = &Commands::commandParameters;
-}
+    _commands(_client, _map, _scnMgr),
+    _options() {}
 
 void App::setup() {
     ApplicationContext::setup();
     addInputListener(this);
-
     Root *root = getRoot();
     root->loadPlugin("Codec_FreeImage");
-    scnMgr = root->createSceneManager();
-    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+    auto *scnMgr = root->createSceneManager();
+    _scnMgr = std::make_unique<SceneManager>(scnMgr);
+    _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
 
     _loadResources();
     _setupCamera();
@@ -63,12 +38,12 @@ void App::setup() {
 }
 
 void App::_setupCamera() {
-    Camera *cam = scnMgr->createCamera("myCam");
+    Camera *cam = _scnMgr->createCamera("myCam");
     cam->setAutoAspectRatio(true);
     cam->setNearClipDistance(0.1);
     cam->setFarClipDistance(1000);
 
-    SceneNode *camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+    SceneNode *camNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
     camNode->setPosition(20, -20, -20);
     camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
     camNode->attachObject(cam);
@@ -89,7 +64,7 @@ void App::_setupMaterials() {
 }
 
 void App::_setupUI() {
-    scnMgr->addRenderQueueListener(getOverlaySystem());
+    _scnMgr->addRenderQueueListener(getOverlaySystem());
 
     trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
     addInputListener(trayMgr);
@@ -198,28 +173,19 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
 
 void App::_updateMap(std::string &command) {
     std::string commandName = command.substr(0, 3);
-    if (this->_commands.find(commandName) != this->_commands.end()) {
-        std::string params = command.substr(4);
-        this->_commands[commandName](params, this->_map, this->scnMgr, this->_client);
-    } else {
-        std::cerr << "Unknown command: " << commandName << std::endl;
-    }
+    std::string params = command.substr(4);
+
+    _commands.execute(commandName, params);
 }
 
 void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
     for (auto &circle : _map.broadcastCircles) {
         if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
-            if (circle.circle)
-                scnMgr->destroyManualObject(circle.circle);
-            if (circle.node)
-                scnMgr->destroySceneNode(circle.node);
-            _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
-            continue;
+            circle.node->setVisible(false);
         }
         circle.radius += evt.timeSinceLastFrame * BROADCAST_SPEED;
         circle.circle->beginUpdate(0);
-        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
-        {
+        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i) {
             float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
             circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
         }
