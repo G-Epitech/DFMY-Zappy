@@ -6,7 +6,6 @@
 ##
 
 import time
-import multiprocessing
 from datetime import datetime
 from classes.client import SocketClient
 from typing import Callable
@@ -23,14 +22,13 @@ COLOR_MAGENTA = "\033[1;35m"
 COLOR_CYAN = "\033[1;36m"
 COLOR_RESET = "\033[0m"
 
-class SubProcess(multiprocessing.Process):
-    def __init__(self, host: str, port: int, name: str, add_subprocess: Callable[[], None], ID: int):
-        super(SubProcess, self).__init__()
+class Thread():
+    def __init__(self, host: str, port: int, name: str, add_thread: Callable[[], None], ID: int):
         self.host: str = host
         self.port: int = port
         self.name: str = name
         self.client: SocketClient = SocketClient(self.host, self.port)
-        self.add_subprocess: Callable[[], None] = add_subprocess
+        self.add_thread: Callable[[], None] = add_thread
         self.ID: int = ID
 
     def run(self):
@@ -55,26 +53,24 @@ class SubProcess(multiprocessing.Process):
                     response = self.client.receive()
 
                 if response == "ko":
-                    # self.debug(f"Server did not accept me, received: {response}")
-                    # self.debug(f"Server did not accept me")
                     self.client.close()
-                    # time.sleep(0.2)
+                    time.sleep(0.2)
                     continue
 
                 available_clients = int(response)
 
                 if available_clients > 0:
-                    self.add_subprocess()
+                    self.add_thread()
 
                 response = None
                 while not response:
                     response = self.client.receive()
-                
+
                 self.debug(f"Successfully joined team {self.name}")
 
                 map_size = tuple(map(int, response.split()))
 
-                hamster = Hamster(self.client, self.name, map_size, self.add_subprocess, self.ID)
+                hamster = Hamster(self.client, self.name, map_size, self.add_thread, self.ID)
 
                 hamster.run()
 
@@ -90,4 +86,3 @@ class SubProcess(multiprocessing.Process):
         timestamp = now.strftime('%H:%M:%S') + f".{now.microsecond // 10:05d}"
         id_formate = f"{self.ID:03d}"
         print(f"{color}[{timestamp}] Hamster {id_formate}: {string}{COLOR_RESET}")
-
