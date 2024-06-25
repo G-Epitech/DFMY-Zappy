@@ -8,14 +8,17 @@
 #include "types/trantor/egg.h"
 #include "types/trantor/map.h"
 #include "types/trantor/player.h"
+#include "log.h"
 
-void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
+bool map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity)
 {
     if (!map)
-        return;
+        return false;
     map->cells[pos.y][pos.x].resources[resource] += quantity;
     map_mark_cell_as_changed(map, MAP_CELL_AT_POS(map, pos));
+    map->resources_manager.stats[resource].actual += quantity;
+    return true;
 }
 
 bool map_add_player(map_t *map, player_t *player)

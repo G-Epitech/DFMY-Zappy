@@ -8,9 +8,9 @@
 #include "types/direction.h"
 
 static const direction_quadrant_t direction_quadrants[] = {
-    {.direction = DIR_NORTH, .quadrants = {7, 8, 1, 2, 3, 4, 5, 6}},
+    {.direction = DIR_NORTH, .quadrants = {3, 4, 5, 6, 7, 8, 1, 2}},
     {.direction = DIR_EAST, .quadrants = {1, 2, 3, 4, 5, 6, 7, 8}},
-    {.direction = DIR_SOUTH, .quadrants = {3, 4, 5, 6, 7, 8, 1, 2}},
+    {.direction = DIR_SOUTH, .quadrants = {7, 8, 1, 2, 3, 4, 5, 6}},
     {.direction = DIR_WEST, .quadrants = {5, 6, 7, 8, 1, 2, 3, 4}},
 };
 

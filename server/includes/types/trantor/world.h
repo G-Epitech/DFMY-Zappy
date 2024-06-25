@@ -32,8 +32,6 @@ typedef struct world_s {
     list_t *dead_players;
     // @brief Clock of the world
     chrono_t chrono;
-    // @brief Resources manager of the world
-    resources_manager_t resources_manager;
     // @brief Delay before next predictable event in world
     time_unit_t next_event_delay;
     // @brief List of incantations in the world
@@ -160,5 +158,25 @@ player_t *world_hatch_egg(world_t *world, egg_t *egg);
  * @param world World to update the resources generation delay in
  */
 void world_update_resources_generation_delay(world_t *world);
+
+/**
+ * @brief Add a resource to the world
+ * @param world World to add the resource to
+ * @param resource Resource type to add
+ * @param pos Position of the resource
+ * @param quantity Quantity of the resource to add
+ */
+void world_add_resource(world_t *world, resource_t resource, vector2u_t pos,
+    size_t quantity);
+
+/**
+ * @brief Remove a resource to the world
+ * @param world World to remove the resource to
+ * @param resource Resource type to remove
+ * @param pos Position of the resource
+ * @param quantity Quantity of the resource to remove
+ */
+void world_remove_resource(world_t *world, resource_t resource, vector2u_t pos,
+    size_t quantity);
 
 /** @} */ // end of server

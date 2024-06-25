@@ -50,6 +50,8 @@ typedef struct map_s {
     map_cell_t **cells;
     // @brief Number of cells changed
     size_t cells_changed;
+    // @brief Resources manager
+    resources_manager_t resources_manager;
 } map_t;
 
 /**
@@ -85,7 +87,7 @@ void map_cell_free(map_cell_t *cell);
  * @param resource Resource to add
  * @param quantity Quantity of the resource to add
  */
-void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
+bool map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
 
 /**
@@ -95,7 +97,7 @@ void map_add_resource(map_t *map, vector2u_t pos, resource_t resource,
  * @param resource Resource to remove
  * @param quantity Quantity of the resource to remove
  */
-void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
+bool map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity);
 
 /**
@@ -185,3 +187,9 @@ void map_mark_cell_as_changed(map_t *map, map_cell_t *cell);
  * @param cell Cell to mark as up to date
  */
 void map_mark_cell_as_up_to_date(map_t *map, map_cell_t *cell);
+
+/**
+ * @brief Refill resources on the map
+ * @param map Map to refill resources on
+ */
+void map_refill_resources(map_t *map);
