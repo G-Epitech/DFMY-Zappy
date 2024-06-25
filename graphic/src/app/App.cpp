@@ -148,7 +148,7 @@ void App::buttonHit(OgreBites::Button* b)
             _client.write("sst " + std::to_string(_map.timeUnit) + "\n");
         } else {
             _pauseButton->setCaption("Resume");
-            _client.write("sst 0\n");
+            _client.write("sst 2\n");
         }
     }
 }
@@ -173,8 +173,15 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
 }
 
 void App::_updateMap(std::string &command) {
+    if (command.length() < 3)
+        return;
+
     std::string commandName = command.substr(0, 3);
-    std::string params = command.substr(4);
+    std::string params;
+
+    if (command.length() > 3) {
+        params = command.substr(4);
+    }
 
     _commands.execute(commandName, params);
 }
