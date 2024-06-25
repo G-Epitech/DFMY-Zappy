@@ -26,6 +26,7 @@ static void emit_message_to_player(world_t *world, player_t *emitter,
     controller_add_emission(controller, "message %d, ", normalized_quadrant);
     controller_add_emission_raw(controller, token->content, token->size);
     controller_add_emission_raw(controller, "\n", 1);
+    log_warn("T%zu send message to T%zu with quadrant %d", emitter->id, player->id, normalized_quadrant);
 }
 
 static void emit_message_to_players(world_t *world, player_t *emitter,
