@@ -261,10 +261,9 @@ bool controller_player_from_generic(controller_t *controller,
 /**
  * @brief Initialize a graphic controller from a generic controller
  * @param controller Controller to initialize
- * @param map Map to use to dynamically allocate buffer
  * @return true if the controller was initialized, false otherwise
  */
-bool controller_graphic_from_generic(controller_t *controller, map_t *map);
+bool controller_graphic_from_generic(controller_t *controller);
 
 /**
  * @brief Check if a controller can emit data

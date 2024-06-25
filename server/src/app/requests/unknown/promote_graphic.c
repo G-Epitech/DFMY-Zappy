@@ -89,17 +89,13 @@ static void send_map_size(controller_t *controller,
 void app_try_promote_controller_to_graphic(app_t *app,
     controller_t *controller)
 {
-    bool promoted = controller_graphic_from_generic(controller,
-        app->world->map);
+    bool promoted = controller_graphic_from_generic(controller);
 
     if (!promoted) {
         log_error("Controller on socket %d could not be promoted to graphic."
             " Disconnecting.", controller->generic.socket);
         return server_disconnect_controller(app->server, controller);
     }
-    log_info("Controller on socket %d has been promoted to graphic."
-            " Emissions buffer smartly resized to %zu bytes.",
-            controller->generic.socket, controller->graphic.emissions->size);
     send_map_size(controller, app->world);
     send_laid_eggs_info(controller, app->world);
     send_players_info(controller, app->world);
