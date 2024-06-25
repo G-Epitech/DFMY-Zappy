@@ -31,10 +31,13 @@ static void log_handle_level(log_level_t level, FILE *stream)
 
 static void log_current_time(FILE *stream)
 {
-    struct timeval tv;
+    struct timeval tv = { 0 };
+    time_t now;
+    struct tm *local = NULL;
+
     gettimeofday(&tv, NULL);
-    time_t now = tv.tv_sec;
-    struct tm *local = localtime(&now);
+    now = tv.tv_sec;
+    local = localtime(&now);
     fprintf(stream, "\033[3;90m%02d:%02d:%02d.%03ld\033[0m ",
         local->tm_hour,
         local->tm_min,
