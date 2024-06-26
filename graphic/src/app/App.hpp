@@ -16,6 +16,7 @@
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
+#include <SFML/Audio.hpp>
 #include "client/Client.hpp"
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
@@ -95,6 +96,8 @@ private:
     /// @brief Options of the application
     Options _options;
 
+    sf::Music _background_music;
+
     /**
      * @brief Load resources of the application
      */
@@ -106,9 +109,19 @@ private:
     void _setupCamera();
 
     /**
-     * @rief Setup the materials of the application
+     * @brief Setup the materials of the application
      */
     void _setupMaterials();
+
+    /**
+     * @brief Setup the lights of the application
+     */
+    void _setupLights();
+
+    /**
+     * @brief Setup the audio of the application
+     */
+    void _setupAudio();
 
     /**
      * @brief Update the map

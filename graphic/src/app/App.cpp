@@ -53,12 +53,13 @@ void App::setup() {
 
     Root *root = getRoot();
     scnMgr = root->createSceneManager();
-    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
     scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
     _setupCamera();
     _setupMaterials();
+    _setupLights();
+    _setupAudio();
 
     trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
     addInputListener(trayMgr);
@@ -91,6 +92,28 @@ void App::_setupMaterials() {
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
     material->setDepthWriteEnabled(false);
+}
+
+void App::_setupLights() {
+    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+
+    auto sunLight = scnMgr->createLight("SunLight");
+    sunLight->setType(Light::LT_DIRECTIONAL);
+    sunLight->setDiffuseColour(ColourValue(0.4, 0, 0));
+    sunLight->setSpecularColour(ColourValue(0.4, 0, 0));
+
+    auto sunNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+    sunNode->attachObject(sunLight);
+    sunNode->setDirection(Vector3(1, -1, 0));
+    sunNode->setPosition(-200, -200, 400);
+}
+
+void App::_setupAudio() {
+    if (!_background_music.openFromFile("audio/background_music.wav")) {
+        std::cerr << "Failed to load music file!" << std::endl;
+    } else {
+        _background_music.play();
+    }
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
