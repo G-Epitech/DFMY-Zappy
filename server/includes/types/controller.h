@@ -15,8 +15,6 @@
 #include "types/vector2.h"
 #include "buffer.h"
 
-#define PAGE_SIZE 4096
-
 // Forward declaration of server
 typedef struct server_s server_t;
 
