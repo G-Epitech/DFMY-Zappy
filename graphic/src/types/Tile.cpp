@@ -6,6 +6,7 @@
 */
 
 #include "Tile.hpp"
+#include "constants/Resources.hpp"
 
 Tile::Tile(Ogre::SceneNode *node) {
     _node = node;
@@ -21,6 +22,7 @@ void Tile::addItemEntity(const std::string &name, int quantity, Ogre::SceneManag
     auto tileSize = _node->getAttachedObject(0)->getBoundingBox().getSize();
     Ogre::Vector3 pos = _node->getPosition();
     Ogre::Vector3 size = _node->getAttachedObject(0)->getBoundingBox().getSize();
+    float rotation;
 
     for (int i = 0; i < quantity; i++) {
         Ogre::Entity *cubeEntity = scnMgr->createEntity(name + ".mesh");
@@ -29,12 +31,14 @@ void Tile::addItemEntity(const std::string &name, int quantity, Ogre::SceneManag
 
         itemNode->attachObject(cubeEntity);
 
-        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
-        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
+        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.x - tileSize.x / 1.5f);
+        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.z - tileSize.z / 1.5f);
+        rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
         float itemY = itemSize.y / 2.0f * 0.1;
 
         itemNode->setPosition(randX, itemY, randZ);
-        itemNode->setScale(0.1f, 0.1f, 0.1f);
+        itemNode->setScale(RESOURCES_SCALE, RESOURCES_SCALE, RESOURCES_SCALE);
+        itemNode->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
         items[name].push_back(itemNode);
     }
 }

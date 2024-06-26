@@ -100,11 +100,12 @@ void Commands::mapSize(std::string &command) {
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
+    float rotation;
     for (int i = 0; i < _map.width; i++) {
         std::vector<std::shared_ptr<Tile>> row;
         posy = static_cast<float>(_map.width) / 2;
         for (int j = 0; j < _map.height; j++) {
-            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
+            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Island.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
             node->attachObject(cubeEntity);
