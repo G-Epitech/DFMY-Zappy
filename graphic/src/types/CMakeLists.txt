@@ -6,4 +6,6 @@ target_sources(zappy_gui_src PRIVATE
         Utils.hpp
         Egg.hpp
         Teams.cpp
-        Teams.hpp)
+        Teams.hpp
+        Tile.cpp
+        Tile.hpp)

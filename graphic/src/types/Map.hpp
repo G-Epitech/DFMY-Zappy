@@ -14,14 +14,12 @@
 #include "constants/Broadcast.hpp"
 #include "constants/Incantation.hpp"
 #include "Teams.hpp"
+#include "Tile.hpp"
 
 #define MAP_TILE_Y_OFFSET 0.4f
 #define MAP_TILE_X_OFFSET 0.4f
 
-struct Tile {
-    std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
-    Ogre::SceneNode *node = nullptr;
-};
+typedef std::vector<std::vector<std::shared_ptr<Tile>>> Tiles;
 
 struct Circle {
     Ogre::ManualObject *circle = nullptr;
@@ -37,8 +35,8 @@ struct Sphere {
 };
 
 struct Map {
-    std::vector<std::vector<Tile>> tiles = {};
-    std::vector<Player> players = {};
+    Tiles tiles = {};
+    std::vector<std::shared_ptr<Player>> players = {};
     int width = 0;
     int height = 0;
     int timeUnit = 0;
@@ -49,4 +47,5 @@ struct Map {
 };
 
 bool operator==(const Circle &lhs, const Circle &rhs);
+
 bool operator==(const Sphere &lhs, const Sphere &rhs);

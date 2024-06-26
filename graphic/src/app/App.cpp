@@ -212,14 +212,14 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
         auto selectedTeam = menu->getSelectedItem();
         if (selectedTeam == "All teams") {
             for (auto &player: _map.players) {
-                player.node->setVisible(true);
+                player->node->setVisible(true);
             }
         } else {
             for (auto &player: _map.players) {
-                if (player.team == selectedTeam) {
-                    player.node->setVisible(true);
+                if (player->getTeam() == selectedTeam) {
+                    player->node->setVisible(true);
                 } else {
-                    player.node->setVisible(false);
+                    player->node->setVisible(false);
                 }
             }
         }
@@ -275,14 +275,14 @@ void App::_handleObjectSelection(Ogre::Node *node) {
     // Tiles management
     for (auto &row: _map.tiles) {
         for (auto &tile: row) {
-            if (tile.node == node) {
+            if (tile->getNode() == node) {
                 Ogre::StringVector stats;
                 Ogre::StringVector values;
 
                 stats.push_back("Position");
                 values.push_back("x:" + std::to_string(static_cast<int>(position.x)) + ", y:" +
                                  std::to_string(static_cast<int>(position.y)));
-                std::for_each(tile.items.begin(), tile.items.end(), [&stats, &values](const auto &item) {
+                std::for_each(tile->items.begin(), tile->items.end(), [&stats, &values](const auto &item) {
                     stats.push_back(item.first);
                     values.push_back(std::to_string(item.second.size()));
                 });
@@ -305,28 +305,30 @@ void App::_handleObjectSelection(Ogre::Node *node) {
 
     // Player management
     for (auto &player: _map.players) {
-        if (player.node == node) {
+        if (player->node == node) {
             Ogre::StringVector stats;
             Ogre::StringVector values;
 
             stats.emplace_back("Position");
-            values.push_back("x:" + std::to_string(static_cast<int>(player.position.x)) + ", y:" +
-                             std::to_string(static_cast<int>(player.position.y)));
+            values.push_back("x:" + std::to_string(static_cast<int>(player->position.x)) + ", y:" +
+                             std::to_string(static_cast<int>(player->position.y)));
 
             stats.emplace_back("Team");
-            values.push_back(player.team);
+            values.push_back(player->getTeam());
 
             stats.emplace_back("Level");
-            values.push_back(std::to_string(player.level));
+            values.push_back(std::to_string(player->level));
 
             stats.emplace_back("Inventory");
             values.emplace_back("");
 
             stats.emplace_back("Food");
-            values.push_back(std::to_string(player.inventory.food));
+            values.push_back(std::to_string(player->getItemQuantity("food")));
 
+            /*
             stats.emplace_back("Stones");
             values.emplace_back(std::to_string(_getPlayerStonesNumber(player)));
+             */
 
             _infosLabel = trayMgr->createLabel(TL_NONE, "Infos/PlayerLabel", "Infos player", 180);
             _infosLabel->_assignListener(this);
@@ -339,11 +341,6 @@ void App::_handleObjectSelection(Ogre::Node *node) {
             return;
         }
     }
-}
-
-int App::_getPlayerStonesNumber(const Player &player) {
-    return player.inventory.linemate + player.inventory.deraumere + player.inventory.sibur +
-           player.inventory.mendiane + player.inventory.phiras + player.inventory.thystame;
 }
 
 Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {
