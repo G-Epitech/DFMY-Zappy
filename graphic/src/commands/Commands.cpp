@@ -69,8 +69,8 @@ void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quan
         float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
         float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
 
-        itemNode->setPosition(randX, 0.0f, randZ);
-        itemNode->setScale(0.1f, 0.1f, 0.1f);
+        itemNode->setPosition(randX, 0.2f, randZ);
+        itemNode->setScale(0.2f, 0.2f, 0.2f);
         tile.items[itemName].push_back(itemNode);
     }
 }
