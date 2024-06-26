@@ -26,7 +26,9 @@ App::App() :
         _commands(_client, _map, nullptr, nullptr),
         _options(),
         _infosLabel(nullptr),
-        _infosPanel(nullptr) {}
+        _infosPanel(nullptr),
+        _teamLabel(nullptr),
+        _teamPanel(nullptr) {}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -210,6 +212,44 @@ void App::_updateMapStats(const Ogre::FrameEvent &evt) {
 
         _mapPanel->setAllParamValues(values);
     }
+
+    if (_teamLabel && _teamPanel) {
+        Ogre::StringVector values;
+
+        int nbPlayers = 0;
+        int maxLevel = 0;
+        int nbMaxLevel = 0;
+        std::vector<int> stones = {0, 0, 0, 0, 0, 0, 0};
+
+        for (auto &player: _map.players) {
+            if (player->getTeam() == _map.selectedTeam) {
+                if (player->level > maxLevel) {
+                    maxLevel = player->level;
+                    nbMaxLevel = 1;
+                } else if (player->level == maxLevel) {
+                    nbMaxLevel++;
+                }
+                nbPlayers++;
+
+                stones[0] += player->getItemQuantity("food");
+                stones[1] += player->getItemQuantity("linemate");
+                stones[2] += player->getItemQuantity("deraumere");
+                stones[3] += player->getItemQuantity("sibur");
+                stones[4] += player->getItemQuantity("mendiane");
+                stones[5] += player->getItemQuantity("phiras");
+                stones[6] += player->getItemQuantity("thystame");
+            }
+        }
+
+        values.push_back(std::to_string(nbPlayers));
+        values.push_back(std::to_string(maxLevel) + " (" + std::to_string(nbMaxLevel) + "p)");
+
+        for (auto &stone: stones) {
+            values.push_back(std::to_string(stone));
+        }
+
+        _teamPanel->setAllParamValues(values);
+    }
 }
 
 bool App::frameEnded(const Ogre::FrameEvent &evt) {
@@ -275,6 +315,13 @@ void App::buttonHit(OgreBites::Button *b) {
 
 void App::itemSelected(OgreBites::SelectMenu *menu) {
     if (menu->getName() == "Teams") {
+        if (_teamLabel && _teamPanel) {
+            trayMgr->destroyWidget(_teamLabel);
+            trayMgr->destroyWidget(_teamPanel);
+            _teamLabel = nullptr;
+            _teamPanel = nullptr;
+        }
+
         auto selectedTeam = menu->getSelectedItem();
         if (selectedTeam == "All teams") {
             for (auto &player: _map.players) {
@@ -282,14 +329,35 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
             }
             _map.selectedTeam = "";
         } else {
+            int nbPlayers = 0;
+
             _map.selectedTeam = selectedTeam;
             for (auto &player: _map.players) {
                 if (player->getTeam() == selectedTeam) {
+                    nbPlayers++;
                     player->node->setVisible(true);
                 } else {
                     player->node->setVisible(false);
                 }
             }
+
+            Ogre::StringVector stats;
+            stats.push_back("Players");
+            stats.push_back("Max level");
+
+            stats.push_back("Food");
+            stats.push_back("Linemate");
+            stats.push_back("Deraumere");
+            stats.push_back("Sibur");
+            stats.push_back("Mendiane");
+            stats.push_back("Phiras");
+            stats.push_back("Thystame");
+
+            _teamLabel = trayMgr->createLabel(TL_NONE, "Team/StatsLabel", selectedTeam, 180);
+            _teamPanel = trayMgr->createParamsPanel(TL_NONE, "Team/StatsPanel", 180, stats);
+
+            trayMgr->moveWidgetToTray(_teamLabel, TL_TOPRIGHT);
+            trayMgr->moveWidgetToTray(_teamPanel, TL_TOPRIGHT);
         }
     }
 }
@@ -392,6 +460,24 @@ void App::_handleObjectSelection(Ogre::Node *node) {
 
             stats.emplace_back("Food");
             values.push_back(std::to_string(player->getItemQuantity("food")));
+
+            stats.emplace_back("Linemate");
+            values.push_back(std::to_string(player->getItemQuantity("linemate")));
+
+            stats.emplace_back("Deraumere");
+            values.push_back(std::to_string(player->getItemQuantity("deraumere")));
+
+            stats.emplace_back("Sibur");
+            values.push_back(std::to_string(player->getItemQuantity("sibur")));
+
+            stats.emplace_back("Mendiane");
+            values.push_back(std::to_string(player->getItemQuantity("mendiane")));
+
+            stats.emplace_back("Phiras");
+            values.push_back(std::to_string(player->getItemQuantity("phiras")));
+
+            stats.emplace_back("Thystame");
+            values.push_back(std::to_string(player->getItemQuantity("thystame")));
 
             /*
             stats.emplace_back("Stones");

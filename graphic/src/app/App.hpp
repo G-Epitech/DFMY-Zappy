@@ -140,6 +140,10 @@ private:
 
     OgreBites::ParamsPanel* _mapPanel;
 
+    OgreBites::Label* _teamLabel;
+
+    OgreBites::ParamsPanel* _teamPanel;
+
     /// @brief Last stats refresh
     float _lastStatsRefresh = 0;
 
