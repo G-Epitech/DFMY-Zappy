@@ -69,8 +69,6 @@ public:
 private:
     void _addItemsToTile(Tile &tile, const std::string &itemName, int quantity);
     void _removeItemsFromTile(Tile &tile, const std::string &itemName, int quantity);
-    Ogre::SceneNode *_createPlayerItem(Tile &tile, Player &player, Teams &teams);
-    void _updatePlayerItemSize(Ogre::SceneNode *node, Player &player, Tile &tile);
     Circle _createBroadcastCircle(const Ogre::Vector3 &position);
     Sphere _createIncantationSphere(const Ogre::Vector3 &position);
 

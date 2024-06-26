@@ -38,7 +38,7 @@ struct Sphere {
 
 struct Map {
     std::vector<std::vector<Tile>> tiles = {};
-    std::vector<Player> players = {};
+    std::vector<std::shared_ptr<Player>> players = {};
     int width = 0;
     int height = 0;
     int timeUnit = 0;
