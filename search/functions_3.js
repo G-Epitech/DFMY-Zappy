@@ -13,7 +13,7 @@ var searchData=
   ['client_1324',['Client',['../classClient.html#ae51af7aa6b8f591496a8f6a4a87a14bf',1,'Client']]],
   ['close_1325',['close',['../classclient_1_1SocketClient.html#ae65d18574f7e00beca0d14aebaa69e45',1,'client::SocketClient']]],
   ['commandparameters_1326',['commandParameters',['../classCommands.html#a1595262753c23ec7c4689d557ec7508d',1,'Commands']]],
-  ['commands_1327',['Commands',['../classCommands.html#a7db781d40b8103e9227a7f2eae290674',1,'Commands']]],
+  ['commands_1327',['Commands',['../classCommands.html#a89d99de60c2db4b5fb3d9f3117c7d1d2',1,'Commands']]],
   ['connect_1328',['connect',['../classclient_1_1SocketClient.html#a0d75d670fa05cdfbac1868a4366aa521',1,'client::SocketClient']]],
   ['controller_5fadd_5femission_1329',['controller_add_emission',['../controller_8h.html#a1fb85d7bf26d60b628fff518c35c123e',1,'controller_add_emission(controller_t *controller, char *format,...) __attribute__((format(printf:&#160;controller.h'],['../controller_2emissions_2add_8c.html#ac1b24eb72a8e13894b10dc45877c33ae',1,'controller_add_emission(controller_t *controller, char *format,...):&#160;add.c']]],
   ['controller_5fadd_5femission_5fraw_1330',['controller_add_emission_raw',['../controller_8h.html#af2d894aa04ab41d51160e26a5c9e5436',1,'controller_add_emission_raw(controller_t *controller, const char *content, size_t size):&#160;add.c'],['../controller_2emissions_2add_8c.html#aa3655a28e1b34b29b38b88f536666629',1,'controller_add_emission_raw(controller_t *controller, const char *content, size_t size):&#160;add.c']]],

@@ -25,7 +25,9 @@ var searchData=
   ['server_5fupdate_5ffd_5fwatch_5fwrite_1530',['server_update_fd_watch_write',['../group__server__network.html#gacf2e243ee53e825fd85f96d45d1c3e54',1,'server_update_fd_watch_write(server_t *server):&#160;poll.c'],['../group__server__network.html#gacf2e243ee53e825fd85f96d45d1c3e54',1,'server_update_fd_watch_write(server_t *server):&#160;poll.c']]],
   ['setlogs_1531',['setLogs',['../classCommands.html#a7d1617961a8ebb240ce6fee9d6efb614',1,'Commands']]],
   ['setscnmgr_1532',['setScnMgr',['../classCommands.html#a771d4285bf1a24e86f6920625890a3dd',1,'Commands']]],
-  ['setup_1533',['setup',['../group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc',1,'App']]],
-  ['split_1534',['split',['../classUtils_1_1StringUtils.html#ae428fe1311a06d90f5b7a2c0c82a8094',1,'Utils::StringUtils']]],
-  ['suicide_1535',['suicide',['../classhamster_1_1Hamster.html#af02b2c7f6b4b7315813a4dba52d4a2dd',1,'hamster::Hamster']]]
+  ['settimeslider_1533',['setTimeSlider',['../classCommands.html#aa0c991662a2ce4b2529c2f503f444e78',1,'Commands']]],
+  ['setup_1534',['setup',['../group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc',1,'App']]],
+  ['slidermoved_1535',['sliderMoved',['../group__graphic__app.html#ga84c1a74fc009026058963f0f33295ad6',1,'App']]],
+  ['split_1536',['split',['../classUtils_1_1StringUtils.html#ae428fe1311a06d90f5b7a2c0c82a8094',1,'Utils::StringUtils']]],
+  ['suicide_1537',['suicide',['../classhamster_1_1Hamster.html#af02b2c7f6b4b7315813a4dba52d4a2dd',1,'hamster::Hamster']]]
 ];
