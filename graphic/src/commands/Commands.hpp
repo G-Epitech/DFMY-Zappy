@@ -25,8 +25,10 @@ public:
      * @param map Map object to update the game state
      * @param scnMgr Ogre::SceneManager object to create entities
      * @param logs OgreBites::TextBox object to display logs
+     * @param timeSlider OgreBites::Slider object to update the time unit
+     * @param sliderChanged Boolean to check if the slider was changed
      */
-    Commands(Client &client, Map &map, Ogre::SceneManager* scnMgr, OgreBites::TextBox* logs);
+    Commands(Client &client, Map &map, Ogre::SceneManager* scnMgr, OgreBites::TextBox* logs, OgreBites::Slider* timeSlider , bool &sliderChanged);
 
     /**
      * @brief Destroy the Commands object
@@ -51,6 +53,12 @@ public:
      * @param logs The OgreBites::TextBox object
      */
     void setLogs(OgreBites::TextBox* logs);
+
+    /**
+     * @brief Set the OgreBites::Slider object
+     * @param timeSlider The OgreBites::Slider object
+     */
+    void setTimeSlider(OgreBites::Slider* timeSlider);
 
     void mapSize(std::string &params);
     void tileContent(std::string &params);
@@ -87,4 +95,6 @@ private:
     Ogre::SceneManager* _scnMgr;
     std::map<std::string, std::function<void(std::string &)>> _commands;
     OgreBites::TextBox* _logs;
+    OgreBites::Slider* _timeSlider;
+    bool &_timeSliderChanged;
 };

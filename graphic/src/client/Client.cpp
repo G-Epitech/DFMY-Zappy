@@ -52,6 +52,7 @@ bool Client::establishConnection(const std::string &host, int port)
     }
     this->write("tna\n");
     this->write("mct\n");
+    this->write("sgt\n");
     return true;
 }
 
