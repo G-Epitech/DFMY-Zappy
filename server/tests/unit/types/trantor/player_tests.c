@@ -125,11 +125,11 @@ Test(player_forward_tests, simple_forward)
     player->direction = PLAYER_DIRECTION_DEFAULT;
     player_forward(player,world->map);
     cr_assert_eq(player->position.x, 4);
-    cr_assert_eq(player->position.y, 3);
+    cr_assert_eq(player->position.y, 5);
     player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     player_forward(player,world->map);
     cr_assert_eq(player->position.x, 5);
-    cr_assert_eq(player->position.y, 3);
+    cr_assert_eq(player->position.y, 5);
     player_change_direction(player, PLAYER_DIRECTION_RIGHT_OFFSET);
     player_forward(player,world->map);
     cr_assert_eq(player->position.x, 5);
@@ -178,17 +178,20 @@ Test(player_take_object_tests, take_object)
     vector2u_t position = { 4, 4 };
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(1);
+    size_t prev_res = 0;
 
     player->position = (vector2u_t) { 4, 4 };
     player->inventory[RES_FOOD] = 1;
     player->lives = PLAYER_LIFE_UNITS_PER_FOOD;
     world_register_player(world, player, team);
     map_add_resource(world->map, position, RES_FOOD, 1);
+    prev_res = world->map->cells[4][4].resources[RES_FOOD];
     cr_assert_eq(player_take_object(player, world->map, RES_FOOD), true);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], prev_res - 1);
     cr_assert_eq(player->inventory[RES_FOOD], 2);
+    prev_res = world->map->cells[4][4].resources[RES_LINEMATE];
     cr_assert_eq(player_take_object(player, world->map, RES_LINEMATE), false);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 0);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], prev_res);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
 }
 
@@ -214,21 +217,25 @@ Test(player_set_object_tests, set_object)
     world_t *world = world_new(size, 100);
     team_t *team = team_new("Team1", 1);
     player_t *player = player_new(1);
+    size_t prev_res = 0;
 
     player->position = (vector2u_t) { 4, 4 };
     world_register_player(world, player, team);
     player->inventory[RES_FOOD] = 1;
     player->lives = PLAYER_LIFE_UNITS_PER_FOOD;
+    prev_res = world->map->cells[4][4].resources[RES_FOOD];
     cr_assert_eq(player_set_object(player, world->map, RES_FOOD), true);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], 1);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_FOOD], prev_res + 1);
     cr_assert_eq(player->inventory[RES_FOOD], 0);
     cr_assert_float_eq(player->lives, 0.0f, 0.0001f, "Player lives: %f", player->lives);
+    prev_res = world->map->cells[4][4].resources[RES_LINEMATE];
     cr_assert_eq(player_set_object(player, world->map, RES_LINEMATE), false);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], 0);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], prev_res);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
     player->inventory[RES_LINEMATE] = 1;
+    prev_res = world->map->cells[4][4].resources[RES_LINEMATE];
     cr_assert_eq(player_set_object(player, world->map, RES_LINEMATE), true);
-    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], 1);
+    cr_assert_eq(world->map->cells[4][4].resources[RES_LINEMATE], prev_res + 1);
     cr_assert_eq(player->inventory[RES_LINEMATE], 0);
 }
 

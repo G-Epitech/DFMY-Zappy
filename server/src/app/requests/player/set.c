@@ -65,4 +65,13 @@ void app_handle_player_request_set_onfinish(app_t *app,
     controller_add_emission((controller_t *) controller, "ok\n");
     controllers_add_emission(app->server->controllers, CTRL_GRAPHIC,
         "pdr %zu %d\n", controller->player->id, resource);
+    // TODO: remove useless step
+    controllers_add_emission(app->server->controllers, CTRL_GRAPHIC,
+        "pin %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n",
+        controller->player->id, controller->player->position.x, controller->player->position.y,
+        controller->player->inventory[RES_FOOD], controller->player->inventory[RES_LINEMATE],
+        controller->player->inventory[RES_DERAUMERE], controller->player->inventory[RES_SIBUR],
+        controller->player->inventory[RES_MENDIANE], controller->player->inventory[RES_PHIRAS],
+        controller->player->inventory[RES_THYSTAME]
+    );
 }

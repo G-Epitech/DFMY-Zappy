@@ -21,9 +21,9 @@ static void notify_incantation_start(server_t *server,
         incantation->requester->id);
     while (node) {
         player = NODE_TO_PTR(node, player_t *);
+        controller_add_emission((controller_t *) player->controller,
+            "Elevation underway\n");
         if (player != incantation->requester) {
-            controller_add_emission((controller_t *) player->controller,
-                "Elevation underway\n");
             controllers_add_emission(server->controllers, CTRL_GRAPHIC,
                 " %zu%c", player->id, node->next ? ' ' : '\n');
         }

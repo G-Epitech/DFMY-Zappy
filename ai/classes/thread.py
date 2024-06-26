@@ -77,7 +77,7 @@ class Thread():
                 self.client.close()
             except Exception as e:
                 self.debug(f"An error occured: {e}")
-                time.sleep(1)
+                exit(EXIT_FAILURE)
             self.debug(f"I'm leaving the team", COLOR_MAGENTA)
             exit(EXIT_SUCCESS)
 

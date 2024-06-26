@@ -10,6 +10,7 @@
 
 void player_init(player_t *player, size_t id)
 {
+    memset(player->inventory, 0, RES_LEN * sizeof(size_t));
     player->controller = NULL;
     player->team = NULL;
     player->level = 1;
@@ -19,7 +20,6 @@ void player_init(player_t *player, size_t id)
     player->direction = PLAYER_DIRECTION_DEFAULT;
     player->id = id;
     player->incantation = NULL;
-    memset(player->inventory, 0, RES_LEN * sizeof(size_t));
 }
 
 player_t *player_new(size_t id)

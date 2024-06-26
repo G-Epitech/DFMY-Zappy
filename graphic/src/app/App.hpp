@@ -127,7 +127,14 @@ private:
     /// @brief Camera used to display the scene
     Ogre::Camera* _camera;
 
+    /// @brief Background music of the application
     sf::Music _background_music;
+
+    OgreBites::TextBox* _logs;
+
+    OgreBites::Label* _infosLabel;
+
+    OgreBites::ParamsPanel* _infosPanel;
 
     /**
      * @brief Load resources of the application
@@ -175,6 +182,11 @@ private:
     void _setupAudio();
 
     /**
+     * @brief Setup the logs of the application
+     */
+    void _setupLogs();
+
+    /**
      * @brief Update the map
      * @param command Command received from the server
      */
@@ -213,4 +225,18 @@ private:
      * @param node Node of the object
      */
     void _handleObjectSelection(Ogre::Node *node);
+
+    /**
+     * @brief Check if the node is a broadcast node
+     * @param node
+     * @return
+     */
+    bool _isBroadcastNode(Ogre::Node *node);
+
+    /**
+     * @brief Get the player stones number
+     * @param player
+     * @return
+     */
+    int _getPlayerStonesNumber(const Player &player);
 };

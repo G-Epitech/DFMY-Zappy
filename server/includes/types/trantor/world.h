@@ -32,8 +32,6 @@ typedef struct world_s {
     list_t *dead_players;
     // @brief Clock of the world
     chrono_t chrono;
-    // @brief Resources manager of the world
-    resources_manager_t resources_manager;
     // @brief Delay before next predictable event in world
     time_unit_t next_event_delay;
     // @brief List of incantations in the world
@@ -42,6 +40,12 @@ typedef struct world_s {
     size_t next_player_id;
     // @brief The current number that will be assigned to the next egg
     size_t next_egg_id;
+    // @brief Winner team
+    team_t *winner;
+    // @brief Time of game start
+    timeval_t start_time;
+    // @brief Time of game end
+    timeval_t end_time;
 } world_t;
 
 /**
@@ -111,10 +115,10 @@ egg_t *world_kill_player(world_t *world, player_t *player, bool zombie);
  * @brief Create an egg in the world for a team
  * @param world World to create the egg in
  * @param team Team of the egg
- * @param laid_by Player who laid the egg
+ * @param player Player who laid the egg
  * @return Created egg or NULL if failed
  */
-egg_t *world_add_egg(world_t *world, team_t *team, long laid_by);
+egg_t *world_add_egg(world_t *world, team_t *team, player_t *player);
 
 /**
  * @brief Ensure a team has a minimum number of slots
@@ -160,5 +164,24 @@ player_t *world_hatch_egg(world_t *world, egg_t *egg);
  * @param world World to update the resources generation delay in
  */
 void world_update_resources_generation_delay(world_t *world);
+
+/**
+ * @brief Start the game
+ * @param world World to start the game in
+ */
+void world_start_game(world_t *world);
+
+/**
+ * @brief End the game
+ * @param world World to end the game in
+ */
+void world_end_game(world_t *world);
+
+/**
+ * @brief Get the duration of the game
+ * @param world World to get the duration from
+ * @param duration Duration of the game
+ */
+void world_get_game_duration(world_t *world, timeval_t *duration);
 
 /** @} */ // end of server
