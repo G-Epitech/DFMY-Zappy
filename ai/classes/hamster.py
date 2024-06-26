@@ -332,7 +332,8 @@ class Hamster:
             "inventory": self.inventory,
             "message": message,
             "recipient": recipient,
-            "level": self.current_level
+            "level": self.current_level,
+            "teamName": self.name
         }
         message = json.dumps(json_message)
         message = message.replace(" ", "").replace("\"", "'")
@@ -368,6 +369,12 @@ class Hamster:
             return False
         if not json["level"]:
             self.debug(f"Invalid level: {json}")
+            return False
+        if not json["teamName"]:
+            self.debug(f"Invalid team name: {json}")
+            return False
+        if json["teamName"] != self.name:
+            self.debug(f"Invalid team name: {json}")
             return False
         return True
     
