@@ -1105,6 +1105,13 @@ class Hamster:
         self.debug(f"Direction called by mother: {self.direction_called_by_mother}")
         for move in possible_moves[self.direction_called_by_mother - 1]:
             move()
+        for message in self.pending_broadcast:
+            try:
+                json_message = self.message_get_json(message[1])
+                if json_message["message"] == HAMSTER_CALL_FAMILY:
+                    self.pending_broadcast.remove(message)
+            except Exception as e:
+                self.debug(f"Error managing broadcast message: {e}")
         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_COMMING, self.cannibal_parent)}")
 
     def reproduce(self):
