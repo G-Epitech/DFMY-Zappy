@@ -87,6 +87,10 @@ void Commands::_addLogMessage(const std::string& message) {
     if (!_logs)
         return;
     auto previousText = _logs->getText();
+    // Cut previous message if it's too long
+    if (previousText.size() > 1000) {
+        previousText = previousText.substr(0, 1000);
+    }
     _logs->setText(message + "\n" + previousText);
 }
 
@@ -225,6 +229,7 @@ void Commands::playerPosition(std::string &command) {
 void Commands::playerLevel(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
+    std::cout << "Receive player level: " << command << std::endl;
     if (args.size() != 2)
         return;
     int id = std::stoi(args[0]);
@@ -233,6 +238,7 @@ void Commands::playerLevel(std::string &command) {
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->level = level;
+            player->updateEntitySize(_map.tiles[player->position.x][player->position.y]->getNode());
             return;
         }
     }
@@ -314,16 +320,20 @@ void Commands::incantationEnd(std::string &command) {
         return;
     int x = std::stoi(args[0]);
     int y = std::stoi(args[1]);
-    auto result = args[2];
 
-    // TODO: Implement incantation animation
     for (auto &sphere: _map.incantationSpheres) {
         if (sphere.node->getPosition() == _map.tiles[x][y]->getNode()->getPosition()) {
             _scnMgr->destroySceneNode(sphere.node);
             _map.incantationSpheres.erase(
                     std::remove(_map.incantationSpheres.begin(), _map.incantationSpheres.end(), sphere),
                     _map.incantationSpheres.end());
-            return;
+        }
+    }
+
+    for (auto &player: _map.players) {
+        if (player->position.x == x && player->position.y == y) {
+            std::string command = "plv " + std::to_string(player->getId()) + "\n";
+            _client.write(command);
         }
     }
 }
