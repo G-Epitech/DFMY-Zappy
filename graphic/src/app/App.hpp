@@ -96,6 +96,13 @@ public:
      */
     bool mousePressed(const OgreBites::MouseButtonEvent &evt) override;
 
+    /**
+     * @brief Mouse moved event
+     * @param evt Mouse motion event
+     * @return true if the event was handled
+     */
+    void sliderMoved(OgreBites::Slider *slider) override;
+
 private:
     /// @brief Client object used to communicate with the server
     Client _client;
@@ -146,6 +153,10 @@ private:
 
     /// @brief Last stats refresh
     float _lastStatsRefresh = 0;
+
+    OgreBites::Slider* _timeSlider;
+
+    bool _timeSliderChanged;
 
     /**
      * @brief Load resources of the application
@@ -201,6 +212,11 @@ private:
      * @brief Setup the logs of the application
      */
     void _setupLogs();
+
+    /**
+     * @brief Setup the sliders of the application
+     */
+    void _setupSliders();
 
     /**
      * @brief Update the map

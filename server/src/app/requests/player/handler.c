@@ -139,7 +139,7 @@ void app_handle_player_request(app_t *app, controller_t *controller,
     player_controller_t *player_controller = &controller->player;
 
     if (player_controller->player->incantation ||
-        player_controller->cooldown > 0
+        player_controller->cooldown > 0 || app->world->paused
     ) {
         return;
     }

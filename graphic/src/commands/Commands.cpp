@@ -8,10 +8,11 @@
 #include <iostream>
 #include "Commands.hpp"
 #include "utils/String.hpp"
+#include "constants/Tile.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
-Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log) : _client(client), _map(map), _scnMgr(scnMgr) {
+Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log, OgreBites::Slider *timeSlider, bool &timeSliderChanged) : _client(client), _map(map), _scnMgr(scnMgr), _logs(log), _timeSlider(timeSlider), _timeSliderChanged(timeSliderChanged) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
     _commands["bct"] = [this](std::string &params) { tileContent(params); };
     _commands["tna"] = [this](std::string &params) { teamsNames(params); };
@@ -53,6 +54,10 @@ void Commands::setScnMgr(Ogre::SceneManager *scnMgr) {
 
 void Commands::setLogs(OgreBites::TextBox *logs) {
     _logs = logs;
+}
+
+void Commands::setTimeSlider(OgreBites::Slider *timeSlider) {
+    _timeSlider = timeSlider;
 }
 
 Circle Commands::_createBroadcastCircle(const Ogre::Vector3 &position) {
@@ -104,18 +109,23 @@ void Commands::mapSize(std::string &command) {
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
+    float rotation;
     for (int i = 0; i < _map.width; i++) {
         std::vector<std::shared_ptr<Tile>> row;
         posy = static_cast<float>(_map.width) / 2;
         for (int j = 0; j < _map.height; j++) {
-            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
+            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Island.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
             node->attachObject(cubeEntity);
 
             Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
             Ogre::Vector3 size = aab.getSize();
+
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
+            rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
+            node->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
+            node->setScale(TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
             auto tile = std::make_shared<Tile>(node);
 
@@ -215,7 +225,6 @@ void Commands::playerPosition(std::string &command) {
     int orientation = std::stoi(args[3]);
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
-
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->position.x = x;
@@ -452,19 +461,23 @@ void Commands::eggHatching(std::string &command) {
 void Commands::timeUnitRequest(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 1)
+    if (args.size() != 1 || args[0] == "0")
         return;
 
     _map.timeUnit = std::stoi(args[0]);
+    _timeSlider->setValue(_map.timeUnit);
+    _timeSliderChanged = true;
 }
 
 void Commands::timeUnitModification(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 1)
+    if (args.size() != 1 || args[0] == "0")
         return;
 
     _map.timeUnit = std::stoi(args[0]);
+    _timeSlider->setValue(_map.timeUnit);
+    _timeSliderChanged = true;
 }
 
 void Commands::endGame(std::string &command) {

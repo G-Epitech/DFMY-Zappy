@@ -46,6 +46,8 @@ typedef struct world_s {
     timeval_t start_time;
     // @brief Time of game end
     timeval_t end_time;
+    // @brief Game is paused
+    bool paused;
 } world_t;
 
 /**

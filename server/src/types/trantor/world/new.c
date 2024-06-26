@@ -18,6 +18,7 @@ void world_init(world_t *world, size_t frequency)
     world->winner = NULL;
     world->start_time = (timeval_t) { -1, -1 };
     world->end_time = (timeval_t) { -1, -1 };
+    world->paused = false;
 }
 
 world_t *world_new(vector2u_t map_size, size_t frequency)
