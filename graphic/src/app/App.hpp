@@ -129,6 +129,10 @@ private:
 
     sf::Music _background_music;
 
+    OgreBites::Label* _infosLabel;
+
+    OgreBites::ParamsPanel* _infosPanel;
+
     /**
      * @brief Load resources of the application
      */
@@ -213,4 +217,18 @@ private:
      * @param node Node of the object
      */
     void _handleObjectSelection(Ogre::Node *node);
+
+    /**
+     * @brief Check if the node is a broadcast node
+     * @param node
+     * @return
+     */
+    bool _isBroadcastNode(Ogre::Node *node);
+
+    /**
+     * @brief Get the player stones number
+     * @param player
+     * @return
+     */
+    int _getPlayerStonesNumber(const Player &player);
 };
