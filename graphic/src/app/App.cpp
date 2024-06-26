@@ -8,6 +8,9 @@
 #include <iostream>
 #include <OgreCameraMan.h>
 #include <OgreViewport.h>
+#include <OgreTextAreaOverlayElement.h>
+#include <OgreFontManager.h>
+#include <OgreBorderPanelOverlayElement.h>
 #include <getopt.h>
 #include "App.hpp"
 
@@ -21,7 +24,9 @@ App::App() :
         _scnMgr(nullptr),
         _map(),
         _commands(_client, _map, nullptr),
-        _options() {}
+        _options(),
+        _infosLabel(nullptr),
+        _infosPanel(nullptr){}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -249,10 +254,39 @@ void App::_handleObjectSelection(Ogre::Node *node)
 {
     Vector2 position(0, 0);
 
+    if (_infosLabel && _infosPanel) {
+        trayMgr->destroyWidget(_infosLabel);
+        trayMgr->destroyWidget(_infosPanel);
+        _infosLabel = nullptr;
+        _infosPanel = nullptr;
+    }
+
+    // Tiles management
     for (auto &row: _map.tiles) {
         for (auto &tile : row) {
             if (tile.node == node) {
-                std::cout << "Tile selected: " << position.x << ", " << position.y << std::endl;
+                Ogre::StringVector stats;
+                Ogre::StringVector values;
+
+                stats.push_back("Position");
+                values.push_back("x:" + std::to_string(static_cast<int>(position.x)) + ", y:" + std::to_string(static_cast<int>(position.y)));
+                std::for_each(tile.items.begin(), tile.items.end(), [&stats, &values](const auto &item) {
+                    std::ostringstream oss;
+
+                    oss.str("");
+                    oss << item.second.size();
+
+                    stats.push_back(item.first);
+                    values.push_back(oss.str());
+                });
+
+                _infosLabel = trayMgr->createLabel(TL_NONE, "Infos/FpsLabel", "Infos tile", 180);
+                _infosLabel->_assignListener(this);
+                _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/StatsPanel", 180, stats);
+                _infosPanel->setAllParamValues(values);
+
+                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, -1);
+                trayMgr->moveWidgetToTray(_infosPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_infosLabel) + 1);
             }
             position.x++;
         }

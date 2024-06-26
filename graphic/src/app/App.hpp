@@ -129,6 +129,10 @@ private:
 
     sf::Music _background_music;
 
+    OgreBites::Label* _infosLabel;
+
+    OgreBites::ParamsPanel* _infosPanel;
+
     /**
      * @brief Load resources of the application
      */
