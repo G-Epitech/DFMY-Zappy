@@ -57,8 +57,6 @@ static void app_handle_world_lifecycle_player_lives_and_cooldown(
     world_t *world, server_t *server, player_t *player)
 {
     time_unit_t elapsed = chrono_get_elapsed_units(&world->chrono);
-    // TODO: remove useless step
-    size_t prev_food = player->inventory[RES_FOOD];
     time_unit_t new_lives = player->lives - elapsed;
 
     if (player->level == 8)
@@ -71,17 +69,6 @@ static void app_handle_world_lifecycle_player_lives_and_cooldown(
             world_register_event(world, player->controller->cooldown);
     }
     player_update_lives(player, new_lives);
-    // TODO: remove useless step
-    if (prev_food != player->inventory[RES_FOOD]) {
-        controllers_add_emission(server->controllers, CTRL_GRAPHIC,
-            "pin %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n",
-            player->id, player->position.x, player->position.y,
-            player->inventory[RES_FOOD], player->inventory[RES_LINEMATE],
-            player->inventory[RES_DERAUMERE], player->inventory[RES_SIBUR],
-            player->inventory[RES_MENDIANE], player->inventory[RES_PHIRAS],
-            player->inventory[RES_THYSTAME]
-        );
-    }
     if (player->lives <= 0 || player->controller->state == CTRL_DISCONNECTED) {
         app_handle_player_death(world, server, player);
     } else {
