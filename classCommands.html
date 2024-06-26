@@ -73,9 +73,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5b758bafdcb30edf176286af4e684e55"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a5b758bafdcb30edf176286af4e684e55">Commands</a> (<a class="el" href="classClient.html">Client</a> &amp;client, <a class="el" href="structMap.html">Map</a> &amp;map, Ogre::SceneManager *scnMgr)</td></tr>
-<tr class="memdesc:a5b758bafdcb30edf176286af4e684e55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classCommands.html">Commands</a> object.  <a href="classCommands.html#a5b758bafdcb30edf176286af4e684e55">More...</a><br /></td></tr>
-<tr class="separator:a5b758bafdcb30edf176286af4e684e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7db781d40b8103e9227a7f2eae290674"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a7db781d40b8103e9227a7f2eae290674">Commands</a> (<a class="el" href="classClient.html">Client</a> &amp;client, <a class="el" href="structMap.html">Map</a> &amp;map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *logs)</td></tr>
+<tr class="memdesc:a7db781d40b8103e9227a7f2eae290674"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classCommands.html">Commands</a> object.  <a href="classCommands.html#a7db781d40b8103e9227a7f2eae290674">More...</a><br /></td></tr>
+<tr class="separator:a7db781d40b8103e9227a7f2eae290674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bd49d7f6b31fc0f08751c8c0521155c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a2bd49d7f6b31fc0f08751c8c0521155c">~Commands</a> ()</td></tr>
 <tr class="memdesc:a2bd49d7f6b31fc0f08751c8c0521155c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="classCommands.html">Commands</a> object.  <a href="classCommands.html#a2bd49d7f6b31fc0f08751c8c0521155c">More...</a><br /></td></tr>
 <tr class="separator:a2bd49d7f6b31fc0f08751c8c0521155c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -85,6 +85,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a771d4285bf1a24e86f6920625890a3dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a771d4285bf1a24e86f6920625890a3dd">setScnMgr</a> (Ogre::SceneManager *scnMgr)</td></tr>
 <tr class="memdesc:a771d4285bf1a24e86f6920625890a3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Ogre::SceneManager object.  <a href="classCommands.html#a771d4285bf1a24e86f6920625890a3dd">More...</a><br /></td></tr>
 <tr class="separator:a771d4285bf1a24e86f6920625890a3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d1617961a8ebb240ce6fee9d6efb614"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a7d1617961a8ebb240ce6fee9d6efb614">setLogs</a> (OgreBites::TextBox *logs)</td></tr>
+<tr class="memdesc:a7d1617961a8ebb240ce6fee9d6efb614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the OgreBites::TextBox object.  <a href="classCommands.html#a7d1617961a8ebb240ce6fee9d6efb614">More...</a><br /></td></tr>
+<tr class="separator:a7d1617961a8ebb240ce6fee9d6efb614"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a558a99d2dcaf3ff7ed42e142c1344c35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#a558a99d2dcaf3ff7ed42e142c1344c35">mapSize</a> (std::string &amp;params)</td></tr>
 <tr class="separator:a558a99d2dcaf3ff7ed42e142c1344c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa648f8779ab267a30d720138738f2716"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCommands.html#aa648f8779ab267a30d720138738f2716">tileContent</a> (std::string &amp;params)</td></tr>
@@ -133,8 +136,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1595262753c23ec7c4689d557ec7508d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5b758bafdcb30edf176286af4e684e55"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b758bafdcb30edf176286af4e684e55">&#9670;&nbsp;</a></span>Commands()</h2>
+<a id="a7db781d40b8103e9227a7f2eae290674"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7db781d40b8103e9227a7f2eae290674">&#9670;&nbsp;</a></span>Commands()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +158,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Ogre::SceneManager *&#160;</td>
-          <td class="paramname"><em>scnMgr</em>&#160;</td>
+          <td class="paramname"><em>scnMgr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OgreBites::TextBox *&#160;</td>
+          <td class="paramname"><em>logs</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -171,6 +180,7 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">client</td><td><a class="el" href="classClient.html">Client</a> object to send commands to the server </td></tr>
     <tr><td class="paramname">map</td><td><a class="el" href="structMap.html">Map</a> object to update the game state </td></tr>
     <tr><td class="paramname">scnMgr</td><td>Ogre::SceneManager object to create entities </td></tr>
+    <tr><td class="paramname">logs</td><td>OgreBites::TextBox object to display logs </td></tr>
   </table>
   </dd>
 </dl>
@@ -563,6 +573,32 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d1617961a8ebb240ce6fee9d6efb614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d1617961a8ebb240ce6fee9d6efb614">&#9670;&nbsp;</a></span>setLogs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Commands::setLogs </td>
+          <td>(</td>
+          <td class="paramtype">OgreBites::TextBox *&#160;</td>
+          <td class="paramname"><em>logs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the OgreBites::TextBox object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">logs</td><td>The OgreBites::TextBox object </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
