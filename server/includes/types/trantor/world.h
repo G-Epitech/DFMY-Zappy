@@ -40,6 +40,12 @@ typedef struct world_s {
     size_t next_player_id;
     // @brief The current number that will be assigned to the next egg
     size_t next_egg_id;
+    // @brief Winner team
+    team_t *winner;
+    // @brief Time of game start
+    timeval_t start_time;
+    // @brief Time of game end
+    timeval_t end_time;
 } world_t;
 
 /**
@@ -160,23 +166,22 @@ player_t *world_hatch_egg(world_t *world, egg_t *egg);
 void world_update_resources_generation_delay(world_t *world);
 
 /**
- * @brief Add a resource to the world
- * @param world World to add the resource to
- * @param resource Resource type to add
- * @param pos Position of the resource
- * @param quantity Quantity of the resource to add
+ * @brief Start the game
+ * @param world World to start the game in
  */
-void world_add_resource(world_t *world, resource_t resource, vector2u_t pos,
-    size_t quantity);
+void world_start_game(world_t *world);
 
 /**
- * @brief Remove a resource to the world
- * @param world World to remove the resource to
- * @param resource Resource type to remove
- * @param pos Position of the resource
- * @param quantity Quantity of the resource to remove
+ * @brief End the game
+ * @param world World to end the game in
  */
-void world_remove_resource(world_t *world, resource_t resource, vector2u_t pos,
-    size_t quantity);
+void world_end_game(world_t *world);
+
+/**
+ * @brief Get the duration of the game
+ * @param world World to get the duration from
+ * @param duration Duration of the game
+ */
+void world_get_game_duration(world_t *world, timeval_t *duration);
 
 /** @} */ // end of server

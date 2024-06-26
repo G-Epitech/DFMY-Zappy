@@ -1,4 +1,5 @@
 target_sources(zappy_server_core PRIVATE
+        lifecycle/game.c
         lifecycle/players.c
         lifecycle/events_delay.c
         lifecycle/incantations.c

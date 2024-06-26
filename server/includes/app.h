@@ -118,6 +118,14 @@ void app_handle_world_lifecycle_events_delay(world_t *world,
     server_t *server);
 
 /**
+ * @brief Handle world lifecycle game starting
+ * @param world World to handle the world lifecycle game starting
+ * @param server Server to handle the world lifecycle game starting
+ */
+void app_handle_world_lifecycle_game_starting(world_t *world,
+    server_t *server);
+
+/**
  * @brief Handle world lifecycle incantations
  * @param world World to handle the world lifecycle incantations
  * @param server App server instance

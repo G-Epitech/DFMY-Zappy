@@ -15,6 +15,9 @@ void world_init(world_t *world, size_t frequency)
     world->next_event_delay = -1;
     world->next_player_id = 0;
     world->next_egg_id = 0;
+    world->winner = NULL;
+    world->start_time = (timeval_t) { -1, -1 };
+    world->end_time = (timeval_t) { -1, -1 };
 }
 
 world_t *world_new(vector2u_t map_size, size_t frequency)

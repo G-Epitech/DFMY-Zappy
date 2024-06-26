@@ -74,5 +74,4 @@ void app_handle_player_request_take_onfinish(app_t *app,
         controller->player->inventory[RES_MENDIANE], controller->player->inventory[RES_PHIRAS],
         controller->player->inventory[RES_THYSTAME]
     );
-    log_info("Player %zu set %s", controller->player->id, str_resource);
 }

@@ -61,6 +61,8 @@ static void app_handle_world_lifecycle_player_lives_and_cooldown(
     size_t prev_food = player->inventory[RES_FOOD];
     time_unit_t new_lives = player->lives - elapsed;
 
+    if (player->level == 8)
+        return;
     if (player->controller) {
         player->controller->cooldown -= elapsed;
         if (player->controller->cooldown <= 0)
