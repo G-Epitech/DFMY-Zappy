@@ -10,7 +10,7 @@
 #include "utils/String.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
-std::vector<std::string> playerModels = {"Shelly.mesh"};
+std::vector<std::string> playerModels = {"Colt.mesh"};
 
 Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr) : _client(client), _map(map), _scnMgr(scnMgr) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
