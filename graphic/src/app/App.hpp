@@ -16,6 +16,7 @@
 #include <Ogre.h>
 #include <OgreApplicationContext.h>
 #include <OgreTrays.h>
+#include <SFML/Audio.hpp>
 #include "client/Client.hpp"
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
@@ -126,6 +127,8 @@ private:
     /// @brief Camera used to display the scene
     Ogre::Camera* _camera;
 
+    sf::Music _background_music;
+
     /**
      * @brief Load resources of the application
      */
@@ -160,6 +163,16 @@ private:
      * @brief Setup the informations of the application
      */
     void _setupInformations();
+
+    /**
+     * @brief Setup the lights of the application
+     */
+    void _setupLights();
+
+    /**
+     * @brief Setup the audio of the application
+     */
+    void _setupAudio();
 
     /**
      * @brief Update the map

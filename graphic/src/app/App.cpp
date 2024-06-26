@@ -33,11 +33,14 @@ void App::setup() {
     _raySceneQuery = _scnMgr->createRayQuery(Ogre::Ray());
 
     _commands.setScnMgr(_scnMgr);
+    _scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
     _setupCamera();
     _setupMaterials();
     _setupUI();
+    _setupLights();
+    _setupAudio();
 }
 
 void App::_setupCamera() {
@@ -108,6 +111,28 @@ void App::_setupDropdowns() {
     // TODO: Add teams from the server
     _teamsDropdown->addItem("team1");
     _teamsDropdown->addItem("team2");
+}
+
+void App::_setupLights() {
+    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+
+    auto sunLight = scnMgr->createLight("SunLight");
+    sunLight->setType(Light::LT_DIRECTIONAL);
+    sunLight->setDiffuseColour(ColourValue(0.4, 0, 0));
+    sunLight->setSpecularColour(ColourValue(0.4, 0, 0));
+
+    auto sunNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+    sunNode->attachObject(sunLight);
+    sunNode->setDirection(Vector3(1, -1, 0));
+    sunNode->setPosition(-200, -200, 400);
+}
+
+void App::_setupAudio() {
+    if (!_background_music.openFromFile("audio/background_music.wav")) {
+        std::cerr << "Failed to load music file!" << std::endl;
+    } else {
+        _background_music.play();
+    }
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
