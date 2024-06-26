@@ -444,27 +444,23 @@ void Commands::eggHatching(std::string &command) {
 void Commands::timeUnitRequest(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 1)
+    if (args.size() != 1 || args[0] == "0")
         return;
 
     _map.timeUnit = std::stoi(args[0]);
-    if (_timeSliderChanged) {
-        _timeSlider->setValue(_map.timeUnit);
-        _timeSliderChanged = false;
-    }
+    _timeSlider->setValue(_map.timeUnit);
+    _timeSliderChanged = true;
 }
 
 void Commands::timeUnitModification(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 1)
+    if (args.size() != 1 || args[0] == "0")
         return;
 
     _map.timeUnit = std::stoi(args[0]);
-    if (_timeSliderChanged) {
-        _timeSlider->setValue(_map.timeUnit);
-        _timeSliderChanged = false;
-    }
+    _timeSlider->setValue(_map.timeUnit);
+    _timeSliderChanged = true;
 }
 
 void Commands::endGame(std::string &command) {
