@@ -376,7 +376,11 @@ void App::_updateMap(std::string &command) {
         params = command.substr(4);
     }
 
-    _commands.execute(commandName, params);
+    try {
+        _commands.execute(commandName, params);
+    } catch(const std::exception& e) {
+        std::cerr << "[ERROR] On command " << commandName << " with paramters " << params << ": " << e.what() << '\n';
+    }
 }
 
 void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {

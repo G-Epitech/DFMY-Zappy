@@ -416,7 +416,7 @@ void Commands::incantationEnd(std::string &command) {
         return;
     int x = std::stoi(args[0]);
     int y = std::stoi(args[1]);
-    int level = std::stoi(args[2]);
+    auto result = args[2];
 
     // TODO: Implement incantation animation
     for (auto &sphere: _map.incantationSpheres) {

@@ -1381,7 +1381,7 @@ class Hamster:
         max_number_of_hamsters = 6
         attemps = 0
 
-        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0) and attemps < 60:
+        while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0) and attemps < 50:
             try:
                 for _ in range(10):
                     self.update_inventory()
@@ -1478,6 +1478,9 @@ class Hamster:
                 self.manage_broadcast()
             except Exception as e:
                 self.error(f"\n=========================\nAn error occurred in the main loop: {e}\n=========================")
+        
+        if not self.I_gonna_be_eaten:
+            self.debug(f"Hamster {self.name} is dead !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", COLOR_RED)
 
     def encrypt_message(self, message: str) -> str:
         """
