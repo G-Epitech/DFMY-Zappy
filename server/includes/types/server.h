@@ -183,14 +183,14 @@ void server_close_all_connections(server_t *server);
  * @brief Handle server connections
  * @param server Server on which handle connections
  */
-void server_handle_requests(server_t *server);
+void server_handle_incoming_content(server_t *server);
 
 /**
  * @brief Handle server controller requests
  * @param server Server on which handle controller requests
  * @param controller Controller to handle requests
  */
-void server_handle_controller_requests(server_t *server,
+void server_handle_controller_incoming_content(server_t *server,
     controller_t *controller);
 
 /**

@@ -7,7 +7,7 @@
 
 #include "types/server.h"
 
-void server_handle_controller_requests(server_t *server,
+void server_handle_controller_incoming_content(server_t *server,
     controller_t *controller)
 {
     if (!controller)
@@ -18,7 +18,7 @@ void server_handle_controller_requests(server_t *server,
         server_disconnect_controller(server, controller);
 }
 
-void server_handle_requests(server_t *server)
+void server_handle_incoming_content(server_t *server)
 {
     node_t *node = NULL;
     controller_t *controller = NULL;
@@ -26,7 +26,7 @@ void server_handle_requests(server_t *server)
     node = server->controllers->first;
     while (node) {
         controller = NODE_TO_PTR(node, controller_t *);
-        server_handle_controller_requests(server, controller);
+        server_handle_controller_incoming_content(server, controller);
         node = node->next;
     }
 }

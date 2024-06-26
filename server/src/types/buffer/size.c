@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "types/buffer.h"
 
 buffer_t *buffer_resize(buffer_t *buffer, size_t new_size)
@@ -23,4 +24,9 @@ buffer_t *buffer_resize(buffer_t *buffer, size_t new_size)
     buffer->data = new_data;
     buffer->size = new_size;
     return buffer;
+}
+
+bool buffer_is_full(buffer_t *buffer)
+{
+    return buffer->bytes == buffer->size;
 }

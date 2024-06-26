@@ -31,6 +31,6 @@ void app_handle_server_connections(app_t *app)
     if (res > 0) {
         server_handle_new_connections(app->server);
         server_handle_emissions(app->server);
-        server_handle_requests(app->server);
+        server_handle_incoming_content(app->server);
     }
 }

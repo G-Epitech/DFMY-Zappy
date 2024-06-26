@@ -30,6 +30,9 @@ typedef struct server_s server_t;
 // Size of emission buffer
 #define CTRL_EMIT_BUFF_SIZE 4096
 
+// Size of incoming buffer
+#define CTRL_INCOMING_BUFF_SIZE 4096
+
 // Check if controller can emit data
 #define CTRL_CAN_EMIT(c) ((c)->generic.state & CTRL_ALLOW_EMIT)
 // Check if controller can receive requests
@@ -68,6 +71,8 @@ typedef struct generic_controller_s {
     list_t *requests;
     // @brief Buffer of data to emit to client
     buffer_t *emissions;
+    // @brief Buffer of data to read from client
+    buffer_t *incoming;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state
@@ -87,6 +92,8 @@ typedef struct player_controller_s {
     list_t *requests;
     // @brief Buffer of data to emit to client
     buffer_t *emissions;
+    // @brief Buffer of data to read from client
+    buffer_t *incoming;
     // @brief Controller type
     controller_type_t type;
     // @brief Controller state

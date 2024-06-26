@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdbool.h>
 #include <stdarg.h>
 #include <unistd.h>
 
@@ -82,3 +83,18 @@ ssize_t buffer_flush(buffer_t *buffer, int fd);
  * @param buffer Buffer to clear
  */
 void buffer_clear(buffer_t *buffer);
+
+/**
+ * @brief Read from file descriptor to buffer
+ * @param buffer Buffer to read to
+ * @param fd File descriptor to read from
+ * @return Number of bytes read
+ */
+ssize_t buffer_read_from(buffer_t *buffer, int fd);
+
+/**
+ * @brief Check if buffer is full
+ * @param buffer Buffer to check
+ * @return true if buffer is full, false otherwise
+ */
+bool buffer_is_full(buffer_t *buffer);

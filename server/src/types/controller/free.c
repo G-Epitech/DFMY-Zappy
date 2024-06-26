@@ -15,6 +15,7 @@ void controller_free(controller_t *controller)
         return;
     list_free(controller->generic.requests, &request_free_as_node_data);
     buffer_free(controller->generic.emissions);
+    buffer_free(controller->generic.incoming);
     free(controller);
 }
 
