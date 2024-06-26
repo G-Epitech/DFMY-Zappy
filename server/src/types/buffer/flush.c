@@ -33,3 +33,15 @@ void buffer_clear(buffer_t *buffer)
         return;
     buffer->bytes = 0;
 }
+
+void buffer_clear_size(buffer_t *buffer, size_t size)
+{
+    if (!buffer || !size)
+        return;
+    if (size >= buffer->size) {
+        buffer->bytes = 0;
+        return;
+    }
+    memmove(buffer->data, &buffer->data[size], buffer->bytes - size);
+    buffer->bytes -= size;
+}

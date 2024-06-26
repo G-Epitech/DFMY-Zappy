@@ -36,7 +36,7 @@ static gui_request_handler_t *find_handler(const char *name)
 void app_handle_graphic_request(app_t *app, controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     gui_request_handler_t *handler = NULL;
     char cmd[GRAPHIC_PROTOCOL_CMD_LEN + 1] = { 0 };
 

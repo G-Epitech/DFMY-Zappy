@@ -12,7 +12,7 @@
 void app_handle_unknown_request(app_t *app, controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     request_get_token(request, 0, &token);
     if (token.size == STR_STRICT_SIZEOF("GRAPHIC") &&

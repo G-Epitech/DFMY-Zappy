@@ -13,7 +13,7 @@ bool app_handle_player_request_fork_onstart(
     player_controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     player_t *player = controller->player;
 
     if (request_get_token(request, 1, &token)) {

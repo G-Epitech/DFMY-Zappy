@@ -13,7 +13,7 @@ void controller_free(controller_t *controller)
 {
     if (!controller)
         return;
-    list_free(controller->generic.requests, &request_free_as_node_data);
+    list_free(controller->player.requests, &request_free_as_node_data);
     buffer_free(controller->generic.emissions);
     buffer_free(controller->generic.incoming);
     free(controller);

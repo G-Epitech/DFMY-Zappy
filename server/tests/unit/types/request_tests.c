@@ -128,7 +128,7 @@ Test(request_tests, append_request_overflow_limit, .init = cr_redirect_stderr)
 Test(request_tests, get_first_token)
 {
     request_t *request = request_new();
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     char data[] = "Hello World";
 
     cr_assert(request_append(request, data, sizeof(data) - 1));
@@ -141,7 +141,7 @@ Test(request_tests, get_first_token)
 Test(request_tests, get_second_token)
 {
     request_t *request = request_new();
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     char data[] = "Hello World";
 
     cr_assert(request_append(request, data, sizeof(data) - 1));
@@ -154,7 +154,7 @@ Test(request_tests, get_second_token)
 Test(request_tests, get_token_out_of_bound)
 {
     request_t *request = request_new();
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     char data[] = "Hello World";
 
     cr_assert(request_append(request, data, sizeof(data) - 1));
@@ -166,7 +166,7 @@ Test(request_tests, get_token_out_of_bound)
 Test(request_tests, get_token_12)
 {
     request_t *request = request_new();
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     char data[] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
     cr_assert(request_append(request, data, sizeof(data) - 1));

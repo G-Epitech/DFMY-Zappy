@@ -8,7 +8,7 @@
 #include <string.h>
 #include "app.h"
 
-static bool parse_player_id(request_token_t *token, size_t *id)
+static bool parse_player_id(incoming_token_t *token, size_t *id)
 {
     char str_token[32] = { 0 };
     char *end_ptr = NULL;
@@ -39,7 +39,7 @@ static bool find_player_by_id(app_t *app, size_t id, player_t **player)
 static bool handle_arguments(controller_t *controller, request_t *request,
     const char *command, size_t *id)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 2, &token)) {
         controller_add_emission(controller, "sbp\n");

@@ -170,7 +170,7 @@ void app_handle_world_routine_map_updates(world_t *world, server_t *server);
  * @brief Handle controllers requests
  * @param app App instance
  */
-void app_handle_controllers_requests(app_t *app);
+void app_handle_controllers_incoming_tokens(app_t *app);
 
 /**
  * @brief Promote an unknown controller to graphic controller

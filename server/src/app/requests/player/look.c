@@ -79,7 +79,7 @@ bool app_handle_player_request_look_onstart(
     __attribute_maybe_unused__ player_controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 1, &token)) {
         log_warn("No arguments expected for 'Look' command");

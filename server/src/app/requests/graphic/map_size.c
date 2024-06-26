@@ -11,7 +11,7 @@ void app_handle_gui_request_map_size(app_t *app, controller_t *controller,
     request_t *request)
 {
     map_t *map = app->world->map;
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 1, &token)) {
         controller_add_emission(controller, "sbp\n");

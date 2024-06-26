@@ -21,7 +21,11 @@ typedef struct request_token_s {
     char *content;
     // @brief Token size
     size_t size;
-} request_token_t;
+    // @brief Specify is a complete token
+    bool complete;
+    // @brief Specify if token has been consumed
+    bool consumed;
+} incoming_token_t;
 
 // @brief Request status
 typedef enum request_status_e {
@@ -46,8 +50,6 @@ typedef struct request_s {
     size_t buffer_size;
     // @brief Size of content in buffer
     size_t content_size;
-    // @brief Status of request
-    request_status_t status;
 } request_t;
 
 /**
@@ -90,4 +92,4 @@ bool request_append(request_t *request, const char *data, size_t size);
  * @return true if token was found, false otherwise
  */
 bool request_get_token(request_t *request, size_t index,
-    request_token_t *token);
+    incoming_token_t *token);

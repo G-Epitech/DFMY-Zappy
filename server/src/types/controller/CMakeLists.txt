@@ -6,6 +6,7 @@ target_sources(zappy_server_core PRIVATE
         emissions/add.c
         emissions/emit.c
         status.c
-        requests/clear.c
-        requests/create.c
+        incoming/clear.c
+        incoming/create.c
+        incoming/tokens.c
 )

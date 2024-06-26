@@ -8,7 +8,7 @@
 #include <string.h>
 #include "app.h"
 
-static bool parse_frequency(request_token_t *token, size_t *frequency)
+static bool parse_frequency(incoming_token_t *token, size_t *frequency)
 {
     char str_token[32] = { 0 };
     char *end_ptr = NULL;
@@ -23,7 +23,7 @@ static bool parse_frequency(request_token_t *token, size_t *frequency)
 static bool handle_arguments(controller_t *controller, request_t *request,
     size_t *frequency)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 2, &token)) {
         controller_add_emission(controller, "sbp\n");

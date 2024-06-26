@@ -210,12 +210,12 @@ Test(controller_tests, controller_read_2_tokens_with_2_newlines)
 {
     char buffer[] = "token1\ntoken2\n";
     size_t size = sizeof(buffer) - 1;
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
-    cr_assert_eq(controller_read_next_token(buffer, size, &token), false);
+    cr_assert_eq(controller_read_next_incoming_token(buffer, size, &token), false);
     cr_assert_eq(token.size, 7);
     cr_assert_eq(memcmp(token.content, "token1\n", 7), 0);
-    cr_assert_eq(controller_read_next_token(buffer + 7, size - 7, &token), true);
+    cr_assert_eq(controller_read_next_incoming_token(buffer + 7, size - 7, &token), true);
     cr_assert_eq(token.size, 7);
     cr_assert_eq(memcmp(token.content, "token2\n", 7), 0);
 }
@@ -224,12 +224,12 @@ Test(controller_tests, controller_read_2_tokens_with_1_newline)
 {
     char buffer[] = "token1\ntoken2";
     size_t size = sizeof(buffer) - 1;
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
-    cr_assert_eq(controller_read_next_token(buffer, size, &token), false);
+    cr_assert_eq(controller_read_next_incoming_token(buffer, size, &token), false);
     cr_assert_eq(token.size, 7);
     cr_assert_eq(memcmp(token.content, "token1\n", 7), 0);
-    cr_assert_eq(controller_read_next_token(buffer + 7, size - 7, &token), true);
+    cr_assert_eq(controller_read_next_incoming_token(buffer + 7, size - 7, &token), true);
     cr_assert_eq(token.size, 6);
     cr_assert_eq(memcmp(token.content, "token2", 6), 0);
 }
@@ -239,7 +239,7 @@ Test(controller_tests, controller_handle_buffer_token_complete_req)
     controller_t *controller = controller_new(0);
     char buffer[] = "complete request 1\ncomplete request 2\n";
     request_t *req = NULL;
-    request_token_t token = {
+    incoming_token_t token = {
         .content = buffer,
         .size = 19
     };
@@ -260,7 +260,7 @@ Test(controller_tests, controller_handle_buffer_token_pending_req)
     controller_t *controller = controller_new(0);
     char buffer[] = "pending request 1\npending request 2";
     request_t *req = NULL;
-    request_token_t token = {
+    incoming_token_t token = {
         .content = buffer,
         .size = 18
     };
@@ -295,7 +295,7 @@ Test(controller_tests, controller_handle_buffer_token_create_request_fail, .init
     controller_t *controller = controller_new(0);
     char buffer[] = "pending request 1\npending request 2";
     request_t *req = NULL;
-    request_token_t token = {
+    incoming_token_t token = {
         .content = buffer,
         .size = 18
     };
@@ -315,7 +315,7 @@ Test(controller_tests, controller_handle_buffer_token_append_fail, .init = cr_re
     controller_t *controller = controller_new(0);
     char buffer[REQ_BUFF_SIZE];
     request_t *req = NULL;
-    request_token_t token = {
+    incoming_token_t token = {
         .content = buffer,
         .size = REQ_BUFF_SIZE
     };

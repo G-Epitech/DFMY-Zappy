@@ -9,7 +9,7 @@
 #include "app.h"
 #include "types/trantor/egg.h"
 
-static bool is_valid_resource(request_token_t *token)
+static bool is_valid_resource(incoming_token_t *token)
 {
     char str_resource[RES_MAX_STRING_LEN + 1] = { 0 };
     resource_t resource;
@@ -31,7 +31,7 @@ bool app_handle_player_request_set_onstart(
     __attribute_maybe_unused__ player_controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 2, &token)) {
         log_warn("Too many arguments for 'Set' command");
@@ -49,7 +49,7 @@ void app_handle_player_request_set_onfinish(app_t *app,
     __attribute_maybe_unused__ request_t *request)
 {
     char str_resource[RES_MAX_STRING_LEN + 1] = { 0 };
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     resource_t resource;
 
     if (!request_get_token(request, 1, &token)) {

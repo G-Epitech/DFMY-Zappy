@@ -686,7 +686,7 @@ Test(server_handle_requests_tests, no_requests)
     cr_assert_eq(server->controllers->len, 0);
 
     // Act and assert
-    server_handle_requests(server);
+    server_handle_incoming_content(server);
     cr_assert_eq(server->controllers->len, 0);
 
     // Cleanup
@@ -718,7 +718,7 @@ Test(server_handle_controller_requests_tests, simple_request, .init = cr_redirec
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Act
-    server_handle_controller_requests(server, controller);
+    server_handle_controller_incoming_content(server, controller);
 
     // Assert
     cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
@@ -757,7 +757,7 @@ Test(server_handle_controller_requests_tests, no_content_to_read, .init = cr_red
     cr_assert_eq(controller->generic.requests->len, 0);
 
     // Act
-    server_handle_controller_requests(server, controller);
+    server_handle_controller_incoming_content(server, controller);
 
     // Assert
     cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
@@ -796,7 +796,7 @@ Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redi
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Read first request
-    server_handle_controller_requests(server, controller);
+    server_handle_controller_incoming_content(server, controller);
     cr_assert_eq(controller->generic.state, CTRL_CONNECTED);
     cr_assert_eq(server->controllers->len, 1);
     cr_assert_eq(controller->generic.requests->len, 1);
@@ -807,7 +807,7 @@ Test(server_handle_controller_requests_tests, closed_connection, .init = cr_redi
     cr_assert_eq(request->content_size, 5);
 
     // Act
-    server_handle_controller_requests(server, controller);
+    server_handle_controller_incoming_content(server, controller);
     cr_assert_eq(controller->generic.state, CTRL_DISCONNECTED);
 
     // Cleanup
@@ -822,7 +822,7 @@ Test(server_handle_controller_requests_tests, null_controller, .init = cr_redire
 
     // Assert
     cr_assert_eq(server->controllers->len, 0);
-    server_handle_controller_requests(server, NULL);
+    server_handle_controller_incoming_content(server, NULL);
 
     // Cleanup
     server_free(server);
@@ -836,7 +836,7 @@ Test(server_handle_controller_requests_tests, disconnected_contoller, .init = cr
 
     // Assert
     controller->generic.state = CTRL_DISCONNECTED;
-    server_handle_controller_requests(server, controller);
+    server_handle_controller_incoming_content(server, controller);
 
     // Cleanup
     controller_free(controller);
@@ -868,7 +868,7 @@ Test(server_handle_requests_tests, simple_request, .init = cr_redirect_stdout)
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Act
-    server_handle_requests(server);
+    server_handle_incoming_content(server);
 
     // Assert
     cr_assert_eq(server->controllers->len, 1);
@@ -910,7 +910,7 @@ Test(server_handle_requests_tests, closed_connection, .init = cr_redirect_stdout
     controller->generic.socket = fds[0]; // Enable read on the controller
 
     // Act
-    server_handle_requests(server);
+    server_handle_incoming_content(server);
 
     // Assert
     cr_assert_eq(server->controllers->len, 1);

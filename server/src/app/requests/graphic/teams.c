@@ -11,7 +11,7 @@ void app_handle_gui_request_teams_names(app_t *app, controller_t *controller,
     request_t *request)
 {
     node_t *node = app->world->teams->first;
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     team_t *team = NULL;
 
     if (request_get_token(request, 1, &token)) {

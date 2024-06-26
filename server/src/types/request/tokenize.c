@@ -8,7 +8,7 @@
 #include <memory.h>
 #include "types/request.h"
 
-static void get_next_token(char *start, size_t size, request_token_t *token)
+static void get_next_token(char *start, size_t size, incoming_token_t *token)
 {
     char *delim = NULL;
 
@@ -20,7 +20,7 @@ static void get_next_token(char *start, size_t size, request_token_t *token)
 }
 
 bool request_get_token(request_t *request, size_t index,
-    request_token_t *token)
+    incoming_token_t *token)
 {
     char *start = request->buffer;
     size_t size = request->content_size;

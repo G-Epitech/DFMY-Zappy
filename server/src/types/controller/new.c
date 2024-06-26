@@ -19,18 +19,16 @@ void controller_init(controller_t *controller, int socket)
 controller_t *controller_new(int socket)
 {
     controller_t *controller = calloc(1, sizeof(controller_t));
-    list_t *requests = controller ? list_new() : NULL;
-    buffer_t *emissions = requests ? buffer_new(CTRL_EMIT_BUFF_SIZE) : NULL;
+    buffer_t *emissions = controller ? buffer_new(CTRL_EMIT_BUFF_SIZE) : NULL;
     buffer_t *incoming = emissions
         ? buffer_new(CTRL_INCOMING_BUFF_SIZE)
         : NULL;
 
     if (!controller)
         return NULL;
-    controller->generic.requests = requests;
     controller->generic.emissions = emissions;
     controller->generic.incoming = incoming;
-    if (!requests || !emissions || !incoming) {
+    if (!emissions || !incoming) {
         controller_free(controller);
         return NULL;
     }

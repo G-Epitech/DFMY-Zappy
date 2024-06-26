@@ -8,7 +8,7 @@
 #include <string.h>
 #include "app.h"
 
-static bool parse_coordinate(request_token_t *token, size_t *coordinate)
+static bool parse_coordinate(incoming_token_t *token, size_t *coordinate)
 {
     char str_token[32] = { 0 };
     char *end_ptr = NULL;
@@ -20,7 +20,7 @@ static bool parse_coordinate(request_token_t *token, size_t *coordinate)
     return end_ptr != &str_token[0];
 }
 
-static bool parse_cell_position(request_token_t tokens[2],
+static bool parse_cell_position(incoming_token_t tokens[2],
     vector2u_t *position)
 {
     if (!parse_coordinate(&tokens[0], &position->x))
@@ -49,7 +49,7 @@ void app_handle_gui_request_map_content(app_t *app, controller_t *controller,
 {
     map_t *map = app->world->map;
     vector2u_t position = { 0 };
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (request_get_token(request, 1, &token)) {
         controller_add_emission(controller, "sbp\n");
@@ -65,7 +65,7 @@ void app_handle_gui_request_map_content(app_t *app, controller_t *controller,
 void app_handle_gui_request_map_cell_content(app_t *app,
     controller_t *controller, request_t *request)
 {
-    request_token_t tokens[2] = { 0 };
+    incoming_token_t tokens[2] = { 0 };
     vector2u_t position = { 0 };
 
     if (request_get_token(request, 3, &tokens[0])) {

@@ -9,7 +9,7 @@
 #include "types/trantor/egg.h"
 
 static void emit_message_to_player(world_t *world, player_t *emitter,
-    player_t *player, request_token_t *token)
+    player_t *player, incoming_token_t *token)
 {
     controller_t *controller = (controller_t *) player->controller;
     double angle = map_get_sound_angle(world->map, emitter->position,
@@ -30,7 +30,7 @@ static void emit_message_to_player(world_t *world, player_t *emitter,
 }
 
 static void emit_message_to_players(world_t *world, player_t *emitter,
-    request_token_t *token)
+    incoming_token_t *token)
 {
     node_t *node = world->players->first;
     player_t *player = NULL;
@@ -44,7 +44,7 @@ static void emit_message_to_players(world_t *world, player_t *emitter,
 }
 
 static void notify_graphics(server_t *server, player_t *player,
-    request_token_t *token)
+    incoming_token_t *token)
 {
     controllers_add_emission(server->controllers, CTRL_GRAPHIC,
         "pbc %zu ", player->id);
@@ -58,7 +58,7 @@ bool app_handle_player_request_broadcast_onstart(
     __attribute_maybe_unused__ player_controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (!request_get_token(request, 1, &token)) {
         log_warn("Not enough arguments for 'Broadcast' command");
@@ -71,7 +71,7 @@ void app_handle_player_request_broadcast_onfinish(app_t *app,
     player_controller_t *controller,
     __attribute_maybe_unused__ request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
 
     if (!request_get_token(request, 1, &token) ||
         (request->content_size - STR_STRICT_SIZEOF("Broadcast ") <= 0)

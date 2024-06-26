@@ -16,7 +16,10 @@ bool controller_player_from_generic(controller_t *controller,
     controller->player.type = CTRL_PLAYER;
     controller->player.cooldown = 0;
     controller->player.player = player;
+    controller->player.requests = list_new();
     player->controller = (player_controller_t *) controller;
+    if (!controller->player.requests)
+        return false;
     return true;
 }
 

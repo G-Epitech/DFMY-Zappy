@@ -85,12 +85,36 @@ ssize_t buffer_flush(buffer_t *buffer, int fd);
 void buffer_clear(buffer_t *buffer);
 
 /**
+ * @brief Clear buffer up to a certain size
+ * @param buffer Buffer to clear
+ * @param size Size to clear up to
+ */
+void buffer_clear_size(buffer_t *buffer, size_t size);
+
+/**
  * @brief Read from file descriptor to buffer
  * @param buffer Buffer to read to
  * @param fd File descriptor to read from
  * @return Number of bytes read
  */
 ssize_t buffer_read_from(buffer_t *buffer, int fd);
+
+/**
+ * @brief Read from buffer
+ * @param buffer Buffer to read from
+ * @param size Size max to read
+ * @return Read size
+ */
+size_t buffer_read(buffer_t *buffer, size_t size);
+
+/**
+ * @brief Read from buffer until delimiter
+ * @param buffer Buffer to read from
+ * @param delim Delimiter
+ * @return Read size
+ */
+size_t buffer_read_delim(buffer_t *buffer, int delim);
+
 
 /**
  * @brief Check if buffer is full

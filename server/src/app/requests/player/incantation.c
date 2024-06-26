@@ -34,7 +34,7 @@ static void notify_incantation_start(server_t *server,
 bool app_handle_player_request_incantation_onstart(app_t *app,
     player_controller_t *controller, request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     incantation_t *incantation = NULL;
 
     if (request_get_token(request, 1, &token)) {

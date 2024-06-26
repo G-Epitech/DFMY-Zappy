@@ -6,6 +6,7 @@
 */
 
 #include <stdlib.h>
+#include <string.h>
 #include "types/buffer.h"
 
 ssize_t buffer_read_from(buffer_t *buffer, int fd)
@@ -18,4 +19,21 @@ ssize_t buffer_read_from(buffer_t *buffer, int fd)
         return read_bytes;
     buffer->bytes += read_bytes;
     return read_bytes;
+}
+
+size_t buffer_read(buffer_t *buffer, size_t size)
+{
+    return size > buffer->bytes ? buffer->bytes : size;
+}
+
+size_t buffer_read_delim(buffer_t *buffer, int delim)
+{
+    char *start = buffer->data;
+    char *end = memchr(start, delim, buffer->size);
+
+    if (end) {
+        return (end - start + 1);
+    } else {
+        return buffer->bytes;
+    }
 }

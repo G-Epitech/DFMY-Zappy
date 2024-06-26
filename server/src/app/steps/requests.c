@@ -7,72 +7,46 @@
 
 #include "app.h"
 
-static void app_handle_controller_invalid_request(controller_t *controller,
-    request_t *request)
-{
-    if (controller_add_emission(controller, "ko\n"))
-        request->status = REQ_FINISHED;
-}
-
-static void app_handle_controller_valid_request(app_t *app,
-    controller_t *controller, request_t *request)
+void app_handle_controller_request(app_t *app, controller_t *controller,
+    incoming_token_t *token)
 {
     switch (controller->generic.type) {
         case CTRL_PLAYER:
-            app_handle_player_request(app, controller, request);
+            app_handle_player_request(app, controller, token);
             break;
         case CTRL_GRAPHIC:
-            app_handle_graphic_request(app, controller, request);
+            app_handle_graphic_request(app, controller, token);
             break;
         default:
-            app_handle_unknown_request(app, controller, request);
+            app_handle_unknown_request(app, controller, token);
             break;
     }
 }
 
-bool app_handle_controller_request(app_t *app, controller_t *controller,
-    request_t *request)
+bool app_handle_controller_next_incoming_token(app_t *app,
+    controller_t *controller)
 {
-    switch (request->status) {
-        case REQ_INVALID:
-            app_handle_controller_invalid_request(controller, request);
-            break;
-        case REQ_READY:
-        case REQ_HANDLING:
-            app_handle_controller_valid_request(app, controller, request);
-            break;
-        default:
-            break;
-    }
-    return request->status == REQ_FINISHED;
+    incoming_token_t token = { 0 };
+    bool last = controller_read_next_incoming_token(controller, &token);
+
+    if (token.size == 0)
+        return false;
+    // TODO: handle request
+    if (token.consumed || controller_incoming_buffer_is_full(controller))
+        controller_consume_incoming_token(controller, &token);
+    return token.consumed ? !last : false;
 }
 
-void app_handle_controller_requests(app_t *app, controller_t *controller)
-{
-    node_t *node = controller->generic.requests->first;
-    node_t *next = NULL;
-    request_t *request = NULL;
-    bool complete = true;
-
-    while (node && complete) {
-        next = node->next;
-        request = NODE_TO_PTR(node, request_t *);
-        complete = app_handle_controller_request(app, controller, request);
-        if (complete)
-            controller_clear_first_request(controller);
-        node = next;
-    }
-}
-
-void app_handle_controllers_requests(app_t *app)
+void app_handle_controllers_incoming_tokens(app_t *app)
 {
     node_t *node = app->server->controllers->first;
     controller_t *controller = NULL;
+    bool has_next = false;
 
     while (node) {
         controller = NODE_TO_PTR(node, controller_t *);
         if (CTRL_CAN_REQ(controller))
-            app_handle_controller_requests(app, controller);
+            has_next |= app_handle_controller_next_incoming_token(app, controller);
         node = node->next;
     }
 }

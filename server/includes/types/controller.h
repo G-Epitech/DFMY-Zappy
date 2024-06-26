@@ -67,8 +67,6 @@ typedef enum controller_read_state_e {
 typedef struct generic_controller_s {
     // @brief Controller socket
     int socket;
-    // @brief List of pending requests
-    list_t *requests;
     // @brief Buffer of data to emit to client
     buffer_t *emissions;
     // @brief Buffer of data to read from client
@@ -88,8 +86,6 @@ typedef generic_controller_t graphic_controller_t;
 typedef struct player_controller_s {
     // @brief Controller socket
     int socket;
-    // @brief List of pending requests
-    list_t *requests;
     // @brief Buffer of data to emit to client
     buffer_t *emissions;
     // @brief Buffer of data to read from client
@@ -100,6 +96,8 @@ typedef struct player_controller_s {
     controller_state_t state;
     // @brief Parent server
     server_t *server;
+    // @brief List of pending requests
+    list_t *requests;
     // @brief Link to player instance
     player_t *player;
     // @brief Player cooldown (time units locked for)
@@ -229,14 +227,21 @@ request_t *controller_get_last_request(controller_t *controller);
 void controller_clear_first_request(controller_t *controller);
 
 /**
- * @brief Read next token from a buffer
- * @param start Start of the buffer
- * @param size Size of the buffer
+ * @brief Read next token from controller incoming buffer
+ * @param controller Controller to read from
  * @param token Token to fill
  * @return true if is the last token, false otherwise
  */
-bool controller_read_next_token(char *start, size_t size,
-    request_token_t *token);
+bool controller_read_next_incoming_token(controller_t *controller,
+    incoming_token_t *token);
+
+/**
+ * @brief Consume a token from a controller
+ * @param controller Controller to consume token from
+ * @param token Token to consume
+ */
+void controller_consume_incoming_token(controller_t *controller,
+    incoming_token_t *token);
 
 /**
  * @brief Handle a token from a buffer
@@ -244,7 +249,7 @@ bool controller_read_next_token(char *start, size_t size,
  * @param token Token to handle
  */
 void controller_handle_buffer_token(controller_t *controller,
-    request_token_t *token);
+    incoming_token_t *token);
 
 /**
  * @brief Handle a buffer from a controller and append it to
@@ -291,3 +296,16 @@ bool controller_has_content_to_read(controller_t *controller);
  * @param controller Controller to clear requests from
  */
 void controller_clear_requests(controller_t *controller);
+
+/**
+ * @brief Check if a controller is a player controller
+ * @param controller Controller to check
+ * @return Full status
+ */
+bool controller_incoming_buffer_is_full(controller_t *controller);
+
+/**
+ * @brief Clear incoming buffer of a controller
+ * @param controller Controller to clear incoming buffer from
+ */s
+void controller_clear_incoming_buffer(controller_t *controller);

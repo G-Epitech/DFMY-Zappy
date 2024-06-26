@@ -98,7 +98,7 @@ static void set_cooldown_or_exec(app_t *app, controller_t *controller,
 static void app_handle_player_request_start(app_t *app,
     controller_t *controller, request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     player_request_handler_t *handler = NULL;
     char cmd[PLAYER_PROTOCOL_MAX_CMD_LEN + 1] = { 0 };
 
@@ -118,7 +118,7 @@ static void app_handle_player_request_start(app_t *app,
 static void app_handle_player_request_end(app_t *app, controller_t *controller,
     request_t *request)
 {
-    request_token_t token = { 0 };
+    incoming_token_t token = { 0 };
     player_request_handler_t *handler = NULL;
     player_controller_t *player_controller = &controller->player;
     char cmd[PLAYER_PROTOCOL_MAX_CMD_LEN + 1] = { 0 };
@@ -134,7 +134,7 @@ static void app_handle_player_request_end(app_t *app, controller_t *controller,
 }
 
 void app_handle_player_request(app_t *app, controller_t *controller,
-    request_t *request)
+    incoming_token_t *token)
 {
     player_controller_t *player_controller = &controller->player;
 
@@ -143,7 +143,7 @@ void app_handle_player_request(app_t *app, controller_t *controller,
     ) {
         return;
     }
-    if (request->status == REQ_READY)
+    if (token->complete)
         app_handle_player_request_start(app, controller, request);
     else
         app_handle_player_request_end(app, controller, request);

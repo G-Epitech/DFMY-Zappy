@@ -10,8 +10,7 @@
 // @brief Application steps
 static const app_step_t app_pipeline[] = {
     &app_handle_server_connections,
-    & app_handle_world_lifecycle,
-    &app_handle_controllers_requests,
+    & app_handle_world_lifecycle, &app_handle_controllers_incoming_tokens,
     &app_handle_world_routines,
 };
 
