@@ -1,10 +1,10 @@
 /*
 ** EPITECH PROJECT, 2024
-** zappy
+** zappy_gui
 ** File description:
-** Player
+** Tile.hpp
 */
 
 #pragma once
 
-#define PLAYER_SCALE 0.08f
+#define TILE_SCALE 1.1f

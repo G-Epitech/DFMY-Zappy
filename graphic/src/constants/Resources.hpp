@@ -1,10 +1,9 @@
 /*
 ** EPITECH PROJECT, 2024
-** zappy
+** zappy_gui
 ** File description:
-** Player
+** Resources.hpp
 */
-
 #pragma once
 
-#define PLAYER_SCALE 0.08f
+#define RESOURCES_SCALE 0.2f

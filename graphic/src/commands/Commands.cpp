@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Commands.hpp"
 #include "utils/String.hpp"
+#include "constants/Tile.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
@@ -104,18 +105,23 @@ void Commands::mapSize(std::string &command) {
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
+    float rotation;
     for (int i = 0; i < _map.width; i++) {
         std::vector<std::shared_ptr<Tile>> row;
         posy = static_cast<float>(_map.width) / 2;
         for (int j = 0; j < _map.height; j++) {
-            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
+            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Island.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
             node->attachObject(cubeEntity);
 
             Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
             Ogre::Vector3 size = aab.getSize();
+
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
+            rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
+            node->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
+            node->setScale(TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
             auto tile = std::make_shared<Tile>(node);
 
@@ -209,7 +215,6 @@ void Commands::playerPosition(std::string &command) {
     int orientation = std::stoi(args[3]);
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
-
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->position.x = x;
