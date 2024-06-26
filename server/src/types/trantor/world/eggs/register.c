@@ -8,13 +8,19 @@
 #include "types/trantor/world.h"
 #include "types/trantor/egg.h"
 
-egg_t *world_add_egg(world_t *world, team_t *team, long laid_by)
+egg_t *world_add_egg(world_t *world, team_t *team, player_t *player)
 {
+    long laid_by = player ? (long) player->id : -1;
     egg_t *egg = egg_new(laid_by, world->next_egg_id);
+    vector2u_t position = player ? player->position : (vector2u_t) { 0, 0 };
 
     if (!egg)
         return NULL;
-    if (!team_add_egg(team, egg) || !map_add_egg(world->map, egg)) {
+    if (!player)
+        vector2u_random(&position, &world->map->size);
+    if (!team_add_egg(team, egg) ||
+        !map_add_egg(world->map, egg, &position)
+    ) {
         world_kill_egg(world, egg);
         return NULL;
     }
@@ -28,5 +34,5 @@ egg_t *world_add_egg_if_needed(world_t *world, team_t *team)
 
     if (current >= team->min_slots)
         return NULL;
-    return world_add_egg(world, team, -1);
+    return world_add_egg(world, team, NULL);
 }

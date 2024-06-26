@@ -2,6 +2,7 @@ target_sources(zappy_server_core PRIVATE
         new.c
         free.c
         delay.c
+        game.c
         players/register.c
         players/kill.c
         incantations/start.c

@@ -30,8 +30,8 @@ void app_handle_player_request_fork_onfinish(app_t *app,
     __attribute_maybe_unused__ request_t *request)
 {
     team_t *team = controller->player->team;
-    egg_t *egg = world_add_egg(app->world, team,
-        (long) controller->player->id);
+    player_t *player = controller->player;
+    egg_t *egg = world_add_egg(app->world, team, player);
 
     if (egg) {
         controller_add_emission((controller_t *) controller, "ok\n");

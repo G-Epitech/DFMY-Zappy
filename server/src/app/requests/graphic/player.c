@@ -106,10 +106,11 @@ void app_handle_gui_request_player_inventory(app_t *app,
         return log_warn("Player with id %zu not found", id);
     }
     controller_add_emission(controller,
-        "pin %zu %zu %zu %zu %zu %zu %zu %zu\n",
-        player->id, player->inventory[RES_FOOD],
-        player->inventory[RES_LINEMATE], player->inventory[RES_DERAUMERE],
-        player->inventory[RES_SIBUR], player->inventory[RES_MENDIANE],
-        player->inventory[RES_PHIRAS], player->inventory[RES_THYSTAME]
+        "pin %zu %zu %zu %zu %zu %zu %zu %zu %zu %zu\n",
+        player->id, player->position.x, player->position.y,
+        player->inventory[RES_FOOD], player->inventory[RES_LINEMATE],
+        player->inventory[RES_DERAUMERE], player->inventory[RES_SIBUR],
+        player->inventory[RES_MENDIANE], player->inventory[RES_PHIRAS],
+        player->inventory[RES_THYSTAME]
     );
 }

@@ -54,7 +54,7 @@ controller_t *server_accept_connection(server_t *server)
             "Socket closed.", socket);
         return NULL;
     }
-    log_info("New client connected on socket %d", socket);
+    log_debug("New client connected on socket %d", socket);
     return controller;
 }
 
