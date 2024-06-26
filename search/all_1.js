@@ -3,7 +3,7 @@ var searchData=
   ['accept_2ec_4',['accept.c',['../accept_8c.html',1,'']]],
   ['actual_5',['actual',['../structresource__stat__s.html#ade2e04fcde12c9a15c69f7469dc338c8',1,'resource_stat_s']]],
   ['add_2ec_6',['add.c',['../trantor_2map_2add_8c.html',1,'(Global Namespace)'],['../controller_2emissions_2add_8c.html',1,'(Global Namespace)']]],
-  ['add_5fprocess_7',['add_process',['../classapp_1_1App.html#a7e5c84f7a337cd1055edb206eba0f51c',1,'app::App']]],
+  ['add_5fthread_7',['add_thread',['../classapp_1_1App.html#a9b3826290bfff855c345666663b092aa',1,'app::App']]],
   ['address_8',['address',['../structserver__s.html#a6e274b21393b9b05546c5523843e20f4',1,'server_s']]],
   ['addteam_9',['addTeam',['../classTeams.html#a91b4872b397f7d2a798bb499a1420c7d',1,'Teams']]],
   ['angle_2ec_10',['angle.c',['../angle_8c.html',1,'']]],

@@ -30,6 +30,6 @@ var searchData=
   ['events_5fdelay_2ec_332',['events_delay.c',['../events__delay_8c.html',1,'']]],
   ['except_333',['except',['../structfd__states__s.html#ac2903f5485ffab7e7fad1642472b1873',1,'fd_states_s']]],
   ['exception_334',['Exception',['../classClient_1_1Exception.html',1,'Client::Exception'],['../classClient_1_1Exception.html#a7b8f8627c40ace4abaf4d8b6c872c93c',1,'Client::Exception::Exception()']]],
-  ['exit_5ffailure_335',['EXIT_FAILURE',['../namespaceapp.html#a379e1b211be9dd2ef3b4bbe991385f24',1,'app.EXIT_FAILURE()'],['../namespaceprocess.html#a19a3dc2da324d0150b83daefc41693d4',1,'process.EXIT_FAILURE()'],['../namespacemain.html#aa9501bdd073b15908a2da236fa3e201a',1,'main.EXIT_FAILURE()']]],
-  ['exit_5fsuccess_336',['EXIT_SUCCESS',['../namespaceapp.html#a015fdd69aa45acc3bcbef7b9f73e605c',1,'app.EXIT_SUCCESS()'],['../namespaceprocess.html#a27d4429dc31171e7bfe7c2a778ae550a',1,'process.EXIT_SUCCESS()'],['../namespacemain.html#ad75579ea6f49bd327513eca6ff871192',1,'main.EXIT_SUCCESS()']]]
+  ['exit_5ffailure_335',['EXIT_FAILURE',['../namespaceapp.html#a379e1b211be9dd2ef3b4bbe991385f24',1,'app.EXIT_FAILURE()'],['../namespacethread.html#aa08895184062eb6b4a63ef8fc5c7f9e0',1,'thread.EXIT_FAILURE()'],['../namespacemain.html#aa9501bdd073b15908a2da236fa3e201a',1,'main.EXIT_FAILURE()']]],
+  ['exit_5fsuccess_336',['EXIT_SUCCESS',['../namespaceapp.html#a015fdd69aa45acc3bcbef7b9f73e605c',1,'app.EXIT_SUCCESS()'],['../namespacethread.html#a39b9ce577f1cc5c63bd2fef9a7568329',1,'thread.EXIT_SUCCESS()'],['../namespacemain.html#ad75579ea6f49bd327513eca6ff871192',1,'main.EXIT_SUCCESS()']]]
 ];

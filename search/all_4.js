@@ -3,7 +3,7 @@ var searchData=
   ['data_268',['data',['../structbuffer__s.html#aff863a60ad847f453587aee141fddef7',1,'buffer_s::data()'],['../structs__node.html#ac14b93d840fe724bf84a7dac865db04e',1,'s_node::data()']]],
   ['dead_269',['dead',['../classhamster_1_1Hamster.html#a1eb5dabb09230fa7d57426b558ddbec1',1,'hamster::Hamster']]],
   ['dead_5fplayers_270',['dead_players',['../structworld__s.html#a99b042b709a35b9fcfd9c5b2afccf6f7',1,'world_s']]],
-  ['debug_271',['debug',['../classhamster_1_1Hamster.html#a887f680b321860afb9a89ce3733f7fce',1,'hamster.Hamster.debug()'],['../classprocess_1_1SubProcess.html#a432063a965758a1a4b3ad42e856451cd',1,'process.SubProcess.debug()']]],
+  ['debug_271',['debug',['../classhamster_1_1Hamster.html#a887f680b321860afb9a89ce3733f7fce',1,'hamster.Hamster.debug()'],['../classthread_1_1Thread.html#a6e8217c01fe2f9a39d9bf688fc376817',1,'thread.Thread.debug()']]],
   ['decl_5fclcc_5fargs_5f0_272',['DECL_CLCC_ARGS_0',['../internal_8h.html#aecd1acddd388c68d4df758d9d63d364f',1,'internal.h']]],
   ['decl_5fclcc_5fargs_5f1_273',['DECL_CLCC_ARGS_1',['../internal_8h.html#a3034f5a816bb2174cc5c0ca2e1614ff2',1,'internal.h']]],
   ['decl_5fclcc_5fargs_5f2_274',['DECL_CLCC_ARGS_2',['../internal_8h.html#a82b9525eacfd9423220cf63fa9d1aa33',1,'internal.h']]],
