@@ -88,6 +88,13 @@ public:
      */
     void itemSelected(OgreBites::SelectMenu *menu) override;
 
+    /**
+     * @brief Mouse pressed event
+     * @param evt Mouse button event
+     * @return true if the event was handled
+     */
+    bool mousePressed(const OgreBites::MouseButtonEvent &evt) override;
+
 private:
     /// @brief Client object used to communicate with the server
     Client _client;
@@ -112,6 +119,12 @@ private:
 
     /// @brief Dropdown used to select the team
     OgreBites::SelectMenu* _teamsDropdown;
+
+    /// @brief Ray scene query used to detect the tile under the mouse
+    Ogre::RaySceneQuery* _raySceneQuery;
+
+    /// @brief Camera used to display the scene
+    Ogre::Camera* _camera;
 
     /**
      * @brief Load resources of the application
@@ -178,5 +191,7 @@ private:
     /**
      * @brief Print the usage of the application
      */
-     static void _printUsage() noexcept;
+    static void _printUsage() noexcept;
+
+    Ogre::Ray _getMouseRay(const OgreBites::MouseButtonEvent &evt);
 };

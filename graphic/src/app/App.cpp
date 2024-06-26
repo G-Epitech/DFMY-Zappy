@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <OgreCameraMan.h>
+#include <OgreViewport.h>
 #include <getopt.h>
 #include "App.hpp"
 
@@ -29,6 +30,7 @@ void App::setup() {
 
     _scnMgr = root->createSceneManager();
     _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+    _raySceneQuery = _scnMgr->createRayQuery(Ogre::Ray());
 
     _commands.setScnMgr(_scnMgr);
 
@@ -39,16 +41,16 @@ void App::setup() {
 }
 
 void App::_setupCamera() {
-    Camera *cam = _scnMgr->createCamera("myCam");
-    cam->setAutoAspectRatio(true);
-    cam->setNearClipDistance(0.1);
-    cam->setFarClipDistance(1000);
+    _camera = _scnMgr->createCamera("myCam");
+    _camera->setAutoAspectRatio(true);
+    _camera->setNearClipDistance(0.1);
+    _camera->setFarClipDistance(1000);
 
     SceneNode *camNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
     camNode->setPosition(20, -20, -20);
     camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
-    camNode->attachObject(cam);
-    getRenderWindow()->addViewport(cam);
+    camNode->attachObject(_camera);
+    getRenderWindow()->addViewport(_camera);
 
     auto *camMan = new CameraMan(camNode);
     camMan->setStyle(CS_ORBIT);
@@ -191,6 +193,37 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
             }
         }
     }
+}
+
+bool App::mousePressed(const MouseButtonEvent &evt) {
+    if (evt.button == OgreBites::BUTTON_LEFT)
+        {
+            // Convert to ray
+            Ogre::Ray ray = this->_getMouseRay(evt);
+
+            // Execute ray query
+            _raySceneQuery->setRay(ray);
+            _raySceneQuery->setSortByDistance(true);
+
+            Ogre::RaySceneQueryResult& result = _raySceneQuery->execute();
+            for (auto it = result.begin(); it != result.end(); ++it)
+            {
+                if (it->movable)
+                {
+                    Ogre::MovableObject* object = it->movable;
+                    std::cout << "Object Name: " << object->getName() << std::endl;
+                    break;
+                }
+            }
+        }
+    return true;
+}
+
+Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {
+    float mouseX = static_cast<float>(evt.x) / getRenderWindow()->getWidth();
+    float mouseY = static_cast<float>(evt.y) / getRenderWindow()->getHeight();
+
+    return _camera->getCameraToViewportRay(mouseX, mouseY);
 }
 
 void App::_updateMap(std::string &command) {
