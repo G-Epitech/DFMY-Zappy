@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "abcdefgilmnoprstvw",
   7: "acder",
   8: "acdlr",
-  9: "_abcdgimnprsv",
+  9: "_abcdgimnprstv",
   10: "gs",
   11: "🧌"
 };
