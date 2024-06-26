@@ -1,8 +1,12 @@
 <map id="graphic/src/constants/Player.hpp" name="graphic/src/constants/Player.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="209,5,369,47"/>
-<area shape="rect" id="node2" href="$Commands_8hpp.html" title=" " alt="" coords="204,95,373,136"/>
-<area shape="rect" id="node3" href="$App_8hpp.html" title=" " alt="" coords="101,191,279,218"/>
-<area shape="rect" id="node6" href="$Commands_8cpp.html" title=" " alt="" coords="304,184,473,225"/>
-<area shape="rect" id="node4" href="$App_8cpp.html" title=" " alt="" coords="5,273,183,300"/>
-<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="207,273,365,300"/>
+<area shape="rect" id="node1" title=" " alt="" coords="147,5,307,47"/>
+<area shape="rect" id="node2" href="$Commands_8hpp.html" title=" " alt="" coords="79,244,248,285"/>
+<area shape="rect" id="node7" href="$types_2Player_8hpp.html" title=" " alt="" coords="195,95,401,121"/>
+<area shape="rect" id="node3" href="$App_8hpp.html" title=" " alt="" coords="199,341,378,367"/>
+<area shape="rect" id="node6" href="$Commands_8cpp.html" title=" " alt="" coords="5,333,175,375"/>
+<area shape="rect" id="node4" href="$App_8cpp.html" title=" " alt="" coords="104,423,281,449"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="306,423,463,449"/>
+<area shape="rect" id="node8" href="$Map_8hpp.html" title=" " alt="" coords="196,169,389,196"/>
+<area shape="rect" id="node10" href="$Player_8cpp.html" title=" " alt="" coords="413,169,617,196"/>
+<area shape="rect" id="node9" href="$Map_8cpp.html" title=" " alt="" coords="326,251,518,278"/>
 </map>

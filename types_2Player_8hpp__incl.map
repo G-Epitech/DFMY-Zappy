@@ -1,6 +1,10 @@
 <map id="graphic/src/types/Player.hpp" name="graphic/src/types/Player.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="19,5,224,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,64,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="89,80,154,107"/>
-<area shape="rect" id="node4" href="$Utils_8hpp.html" title=" " alt="" coords="179,80,259,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="51,5,256,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="59,155,118,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="24,80,89,107"/>
+<area shape="rect" id="node4" href="$Utils_8hpp.html" title=" " alt="" coords="114,80,194,107"/>
+<area shape="rect" id="node5" href="$Teams_8hpp.html" title=" " alt="" coords="218,80,310,107"/>
+<area shape="rect" id="node8" href="$constants_2Player_8hpp.html" title=" " alt="" coords="335,80,492,107"/>
+<area shape="rect" id="node6" title=" " alt="" coords="199,155,242,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="266,155,351,181"/>
 </map>
