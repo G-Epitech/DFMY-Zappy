@@ -10,7 +10,6 @@
 #include "utils/String.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
-std::vector<std::string> playerModels = {"Barbar.mesh", "Queen.mesh"};
 
 Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log) : _client(client), _map(map), _scnMgr(scnMgr) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
@@ -160,17 +159,15 @@ void Commands::mapSize(std::string &command) {
 
     if (args.size() != 2)
         return;
-  
+
     _map.width = std::stoi(args[0]);
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
-    for (int i = 0; i < _map.width; i++)
-    {
-        std::vector<Tile> row;
+    for (int i = 0; i < _map.width; i++) {
+        std::vector<std::shared_ptr<Tile>> row;
         posy = static_cast<float>(_map.width) / 2;
-        for (int j = 0; j < _map.height; j++)
-        {
+        for (int j = 0; j < _map.height; j++) {
             Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
@@ -180,13 +177,11 @@ void Commands::mapSize(std::string &command) {
             Ogre::Vector3 size = aab.getSize();
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
 
-            Tile tile;
+            auto tile = std::make_shared<Tile>(node);
 
-            for (const auto & stonesName : stonesNames)
-            {
-                tile.items[stonesName] = {};
+            for (const auto &stonesName: stonesNames) {
+                tile->items[stonesName] = {};
             }
-            tile.node = node;
             row.push_back(tile);
             posy = posy - 1 - MAP_TILE_Y_OFFSET;
         }
@@ -205,21 +200,21 @@ void Commands::tileContent(std::string &command) {
     int y = std::stoi(args[1]);
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
-    int food = std::stoi(args[2]) - _map.tiles[x][y].items["food"].size();
+    int food = std::stoi(args[2]) - _map.tiles[x][y]->items["food"].size();
     std::vector<int> stones;
     for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++) {
-        stones.push_back(std::stoi(args[3 + i]) - _map.tiles[x][y].items[stonesNames[i]].size());
+        stones.push_back(std::stoi(args[3 + i]) - _map.tiles[x][y]->items[stonesNames[i]].size());
     }
 
     if (food > 0)
-        _addItemsToTile(_map.tiles[x][y], "food", food);
+        _map.tiles[x][y]->addItemEntity("food", food, _scnMgr);
     else if (food < 0)
-        _removeItemsFromTile(_map.tiles[x][y], "food", -food);
+        _map.tiles[x][y]->removeItemEntity("food", -food, _scnMgr);
     for (int i = 0; i < stonesNames.size(); i++) {
         if (stones[i] > 0)
-            _addItemsToTile(_map.tiles[x][y], stonesNames[i], stones[i]);
+            _map.tiles[x][y]->addItemEntity(stonesNames[i], stones[i], _scnMgr);
         else if (stones[i] < 0)
-            _removeItemsFromTile(_map.tiles[x][y], stonesNames[i], -stones[i]);
+            _map.tiles[x][y]->removeItemEntity(stonesNames[i], -stones[i], _scnMgr);
     }
 }
 
@@ -250,18 +245,16 @@ void Commands::playerConnect(std::string &command) {
         return;
 
     for (const auto &player: _map.players) {
-        if (player.id == id) {
+        if (player->getId() == id) {
             return;
         }
     }
 
-    Player player;
-    player.id = id;
-    player.orientation = orientation;
-    player.level = level;
-    player.team = team;
-    player.position = {x, y};
-    player.node = _createPlayerItem(_map.tiles[x][y], player, _map.teams);
+    auto player = std::make_shared<Player>(id, team);
+    player->orientation = orientation;
+    player->level = level;
+    player->position = {x, y};
+    player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
     _map.players.push_back(player);
 }
 
@@ -278,31 +271,19 @@ void Commands::playerPosition(std::string &command) {
         return;
 
     for (auto &player: _map.players) {
-        if (player.id == id) {
-            player.position.x = x;
-            player.position.y = y;
-            player.orientation = orientation;
-            player.node->setPosition(_map.tiles[x][y].node->getPosition().x, player.node->getPosition().y,
-                                     _map.tiles[x][y].node->getPosition().z);
-            if (!player.node)
-                player.node = _createPlayerItem(_map.tiles[x][y], player, _map.teams);
+        if (player->getId() == id) {
+            player->position.x = x;
+            player->position.y = y;
+            player->orientation = orientation;
+            player->node->setPosition(_map.tiles[x][y]->getNode()->getPosition().x, player->node->getPosition().y,
+                                      _map.tiles[x][y]->getNode()->getPosition().z);
+            if (!player->node)
+                player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             else
-                _updatePlayerItemSize(player.node, player, _map.tiles[x][y]);
+                player->updateEntitySize(_map.tiles[x][y]->getNode());
             return;
         }
     }
-
-    Player player;
-    player.id = id;
-    player.position.x = x;
-    player.position.y = y;
-    player.orientation = orientation;
-    player.node = _createPlayerItem(_map.tiles[x][y], player, _map.teams);
-    _map.players.push_back(player);
-
-    // Because it's a new player, we need to get its level and inventory
-    _client.write("pin " + std::to_string(id) + "\n");
-    _client.write("plv " + std::to_string(id) + "\n");
 }
 
 void Commands::playerLevel(std::string &command) {
@@ -314,19 +295,11 @@ void Commands::playerLevel(std::string &command) {
     int level = std::stoi(args[1]);
 
     for (auto &player: _map.players) {
-        if (player.id == id) {
-            player.level = level;
+        if (player->getId() == id) {
+            player->level = level;
             return;
         }
     }
-
-    Player player;
-    player.id = id;
-    player.level = level;
-    _map.players.push_back(player);
-
-    _client.write("pin " + std::to_string(id) + "\n");
-    _client.write("ppo " + std::to_string(id) + "\n");
 }
 
 void Commands::playerInventory(std::string &command) {
@@ -341,29 +314,18 @@ void Commands::playerInventory(std::string &command) {
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
 
-    Inventory inventory;
-    inventory.food = std::stoi(args[3]);
-    inventory.linemate = std::stoi(args[4]);
-    inventory.deraumere = std::stoi(args[5]);
-    inventory.sibur = std::stoi(args[6]);
-    inventory.mendiane = std::stoi(args[7]);
-    inventory.phiras = std::stoi(args[8]);
-    inventory.thystame = std::stoi(args[9]);
-
     for (auto &player: _map.players) {
-        if (player.id == id) {
-            player.inventory = inventory;
+        if (player->getId() == id) {
+            player->addInventoryItem("food", std::stoi(args[3]));
+            player->addInventoryItem("linemate", std::stoi(args[4]));
+            player->addInventoryItem("deraumere", std::stoi(args[5]));
+            player->addInventoryItem("sibur", std::stoi(args[6]));
+            player->addInventoryItem("mendiane", std::stoi(args[7]));
+            player->addInventoryItem("phiras", std::stoi(args[8]));
+            player->addInventoryItem("thystame", std::stoi(args[9]));
             return;
         }
     }
-
-    Player player;
-    player.id = id;
-    player.inventory = inventory;
-    _map.players.push_back(player);
-
-    _client.write("pin " + std::to_string(id) + "\n");
-    _client.write("plv " + std::to_string(id) + "\n");
 }
 
 void Commands::playerEject(std::string &command) {
@@ -386,8 +348,8 @@ void Commands::broadcast(std::string &command) {
     std::string message = args[1];
 
     for (auto &player: _map.players) {
-        if (player.id == id) {
-            Circle circle = _createBroadcastCircle(player.node->getPosition());
+        if (player->getId() == id) {
+            Circle circle = _createBroadcastCircle(player->node->getPosition());
             _map.broadcastCircles.push_back(circle);
             _addLogMessage("Player " + std::to_string(id) + " broadcasted: " + message);
             return;
@@ -405,7 +367,7 @@ void Commands::incantationStart(std::string &command) {
     int level = std::stoi(args[2]);
 
     // TODO: Implement incantation animation
-    Sphere sphere = _createIncantationSphere(_map.tiles[x][y].node->getPosition());
+    Sphere sphere = _createIncantationSphere(_map.tiles[x][y]->getNode()->getPosition());
     _map.incantationSpheres.push_back(sphere);
 }
 
@@ -420,7 +382,7 @@ void Commands::incantationEnd(std::string &command) {
 
     // TODO: Implement incantation animation
     for (auto &sphere: _map.incantationSpheres) {
-        if (sphere.node->getPosition() == _map.tiles[x][y].node->getPosition()) {
+        if (sphere.node->getPosition() == _map.tiles[x][y]->getNode()->getPosition()) {
             _scnMgr->destroySceneNode(sphere.node);
             _map.incantationSpheres.erase(
                     std::remove(_map.incantationSpheres.begin(), _map.incantationSpheres.end(), sphere),
@@ -450,19 +412,11 @@ void Commands::playerResourceDrop(std::string &command) {
     int quantity = std::stoi(args[2]);
 
     for (auto &player: _map.players) {
-        if (player.id == player_id) {
-            _addItemsToTile(_map.tiles[player.position.x][player.position.y], resource, quantity);
+        if (player->getId() == player_id) {
+            _map.tiles[player->position.x][player->position.y]->addItemEntity(resource, quantity, _scnMgr);
             return;
         }
     }
-
-    Player player;
-    player.id = player_id;
-    _map.players.push_back(player);
-
-    _client.write("ppo " + std::to_string(player_id) + "\n");
-    _client.write("pin " + std::to_string(player_id) + "\n");
-    _client.write("plv " + std::to_string(player_id) + "\n");
 }
 
 void Commands::playerResourceTake(std::string &command) {
@@ -475,19 +429,11 @@ void Commands::playerResourceTake(std::string &command) {
     int quantity = std::stoi(args[2]);
 
     for (auto &player: _map.players) {
-        if (player.id == player_id) {
-            _removeItemsFromTile(_map.tiles[player.position.x][player.position.y], resource, quantity);
+        if (player->getId() == player_id) {
+            _map.tiles[player->position.x][player->position.y]->removeItemEntity(resource, quantity, _scnMgr);
             return;
         }
     }
-
-    Player player;
-    player.id = player_id;
-    _map.players.push_back(player);
-
-    _client.write("ppo " + std::to_string(player_id) + "\n");
-    _client.write("pin " + std::to_string(player_id) + "\n");
-    _client.write("plv " + std::to_string(player_id) + "\n");
 }
 
 void Commands::playerDeath(std::string &command) {
@@ -498,9 +444,9 @@ void Commands::playerDeath(std::string &command) {
     int player_id = std::stoi(args[0]);
 
     for (auto &player: _map.players) {
-        if (player.id == player_id) {
-            if (player.node)
-                _scnMgr->destroySceneNode(player.node);
+        if (player->getId() == player_id) {
+            if (player->node)
+                _scnMgr->destroySceneNode(player->node);
             _map.players.erase(std::remove(_map.players.begin(), _map.players.end(), player), _map.players.end());
             return;
         }
