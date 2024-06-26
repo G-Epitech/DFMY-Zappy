@@ -1,24 +1,25 @@
 <map id="server/includes/types/trantor/world.h" name="server/includes/types/trantor/world.h">
-<area shape="rect" id="node1" title=" " alt="" coords="4556,5,4717,47"/>
-<area shape="rect" id="node2" href="$app_8h.html" title=" " alt="" coords="2812,109,2973,136"/>
-<area shape="rect" id="node33" href="$map_8c.html" title=" " alt="" coords="2998,102,3153,143"/>
-<area shape="rect" id="node34" href="$resources_8c.html" title=" " alt="" coords="3177,102,3334,143"/>
-<area shape="rect" id="node35" href="$victory_8c.html" title=" " alt="" coords="3358,102,3513,143"/>
-<area shape="rect" id="node36" href="$delay_8c.html" title=" " alt="" coords="3537,102,3712,143"/>
-<area shape="rect" id="node37" href="$hatching_8c.html" title=" " alt="" coords="3736,102,3911,143"/>
-<area shape="rect" id="node38" href="$eggs_2kill_8c.html" title=" " alt="" coords="3935,102,4109,143"/>
-<area shape="rect" id="node39" href="$eggs_2register_8c.html" title=" " alt="" coords="4133,102,4308,143"/>
-<area shape="rect" id="node40" href="$trantor_2world_2free_8c.html" title=" " alt="" coords="4332,102,4507,143"/>
-<area shape="rect" id="node41" href="$trantor_2world_2incantations_2remove_8c.html" title=" " alt="" coords="4531,102,4742,143"/>
-<area shape="rect" id="node42" href="$types_2trantor_2world_2incantations_2start_8c.html" title=" " alt="" coords="4767,102,4957,143"/>
-<area shape="rect" id="node43" href="$trantor_2world_2new_8c.html" title=" " alt="" coords="4981,102,5156,143"/>
-<area shape="rect" id="node44" href="$players_2kill_8c.html" title=" " alt="" coords="5180,102,5355,143"/>
-<area shape="rect" id="node45" href="$players_2register_8c.html" title=" " alt="" coords="5379,102,5558,143"/>
-<area shape="rect" id="node46" href="$update__delay_8c.html" title=" " alt="" coords="5582,95,5777,151"/>
-<area shape="rect" id="node47" href="$trantor_2world_2teams_2create_8c.html" title=" " alt="" coords="5801,102,5976,143"/>
-<area shape="rect" id="node48" href="$map__tests_8c.html" title=" " alt="" coords="6001,102,6169,143"/>
-<area shape="rect" id="node49" href="$player__tests_8c.html" title=" " alt="" coords="6193,102,6361,143"/>
-<area shape="rect" id="node50" href="$world__tests_8c.html" title=" " alt="" coords="6385,102,6553,143"/>
+<area shape="rect" id="node1" title=" " alt="" coords="4547,5,4708,47"/>
+<area shape="rect" id="node2" href="$app_8h.html" title=" " alt="" coords="2713,109,2875,136"/>
+<area shape="rect" id="node32" href="$map_8c.html" title=" " alt="" coords="2899,102,3054,143"/>
+<area shape="rect" id="node33" href="$app_2world_2routines_2resources_8c.html" title=" " alt="" coords="3078,102,3235,143"/>
+<area shape="rect" id="node34" href="$victory_8c.html" title=" " alt="" coords="3259,102,3414,143"/>
+<area shape="rect" id="node35" href="$delay_8c.html" title=" " alt="" coords="3439,102,3613,143"/>
+<area shape="rect" id="node36" href="$hatching_8c.html" title=" " alt="" coords="3637,102,3812,143"/>
+<area shape="rect" id="node37" href="$eggs_2kill_8c.html" title=" " alt="" coords="3836,102,4011,143"/>
+<area shape="rect" id="node38" href="$eggs_2register_8c.html" title=" " alt="" coords="4035,102,4209,143"/>
+<area shape="rect" id="node39" href="$trantor_2world_2free_8c.html" title=" " alt="" coords="4233,102,4408,143"/>
+<area shape="rect" id="node40" href="$types_2trantor_2world_2game_8c.html" title=" " alt="" coords="4432,102,4607,143"/>
+<area shape="rect" id="node41" href="$trantor_2world_2incantations_2remove_8c.html" title=" " alt="" coords="4631,102,4842,143"/>
+<area shape="rect" id="node42" href="$types_2trantor_2world_2incantations_2start_8c.html" title=" " alt="" coords="4867,102,5057,143"/>
+<area shape="rect" id="node43" href="$trantor_2world_2new_8c.html" title=" " alt="" coords="5081,102,5256,143"/>
+<area shape="rect" id="node44" href="$players_2kill_8c.html" title=" " alt="" coords="5280,102,5455,143"/>
+<area shape="rect" id="node45" href="$players_2register_8c.html" title=" " alt="" coords="5479,102,5658,143"/>
+<area shape="rect" id="node46" href="$update__delay_8c.html" title=" " alt="" coords="5682,95,5877,151"/>
+<area shape="rect" id="node47" href="$trantor_2world_2teams_2create_8c.html" title=" " alt="" coords="5901,102,6076,143"/>
+<area shape="rect" id="node48" href="$map__tests_8c.html" title=" " alt="" coords="6101,102,6269,143"/>
+<area shape="rect" id="node49" href="$player__tests_8c.html" title=" " alt="" coords="6293,102,6461,143"/>
+<area shape="rect" id="node50" href="$world__tests_8c.html" title=" " alt="" coords="6485,102,6653,143"/>
 <area shape="rect" id="node3" href="$main_8c.html" title=" " alt="" coords="5,206,116,233"/>
 <area shape="rect" id="node4" href="$app_2init_8c.html" title=" " alt="" coords="140,206,291,233"/>
 <area shape="rect" id="node5" href="$pipeline_8c.html" title=" " alt="" coords="315,206,497,233"/>
@@ -48,5 +49,4 @@
 <area shape="rect" id="node29" href="$app_2start_8c.html" title=" " alt="" coords="5132,206,5291,233"/>
 <area shape="rect" id="node30" href="$app_2steps_2requests_8c.html" title=" " alt="" coords="5315,199,5468,240"/>
 <area shape="rect" id="node31" href="$server_8c.html" title=" " alt="" coords="5492,199,5645,240"/>
-<area shape="rect" id="node32" href="$world__lifecycle_8c.html" title=" " alt="" coords="5669,199,5823,240"/>
 </map>

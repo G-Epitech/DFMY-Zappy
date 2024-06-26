@@ -1,19 +1,22 @@
 <map id="server/includes/log.h" name="server/includes/log.h">
-<area shape="rect" id="node1" title=" " alt="" coords="4622,5,4779,32"/>
-<area shape="rect" id="node2" href="$app_8h.html" title=" " alt="" coords="3408,169,3569,196"/>
-<area shape="rect" id="node38" href="$args_8h.html" title=" " alt="" coords="3527,80,3688,121"/>
-<area shape="rect" id="node39" href="$level_8c.html" title=" " alt="" coords="3713,87,3870,114"/>
-<area shape="rect" id="node40" href="$log_8c.html" title=" " alt="" coords="3895,87,4040,114"/>
-<area shape="rect" id="node41" href="$controller_2emissions_2add_8c.html" title=" " alt="" coords="4065,80,4257,121"/>
-<area shape="rect" id="node42" href="$emit_8c.html" title=" " alt="" coords="4281,80,4473,121"/>
-<area shape="rect" id="node43" href="$read_8c.html" title=" " alt="" coords="4497,80,4689,121"/>
-<area shape="rect" id="node44" href="$controller_2requests_2create_8c.html" title=" " alt="" coords="4713,80,4905,121"/>
-<area shape="rect" id="node45" href="$append_8c.html" title=" " alt="" coords="4929,80,5107,121"/>
-<area shape="rect" id="node46" href="$accept_8c.html" title=" " alt="" coords="5131,80,5302,121"/>
-<area shape="rect" id="node47" href="$close_8c.html" title=" " alt="" coords="5326,80,5497,121"/>
-<area shape="rect" id="node48" href="$poll_8c.html" title=" " alt="" coords="5521,80,5691,121"/>
-<area shape="rect" id="node49" href="$types_2server_2start_8c.html" title=" " alt="" coords="5715,80,5886,121"/>
-<area shape="rect" id="node50" href="$log__tests_8c.html" title=" " alt="" coords="5910,80,6062,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="4611,5,4769,32"/>
+<area shape="rect" id="node2" href="$app_8h.html" title=" " alt="" coords="3111,169,3272,196"/>
+<area shape="rect" id="node35" href="$args_8h.html" title=" " alt="" coords="3229,80,3391,121"/>
+<area shape="rect" id="node36" href="$victory_8c.html" title=" " alt="" coords="3415,80,3570,121"/>
+<area shape="rect" id="node37" href="$level_8c.html" title=" " alt="" coords="3594,87,3751,114"/>
+<area shape="rect" id="node38" href="$log_8c.html" title=" " alt="" coords="3776,87,3921,114"/>
+<area shape="rect" id="node39" href="$controller_2emissions_2add_8c.html" title=" " alt="" coords="3946,80,4138,121"/>
+<area shape="rect" id="node40" href="$emit_8c.html" title=" " alt="" coords="4162,80,4354,121"/>
+<area shape="rect" id="node41" href="$read_8c.html" title=" " alt="" coords="4378,80,4570,121"/>
+<area shape="rect" id="node42" href="$controller_2requests_2create_8c.html" title=" " alt="" coords="4594,80,4786,121"/>
+<area shape="rect" id="node43" href="$append_8c.html" title=" " alt="" coords="4810,80,4989,121"/>
+<area shape="rect" id="node44" href="$accept_8c.html" title=" " alt="" coords="5013,80,5183,121"/>
+<area shape="rect" id="node45" href="$close_8c.html" title=" " alt="" coords="5207,80,5378,121"/>
+<area shape="rect" id="node46" href="$poll_8c.html" title=" " alt="" coords="5402,80,5573,121"/>
+<area shape="rect" id="node47" href="$types_2server_2start_8c.html" title=" " alt="" coords="5597,80,5767,121"/>
+<area shape="rect" id="node48" href="$trantor_2map_2add_8c.html" title=" " alt="" coords="5792,80,5967,121"/>
+<area shape="rect" id="node49" href="$types_2trantor_2map_2resources_8c.html" title=" " alt="" coords="5991,80,6165,121"/>
+<area shape="rect" id="node50" href="$log__tests_8c.html" title=" " alt="" coords="6190,80,6342,121"/>
 <area shape="rect" id="node3" href="$main_8c.html" title=" " alt="" coords="180,251,291,278"/>
 <area shape="rect" id="node4" href="$app_2init_8c.html" title=" " alt="" coords="5,251,156,278"/>
 <area shape="rect" id="node5" href="$pipeline_8c.html" title=" " alt="" coords="315,251,497,278"/>
@@ -39,14 +42,11 @@
 <area shape="rect" id="node25" href="$unknown_2handler_8c.html" title=" " alt="" coords="4296,244,4471,285"/>
 <area shape="rect" id="node26" href="$promote__graphic_8c.html" title=" " alt="" coords="4495,244,4706,285"/>
 <area shape="rect" id="node27" href="$promote__player_8c.html" title=" " alt="" coords="4730,244,4933,285"/>
-<area shape="rect" id="node28" href="$run_8c.html" title=" " alt="" coords="6433,251,6584,278"/>
-<area shape="rect" id="node29" href="$app_2start_8c.html" title=" " alt="" coords="6608,251,6767,278"/>
+<area shape="rect" id="node28" href="$run_8c.html" title=" " alt="" coords="5849,251,6000,278"/>
+<area shape="rect" id="node29" href="$app_2start_8c.html" title=" " alt="" coords="6024,251,6183,278"/>
 <area shape="rect" id="node30" href="$app_2steps_2requests_8c.html" title=" " alt="" coords="4957,244,5111,285"/>
 <area shape="rect" id="node31" href="$server_8c.html" title=" " alt="" coords="5135,244,5288,285"/>
 <area shape="rect" id="node32" href="$world__lifecycle_8c.html" title=" " alt="" coords="5312,244,5465,285"/>
 <area shape="rect" id="node33" href="$world__routines_8c.html" title=" " alt="" coords="5489,244,5643,285"/>
 <area shape="rect" id="node34" href="$stop_8c.html" title=" " alt="" coords="5667,251,5825,278"/>
-<area shape="rect" id="node35" href="$events__delay_8c.html" title=" " alt="" coords="5849,244,6030,285"/>
-<area shape="rect" id="node36" href="$incantations_8c.html" title=" " alt="" coords="6054,244,6230,285"/>
-<area shape="rect" id="node37" href="$app_2world_2lifecycle_2players_8c.html" title=" " alt="" coords="6254,244,6409,285"/>
 </map>

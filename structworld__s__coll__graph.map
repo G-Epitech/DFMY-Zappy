@@ -1,12 +1,13 @@
 <map id="world_s" name="world_s">
-<area shape="rect" id="node1" title=" " alt="" coords="266,528,338,555"/>
-<area shape="rect" id="node2" href="$structresources__manager__s.html" title=" " alt="" coords="5,439,169,465"/>
-<area shape="rect" id="node3" href="$structresource__stat__s.html" title=" " alt="" coords="25,305,149,332"/>
-<area shape="rect" id="node4" href="$structmap__s.html" title=" " alt="" coords="316,439,381,465"/>
-<area shape="rect" id="node5" href="$structmap__cell__s.html" title=" " alt="" coords="279,305,373,332"/>
-<area shape="rect" id="node6" href="$structs__list.html" title=" " alt="" coords="234,201,290,228"/>
-<area shape="rect" id="node7" href="$structs__node.html" title=" " alt="" coords="228,96,296,123"/>
-<area shape="rect" id="node8" href="$unionu__node__data.html" title=" " alt="" coords="209,5,315,32"/>
-<area shape="rect" id="node9" href="$structvector2u__s.html" title=" " alt="" coords="398,305,491,332"/>
-<area shape="rect" id="node10" href="$structchrono__s.html" title=" " alt="" coords="406,439,486,465"/>
+<area shape="rect" id="node1" title=" " alt="" coords="433,528,505,555"/>
+<area shape="rect" id="node2" href="$structteam__s.html" title=" " alt="" coords="403,372,473,399"/>
+<area shape="rect" id="node3" href="$structs__list.html" title=" " alt="" coords="415,201,471,228"/>
+<area shape="rect" id="node9" href="$structmap__cell__s.html" title=" " alt="" coords="193,305,288,332"/>
+<area shape="rect" id="node4" href="$structs__node.html" title=" " alt="" coords="409,96,477,123"/>
+<area shape="rect" id="node5" href="$unionu__node__data.html" title=" " alt="" coords="391,5,496,32"/>
+<area shape="rect" id="node6" href="$structmap__s.html" title=" " alt="" coords="281,439,347,465"/>
+<area shape="rect" id="node7" href="$structresources__manager__s.html" title=" " alt="" coords="5,305,169,332"/>
+<area shape="rect" id="node8" href="$structresource__stat__s.html" title=" " alt="" coords="25,201,149,228"/>
+<area shape="rect" id="node10" href="$structvector2u__s.html" title=" " alt="" coords="313,305,406,332"/>
+<area shape="rect" id="node11" href="$structchrono__s.html" title=" " alt="" coords="550,439,630,465"/>
 </map>

@@ -1,8 +1,10 @@
 <map id="map_s" name="map_s">
-<area shape="rect" id="node1" title=" " alt="" coords="84,395,149,421"/>
-<area shape="rect" id="node2" href="$structmap__cell__s.html" title=" " alt="" coords="11,305,105,332"/>
-<area shape="rect" id="node3" href="$structs__list.html" title=" " alt="" coords="30,201,86,228"/>
-<area shape="rect" id="node4" href="$structs__node.html" title=" " alt="" coords="24,96,92,123"/>
-<area shape="rect" id="node5" href="$unionu__node__data.html" title=" " alt="" coords="5,5,111,32"/>
-<area shape="rect" id="node6" href="$structvector2u__s.html" title=" " alt="" coords="130,305,223,332"/>
+<area shape="rect" id="node1" title=" " alt="" coords="219,395,284,421"/>
+<area shape="rect" id="node2" href="$structresources__manager__s.html" title=" " alt="" coords="5,305,169,332"/>
+<area shape="rect" id="node3" href="$structresource__stat__s.html" title=" " alt="" coords="25,201,149,228"/>
+<area shape="rect" id="node4" href="$structmap__cell__s.html" title=" " alt="" coords="199,305,293,332"/>
+<area shape="rect" id="node5" href="$structs__list.html" title=" " alt="" coords="218,201,274,228"/>
+<area shape="rect" id="node6" href="$structs__node.html" title=" " alt="" coords="212,96,280,123"/>
+<area shape="rect" id="node7" href="$unionu__node__data.html" title=" " alt="" coords="193,5,299,32"/>
+<area shape="rect" id="node8" href="$structvector2u__s.html" title=" " alt="" coords="318,305,411,332"/>
 </map>

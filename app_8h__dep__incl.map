@@ -1,5 +1,5 @@
 <map id="server/includes/app.h" name="server/includes/app.h">
-<area shape="rect" id="node1" title=" " alt="" coords="3905,5,4067,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="4004,5,4165,32"/>
 <area shape="rect" id="node2" href="$main_8c.html" title=" " alt="" coords="5,87,116,114"/>
 <area shape="rect" id="node3" href="$app_2init_8c.html" title=" " alt="" coords="140,87,291,114"/>
 <area shape="rect" id="node4" href="$pipeline_8c.html" title=" " alt="" coords="315,87,497,114"/>
@@ -33,12 +33,13 @@
 <area shape="rect" id="node32" href="$world__routines_8c.html" title=" " alt="" coords="5847,80,6000,121"/>
 <area shape="rect" id="node33" href="$stop_8c.html" title=" " alt="" coords="6025,87,6182,114"/>
 <area shape="rect" id="node34" href="$events__delay_8c.html" title=" " alt="" coords="6206,80,6387,121"/>
-<area shape="rect" id="node35" href="$incantations_8c.html" title=" " alt="" coords="6411,80,6587,121"/>
-<area shape="rect" id="node36" href="$app_2world_2lifecycle_2players_8c.html" title=" " alt="" coords="6611,80,6766,121"/>
-<area shape="rect" id="node37" href="$frequency_8c.html" title=" " alt="" coords="6790,80,6977,121"/>
-<area shape="rect" id="node38" href="$init__tests_8c.html" title=" " alt="" coords="7001,80,7157,121"/>
-<area shape="rect" id="node39" href="$run__tests_8c.html" title=" " alt="" coords="7181,80,7337,121"/>
-<area shape="rect" id="node40" href="$stop__tests_8c.html" title=" " alt="" coords="7361,80,7517,121"/>
-<area shape="rect" id="node41" href="$usage__tests_8c.html" title=" " alt="" coords="7541,80,7697,121"/>
-<area shape="rect" id="node42" href="$routines__tests_8c.html" title=" " alt="" coords="7721,80,7891,121"/>
+<area shape="rect" id="node35" href="$app_2world_2lifecycle_2game_8c.html" title=" " alt="" coords="6411,80,6566,121"/>
+<area shape="rect" id="node36" href="$incantations_8c.html" title=" " alt="" coords="6590,80,6766,121"/>
+<area shape="rect" id="node37" href="$app_2world_2lifecycle_2players_8c.html" title=" " alt="" coords="6790,80,6945,121"/>
+<area shape="rect" id="node38" href="$frequency_8c.html" title=" " alt="" coords="6969,80,7155,121"/>
+<area shape="rect" id="node39" href="$init__tests_8c.html" title=" " alt="" coords="7180,80,7336,121"/>
+<area shape="rect" id="node40" href="$run__tests_8c.html" title=" " alt="" coords="7360,80,7516,121"/>
+<area shape="rect" id="node41" href="$stop__tests_8c.html" title=" " alt="" coords="7540,80,7696,121"/>
+<area shape="rect" id="node42" href="$usage__tests_8c.html" title=" " alt="" coords="7720,80,7876,121"/>
+<area shape="rect" id="node43" href="$routines__tests_8c.html" title=" " alt="" coords="7900,80,8069,121"/>
 </map>
