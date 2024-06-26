@@ -81,14 +81,15 @@ void App::_setupUI() {
 }
 
 void App::_setupInformations() {
-    Ogre::OverlayManager& overlayMgr = Ogre::OverlayManager::getSingleton();
-    Ogre::OverlayContainer* panel = static_cast<Ogre::OverlayContainer*>(overlayMgr.createOverlayElement("Panel", "MyPanel"));
+    Ogre::OverlayManager &overlayMgr = Ogre::OverlayManager::getSingleton();
+    Ogre::OverlayContainer *panel = static_cast<Ogre::OverlayContainer *>(overlayMgr.createOverlayElement("Panel",
+                                                                                                          "MyPanel"));
     panel->setMetricsMode(Ogre::GMM_PIXELS);
     panel->setPosition(0, 50);
     panel->setDimensions(200, 158.7);
     panel->setMaterialName("gepitech");
 
-    Ogre::Overlay* overlay = overlayMgr.create("MyOverlay");
+    Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
     overlay->add2D(panel);
     overlay->show();
 
@@ -170,9 +171,9 @@ void App::buttonHit(OgreBites::Button *b) {
     }
     if (b->getName() == "infos") {
         trayMgr->showOkDialog("Informations", "This is a Zappy GUI made by the G-Epitech team.\n\n"
-                                             "You can use the dropdown to select a team and see only its players.\n"
-                                             "You can also pause the game by clicking on the Pause button.\n"
-                                             "Enjoy the game!");
+                                              "You can use the dropdown to select a team and see only its players.\n"
+                                              "You can also pause the game by clicking on the Pause button.\n"
+                                              "Enjoy the game!");
     }
 }
 
