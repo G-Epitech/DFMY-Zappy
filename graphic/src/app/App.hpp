@@ -224,4 +224,11 @@ private:
      * @return
      */
     bool _isBroadcastNode(Ogre::Node *node);
+
+    /**
+     * @brief Get the player stones number
+     * @param player
+     * @return
+     */
+    int _getPlayerStonesNumber(const Player &player);
 };

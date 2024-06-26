@@ -319,6 +319,15 @@ void App::_handleObjectSelection(Ogre::Node *node) {
             stats.emplace_back("Level");
             values.push_back(std::to_string(player.level));
 
+            stats.emplace_back("Inventory");
+            values.emplace_back("");
+
+            stats.emplace_back("Food");
+            values.push_back(std::to_string(player.inventory.food));
+
+            stats.emplace_back("Stones");
+            values.emplace_back(std::to_string(_getPlayerStonesNumber(player)));
+
             _infosLabel = trayMgr->createLabel(TL_NONE, "Infos/PlayerLabel", "Infos player", 180);
             _infosLabel->_assignListener(this);
             _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/PlayerPanel", 180, stats);
@@ -330,6 +339,11 @@ void App::_handleObjectSelection(Ogre::Node *node) {
             return;
         }
     }
+}
+
+int App::_getPlayerStonesNumber(const Player &player) {
+    return player.inventory.linemate + player.inventory.deraumere + player.inventory.sibur +
+           player.inventory.mendiane + player.inventory.phiras + player.inventory.thystame;
 }
 
 Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {
