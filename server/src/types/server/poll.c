@@ -36,7 +36,7 @@ bool server_poll_controller(server_t *server, controller_t *controller)
 
     fd_states_init(&states);
     fd_states_set(&states, sock, FD_STATES_W | FD_STATES_E | FD_STATES_R);
-    if (select(states.max, &states.readable,
+    if (select(states.max + 1, &states.readable,
         &states.writable, &states.except, NULL) == -1
     ) {
         if (errno != EINTR)

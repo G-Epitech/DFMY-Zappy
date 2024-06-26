@@ -8,6 +8,9 @@
 #include <iostream>
 #include <OgreCameraMan.h>
 #include <OgreViewport.h>
+#include <OgreTextAreaOverlayElement.h>
+#include <OgreFontManager.h>
+#include <OgreBorderPanelOverlayElement.h>
 #include <getopt.h>
 #include "App.hpp"
 
@@ -21,7 +24,9 @@ App::App() :
         _scnMgr(nullptr),
         _map(),
         _commands(_client, _map, nullptr, nullptr),
-        _options() {}
+        _options(),
+        _infosLabel(nullptr),
+        _infosPanel(nullptr) {}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -233,41 +238,124 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
     }
 }
 
-bool App::mousePressed(const MouseButtonEvent &evt) {
-    if (evt.button == OgreBites::BUTTON_LEFT) {
-        Ogre::Ray ray = this->_getMouseRay(evt);
-
-        _raySceneQuery->setRay(ray);
-        _raySceneQuery->setSortByDistance(true);
-
-        Ogre::RaySceneQueryResult& result = _raySceneQuery->execute();
-        for (auto it = result.begin(); it != result.end(); ++it)
-        {
-            if (it->movable)
-            {
-                Ogre::MovableObject* object = it->movable;
-                _handleObjectSelection(object->getParentSceneNode());
-                return true;
-            }
+bool App::_isBroadcastNode(Ogre::Node *node) {
+    for (auto &circle: _map.broadcastCircles) {
+        if (circle.node == node) {
+            return true;
         }
     }
     return false;
 }
 
-void App::_handleObjectSelection(Ogre::Node *node)
-{
+bool App::mousePressed(const MouseButtonEvent &evt) {
+    if (evt.button == OgreBites::BUTTON_LEFT) {
+        // Convert to ray
+        Ogre::Ray ray = this->_getMouseRay(evt);
+
+        // Execute ray query
+        _raySceneQuery->setRay(ray);
+        _raySceneQuery->setSortByDistance(true);
+
+        Ogre::RaySceneQueryResult &result = _raySceneQuery->execute();
+        for (auto it = result.begin(); it != result.end(); ++it) {
+            if (it->movable) {
+                Ogre::MovableObject *object = it->movable;
+                Ogre::Node *node = object->getParentSceneNode();
+
+                if (_isBroadcastNode(node)) {
+                    continue;
+                }
+
+                _handleObjectSelection(node);
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+void App::_handleObjectSelection(Ogre::Node *node) {
     Vector2 position(0, 0);
 
+    if (_infosLabel && _infosPanel) {
+        trayMgr->destroyWidget(_infosLabel);
+        trayMgr->destroyWidget(_infosPanel);
+        _infosLabel = nullptr;
+        _infosPanel = nullptr;
+    }
+
+    // Tiles management
     for (auto &row: _map.tiles) {
-        for (auto &tile : row) {
+        for (auto &tile: row) {
             if (tile.node == node) {
-                std::cout << "Tile selected: " << position.x << ", " << position.y << std::endl;
+                Ogre::StringVector stats;
+                Ogre::StringVector values;
+
+                stats.push_back("Position");
+                values.push_back("x:" + std::to_string(static_cast<int>(position.x)) + ", y:" +
+                                 std::to_string(static_cast<int>(position.y)));
+                std::for_each(tile.items.begin(), tile.items.end(), [&stats, &values](const auto &item) {
+                    stats.push_back(item.first);
+                    values.push_back(std::to_string(item.second.size()));
+                });
+
+                _infosLabel = trayMgr->createLabel(TL_NONE, "Infos/StatsLabel", "Infos tile", 180);
+                _infosLabel->_assignListener(this);
+                _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/StatsPanel", 180, stats);
+                _infosPanel->setAllParamValues(values);
+
+                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, -1);
+                trayMgr->moveWidgetToTray(_infosPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_infosLabel) + 1);
+
+                return;
             }
             position.x++;
         }
         position.y++;
         position.x = 0;
     }
+
+    // Player management
+    for (auto &player: _map.players) {
+        if (player.node == node) {
+            Ogre::StringVector stats;
+            Ogre::StringVector values;
+
+            stats.emplace_back("Position");
+            values.push_back("x:" + std::to_string(static_cast<int>(player.position.x)) + ", y:" +
+                             std::to_string(static_cast<int>(player.position.y)));
+
+            stats.emplace_back("Team");
+            values.push_back(player.team);
+
+            stats.emplace_back("Level");
+            values.push_back(std::to_string(player.level));
+
+            stats.emplace_back("Inventory");
+            values.emplace_back("");
+
+            stats.emplace_back("Food");
+            values.push_back(std::to_string(player.inventory.food));
+
+            stats.emplace_back("Stones");
+            values.emplace_back(std::to_string(_getPlayerStonesNumber(player)));
+
+            _infosLabel = trayMgr->createLabel(TL_NONE, "Infos/PlayerLabel", "Infos player", 180);
+            _infosLabel->_assignListener(this);
+            _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/PlayerPanel", 180, stats);
+            _infosPanel->setAllParamValues(values);
+
+            trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, -1);
+            trayMgr->moveWidgetToTray(_infosPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_infosLabel) + 1);
+
+            return;
+        }
+    }
+}
+
+int App::_getPlayerStonesNumber(const Player &player) {
+    return player.inventory.linemate + player.inventory.deraumere + player.inventory.sibur +
+           player.inventory.mendiane + player.inventory.phiras + player.inventory.thystame;
 }
 
 Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {

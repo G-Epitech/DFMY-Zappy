@@ -12,8 +12,8 @@ vector2u_t map_resolve_position(map_t *map, vector2l_t pos)
 {
     vector2u_t resolved_pos = { 0, 0 };
 
-    pos.x = pos.x % (long)map->size.x;
-    pos.y = pos.y % (long)map->size.y;
+    pos.x = pos.x % (long) map->size.x;
+    pos.y = pos.y % (long) map->size.y;
     if (pos.x < 0)
         resolved_pos.x = map->size.x + pos.x;
     else
@@ -31,7 +31,7 @@ void map_forward_position(map_t *map, vector2u_t *position,
     vector2l_t move_vector = direction_get_move_vector(direction);
     vector2l_t new_pos = { 0, 0 };
 
-    new_pos.x = (long)position->x + move_vector.x;
-    new_pos.y = (long)position->y + move_vector.y;
+    new_pos.x = (long) position->x + move_vector.x;
+    new_pos.y = (long) position->y + move_vector.y;
     *position = map_resolve_position(map, new_pos);
 }
