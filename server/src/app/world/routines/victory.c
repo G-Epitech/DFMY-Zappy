@@ -35,10 +35,10 @@ static void notify_graphics(world_t *world, server_t *server)
 
     world_get_game_duration(world, &game_duration);
     controllers_add_emission(server->controllers, CTRL_GRAPHIC,
-        "seg %s\nsmg Game end in %lds and %ld us\n",
+        "seg %s\nsmg Game ended in %lds and %ldus\n",
         world->winner->name, game_duration.tv_sec, game_duration.tv_usec
     );
-    log_info("Game ended in %lds and %ld us", game_duration.tv_sec,
+    log_info("Game ended in %lds and %ldus", game_duration.tv_sec,
         game_duration.tv_usec
     );
 }
