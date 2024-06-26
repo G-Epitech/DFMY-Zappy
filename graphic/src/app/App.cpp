@@ -226,7 +226,9 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
             for (auto &player: _map.players) {
                 player->node->setVisible(true);
             }
+            _map.selectedTeam = "";
         } else {
+            _map.selectedTeam = selectedTeam;
             for (auto &player: _map.players) {
                 if (player->getTeam() == selectedTeam) {
                     player->node->setVisible(true);
@@ -375,7 +377,7 @@ void App::_updateMap(std::string &command) {
 
     try {
         _commands.execute(commandName, params);
-    } catch(const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << "[ERROR] On command " << commandName << " with paramters " << params << ": " << e.what() << '\n';
     }
 }

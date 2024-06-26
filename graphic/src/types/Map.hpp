@@ -44,6 +44,7 @@ struct Map {
     std::vector<Egg> eggs = {};
     std::vector<Circle> broadcastCircles = {};
     std::vector<Sphere> incantationSpheres = {};
+    std::string selectedTeam;
 };
 
 bool operator==(const Circle &lhs, const Circle &rhs);

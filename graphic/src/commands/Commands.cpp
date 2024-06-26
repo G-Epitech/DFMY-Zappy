@@ -196,6 +196,10 @@ void Commands::playerConnect(std::string &command) {
     player->position = {x, y};
     player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
     _map.players.push_back(player);
+
+    if (!_map.selectedTeam.empty() && _map.selectedTeam != team) {
+        player->node->setVisible(false);
+    }
 }
 
 void Commands::playerPosition(std::string &command) {
@@ -291,6 +295,10 @@ void Commands::broadcast(std::string &command) {
 
     for (auto &player: _map.players) {
         if (player->getId() == id) {
+            if (!_map.selectedTeam.empty() && _map.selectedTeam != player->getTeam()) {
+                return;
+            }
+
             Circle circle = _createBroadcastCircle(player->node->getPosition());
             _map.broadcastCircles.push_back(circle);
             _addLogMessage("Player " + std::to_string(id) + " broadcasted: " + message);
