@@ -17,6 +17,6 @@ void app_handle_gui_request_get_time_unit(app_t *app, controller_t *controller,
         return log_warn("No arguments expected for 'sgt' command");
     }
     controller_add_emission(controller, "sgt %zu\n",
-        app->world->chrono.frequency
+        app->world->paused ? 0 : app->world->chrono.frequency
     );
 }

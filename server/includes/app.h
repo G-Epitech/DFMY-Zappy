@@ -21,7 +21,7 @@
 #define APP_EXIT_SUCCESS 0
 #define APP_EXIT_FAILURE 84
 #define APP_MAX_FREQ 10000
-#define APP_MIN_FREQ 1
+#define APP_MIN_FREQ 0
 
 // @brief Application state
 typedef struct app_s {
