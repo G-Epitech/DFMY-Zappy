@@ -114,12 +114,14 @@ void App::_setupDropdowns() {
 }
 
 void App::_setupLights() {
-    _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
-
     auto sunLight = _scnMgr->createLight("SunLight");
     sunLight->setType(Light::LT_DIRECTIONAL);
-    sunLight->setDiffuseColour(ColourValue(0.5, 0.5f, 0.5f, 0.5f));
-    sunLight->setSpecularColour(ColourValue(0.5, 0.5f, 0.5f, 0.5f));
+    sunLight->setPowerScale(0.1f); // Slightly reduced power for a softer light
+    sunLight->setAttenuation(100, 10, 10, 100); // No attenuation, full power at any distance
+    sunLight->setSourceSize(2.0f, 2.0f); // Larger sun size for softer transitions
+    sunLight->setCastShadows(true);
+    sunLight->setDiffuseColour(ColourValue(1.0f, 1.0f, 1.0f)); // Warm orange color for sunset
+    sunLight->setSpecularColour(ColourValue(1.0f, 1.0f, 1.0f)); // Matching specular color
 
     auto sunNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
     sunNode->attachObject(sunLight);

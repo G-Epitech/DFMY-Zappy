@@ -6,13 +6,12 @@ material layeredShader1SG {
             scene_blend alpha_blend
             cull_hardware none
             depth_write off
-            diffuse 0.8 0.8 0.8 1.0
-            specular 0.5 0.0 0 0 0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.2 0.0 0 0 0
 
             // additional maps - requires RTSS
             rtshader_system {
                 lighting_stage metal_roughness texture Image_4.png
-                lighting_stage normal_map Image_5.png
             }
 
             // - base_color_texture

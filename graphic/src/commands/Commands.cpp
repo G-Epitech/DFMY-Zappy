@@ -66,8 +66,8 @@ void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quan
         auto itemSize = cubeEntity->getBoundingBox().getSize();
         itemNode->attachObject(cubeEntity);
 
-        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
-        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
+        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.x - tileSize.x / 1.5f);
+        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.z - tileSize.z / 1.5f);
 
         itemNode->setPosition(randX, 0.2f, randZ);
         itemNode->setScale(0.2f, 0.2f, 0.2f);
@@ -274,11 +274,9 @@ void Commands::playerPosition(std::string &command) {
             player.position.y = y;
             player.orientation = orientation;
             player.node->setPosition(_map.tiles[x][y].node->getPosition().x, player.node->getPosition().y,
-                                     _map.tiles[x][y].node->getPosition().z + 100);
+                                     _map.tiles[x][y].node->getPosition().z);
             if (!player.node)
                 player.node = _createPlayerItem(_map.tiles[x][y], player, _map.teams);
-            else
-                _updatePlayerItemSize(player.node, player, _map.tiles[x][y]);
             return;
         }
     }

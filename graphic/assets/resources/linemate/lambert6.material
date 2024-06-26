@@ -3,13 +3,12 @@ material lambert6 {
     receive_shadows on
     technique {
         pass {
-            diffuse 0.8 0.8 0.8 1.0
-            specular 0.5 0.0 0 0 0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.2 0.0 0 0 0
 
             // additional maps - requires RTSS
             rtshader_system {
                 lighting_stage metal_roughness texture Image_5.png
-                lighting_stage normal_map Image_7.png
                 texturing_stage late_add_blend // needed for emissive to work
             }
 
@@ -22,7 +21,7 @@ material lambert6 {
 
             // - emission_color_texture
             texture_unit {
-                texture Image_6.jpeg
+                texture Image_6.jpg
                 tex_address_mode wrap
                 colour_op add
             }
