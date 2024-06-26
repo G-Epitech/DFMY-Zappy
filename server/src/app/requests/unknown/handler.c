@@ -19,7 +19,12 @@ void app_handle_unknown_request(app_t *app, controller_t *controller,
         memcmp(token.content, "GRAPHIC", token.size) == 0
     ) {
         app_try_promote_controller_to_graphic(app, controller);
-    } else {
+        request->status = REQ_FINISHED;
+        return;
+    }
+    if (app->world->winner)
+        controller_add_emission_raw(controller, "ko\n", 3);
+    else {
         app_try_promote_controller_to_player(app, controller, request,
             token.size);
     }
