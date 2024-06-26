@@ -275,14 +275,14 @@ void App::_handleObjectSelection(Ogre::Node *node) {
     // Tiles management
     for (auto &row: _map.tiles) {
         for (auto &tile: row) {
-            if (tile.node == node) {
+            if (tile->getNode() == node) {
                 Ogre::StringVector stats;
                 Ogre::StringVector values;
 
                 stats.push_back("Position");
                 values.push_back("x:" + std::to_string(static_cast<int>(position.x)) + ", y:" +
                                  std::to_string(static_cast<int>(position.y)));
-                std::for_each(tile.items.begin(), tile.items.end(), [&stats, &values](const auto &item) {
+                std::for_each(tile->items.begin(), tile->items.end(), [&stats, &values](const auto &item) {
                     stats.push_back(item.first);
                     values.push_back(std::to_string(item.second.size()));
                 });

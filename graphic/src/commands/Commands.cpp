@@ -51,40 +51,6 @@ void Commands::setScnMgr(Ogre::SceneManager *scnMgr) {
     _scnMgr = scnMgr;
 }
 
-void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quantity) {
-    Ogre::SceneNode *node = tile.node;
-    if (!node || node->numAttachedObjects() == 0)
-        return;
-    auto tileSize = node->getAttachedObject(0)->getBoundingBox().getSize();
-    Ogre::Vector3 pos = node->getPosition();
-    Ogre::Vector3 size = node->getAttachedObject(0)->getBoundingBox().getSize();
-
-    for (int i = 0; i < quantity; i++) {
-        Ogre::Entity *cubeEntity = _scnMgr->createEntity(itemName + ".mesh");
-        Ogre::SceneNode *itemNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
-        auto itemSize = cubeEntity->getBoundingBox().getSize();
-        itemNode->attachObject(cubeEntity);
-
-        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
-        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
-        float itemY = itemSize.y / 2.0f * 0.1;
-
-        itemNode->setPosition(randX, itemY, randZ);
-        itemNode->setScale(0.1f, 0.1f, 0.1f);
-        tile.items[itemName].push_back(itemNode);
-    }
-}
-
-void Commands::_removeItemsFromTile(Tile &tile, const std::string &itemName, int quantity) {
-    for (int i = 0; i < quantity; i++) {
-        if (tile.items[itemName].empty())
-            return;
-        Ogre::SceneNode *node = tile.items[itemName].back();
-        tile.items[itemName].pop_back();
-        _scnMgr->destroySceneNode(node);
-    }
-}
-
 Circle Commands::_createBroadcastCircle(const Ogre::Vector3 &position) {
     Circle circle;
     circle.circle = _scnMgr->createManualObject();
@@ -118,17 +84,15 @@ void Commands::mapSize(std::string &command) {
 
     if (args.size() != 2)
         return;
-  
+
     _map.width = std::stoi(args[0]);
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
-    for (int i = 0; i < _map.width; i++)
-    {
-        std::vector<Tile> row;
+    for (int i = 0; i < _map.width; i++) {
+        std::vector<std::shared_ptr<Tile>> row;
         posy = static_cast<float>(_map.width) / 2;
-        for (int j = 0; j < _map.height; j++)
-        {
+        for (int j = 0; j < _map.height; j++) {
             Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
@@ -138,13 +102,11 @@ void Commands::mapSize(std::string &command) {
             Ogre::Vector3 size = aab.getSize();
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
 
-            Tile tile;
+            auto tile = std::make_shared<Tile>(node);
 
-            for (const auto & stonesName : stonesNames)
-            {
-                tile.items[stonesName] = {};
+            for (const auto &stonesName: stonesNames) {
+                tile->items[stonesName] = {};
             }
-            tile.node = node;
             row.push_back(tile);
             posy = posy - 1 - MAP_TILE_Y_OFFSET;
         }
@@ -163,21 +125,21 @@ void Commands::tileContent(std::string &command) {
     int y = std::stoi(args[1]);
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
-    int food = std::stoi(args[2]) - _map.tiles[x][y].items["food"].size();
+    int food = std::stoi(args[2]) - _map.tiles[x][y]->items["food"].size();
     std::vector<int> stones;
     for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++) {
-        stones.push_back(std::stoi(args[3 + i]) - _map.tiles[x][y].items[stonesNames[i]].size());
+        stones.push_back(std::stoi(args[3 + i]) - _map.tiles[x][y]->items[stonesNames[i]].size());
     }
 
     if (food > 0)
-        _addItemsToTile(_map.tiles[x][y], "food", food);
+        _map.tiles[x][y]->addItemEntity("food", food, _scnMgr);
     else if (food < 0)
-        _removeItemsFromTile(_map.tiles[x][y], "food", -food);
+        _map.tiles[x][y]->removeItemEntity("food", -food, _scnMgr);
     for (int i = 0; i < stonesNames.size(); i++) {
         if (stones[i] > 0)
-            _addItemsToTile(_map.tiles[x][y], stonesNames[i], stones[i]);
+            _map.tiles[x][y]->addItemEntity(stonesNames[i], stones[i], _scnMgr);
         else if (stones[i] < 0)
-            _removeItemsFromTile(_map.tiles[x][y], stonesNames[i], -stones[i]);
+            _map.tiles[x][y]->removeItemEntity(stonesNames[i], -stones[i], _scnMgr);
     }
 }
 
@@ -217,7 +179,7 @@ void Commands::playerConnect(std::string &command) {
     player->orientation = orientation;
     player->level = level;
     player->position = {x, y};
-    player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y].node);
+    player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
     _map.players.push_back(player);
 }
 
@@ -238,12 +200,12 @@ void Commands::playerPosition(std::string &command) {
             player->position.x = x;
             player->position.y = y;
             player->orientation = orientation;
-            player->node->setPosition(_map.tiles[x][y].node->getPosition().x, player->node->getPosition().y,
-                                     _map.tiles[x][y].node->getPosition().z);
+            player->node->setPosition(_map.tiles[x][y]->getNode()->getPosition().x, player->node->getPosition().y,
+                                      _map.tiles[x][y]->getNode()->getPosition().z);
             if (!player->node)
-                player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y].node);
+                player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             else
-                player->updateEntitySize(_map.tiles[x][y].node);
+                player->updateEntitySize(_map.tiles[x][y]->getNode());
             return;
         }
     }
@@ -329,7 +291,7 @@ void Commands::incantationStart(std::string &command) {
     int level = std::stoi(args[2]);
 
     // TODO: Implement incantation animation
-    Sphere sphere = _createIncantationSphere(_map.tiles[x][y].node->getPosition());
+    Sphere sphere = _createIncantationSphere(_map.tiles[x][y]->getNode()->getPosition());
     _map.incantationSpheres.push_back(sphere);
 }
 
@@ -344,7 +306,7 @@ void Commands::incantationEnd(std::string &command) {
 
     // TODO: Implement incantation animation
     for (auto &sphere: _map.incantationSpheres) {
-        if (sphere.node->getPosition() == _map.tiles[x][y].node->getPosition()) {
+        if (sphere.node->getPosition() == _map.tiles[x][y]->getNode()->getPosition()) {
             _scnMgr->destroySceneNode(sphere.node);
             _map.incantationSpheres.erase(
                     std::remove(_map.incantationSpheres.begin(), _map.incantationSpheres.end(), sphere),
@@ -375,7 +337,7 @@ void Commands::playerResourceDrop(std::string &command) {
 
     for (auto &player: _map.players) {
         if (player->getId() == player_id) {
-            _addItemsToTile(_map.tiles[player->position.x][player->position.y], resource, quantity);
+            _map.tiles[player->position.x][player->position.y]->addItemEntity(resource, quantity, _scnMgr);
             return;
         }
     }
@@ -392,7 +354,7 @@ void Commands::playerResourceTake(std::string &command) {
 
     for (auto &player: _map.players) {
         if (player->getId() == player_id) {
-            _removeItemsFromTile(_map.tiles[player->position.x][player->position.y], resource, quantity);
+            _map.tiles[player->position.x][player->position.y]->removeItemEntity(resource, quantity, _scnMgr);
             return;
         }
     }
