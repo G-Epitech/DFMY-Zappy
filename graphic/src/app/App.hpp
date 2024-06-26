@@ -194,4 +194,10 @@ private:
     static void _printUsage() noexcept;
 
     Ogre::Ray _getMouseRay(const OgreBites::MouseButtonEvent &evt);
+
+    /**
+     * @brief Handle the object selection
+     * @param node Node of the object
+     */
+    void _handleObjectSelection(Ogre::Node *node);
 };

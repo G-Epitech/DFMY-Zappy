@@ -212,12 +212,28 @@ bool App::mousePressed(const MouseButtonEvent &evt) {
                 if (it->movable)
                 {
                     Ogre::MovableObject* object = it->movable;
-                    std::cout << "Object Name: " << object->getName() << std::endl;
+                    _handleObjectSelection(object->getParentSceneNode());
                     break;
                 }
             }
         }
     return true;
+}
+
+void App::_handleObjectSelection(Ogre::Node *node)
+{
+    Vector2 position(0, 0);
+
+    for (auto &row: _map.tiles) {
+        for (auto &tile : row) {
+            if (tile.node == node) {
+                std::cout << "Tile selected: " << position.x << ", " << position.y << std::endl;
+            }
+            position.x++;
+        }
+        position.y++;
+        position.x = 0;
+    }
 }
 
 Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {
