@@ -18,6 +18,8 @@ zappy_gui:
 	@printf "cd $(shell pwd)/graphic && ./zappy_gui $$%s\n" "@" >> zappy_gui
 	@chmod +x zappy_gui
 
+re: fclean all
+
 clean:
 	@make -C graphic clean
 	@make -C server clean
@@ -36,5 +38,5 @@ tests_run:
 
 all: zappy_server zappy_ai zappy_gui
 
-.PHONY: all zappy_server zappy_ai zappy_gui tests_run clean fclean
+.PHONY: all zappy_server zappy_ai zappy_gui tests_run clean fclean re
 .DEFAULT_GOAL := all

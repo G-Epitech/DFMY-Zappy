@@ -50,6 +50,7 @@ bool Client::establishConnection(const std::string &host, int port)
     if (bytesWritten == 0) {
         return false;
     }
+    this->write("tna\n");
     this->write("mct\n");
     return true;
 }

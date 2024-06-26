@@ -13,6 +13,10 @@
 #include "Player.hpp"
 #include "constants/Broadcast.hpp"
 #include "constants/Incantation.hpp"
+#include "Teams.hpp"
+
+#define MAP_TILE_Y_OFFSET 0.4f
+#define MAP_TILE_X_OFFSET 0.4f
 
 struct Tile {
     std::map<std::string, std::vector<Ogre::SceneNode *>> items = {};
@@ -38,7 +42,7 @@ struct Map {
     int width = 0;
     int height = 0;
     int timeUnit = 0;
-    std::vector<std::string> teams = {};
+    Teams teams;
     std::vector<Egg> eggs = {};
     std::vector<Circle> broadcastCircles = {};
     std::vector<Sphere> incantationSpheres = {};

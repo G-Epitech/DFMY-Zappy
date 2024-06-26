@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <OgreCameraMan.h>
+#include <OgreViewport.h>
 #include <getopt.h>
 #include "App.hpp"
 
@@ -14,70 +15,45 @@ using namespace Ogre;
 using namespace OgreBites;
 
 App::App() :
-    OgreBites::ApplicationContext("Zappy"),
-    _client(),
-    trayMgr(nullptr),
-    scnMgr(nullptr),
-    _map(),
-    _commands(),
-    _options()
-{
-    this->_commands["msz"] = &Commands::mapSize;
-    this->_commands["bct"] = &Commands::tileContent;
-    this->_commands["tna"] = &Commands::teamsNames;
-    this->_commands["pnw"] = &Commands::playerConnect;
-    this->_commands["ppo"] = &Commands::playerPosition;
-    this->_commands["plv"] = &Commands::playerLevel;
-    this->_commands["pin"] = &Commands::playerInventory;
-    this->_commands["pex"] = &Commands::playerEject;
-    this->_commands["pbc"] = &Commands::broadcast;
-    this->_commands["pic"] = &Commands::incantationStart;
-    this->_commands["pie"] = &Commands::incantationEnd;
-    this->_commands["pfk"] = &Commands::playerLayingEgg;
-    this->_commands["pdr"] = &Commands::playerResourceDrop;
-    this->_commands["pgt"] = &Commands::playerResourceTake;
-    this->_commands["pdi"] = &Commands::playerDeath;
-    this->_commands["enw"] = &Commands::playerEggLaid;
-    this->_commands["edi"] = &Commands::eggDeath;
-    this->_commands["ebo"] = &Commands::eggHatching;
-    this->_commands["sgt"] = &Commands::timeUnitRequest;
-    this->_commands["sst"] = &Commands::timeUnitModification;
-    this->_commands["seg"] = &Commands::endGame;
-    this->_commands["suc"] = &Commands::unknownCommand;
-    this->_commands["sbp"] = &Commands::commandParameters;
-}
+        OgreBites::ApplicationContext("Zappy"),
+        _client(),
+        trayMgr(nullptr),
+        _scnMgr(nullptr),
+        _map(),
+        _commands(_client, _map, nullptr),
+        _options() {}
 
 void App::setup() {
     ApplicationContext::setup();
     addInputListener(this);
-
     Root *root = getRoot();
-    root->loadPlugin("Codec_FreeImage");
-    scnMgr = root->createSceneManager();
-    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+
+    _scnMgr = root->createSceneManager();
+    _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+    _raySceneQuery = _scnMgr->createRayQuery(Ogre::Ray());
+
+    _commands.setScnMgr(_scnMgr);
+    _scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
     _setupCamera();
     _setupMaterials();
-
-    trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
-    addInputListener(trayMgr);
-    trayMgr->showFrameStats(TL_BOTTOMLEFT);
-    trayMgr->showLogo(TL_BOTTOMRIGHT);
-    trayMgr->hideCursor();
+    _setupUI();
+    _setupLights();
+    _setupAudio();
 }
 
 void App::_setupCamera() {
-    Camera *cam = scnMgr->createCamera("myCam");
-    cam->setAutoAspectRatio(true);
-    cam->setNearClipDistance(0.1);
-    cam->setFarClipDistance(1000);
+    _camera = _scnMgr->createCamera("myCam");
+    _camera->setAutoAspectRatio(true);
+    _camera->setNearClipDistance(0.1);
+    _camera->setFarClipDistance(1000);
 
-    SceneNode *camNode = scnMgr->getRootSceneNode()->createChildSceneNode();
-    camNode->setPosition(0, 0, 20);
+    SceneNode *camNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
+    camNode->setPosition(20, -20, -20);
     camNode->lookAt(Vector3(0, 0, -1), Node::TS_PARENT);
-    camNode->attachObject(cam);
-    getRenderWindow()->addViewport(cam);
+    camNode->attachObject(_camera);
+    getRenderWindow()->addViewport(_camera);
 
     auto *camMan = new CameraMan(camNode);
     camMan->setStyle(CS_ORBIT);
@@ -86,14 +62,81 @@ void App::_setupCamera() {
 
 void App::_setupMaterials() {
     MaterialPtr material = MaterialManager::getSingleton().create("TransparentMaterial",
-        ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+                                                                  ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
     material->setDiffuse(1, 1, 1, 0.5);
     material->setAmbient(0, 0.65, 1);
     material->setSceneBlending(SBT_TRANSPARENT_ALPHA);
     material->setDepthWriteEnabled(false);
 }
 
-bool App::frameRenderingQueued(const Ogre::FrameEvent& evt) {
+void App::_setupUI() {
+    _scnMgr->addRenderQueueListener(getOverlaySystem());
+
+    trayMgr = new TrayManager("TrayGUISystem", getRenderWindow());
+    addInputListener(trayMgr);
+    trayMgr->setListener(this);
+    trayMgr->showFrameStats(TL_BOTTOMRIGHT);
+    trayMgr->hideCursor();
+
+    _setupButtons();
+    _setupDropdowns();
+    _setupInformations();
+}
+
+void App::_setupInformations() {
+    Ogre::OverlayManager &overlayMgr = Ogre::OverlayManager::getSingleton();
+    Ogre::OverlayContainer *panel = static_cast<Ogre::OverlayContainer *>(overlayMgr.createOverlayElement("Panel",
+                                                                                                          "MyPanel"));
+    panel->setMetricsMode(Ogre::GMM_PIXELS);
+    panel->setPosition(0, 50);
+    panel->setDimensions(200, 158.7);
+    panel->setMaterialName("gepitech");
+
+    Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
+    overlay->add2D(panel);
+    overlay->show();
+
+    trayMgr->createButton(TL_TOPLEFT, "infos", "Informations", 185);
+}
+
+void App::_setupButtons() {
+    _pauseButton = trayMgr->createButton(TL_BOTTOM, "Pause", "Pause", 200);
+}
+
+void App::_setupDropdowns() {
+    _teamsDropdown = trayMgr->createThickSelectMenu(TL_BOTTOMLEFT, "Teams", "Teams", 200, 200);
+    _teamsDropdown->addItem("All teams");
+    _teamsDropdown->selectItem(0);
+
+    // TODO: Add teams from the server
+    _teamsDropdown->addItem("team1");
+    _teamsDropdown->addItem("team2");
+}
+
+void App::_setupLights() {
+    _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+
+    auto sunLight = _scnMgr->createLight("SunLight");
+    sunLight->setType(Light::LT_DIRECTIONAL);
+    sunLight->setDiffuseColour(ColourValue(0.4, 0, 0));
+    sunLight->setSpecularColour(ColourValue(0.4, 0, 0));
+
+    auto sunNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
+    sunNode->attachObject(sunLight);
+    sunNode->setDirection(Vector3(1, -1, 0));
+    sunNode->setPosition(-200, -200, 400);
+}
+
+void App::_setupAudio() {
+    if (!_background_music.openFromFile("audio/background_music.wav")) {
+        std::cerr << "Failed to load music file!" << std::endl;
+    } else {
+        _background_music.play();
+    }
+}
+
+bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
+    trayMgr->frameRendered(evt);
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
     return true;
@@ -123,8 +166,8 @@ void App::_loadResources() {
     ConfigFile::SettingsBySection_ section = cf.getSettingsBySection();
     String typeName, archName;
 
-    for (auto &i : section) {
-        for (auto &j : i.second) {
+    for (auto &i: section) {
+        for (auto &j: i.second) {
             typeName = j.first;
             archName = j.second;
             rgm.addResourceLocation(archName, typeName, "Main");
@@ -141,30 +184,112 @@ bool App::keyPressed(const KeyboardEvent &evt) {
     return true;
 }
 
-void App::_updateMap(std::string &command) {
-    std::string commandName = command.substr(0, 3);
-    if (this->_commands.find(commandName) != this->_commands.end()) {
-        std::string params = command.substr(4);
-        this->_commands[commandName](params, this->_map, this->scnMgr, this->_client);
-    } else {
-        std::cerr << "Unknown command: " << commandName << std::endl;
+void App::buttonHit(OgreBites::Button *b) {
+    if (b->getName() == "Pause") {
+        if (_pauseButton->getCaption() == "Resume") {
+            _pauseButton->setCaption("Pause");
+            _client.write("sst 100\n");
+        } else {
+            _pauseButton->setCaption("Resume");
+            _client.write("sst 0\n");
+        }
+    }
+    if (b->getName() == "infos") {
+        trayMgr->showOkDialog("Informations", "This is a Zappy GUI made by the G-Epitech team.\n\n"
+                                              "You can use the dropdown to select a team and see only its players.\n"
+                                              "You can also pause the game by clicking on the Pause button.\n"
+                                              "Enjoy the game!");
     }
 }
 
-void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
-    for (auto &circle : _map.broadcastCircles) {
-        if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
-            if (circle.circle) {
-                scnMgr->destroyManualObject(circle.circle);
-                circle.circle = nullptr;
+void App::itemSelected(OgreBites::SelectMenu *menu) {
+    if (menu->getName() == "Teams") {
+        auto selectedTeam = menu->getSelectedItem();
+        if (selectedTeam == "All teams") {
+            for (auto &player: _map.players) {
+                player.node->setVisible(true);
             }
-            _map.broadcastCircles.erase(std::remove(_map.broadcastCircles.begin(), _map.broadcastCircles.end(), circle), _map.broadcastCircles.end());
-            continue;
+        } else {
+            for (auto &player: _map.players) {
+                if (player.team == selectedTeam) {
+                    player.node->setVisible(true);
+                } else {
+                    player.node->setVisible(false);
+                }
+            }
+        }
+    }
+}
+
+bool App::mousePressed(const MouseButtonEvent &evt) {
+    if (evt.button == OgreBites::BUTTON_LEFT)
+        {
+            // Convert to ray
+            Ogre::Ray ray = this->_getMouseRay(evt);
+
+            // Execute ray query
+            _raySceneQuery->setRay(ray);
+            _raySceneQuery->setSortByDistance(true);
+
+            Ogre::RaySceneQueryResult& result = _raySceneQuery->execute();
+            for (auto it = result.begin(); it != result.end(); ++it)
+            {
+                if (it->movable)
+                {
+                    Ogre::MovableObject* object = it->movable;
+                    _handleObjectSelection(object->getParentSceneNode());
+                    break;
+                }
+            }
+        }
+    return true;
+}
+
+void App::_handleObjectSelection(Ogre::Node *node)
+{
+    Vector2 position(0, 0);
+
+    for (auto &row: _map.tiles) {
+        for (auto &tile : row) {
+            if (tile.node == node) {
+                std::cout << "Tile selected: " << position.x << ", " << position.y << std::endl;
+            }
+            position.x++;
+        }
+        position.y++;
+        position.x = 0;
+    }
+}
+
+Ogre::Ray App::_getMouseRay(const OgreBites::MouseButtonEvent &evt) {
+    float mouseX = static_cast<float>(evt.x) / getRenderWindow()->getWidth();
+    float mouseY = static_cast<float>(evt.y) / getRenderWindow()->getHeight();
+
+    return _camera->getCameraToViewportRay(mouseX, mouseY);
+}
+
+void App::_updateMap(std::string &command) {
+    if (command.length() < 3)
+        return;
+
+    std::string commandName = command.substr(0, 3);
+    std::string params;
+
+    if (command.length() > 3) {
+        params = command.substr(4);
+    }
+
+    _commands.execute(commandName, params);
+}
+
+void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
+    for (auto &circle: _map.broadcastCircles) {
+        if (circle.radius >= BROADCAST_CIRCLE_MAX_RADIUS) {
+            circle.node->setVisible(false);
         }
         circle.radius += evt.timeSinceLastFrame * BROADCAST_SPEED;
         circle.circle->beginUpdate(0);
-        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i)
-        {
+        for (int i = 0; i <= BROADCAST_CIRCLE_SEGMENTS; ++i) {
             float angle = Ogre::Math::TWO_PI * i / BROADCAST_CIRCLE_SEGMENTS;
             circle.circle->position(Ogre::Math::Cos(angle) * circle.radius, 0, Ogre::Math::Sin(angle) * circle.radius);
         }
@@ -173,7 +298,7 @@ void App::_updateBroadcastCircles(const Ogre::FrameEvent &evt) {
 }
 
 void App::_updateIncantationSpheres(const Ogre::FrameEvent &evt) {
-    for (auto &sphere : _map.incantationSpheres) {
+    for (auto &sphere: _map.incantationSpheres) {
         if (sphere.isGrowing) {
             sphere.radius += evt.timeSinceLastFrame * INCANTATION_SPHERE_SPEED;
             if (sphere.radius >= INCANTATION_SPHERE_MAX_RADIUS) {
@@ -189,8 +314,7 @@ void App::_updateIncantationSpheres(const Ogre::FrameEvent &evt) {
     }
 }
 
-void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int segments)
-{
+void App::_updateSphere(Ogre::ManualObject *obj, float radius, int rings, int segments) {
     obj->clear();
     obj->begin("TransparentMaterial", RenderOperation::OT_TRIANGLE_LIST);
 
@@ -199,24 +323,21 @@ void App::_updateSphere(Ogre::ManualObject* obj, float radius, int rings, int se
     unsigned short wVerticeIndex = 0;
 
     // Generate the group of rings for the sphere
-    for (int ring = 0; ring <= rings; ring++)
-    {
+    for (int ring = 0; ring <= rings; ring++) {
         float r0 = radius * sinf(ring * fDeltaRingAngle);
         float y0 = radius * cosf(ring * fDeltaRingAngle);
 
         // Generate the group of segments for the current ring
-        for (int seg = 0; seg <= segments; seg++)
-        {
+        for (int seg = 0; seg <= segments; seg++) {
             float x0 = r0 * sinf(seg * fDeltaSegAngle);
             float z0 = r0 * cosf(seg * fDeltaSegAngle);
 
             // Add one vertex to the strip which makes up the sphere
             obj->position(x0, y0, z0);
             obj->normal(Vector3(x0, y0, z0).normalisedCopy());
-            obj->textureCoord((float)seg / (float)segments, (float)ring / (float)rings);
+            obj->textureCoord((float) seg / (float) segments, (float) ring / (float) rings);
 
-            if (ring != rings)
-            {
+            if (ring != rings) {
                 // each vertex (except the last) has six indices pointing to it
                 obj->index(wVerticeIndex + segments + 1);
                 obj->index(wVerticeIndex);
