@@ -37,7 +37,7 @@ static bool handle_arguments(controller_t *controller, request_t *request,
     }
     if (!parse_frequency(&token, frequency)) {
         controller_add_emission(controller, "sbp\n");
-        log_warn("Invalid player id for for 'sst' command");
+        log_warn("Invalid frequency value for 'sst' command");
         return false;
     }
     return true;
@@ -50,15 +50,18 @@ void app_handle_gui_request_set_time_unit(app_t *app, controller_t *controller,
 
     if (!handle_arguments(controller, request, &frequency))
         return;
-    if (frequency < APP_MIN_FREQ || frequency > APP_MAX_FREQ) {
+    if (frequency > APP_MAX_FREQ) {
         controller_add_emission(controller, "sbp\n");
-        return log_warn("Invalid frequency for 'sst' command");
+        return log_warn("Invalid frequency value for 'sst' command");
     }
-    app->world->chrono.frequency = frequency;
+    if (frequency > 0) {
+        app->world->chrono.frequency = frequency;
+        app->world->paused = false;
+    } else {
+        app->world->paused = true;
+    }
     controller_add_emission(controller, "sst %zu\n",
-        app->world->chrono.frequency
-    );
+        app->world->paused ? 0 : app->world->chrono.frequency);
     controllers_add_emission(app->server->controllers, CTRL_GRAPHIC,
-        "sgt %zu\n", app->world->chrono.frequency
-    );
+        "sgt %zu\n", app->world->paused ? 0 : app->world->chrono.frequency);
 }

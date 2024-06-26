@@ -12,8 +12,8 @@ static const char *app_usage_lines[] = {
     " -n team1 team2 ... -c clients_nb",
     "ARGUMENTS:",
     "  -p, --port [0, 65535]                           port number of server",
-    "  -x, --width [10, 40]                            width of the world",
-    "  -y, --height [10, 40]                           height of the world",
+    "  -x, --width [1, +inf]                           width of the world",
+    "  -y, --height [1, +inf]                          height of the world",
     "  -n, --teams [...teams]                          names of the teams "
     "(at least one)",
     "  -c, --clients-nb [1, 200]                       number of authorized"
@@ -21,9 +21,9 @@ static const char *app_usage_lines[] = {
     "OPTIONS:",
     "  -h, --help                                      display this help"
     " and exit",
-    "  -f, --frequency [2, 10000]                      reciprocal of time"
+    "  -f, --frequency [0, 10000]                      reciprocal of time"
     " unit for execution of actions",
-    "  -v, --verbose [DEBUG,  INFO, WARNING, ERROR]    set verbose level",
+    "  -v, --verbose [DEBUG,  INFO, WARNING, ERROR]   set verbose level",
     NULL
 };
 
