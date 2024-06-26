@@ -20,7 +20,7 @@ App::App() :
         trayMgr(nullptr),
         _scnMgr(nullptr),
         _map(),
-        _commands(_client, _map, nullptr),
+        _commands(_client, _map, nullptr, nullptr),
         _options() {}
 
 void App::setup() {
@@ -81,20 +81,26 @@ void App::_setupUI() {
     _setupButtons();
     _setupDropdowns();
     _setupInformations();
+    _setupLogs();
 }
 
 void App::_setupInformations() {
     Ogre::OverlayManager &overlayMgr = Ogre::OverlayManager::getSingleton();
     Ogre::OverlayContainer *panel = static_cast<Ogre::OverlayContainer *>(overlayMgr.createOverlayElement("Panel",
                                                                                                           "MyPanel"));
+    Ogre::Real width = 200;
+    Ogre::Real height = 158.7;
+
     panel->setMetricsMode(Ogre::GMM_PIXELS);
     panel->setPosition(0, 50);
-    panel->setDimensions(200, 158.7);
+    panel->setDimensions(width, height);
     panel->setMaterialName("gepitech");
 
-    Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
-    overlay->add2D(panel);
-    overlay->show();
+    trayMgr->getTrayContainer(TL_TOPLEFT)->addChild(panel);
+
+    // Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
+    // overlay->add2D(panel);
+    // overlay->show();
 
     trayMgr->createButton(TL_TOPLEFT, "infos", "Informations", 185);
 }
@@ -104,7 +110,7 @@ void App::_setupButtons() {
 }
 
 void App::_setupDropdowns() {
-    _teamsDropdown = trayMgr->createThickSelectMenu(TL_BOTTOMLEFT, "Teams", "Teams", 200, 200);
+    _teamsDropdown = trayMgr->createThickSelectMenu(TL_BOTTOMLEFT, "Teams", "Teams", 300, 200);
     _teamsDropdown->addItem("All teams");
     _teamsDropdown->selectItem(0);
 
@@ -133,6 +139,11 @@ void App::_setupAudio() {
     } else {
         _background_music.play();
     }
+}
+
+void App::_setupLogs() {
+    _logs = trayMgr->createTextBox(TL_BOTTOMLEFT, "Logs", "Logs", 300, 200);
+    _commands.setLogs(_logs);
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
@@ -199,6 +210,7 @@ void App::buttonHit(OgreBites::Button *b) {
                                               "You can use the dropdown to select a team and see only its players.\n"
                                               "You can also pause the game by clicking on the Pause button.\n"
                                               "Enjoy the game!");
+        trayMgr->hideCursor();
     }
 }
 
@@ -222,27 +234,24 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
 }
 
 bool App::mousePressed(const MouseButtonEvent &evt) {
-    if (evt.button == OgreBites::BUTTON_LEFT)
+    if (evt.button == OgreBites::BUTTON_LEFT) {
+        Ogre::Ray ray = this->_getMouseRay(evt);
+
+        _raySceneQuery->setRay(ray);
+        _raySceneQuery->setSortByDistance(true);
+
+        Ogre::RaySceneQueryResult& result = _raySceneQuery->execute();
+        for (auto it = result.begin(); it != result.end(); ++it)
         {
-            // Convert to ray
-            Ogre::Ray ray = this->_getMouseRay(evt);
-
-            // Execute ray query
-            _raySceneQuery->setRay(ray);
-            _raySceneQuery->setSortByDistance(true);
-
-            Ogre::RaySceneQueryResult& result = _raySceneQuery->execute();
-            for (auto it = result.begin(); it != result.end(); ++it)
+            if (it->movable)
             {
-                if (it->movable)
-                {
-                    Ogre::MovableObject* object = it->movable;
-                    _handleObjectSelection(object->getParentSceneNode());
-                    break;
-                }
+                Ogre::MovableObject* object = it->movable;
+                _handleObjectSelection(object->getParentSceneNode());
+                return true;
             }
         }
-    return true;
+    }
+    return false;
 }
 
 void App::_handleObjectSelection(Ogre::Node *node)
