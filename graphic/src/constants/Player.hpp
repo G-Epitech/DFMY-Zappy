@@ -7,4 +7,4 @@
 
 #pragma once
 
-#define PLAYER_SCALE 0.07f
+#define PLAYER_SCALE 0.08f

@@ -31,8 +31,8 @@ void Tile::addItemEntity(const std::string &name, int quantity, Ogre::SceneManag
 
         itemNode->attachObject(cubeEntity);
 
-        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.x - tileSize.x / 1.5f);
-        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.z - tileSize.z / 1.5f);
+        float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * ((tileSize.x - tileSize.x / 1.5f) - tileSize.x / 3.0f);
+        float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * ((tileSize.z - tileSize.z / 1.5f) - tileSize.z / 3.0f);
         rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
         float itemY = itemSize.y / 2.0f * 0.1;
 

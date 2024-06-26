@@ -8,6 +8,7 @@
 #include <iostream>
 #include "Commands.hpp"
 #include "utils/String.hpp"
+#include "constants/Tile.hpp"
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
@@ -116,6 +117,7 @@ void Commands::mapSize(std::string &command) {
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
             rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
             node->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
+            node->setScale(TILE_SCALE, TILE_SCALE, TILE_SCALE);
 
             auto tile = std::make_shared<Tile>(node);
 
@@ -207,6 +209,7 @@ void Commands::playerPosition(std::string &command) {
     int x = std::stoi(args[1]);
     int y = std::stoi(args[2]);
     int orientation = std::stoi(args[3]);
+    std::cout << "Player moved to " << x << ", " << y << " orientation: " << orientation << std::endl;
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
 

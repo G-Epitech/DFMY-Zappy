@@ -49,9 +49,11 @@ void Player::updateEntitySize(Ogre::Node *tileNode) const
     Ogre::AxisAlignedBox boundingBox = entity->getBoundingBox();
     Ogre::Vector3 size = boundingBox.getSize();
     float playerScale = static_cast<float>(level) * PLAYER_SCALE;
+    auto final_orientation = static_cast<float>((orientation - 1) * 90);
 
     node->setPosition(tileNode->getPosition().x, 0.0f, tileNode->getPosition().z);
     node->setScale(playerScale, playerScale, playerScale);
+    //node->setOrientation(Ogre::Quaternion(Ogre::Degree(final_orientation), Ogre::Vector3::UNIT_Y));
 }
 
 void Player::addInventoryItem(const std::string &item, int quantity) {
