@@ -12,6 +12,7 @@ import json
 from datetime import datetime
 import random
 import time
+import random
 
 HAMSTER_NEW = "NEW_HAMSTER"
 HAMSTER_ASSERT_AUTHORITY = "I_AM_THE_MOTHER"
@@ -1065,6 +1066,18 @@ class Hamster:
             if not fourth_case_list:
                 fourth_case_list = []
             # self.debug(f"Fourth case: {fourth_case_list}", COLOR_BLUE)
+            nb_of_players_in_first_case = first_case_list.count("player")
+            if nb_of_players_in_first_case > 1:
+                random_direction = random.choice([
+                    [self.walk_rotate_left],
+                    [self.walk_rotate_left, self.walk_rotate_left],
+                    [self.walk_rotate_right],
+                    []
+                ])
+                for move in random_direction:
+                    move()
+                self.walk_forward()
+                return
             if (len(second_case_list) == len(fourth_case_list)) or (len(third_case_list) > len(second_case_list) and len(third_case_list) > len(fourth_case_list)):
                 self.walk_forward()
                 return
@@ -1358,7 +1371,7 @@ class Hamster:
         """
         self.debug(f"Hamster {self.name} is running")
         self.init_hamster()
-        max_number_of_hamsters = 60
+        max_number_of_hamsters = 6
         attemps = 0
 
         while not self.dead and (not self.sync_with_other_hamsters or max_number_of_hamsters > 0) and attemps < 60:
@@ -1397,7 +1410,7 @@ class Hamster:
                     if self.inventory["food"] < 20:
                         self.debug("I'm hungry")
                         self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
-                        for _ in range(10):
+                        for _ in range(6):
                             self.cannibalism()
                             # self.update_inventory()
                             # self.debug(f"Inventory: {self.inventory}")
@@ -1407,7 +1420,7 @@ class Hamster:
                     if self.mother:
                         if self.fill_empty_slots():
                             self.debug("Filled empty slots")
-                        elif len(self.hamsters) < 8:
+                        elif len(self.hamsters) < 6:
                             self.debug("I'm the mother and I need to reproduce")
                             self.reproduce()
                             attemps += 1
@@ -1424,7 +1437,7 @@ class Hamster:
                                         self.reproduce()
                                     else:
                                         self.hamster_give_authority()
-                            elif self.hamsters_have_at_leats_n_foods(40):
+                            elif (not self.called_by_mother and self.hamsters_have_at_leats_n_foods(40)) or (self.called_by_mother and self.hamsters_have_at_leats_n_foods(20)):
                                 attemps_enough_hamsters = 0
                                 if self.hamsters_have_enough_ressources_for_the_next_level():
                                     self.debug("I'm the mother and my little ones have enough ressources", COLOR_YELLOW)
@@ -1442,6 +1455,7 @@ class Hamster:
                             else:
                                 if self.called_by_mother:
                                     self.send_broadcast(f"{self.create_broadcast_message(HAMSTER_STOP_CALLING, 0)}")
+                                    self.called_by_mother = False
                                 self.debug("I'm the mother and my little ones are hungry")
                                 self.walk()
                                 self.hamsters_decrement_cooldown()
