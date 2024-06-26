@@ -118,8 +118,8 @@ void App::_setupLights() {
 
     auto sunLight = _scnMgr->createLight("SunLight");
     sunLight->setType(Light::LT_DIRECTIONAL);
-    sunLight->setDiffuseColour(ColourValue(0.4, 0, 0));
-    sunLight->setSpecularColour(ColourValue(0.4, 0, 0));
+    sunLight->setDiffuseColour(ColourValue(0.5, 0.5f, 0.5f, 0.5f));
+    sunLight->setSpecularColour(ColourValue(0.5, 0.5f, 0.5f, 0.5f));
 
     auto sunNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
     sunNode->attachObject(sunLight);

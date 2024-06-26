@@ -68,9 +68,8 @@ void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quan
 
         float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * tileSize.x - tileSize.x / 2.0f;
         float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * tileSize.z - tileSize.z / 2.0f;
-        float itemY = itemSize.y / 2.0f * 0.1;
 
-        itemNode->setPosition(randX, itemY, randZ);
+        itemNode->setPosition(randX, 0.0f, randZ);
         itemNode->setScale(0.1f, 0.1f, 0.1f);
         tile.items[itemName].push_back(itemNode);
     }
@@ -108,9 +107,8 @@ void Commands::_updatePlayerItemSize(Ogre::SceneNode *node, Player &player, Tile
     float playerScale = static_cast<float>(player.level) * PLAYER_SCALE;
     float randX = tile.node->getPosition().x + static_cast<float>(std::rand()) / RAND_MAX * size.x - size.x / 2.0f;
     float randZ = tile.node->getPosition().z + static_cast<float>(std::rand()) / RAND_MAX * size.z - size.z / 2.0f;
-    float itemY = size.y / 2.0f * playerScale;
 
-    node->setPosition(randX, itemY, randZ);
+    node->setPosition(randX, 0.1f, randZ);
     node->setScale(playerScale, playerScale, playerScale);
     std::cout << "Player " << player.id << " is now level " << player.level << " with size " << playerScale
               << std::endl;
@@ -154,20 +152,24 @@ void Commands::mapSize(std::string &command) {
     _map.height = std::stoi(args[1]);
     float posx = static_cast<float>(_map.width) / 2;
     float posy;
+    float rotation;
     for (int i = 0; i < _map.width; i++)
     {
         std::vector<Tile> row;
         posy = static_cast<float>(_map.width) / 2;
         for (int j = 0; j < _map.height; j++)
         {
-            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
+            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Island.mesh");
             Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
             node->attachObject(cubeEntity);
 
             Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
             Ogre::Vector3 size = aab.getSize();
+
             node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
+            rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
+            node->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
 
             Tile tile;
 
@@ -272,7 +274,7 @@ void Commands::playerPosition(std::string &command) {
             player.position.y = y;
             player.orientation = orientation;
             player.node->setPosition(_map.tiles[x][y].node->getPosition().x, player.node->getPosition().y,
-                                     _map.tiles[x][y].node->getPosition().z);
+                                     _map.tiles[x][y].node->getPosition().z + 100);
             if (!player.node)
                 player.node = _createPlayerItem(_map.tiles[x][y], player, _map.teams);
             else
