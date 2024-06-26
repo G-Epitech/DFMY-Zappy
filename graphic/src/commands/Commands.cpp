@@ -59,6 +59,7 @@ void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quan
     auto tileSize = node->getAttachedObject(0)->getBoundingBox().getSize();
     Ogre::Vector3 pos = node->getPosition();
     Ogre::Vector3 size = node->getAttachedObject(0)->getBoundingBox().getSize();
+    float rotation;
 
     for (int i = 0; i < quantity; i++) {
         Ogre::Entity *cubeEntity = _scnMgr->createEntity(itemName + ".mesh");
@@ -68,9 +69,11 @@ void Commands::_addItemsToTile(Tile &tile, const std::string &itemName, int quan
 
         float randX = pos.x + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.x - tileSize.x / 1.5f);
         float randZ = pos.z + static_cast<float>(std::rand()) / RAND_MAX * (tileSize.z - tileSize.z / 1.5f);
+        rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
 
         itemNode->setPosition(randX, 0.2f, randZ);
         itemNode->setScale(0.2f, 0.2f, 0.2f);
+        itemNode->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
         tile.items[itemName].push_back(itemNode);
     }
 }
