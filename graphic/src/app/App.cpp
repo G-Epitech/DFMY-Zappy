@@ -226,6 +226,15 @@ void App::itemSelected(OgreBites::SelectMenu *menu) {
     }
 }
 
+bool App::_isBroadcastNode(Ogre::Node *node) {
+    for (auto &circle: _map.broadcastCircles) {
+        if (circle.node == node) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool App::mousePressed(const MouseButtonEvent &evt) {
     if (evt.button == OgreBites::BUTTON_LEFT) {
         // Convert to ray
@@ -239,7 +248,13 @@ bool App::mousePressed(const MouseButtonEvent &evt) {
         for (auto it = result.begin(); it != result.end(); ++it) {
             if (it->movable) {
                 Ogre::MovableObject *object = it->movable;
-                _handleObjectSelection(object->getParentSceneNode());
+                Ogre::Node *node = object->getParentSceneNode();
+
+                if (_isBroadcastNode(node)) {
+                    continue;
+                }
+
+                _handleObjectSelection(node);
                 break;
             }
         }

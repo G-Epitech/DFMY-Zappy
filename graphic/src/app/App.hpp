@@ -217,4 +217,11 @@ private:
      * @param node Node of the object
      */
     void _handleObjectSelection(Ogre::Node *node);
+
+    /**
+     * @brief Check if the node is a broadcast node
+     * @param node
+     * @return
+     */
+    bool _isBroadcastNode(Ogre::Node *node);
 };
