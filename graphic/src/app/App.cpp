@@ -86,6 +86,7 @@ void App::_setupUI() {
     _setupButtons();
     _setupDropdowns();
     _setupInformations();
+    _setupMapStats();
     _setupLogs();
 }
 
@@ -102,12 +103,25 @@ void App::_setupInformations() {
     panel->setMaterialName("gepitech");
 
     trayMgr->getTrayContainer(TL_TOPLEFT)->addChild(panel);
-
-    // Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
-    // overlay->add2D(panel);
-    // overlay->show();
-
     trayMgr->createButton(TL_TOPLEFT, "infos", "Informations", 185);
+}
+
+void App::_setupMapStats() {
+    Ogre::StringVector stats;
+
+    stats.push_back("Width");
+    stats.push_back("Height");
+    stats.push_back("Time unit");
+    stats.push_back("Players");
+    stats.push_back("Items");
+    stats.push_back("Broadcasts");
+
+    _mapLabel = trayMgr->createLabel(TL_NONE, "Map/StatsLabel", "Infos map", 180);
+    _mapLabel->_assignListener(this);
+    _mapPanel = trayMgr->createParamsPanel(TL_NONE, "Map/StatsPanel", 180, stats);
+
+    trayMgr->moveWidgetToTray(_mapLabel, TL_TOPRIGHT, -1);
+    trayMgr->moveWidgetToTray(_mapPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_mapLabel) + 1);
 }
 
 void App::_setupButtons() {
@@ -155,7 +169,47 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
     trayMgr->frameRendered(evt);
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
+    _updateMapStats(evt);
     return true;
+}
+
+void App::_updateMapStats(const Ogre::FrameEvent &evt) {
+    // Update map stats every 1 second with _lastStatsRefresh
+    _lastStatsRefresh += evt.timeSinceLastFrame;
+    if (_lastStatsRefresh < 1) {
+        return;
+    }
+
+    _lastStatsRefresh = 0;
+    if (_mapLabel && _mapPanel) {
+        Ogre::StringVector values;
+
+        values.push_back(std::to_string(_map.width));
+        values.push_back(std::to_string(_map.height));
+        values.push_back(std::to_string(_map.timeUnit));
+        values.push_back(std::to_string(_map.players.size()));
+
+        size_t numberOfItems = 0;
+        for (auto &row: _map.tiles) {
+            for (auto &tile: row) {
+                for (auto &item: tile->items) {
+                    numberOfItems += item.second.size();
+                }
+            }
+        }
+        values.push_back(std::to_string(numberOfItems));
+
+        size_t numberOfBroadcasts = 0;
+        for (auto &circle: _map.broadcastCircles) {
+            if (circle.circle->isVisible()) {
+                numberOfBroadcasts++;
+            }
+        }
+
+        values.push_back(std::to_string(numberOfBroadcasts));
+
+        _mapPanel->setAllParamValues(values);
+    }
 }
 
 bool App::frameEnded(const Ogre::FrameEvent &evt) {
@@ -306,7 +360,7 @@ void App::_handleObjectSelection(Ogre::Node *node) {
                 _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/StatsPanel", 180, stats);
                 _infosPanel->setAllParamValues(values);
 
-                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, -1);
+                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_mapPanel) + 1);
                 trayMgr->moveWidgetToTray(_infosPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_infosLabel) + 1);
 
                 return;
