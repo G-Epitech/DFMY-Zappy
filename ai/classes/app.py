@@ -5,8 +5,10 @@
 ## app
 ##
 
-from classes.process import SubProcess
+from classes.thread import Thread
 import random
+
+import threading
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 84
@@ -16,18 +18,17 @@ class App:
         self.host: str = host
         self.port: int = port
         self.name: str = name
-        self.list_processes: list[SubProcess] = []
+        self.list_threads: list[threading.Thread] = []
 
-
-    def add_process(self):
+    def add_thread(self):
         number = random.randint(0, 999)
 
-        process = SubProcess(self.host, self.port, self.name, self.add_process, number)
-        self.list_processes.append(process)
-        process.start()
+        thread = threading.Thread(target=Thread(self.host, self.port, self.name, self.add_thread, number).run)
+        self.list_threads.append(thread)
+        thread.start()
 
     def run(self) -> int:
-        self.add_process()
-        for process in self.list_processes:
-            process.join()
+        self.add_thread()
+        for thread in self.list_threads:
+            thread.join()
         return EXIT_SUCCESS
