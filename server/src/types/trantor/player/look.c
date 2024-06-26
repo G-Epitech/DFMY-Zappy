@@ -12,16 +12,16 @@ void player_get_look_vector(player_t *player, vector2l_t *look)
 {
     switch (player->direction) {
         case DIR_NORTH:
-            look->x = 1;
-            look->y = -1;
+            look->x = -1;
+            look->y = 1;
             break;
         case DIR_EAST:
             look->x = 1;
             look->y = 1;
             break;
         case DIR_SOUTH:
-            look->x = -1;
-            look->y = 1;
+            look->x = 1;
+            look->y = -1;
             break;
         default:
             look->x = -1;

@@ -42,5 +42,6 @@ map_t *map_new(vector2u_t size)
         map_free(map);
         return NULL;
     }
+    resources_manager_init(&map->resources_manager, size);
     return map;
 }

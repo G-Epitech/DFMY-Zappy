@@ -10,11 +10,17 @@
 #include "app.h"
 #include "clcc/modules/stdlib.h"
 
+static void redirect_all_std(void)
+{
+    cr_redirect_stdout();
+    cr_redirect_stderr();
+}
+
 Test(world_routine_resource_generation_tests, simple)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
-    resources_manager_t *res_manager = &world->resources_manager;
+    resources_manager_t *res_manager = &world->map->resources_manager;
 
     for (resource_t i = 0; i < RES_LEN; i++) {
         res_manager->stats[i].actual = 8;
@@ -36,7 +42,7 @@ Test(world_routine_resource_generation_tests, simple)
     world_free(world);
 }
 
-Test(world_routine_team_victory, simple, .init = cr_redirect_stderr)
+Test(world_routine_team_victory, simple, .init = redirect_all_std)
 {
     vector2u_t size = { 10, 10 };
     world_t *world = world_new(size, 100);
@@ -50,6 +56,8 @@ Test(world_routine_team_victory, simple, .init = cr_redirect_stderr)
     player_t *player4 = player_new(4);
     player_t *player5 = player_new(5);
     player_t *player6 = player_new(6);
+    char out_message[1024] = { 0 };
+    timeval_t duration = { 0 };
 
     ctrl->generic.type = CTRL_GRAPHIC;
     ctrl2->generic.type = CTRL_PLAYER;
@@ -72,10 +80,16 @@ Test(world_routine_team_victory, simple, .init = cr_redirect_stderr)
     player4->level = 8;
     player5->level = 8;
     player6->level = 8;
+    gettimeofday(&world->start_time, NULL);
+    world->start_time.tv_sec -= 10;
     cr_assert_eq(app_handle_world_routine_team_victory(world, server), true);
-
-    cr_assert_eq(ctrl->generic.emissions->bytes, 10);
+    world_get_game_duration(world, &duration);
+    snprintf(out_message, 1024, "smg Game ended in 10s and %zuus\n",
+        duration.tv_usec
+    );
+    cr_assert_eq(ctrl->generic.emissions->bytes, 40);
     cr_assert(memcmp(ctrl->generic.emissions->data, "seg Team1\n", 10) == 0);
+    cr_assert(memcmp(ctrl->generic.emissions->data + 10, out_message, 30) == 0);
     cr_assert_eq(ctrl2->generic.emissions->bytes, 0);
 
     world_free(world);

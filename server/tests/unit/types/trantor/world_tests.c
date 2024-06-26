@@ -36,8 +36,8 @@ Test(world_new_tests, simple_new)
     cr_assert_eq(world->incantations->len, 0);
     cr_assert_eq(world->next_event_delay, -1.0f);
     for (resource_t i = 0; i < RES_LEN; i++) {
-        cr_expect_eq(world->resources_manager.stats[i].actual, 0);
-        cr_expect_eq(world->resources_manager.stats[i].limit, resources_limit[i]);
+        cr_expect_eq(world->map->resources_manager.stats[i].actual, resources_limit[i]);
+        cr_expect_eq(world->map->resources_manager.stats[i].limit, resources_limit[i]);
     }
     world_free(world);
 }

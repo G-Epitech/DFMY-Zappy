@@ -20,7 +20,7 @@ void server_disconnect_controller(server_t *server, controller_t *controller)
     if (controller->generic.state == CTRL_DISCONNECTED)
         return;
     close(controller->generic.socket);
-    log_info("Client on socket %d disconnected", controller->generic.socket);
+    log_debug("Client on socket %d disconnected", controller->generic.socket);
     if (server) {
         fd_states_unset(&(server->fd_watch), controller->generic.socket,
             FD_STATES_R | FD_STATES_E | FD_STATES_W);

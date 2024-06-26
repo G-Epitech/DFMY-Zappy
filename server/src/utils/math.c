@@ -11,5 +11,5 @@ int angle_to_quadrant(double angle)
 {
     if (angle == -1)
         return (-1);
-    return ((int) round(angle / 45));
+    return ((int) round(angle / 45)) % 8;
 }

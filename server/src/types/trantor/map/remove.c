@@ -9,13 +9,15 @@
 #include "types/trantor/egg.h"
 #include "types/trantor/player.h"
 
-void map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
+bool map_remove_resource(map_t *map, vector2u_t pos, resource_t resource,
     size_t quantity)
 {
-    if (!map || map->cells[pos.y][pos.x].resources[resource] == 0)
-        return;
-    map->cells[pos.y][pos.x].resources[resource] -= quantity;
+    if (!map || MAP_CELL_AT_POS(map, pos)->resources[resource] == 0)
+        return false;
+    MAP_CELL_AT_POS(map, pos)->resources[resource] -= quantity;
     map_mark_cell_as_changed(map, MAP_CELL_AT_POS(map, pos));
+    map->resources_manager.stats[resource].actual -= quantity;
+    return true;
 }
 
 void map_remove_player(map_t *map, player_t *player)
