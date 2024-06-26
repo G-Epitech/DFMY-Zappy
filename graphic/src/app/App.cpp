@@ -23,10 +23,11 @@ App::App() :
         trayMgr(nullptr),
         _scnMgr(nullptr),
         _map(),
-        _commands(_client, _map, nullptr, nullptr),
+        _commands(_client, _map, nullptr, nullptr, nullptr, _timeSliderChanged),
         _options(),
         _infosLabel(nullptr),
-        _infosPanel(nullptr) {}
+        _infosPanel(nullptr),
+        _timeSliderChanged(false) {}
 
 void App::setup() {
     ApplicationContext::setup();
@@ -87,6 +88,7 @@ void App::_setupUI() {
     _setupDropdowns();
     _setupInformations();
     _setupLogs();
+    _setupSliders();
 }
 
 void App::_setupInformations() {
@@ -151,6 +153,12 @@ void App::_setupAudio() {
 void App::_setupLogs() {
     _logs = trayMgr->createTextBox(TL_BOTTOMLEFT, "Logs", "Logs", 300, 200);
     _commands.setLogs(_logs);
+}
+
+void App::_setupSliders() {
+    _timeSlider = trayMgr->createLongSlider(TL_BOTTOMLEFT, "TimeSlider", "Time", 200, 100, 1, 500, 100);
+    _timeSlider->setValue(100);
+    _commands.setTimeSlider(_timeSlider);
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
@@ -274,6 +282,20 @@ bool App::mousePressed(const MouseButtonEvent &evt) {
         }
     }
     return true;
+}
+
+void App::sliderMoved(OgreBites::Slider *slider) {
+    if (slider->getName() == "TimeSlider") {
+        try {
+            if (!_timeSliderChanged) {
+                _client.write("sst " + std::to_string((int)slider->getValue()) + "\n");
+                _timeSliderChanged = true;
+                return;
+            }
+        } catch(const std::exception& e) {
+            std::cerr << e.what() << '\n';
+        }
+    }
 }
 
 void App::_handleObjectSelection(Ogre::Node *node) {

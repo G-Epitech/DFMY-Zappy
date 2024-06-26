@@ -12,7 +12,7 @@
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
-Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log) : _client(client), _map(map), _scnMgr(scnMgr) {
+Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log, OgreBites::Slider *timeSlider, bool &timeSliderChanged) : _client(client), _map(map), _scnMgr(scnMgr), _logs(log), _timeSlider(timeSlider), _timeSliderChanged(timeSliderChanged) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
     _commands["bct"] = [this](std::string &params) { tileContent(params); };
     _commands["tna"] = [this](std::string &params) { teamsNames(params); };
@@ -54,6 +54,10 @@ void Commands::setScnMgr(Ogre::SceneManager *scnMgr) {
 
 void Commands::setLogs(OgreBites::TextBox *logs) {
     _logs = logs;
+}
+
+void Commands::setTimeSlider(OgreBites::Slider *timeSlider) {
+    _timeSlider = timeSlider;
 }
 
 Circle Commands::_createBroadcastCircle(const Ogre::Vector3 &position) {
@@ -444,6 +448,10 @@ void Commands::timeUnitRequest(std::string &command) {
         return;
 
     _map.timeUnit = std::stoi(args[0]);
+    if (_timeSliderChanged) {
+        _timeSlider->setValue(_map.timeUnit);
+        _timeSliderChanged = false;
+    }
 }
 
 void Commands::timeUnitModification(std::string &command) {
@@ -453,6 +461,10 @@ void Commands::timeUnitModification(std::string &command) {
         return;
 
     _map.timeUnit = std::stoi(args[0]);
+    if (_timeSliderChanged) {
+        _timeSlider->setValue(_map.timeUnit);
+        _timeSliderChanged = false;
+    }
 }
 
 void Commands::endGame(std::string &command) {
