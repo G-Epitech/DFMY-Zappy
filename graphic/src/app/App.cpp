@@ -114,14 +114,14 @@ void App::_setupDropdowns() {
 }
 
 void App::_setupLights() {
-    scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
+    _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
 
-    auto sunLight = scnMgr->createLight("SunLight");
+    auto sunLight = _scnMgr->createLight("SunLight");
     sunLight->setType(Light::LT_DIRECTIONAL);
     sunLight->setDiffuseColour(ColourValue(0.4, 0, 0));
     sunLight->setSpecularColour(ColourValue(0.4, 0, 0));
 
-    auto sunNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+    auto sunNode = _scnMgr->getRootSceneNode()->createChildSceneNode();
     sunNode->attachObject(sunLight);
     sunNode->setDirection(Vector3(1, -1, 0));
     sunNode->setPosition(-200, -200, 400);

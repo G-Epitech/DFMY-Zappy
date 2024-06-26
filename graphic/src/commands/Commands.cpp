@@ -160,8 +160,8 @@ void Commands::mapSize(std::string &command) {
         posy = static_cast<float>(_map.width) / 2;
         for (int j = 0; j < _map.height; j++)
         {
-            Ogre::Entity *cubeEntity = scnMgr->createEntity("Cube.mesh");
-            Ogre::SceneNode *node = scnMgr->getRootSceneNode()->createChildSceneNode();
+            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Cube.mesh");
+            Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
 
             node->attachObject(cubeEntity);
 
