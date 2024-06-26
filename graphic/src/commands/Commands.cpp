@@ -209,10 +209,8 @@ void Commands::playerPosition(std::string &command) {
     int x = std::stoi(args[1]);
     int y = std::stoi(args[2]);
     int orientation = std::stoi(args[3]);
-    std::cout << "Player moved to " << x << ", " << y << " orientation: " << orientation << std::endl;
     if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
         return;
-
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->position.x = x;

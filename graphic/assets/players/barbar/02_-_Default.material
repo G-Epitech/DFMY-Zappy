@@ -3,8 +3,8 @@ material 02_-_Default {
     receive_shadows on
     technique {
         pass {
-            diffuse 0.588235 0.588235 0.588235 1.0
-            specular 0.858579 1.0 0 0 0
+            diffuse 1.0 1.0 1.0 1.0
+            specular 0.2 0.0 0 0 0
 
             // additional maps - requires RTSS
             rtshader_system {
