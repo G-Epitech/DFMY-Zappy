@@ -11,7 +11,7 @@
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
-Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr) : _client(client), _map(map), _scnMgr(scnMgr) {
+Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log) : _client(client), _map(map), _scnMgr(scnMgr) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
     _commands["bct"] = [this](std::string &params) { tileContent(params); };
     _commands["tna"] = [this](std::string &params) { teamsNames(params); };
@@ -51,6 +51,10 @@ void Commands::setScnMgr(Ogre::SceneManager *scnMgr) {
     _scnMgr = scnMgr;
 }
 
+void Commands::setLogs(OgreBites::TextBox *logs) {
+    _logs = logs;
+}
+
 Circle Commands::_createBroadcastCircle(const Ogre::Vector3 &position) {
     Circle circle;
     circle.circle = _scnMgr->createManualObject();
@@ -77,6 +81,13 @@ Sphere Commands::_createIncantationSphere(const Ogre::Vector3 &position) {
     sphere.node->setPosition(position);
 
     return sphere;
+}
+
+void Commands::_addLogMessage(const std::string& message) {
+    if (!_logs)
+        return;
+    auto previousText = _logs->getText();
+    _logs->setText(message + "\n" + previousText);
 }
 
 void Commands::mapSize(std::string &command) {
@@ -276,6 +287,7 @@ void Commands::broadcast(std::string &command) {
         if (player->getId() == id) {
             Circle circle = _createBroadcastCircle(player->node->getPosition());
             _map.broadcastCircles.push_back(circle);
+            _addLogMessage("Player " + std::to_string(id) + " broadcasted: " + message);
             return;
         }
     }
@@ -302,7 +314,7 @@ void Commands::incantationEnd(std::string &command) {
         return;
     int x = std::stoi(args[0]);
     int y = std::stoi(args[1]);
-    int level = std::stoi(args[2]);
+    auto result = args[2];
 
     // TODO: Implement incantation animation
     for (auto &sphere: _map.incantationSpheres) {

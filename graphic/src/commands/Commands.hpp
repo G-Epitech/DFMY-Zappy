@@ -8,6 +8,9 @@
 #pragma once
 
 #include <memory>
+#include <Ogre.h>
+#include <OgreApplicationContext.h>
+#include <OgreTrays.h>
 #include "types/Map.hpp"
 #include "../client/Client.hpp"
 #include "constants/Broadcast.hpp"
@@ -21,8 +24,9 @@ public:
      * @param client Client object to send commands to the server
      * @param map Map object to update the game state
      * @param scnMgr Ogre::SceneManager object to create entities
+     * @param logs OgreBites::TextBox object to display logs
      */
-    Commands(Client &client, Map &map, Ogre::SceneManager* scnMgr);
+    Commands(Client &client, Map &map, Ogre::SceneManager* scnMgr, OgreBites::TextBox* logs);
 
     /**
      * @brief Destroy the Commands object
@@ -41,6 +45,12 @@ public:
      * @param scnMgr The Ogre::SceneManager object
      */
     void setScnMgr(Ogre::SceneManager* scnMgr);
+
+    /**
+     * @brief Set the OgreBites::TextBox object
+     * @param logs The OgreBites::TextBox object
+     */
+    void setLogs(OgreBites::TextBox* logs);
 
     void mapSize(std::string &params);
     void tileContent(std::string &params);
@@ -70,8 +80,11 @@ private:
     Circle _createBroadcastCircle(const Ogre::Vector3 &position);
     Sphere _createIncantationSphere(const Ogre::Vector3 &position);
 
+    void _addLogMessage(const std::string& message);
+
     Client &_client;
     Map &_map;
     Ogre::SceneManager* _scnMgr;
     std::map<std::string, std::function<void(std::string &)>> _commands;
+    OgreBites::TextBox* _logs;
 };

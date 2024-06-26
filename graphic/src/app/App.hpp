@@ -127,7 +127,10 @@ private:
     /// @brief Camera used to display the scene
     Ogre::Camera* _camera;
 
+    /// @brief Background music of the application
     sf::Music _background_music;
+
+    OgreBites::TextBox* _logs;
 
     OgreBites::Label* _infosLabel;
 
@@ -177,6 +180,11 @@ private:
      * @brief Setup the audio of the application
      */
     void _setupAudio();
+
+    /**
+     * @brief Setup the logs of the application
+     */
+    void _setupLogs();
 
     /**
      * @brief Update the map
