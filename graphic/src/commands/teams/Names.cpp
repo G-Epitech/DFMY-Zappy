@@ -18,5 +18,6 @@ void TeamsNamesCommand::execute(std::string &params) {
 
     for (const auto &arg: args) {
         _map.teams.addTeam(arg);
+        _dropdown->addItem(arg);
     }
 }

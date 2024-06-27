@@ -136,10 +136,6 @@ void App::_setupDropdowns() {
     _teamsDropdown = trayMgr->createThickSelectMenu(TL_BOTTOMLEFT, "Teams", "Teams", 300, 200);
     _teamsDropdown->addItem("All teams");
     _teamsDropdown->selectItem(0);
-
-    // TODO: Add teams from the server
-    _teamsDropdown->addItem("team1");
-    _teamsDropdown->addItem("team2");
 }
 
 void App::_setupLights() {
@@ -212,6 +208,7 @@ void App::_setupCommands() {
             command.second->setLogs(_logs);
             command.second->setScnMgr(_scnMgr);
             command.second->setSlider(_timeSlider);
+            command.second->setDropdown(_teamsDropdown);
         }
     }
 }
