@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hamster_1124',['hamster',['../namespacehamster.html',1,'']]]
+  ['hamster_1126',['hamster',['../namespacehamster.html',1,'']]]
 ];
