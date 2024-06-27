@@ -18,6 +18,7 @@
 #include "commands/player/Inventory.hpp"
 #include "commands/player/Eject.hpp"
 #include "commands/player/Broadcast.hpp"
+#include "commands/player/Fork.hpp"
 
 #include "commands/incantation/Start.hpp"
 #include "commands/incantation/End.hpp"
@@ -34,6 +35,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pbc", [&](){ return std::make_unique<PlayerBroadcastCommand>(client, map, sliderChanged); });
     commandRegister("pic", [&](){ return std::make_unique<IncantationStartCommand>(client, map, sliderChanged); });
     commandRegister("pie", [&](){ return std::make_unique<IncantationEndCommand>(client, map, sliderChanged); });
+    commandRegister("pfk", [&](){ return std::make_unique<PlayerForkCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

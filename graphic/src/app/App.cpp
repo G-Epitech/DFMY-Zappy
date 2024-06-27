@@ -191,7 +191,8 @@ void App::_setupCommands() {
         "pex",
         "pbc",
         "pic",
-        "pie"
+        "pie",
+        "pfk"
     };
 
     for (const auto &command: commands) {
