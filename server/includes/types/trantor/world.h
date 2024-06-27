@@ -20,6 +20,9 @@
 #include "types/trantor/player.h"
 #include "types/server.h"
 
+// @brief Default frequency of the world
+#define WORLD_DEFAULT_FREQ 100
+
 // @brief Structure representing a Trantorian world
 typedef struct world_s {
     // @brief Map of the world
