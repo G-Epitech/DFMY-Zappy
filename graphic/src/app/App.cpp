@@ -13,6 +13,7 @@
 #include <OgreBorderPanelOverlayElement.h>
 #include <getopt.h>
 #include "App.hpp"
+#include "commands/CommandFactory.hpp"
 
 using namespace Ogre;
 using namespace OgreBites;
@@ -23,7 +24,6 @@ App::App() :
         trayMgr(nullptr),
         _scnMgr(nullptr),
         _map(),
-        _commands(_client, _map, nullptr, nullptr, nullptr, _timeSliderChanged),
         _options(),
         _infosLabel(nullptr),
         _infosPanel(nullptr),
@@ -40,7 +40,6 @@ void App::setup() {
     _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
     _raySceneQuery = _scnMgr->createRayQuery(Ogre::Ray());
 
-    _commands.setScnMgr(_scnMgr);
     _scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
@@ -92,6 +91,7 @@ void App::_setupUI() {
     _setupMapStats();
     _setupLogs();
     _setupSliders();
+    _setupCommands();
 }
 
 void App::_setupInformations() {
@@ -168,13 +168,52 @@ void App::_setupAudio() {
 
 void App::_setupLogs() {
     _logs = trayMgr->createTextBox(TL_BOTTOMLEFT, "Logs", "Logs", 300, 200);
-    _commands.setLogs(_logs);
 }
 
 void App::_setupSliders() {
     _timeSlider = trayMgr->createLongSlider(TL_BOTTOMLEFT, "TimeSlider", "Time", 150, 100, 1, 500, 100);
-    _timeSlider->setValue(100);
-    _commands.setTimeSlider(_timeSlider);
+}
+
+void App::_setupCommands() {
+    CommandFactory commandFactory(_client, _map, _timeSliderChanged);
+    std::vector<std::string> commands = {
+        "msz",
+        "bct",
+        "tna",
+        "pnw",
+        "ppo",
+        "plv",
+        "pin",
+        "pex",
+        "pbc",
+        "pic",
+        "pie",
+        "pfk",
+        "pdr",
+        "pgt",
+        "pdi",
+        "enw",
+        "edi",
+        "eht",
+        "sgt",
+        "sst",
+        "seg",
+        "smg",
+        "suc",
+        "sbp"
+    };
+
+    for (const auto &command: commands) {
+        _commandsMap[command] = commandFactory.createCommand(command);
+    }
+
+    for (auto &command: _commandsMap) {
+        if (command.second) {
+            command.second->setLogs(_logs);
+            command.second->setScnMgr(_scnMgr);
+            command.second->setSlider(_timeSlider);
+        }
+    }
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
@@ -540,7 +579,12 @@ void App::_updateMap(std::string &command) {
     }
 
     try {
-        _commands.execute(commandName, params);
+        for (auto &command: _commandsMap) {
+            if (command.first == commandName) {
+                command.second->execute(params);
+                break;
+            }
+        }
     } catch (const std::exception &e) {
         std::cerr << "[ERROR] On command " << commandName << " with paramters " << params << ": " << e.what() << '\n';
     }

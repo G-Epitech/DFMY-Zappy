@@ -19,7 +19,7 @@
 #include <SFML/Audio.hpp>
 #include "client/Client.hpp"
 #include "types/Map.hpp"
-#include "commands/Commands.hpp"
+#include "interfaces/ICommand.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener, public OgreBites::TrayListener {
 public:
@@ -116,9 +116,6 @@ private:
     /// @brief Map of the game with all the tiles, players...
     Map _map;
 
-    /// @brief Commands object used to execute commands
-    Commands _commands;
-
     /// @brief Options of the application
     Options _options;
 
@@ -150,6 +147,8 @@ private:
     OgreBites::Label* _teamLabel;
 
     OgreBites::ParamsPanel* _teamPanel;
+
+    std::map<std::string, std::unique_ptr<ICommand>> _commandsMap;
 
     /// @brief Last stats refresh
     float _lastStatsRefresh = 0;
@@ -217,6 +216,11 @@ private:
      * @brief Setup the sliders of the application
      */
     void _setupSliders();
+
+    /**
+     * @brief Setup the commands of the application
+     */
+    void _setupCommands();
 
     /**
      * @brief Update the map
