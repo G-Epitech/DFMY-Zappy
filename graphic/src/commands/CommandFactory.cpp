@@ -33,6 +33,8 @@
 #include "commands/time/Request.hpp"
 #include "commands/time/Modification.hpp"
 
+#include "commands/game/End.hpp"
+
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
@@ -54,6 +56,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("eht", [&](){ return std::make_unique<EggHatchCommand>(client, map, sliderChanged); });
     commandRegister("sgt", [&](){ return std::make_unique<TimeRequestCommand>(client, map, sliderChanged); });
     commandRegister("sst", [&](){ return std::make_unique<TimeModificationCommand>(client, map, sliderChanged); });
+    commandRegister("seg", [&](){ return std::make_unique<GameEndCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

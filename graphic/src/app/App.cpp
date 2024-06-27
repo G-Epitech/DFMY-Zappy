@@ -200,7 +200,8 @@ void App::_setupCommands() {
         "edi",
         "eht",
         "sgt",
-        "sst"
+        "sst",
+        "seg"
     };
 
     for (const auto &command: commands) {
