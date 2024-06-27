@@ -9,12 +9,12 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-
+#include "types/trantor/world.h"
 #include "types/args_parser.h"
 #include "log.h"
 
 // @brief Default frequency value
-#define ARGS_DEFAULT_FREQ 100
+#define ARGS_DEFAULT_FREQ WORLD_DEFAULT_FREQ
 
 // @brief Default verbose level
 #define ARGS_DEFAULT_VERBOSE_LEVEL LOG_ERROR
