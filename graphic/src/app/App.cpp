@@ -190,7 +190,8 @@ void App::_setupCommands() {
         "pin",
         "pex",
         "pbc",
-        "pic"
+        "pic",
+        "pie"
     };
 
     for (const auto &command: commands) {

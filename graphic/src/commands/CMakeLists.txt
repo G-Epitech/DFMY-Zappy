@@ -24,4 +24,6 @@ target_sources(zappy_gui_src PRIVATE
         player/Broadcast.hpp
         player/Broadcast.cpp
         incantation/Start.hpp
-        incantation/Start.cpp)
+        incantation/Start.cpp
+        incantation/End.hpp
+        incantation/End.cpp)
