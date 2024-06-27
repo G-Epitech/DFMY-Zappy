@@ -13,41 +13,26 @@ MapTileCommand::MapTileCommand(Client &client, Map &map, bool &sliderChanged)
 void MapTileCommand::execute(std::string &params) {
     std::vector<std::string> args = Utils::StringUtils::split(params, ' ');
 
-    if (args.size() != 2)
+    if (args.size() != 9)
         return;
+    int x = std::stoi(args[0]);
+    int y = std::stoi(args[1]);
+    if (x < 0 || x >= _map.width || y < 0 || y >= _map.height)
+        return;
+    int food = std::stoi(args[2]) - _map.tiles[x][y]->items["food"].size();
+    std::vector<int> stones;
+    for (int i = 0; i < stonesNames.size() && i + 3 < args.size(); i++) {
+        stones.push_back(std::stoi(args[3 + i]) - _map.tiles[x][y]->items[stonesNames[i]].size());
+    }
 
-    _map.width = std::stoi(args[0]);
-    _map.height = std::stoi(args[1]);
-    float posx = static_cast<float>(_map.width) / 2;
-    float posy;
-    float rotation;
-    for (int i = 0; i < _map.width; i++) {
-        std::vector<std::shared_ptr<Tile>> row;
-        posy = static_cast<float>(_map.width) / 2;
-        for (int j = 0; j < _map.height; j++) {
-            Ogre::Entity *cubeEntity = _scnMgr->createEntity("Island.mesh");
-            Ogre::SceneNode *node = _scnMgr->getRootSceneNode()->createChildSceneNode();
-
-            node->attachObject(cubeEntity);
-
-            Ogre::AxisAlignedBox aab = cubeEntity->getBoundingBox();
-            Ogre::Vector3 size = aab.getSize();
-
-            node->setPosition(posx * size.x, (-size.y / 2.0), posy * size.z);
-            rotation = static_cast<float>(std::rand()) / RAND_MAX * 360;
-            node->setOrientation(Ogre::Quaternion(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y));
-            node->setScale(TILE_SCALE, TILE_SCALE, TILE_SCALE);
-
-            auto tile = std::make_shared<Tile>(node);
-
-            for (const auto &stonesName: stonesNames) {
-                tile->items[stonesName] = {};
-            }
-            row.push_back(tile);
-            posy = posy - 1 - MAP_TILE_Y_OFFSET;
-        }
-
-        _map.tiles.push_back(row);
-        posx = posx - 1 - MAP_TILE_X_OFFSET;
+    if (food > 0)
+        _map.tiles[x][y]->addItemEntity("food", food, _scnMgr);
+    else if (food < 0)
+        _map.tiles[x][y]->removeItemEntity("food", -food, _scnMgr);
+    for (int i = 0; i < stonesNames.size(); i++) {
+        if (stones[i] > 0)
+            _map.tiles[x][y]->addItemEntity(stonesNames[i], stones[i], _scnMgr);
+        else if (stones[i] < 0)
+            _map.tiles[x][y]->removeItemEntity(stonesNames[i], -stones[i], _scnMgr);
     }
 }
