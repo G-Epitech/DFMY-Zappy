@@ -183,7 +183,8 @@ void App::_setupCommands() {
     std::vector<std::string> commands = {
         "msz",
         "bct",
-        "tna"
+        "tna",
+        "pnw"
     };
 
     for (const auto &command: commands) {

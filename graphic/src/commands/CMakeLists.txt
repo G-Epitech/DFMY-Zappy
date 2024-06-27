@@ -10,4 +10,6 @@ target_sources(zappy_gui_src PRIVATE
         map/Tile.hpp
         map/Tile.cpp
         teams/Names.hpp
-        teams/Names.cpp)
+        teams/Names.cpp
+        player/Connect.hpp
+        player/Connect.cpp)
