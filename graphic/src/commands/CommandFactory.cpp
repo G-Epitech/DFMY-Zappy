@@ -30,6 +30,9 @@
 #include "commands/egg/Death.hpp"
 #include "commands/egg/Hatch.hpp"
 
+#include "commands/time/Request.hpp"
+#include "commands/time/Modification.hpp"
+
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
@@ -49,6 +52,8 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("enw", [&](){ return std::make_unique<EggLaidCommand>(client, map, sliderChanged); });
     commandRegister("edi", [&](){ return std::make_unique<EggDeathCommand>(client, map, sliderChanged); });
     commandRegister("eht", [&](){ return std::make_unique<EggHatchCommand>(client, map, sliderChanged); });
+    commandRegister("sgt", [&](){ return std::make_unique<TimeRequestCommand>(client, map, sliderChanged); });
+    commandRegister("sst", [&](){ return std::make_unique<TimeModificationCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

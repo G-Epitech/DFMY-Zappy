@@ -8,7 +8,7 @@
 #include "ACommand.hpp"
 
 ACommand::ACommand(Client &client, Map &map, bool &sliderChanged)
-    : _client(client), _map(map), _sliderChanged(sliderChanged) {}
+    : _client(client), _map(map), _timeSliderChanged(sliderChanged) {}
 
 ACommand::~ACommand() {}
 

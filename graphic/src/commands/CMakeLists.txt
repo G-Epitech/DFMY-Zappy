@@ -40,4 +40,8 @@ target_sources(zappy_gui_src PRIVATE
         egg/Death.hpp
         egg/Death.cpp
         egg/Hatch.hpp
-        egg/Hatch.cpp)
+        egg/Hatch.cpp
+        time/Request.hpp
+        time/Request.cpp
+        time/Modification.hpp
+        time/Modification.cpp)

@@ -42,7 +42,7 @@ class ACommand : public ICommand {
     protected:
         Client &_client;
         Map &_map;
-        bool &_sliderChanged;
+        bool &_timeSliderChanged;
         Ogre::SceneManager* _scnMgr;
         OgreBites::TextBox* _logs;
         OgreBites::Slider* _timeSlider;
