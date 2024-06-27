@@ -14,4 +14,6 @@ target_sources(zappy_gui_src PRIVATE
         player/Connect.hpp
         player/Connect.cpp
         player/Position.hpp
-        player/Position.cpp)
+        player/Position.cpp
+        player/Level.hpp
+        player/Level.cpp)
