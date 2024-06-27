@@ -26,6 +26,8 @@
 #include "commands/incantation/Start.hpp"
 #include "commands/incantation/End.hpp"
 
+#include "commands/egg/Laid.hpp"
+
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
@@ -42,6 +44,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pdr", [&](){ return std::make_unique<PlayerDropCommand>(client, map, sliderChanged); });
     commandRegister("pgt", [&](){ return std::make_unique<PlayerTakeCommand>(client, map, sliderChanged); });
     commandRegister("pdi", [&](){ return std::make_unique<PlayerDeathCommand>(client, map, sliderChanged); });
+    commandRegister("enw", [&](){ return std::make_unique<EggLaidCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;
