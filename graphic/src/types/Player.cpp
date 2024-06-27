@@ -37,17 +37,31 @@ void Player::createEntity(Ogre::SceneManager *scnMgr, Teams &teams, Ogre::Node *
 
     if (teamIndex >= playerModels.size())
         teamIndex = 0;
+
     Ogre::Entity *cubeEntity = scnMgr->createEntity(playerModels[teamIndex]);
     node = scnMgr->getRootSceneNode()->createChildSceneNode();
     node->attachObject(cubeEntity);
     node->setOrientation(Ogre::Quaternion(Ogre::Degree(0), Ogre::Vector3::UNIT_Y));
 
-    updateEntitySize(tileNode);
+    _playerModelLoad = true;
+    updateEntitySize(scnMgr, teams, tileNode);
+
+    if (!teams.teamExists(_team))
+        _playerModelLoad = false;
 }
 
-void Player::updateEntitySize(Ogre::Node *tileNode) const
+void Player::updateEntitySize(Ogre::SceneManager *scnMgr, Teams &teams, Ogre::Node *tileNode)
 {
     auto *entity = dynamic_cast<Ogre::Entity *>(node->getAttachedObject(0));
+
+    std::size_t teamIndex = teams.teamIndex(_team);
+    if (teamIndex >= playerModels.size())
+        teamIndex = 0;
+    if (!_playerModelLoad) {
+        scnMgr->destroySceneNode(node);
+        return this->createEntity(scnMgr, teams, tileNode);
+    }
+
     Ogre::AxisAlignedBox boundingBox = entity->getBoundingBox();
     Ogre::Vector3 size = boundingBox.getSize();
     float playerScale = static_cast<float>(level) * PLAYER_SCALE;
