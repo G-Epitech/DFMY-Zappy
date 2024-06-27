@@ -53,6 +53,13 @@ public:
     void addInventoryItem(const std::string &item, int quantity);
 
     /**
+     * @brief Remove an item from the inventory of the player
+     * @param item Item to remove
+     * @return Quantity of the item removed
+     */
+    void removeInventoryItem(const std::string &item, int quantity);
+
+    /**
      * @brief Get the quantity of an item in the inventory of the player
      * @param item Item to get the quantity of
      * @return Quantity of the item

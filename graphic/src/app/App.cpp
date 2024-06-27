@@ -27,6 +27,8 @@ App::App() :
         _options(),
         _infosLabel(nullptr),
         _infosPanel(nullptr),
+        _teamLabel(nullptr),
+        _teamPanel(nullptr),
         _timeSliderChanged(false) {}
 
 void App::setup() {
@@ -87,6 +89,7 @@ void App::_setupUI() {
     _setupButtons();
     _setupDropdowns();
     _setupInformations();
+    _setupMapStats();
     _setupLogs();
     _setupSliders();
 }
@@ -104,12 +107,25 @@ void App::_setupInformations() {
     panel->setMaterialName("gepitech");
 
     trayMgr->getTrayContainer(TL_TOPLEFT)->addChild(panel);
-
-    // Ogre::Overlay *overlay = overlayMgr.create("MyOverlay");
-    // overlay->add2D(panel);
-    // overlay->show();
-
     trayMgr->createButton(TL_TOPLEFT, "infos", "Informations", 185);
+}
+
+void App::_setupMapStats() {
+    Ogre::StringVector stats;
+
+    stats.push_back("Width");
+    stats.push_back("Height");
+    stats.push_back("Time unit");
+    stats.push_back("Players");
+    stats.push_back("Items");
+    stats.push_back("Broadcasts");
+
+    _mapLabel = trayMgr->createLabel(TL_NONE, "Map/StatsLabel", "Infos map", 180);
+    _mapLabel->_assignListener(this);
+    _mapPanel = trayMgr->createParamsPanel(TL_NONE, "Map/StatsPanel", 180, stats);
+
+    trayMgr->moveWidgetToTray(_mapLabel, TL_TOPRIGHT, -1);
+    trayMgr->moveWidgetToTray(_mapPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_mapLabel) + 1);
 }
 
 void App::_setupButtons() {
@@ -165,7 +181,85 @@ bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
     trayMgr->frameRendered(evt);
     _updateBroadcastCircles(evt);
     _updateIncantationSpheres(evt);
+    _updateMapStats(evt);
     return true;
+}
+
+void App::_updateMapStats(const Ogre::FrameEvent &evt) {
+    // Update map stats every 1 second with _lastStatsRefresh
+    _lastStatsRefresh += evt.timeSinceLastFrame;
+    if (_lastStatsRefresh < 1) {
+        return;
+    }
+
+    _lastStatsRefresh = 0;
+    if (_mapLabel && _mapPanel) {
+        Ogre::StringVector values;
+
+        values.push_back(std::to_string(_map.width));
+        values.push_back(std::to_string(_map.height));
+        values.push_back(std::to_string(_map.timeUnit));
+        values.push_back(std::to_string(_map.players.size()));
+
+        size_t numberOfItems = 0;
+        for (auto &row: _map.tiles) {
+            for (auto &tile: row) {
+                for (auto &item: tile->items) {
+                    numberOfItems += item.second.size();
+                }
+            }
+        }
+        values.push_back(std::to_string(numberOfItems));
+
+        size_t numberOfBroadcasts = 0;
+        for (auto &circle: _map.broadcastCircles) {
+            if (circle.circle->isVisible()) {
+                numberOfBroadcasts++;
+            }
+        }
+
+        values.push_back(std::to_string(numberOfBroadcasts));
+
+        _mapPanel->setAllParamValues(values);
+    }
+
+    if (_teamLabel && _teamPanel) {
+        Ogre::StringVector values;
+
+        int nbPlayers = 0;
+        int maxLevel = 0;
+        int nbMaxLevel = 0;
+        std::vector<int> stones = {0, 0, 0, 0, 0, 0, 0};
+
+        for (auto &player: _map.players) {
+            if (player->getTeam() == _map.selectedTeam) {
+                if (player->level > maxLevel) {
+                    maxLevel = player->level;
+                    nbMaxLevel = 1;
+                } else if (player->level == maxLevel) {
+                    nbMaxLevel++;
+                }
+                nbPlayers++;
+
+                stones[0] += player->getItemQuantity("food");
+                stones[1] += player->getItemQuantity("linemate");
+                stones[2] += player->getItemQuantity("deraumere");
+                stones[3] += player->getItemQuantity("sibur");
+                stones[4] += player->getItemQuantity("mendiane");
+                stones[5] += player->getItemQuantity("phiras");
+                stones[6] += player->getItemQuantity("thystame");
+            }
+        }
+
+        values.push_back(std::to_string(nbPlayers));
+        values.push_back(std::to_string(maxLevel) + " (" + std::to_string(nbMaxLevel) + "p)");
+
+        for (auto &stone: stones) {
+            values.push_back(std::to_string(stone));
+        }
+
+        _teamPanel->setAllParamValues(values);
+    }
 }
 
 bool App::frameEnded(const Ogre::FrameEvent &evt) {
@@ -231,19 +325,49 @@ void App::buttonHit(OgreBites::Button *b) {
 
 void App::itemSelected(OgreBites::SelectMenu *menu) {
     if (menu->getName() == "Teams") {
+        if (_teamLabel && _teamPanel) {
+            trayMgr->destroyWidget(_teamLabel);
+            trayMgr->destroyWidget(_teamPanel);
+            _teamLabel = nullptr;
+            _teamPanel = nullptr;
+        }
+
         auto selectedTeam = menu->getSelectedItem();
         if (selectedTeam == "All teams") {
             for (auto &player: _map.players) {
                 player->node->setVisible(true);
             }
+            _map.selectedTeam = "";
         } else {
+            int nbPlayers = 0;
+
+            _map.selectedTeam = selectedTeam;
             for (auto &player: _map.players) {
                 if (player->getTeam() == selectedTeam) {
+                    nbPlayers++;
                     player->node->setVisible(true);
                 } else {
                     player->node->setVisible(false);
                 }
             }
+
+            Ogre::StringVector stats;
+            stats.push_back("Players");
+            stats.push_back("Max level");
+
+            stats.push_back("Food");
+            stats.push_back("Linemate");
+            stats.push_back("Deraumere");
+            stats.push_back("Sibur");
+            stats.push_back("Mendiane");
+            stats.push_back("Phiras");
+            stats.push_back("Thystame");
+
+            _teamLabel = trayMgr->createLabel(TL_NONE, "Team/StatsLabel", selectedTeam, 180);
+            _teamPanel = trayMgr->createParamsPanel(TL_NONE, "Team/StatsPanel", 180, stats);
+
+            trayMgr->moveWidgetToTray(_teamLabel, TL_TOPRIGHT);
+            trayMgr->moveWidgetToTray(_teamPanel, TL_TOPRIGHT);
         }
     }
 }
@@ -328,7 +452,7 @@ void App::_handleObjectSelection(Ogre::Node *node) {
                 _infosPanel = trayMgr->createParamsPanel(TL_NONE, "Infos/StatsPanel", 180, stats);
                 _infosPanel->setAllParamValues(values);
 
-                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, -1);
+                trayMgr->moveWidgetToTray(_infosLabel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_mapPanel) + 1);
                 trayMgr->moveWidgetToTray(_infosPanel, TL_TOPRIGHT, trayMgr->locateWidgetInTray(_infosLabel) + 1);
 
                 return;
@@ -360,6 +484,24 @@ void App::_handleObjectSelection(Ogre::Node *node) {
 
             stats.emplace_back("Food");
             values.push_back(std::to_string(player->getItemQuantity("food")));
+
+            stats.emplace_back("Linemate");
+            values.push_back(std::to_string(player->getItemQuantity("linemate")));
+
+            stats.emplace_back("Deraumere");
+            values.push_back(std::to_string(player->getItemQuantity("deraumere")));
+
+            stats.emplace_back("Sibur");
+            values.push_back(std::to_string(player->getItemQuantity("sibur")));
+
+            stats.emplace_back("Mendiane");
+            values.push_back(std::to_string(player->getItemQuantity("mendiane")));
+
+            stats.emplace_back("Phiras");
+            values.push_back(std::to_string(player->getItemQuantity("phiras")));
+
+            stats.emplace_back("Thystame");
+            values.push_back(std::to_string(player->getItemQuantity("thystame")));
 
             /*
             stats.emplace_back("Stones");
@@ -399,7 +541,7 @@ void App::_updateMap(std::string &command) {
 
     try {
         _commands.execute(commandName, params);
-    } catch(const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << "[ERROR] On command " << commandName << " with paramters " << params << ": " << e.what() << '\n';
     }
 }

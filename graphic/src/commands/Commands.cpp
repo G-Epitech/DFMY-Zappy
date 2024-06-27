@@ -206,6 +206,12 @@ void Commands::playerConnect(std::string &command) {
     player->position = {x, y};
     player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
     _map.players.push_back(player);
+
+    _client.write("pin " + std::to_string(id) + "\n");
+
+    if (!_map.selectedTeam.empty() && _map.selectedTeam != team) {
+        player->node->setVisible(false);
+    }
 }
 
 void Commands::playerPosition(std::string &command) {
@@ -238,7 +244,6 @@ void Commands::playerPosition(std::string &command) {
 void Commands::playerLevel(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    std::cout << "Receive player level: " << command << std::endl;
     if (args.size() != 2)
         return;
     int id = std::stoi(args[0]);
@@ -300,6 +305,10 @@ void Commands::broadcast(std::string &command) {
 
     for (auto &player: _map.players) {
         if (player->getId() == id) {
+            if (!_map.selectedTeam.empty() && _map.selectedTeam != player->getTeam()) {
+                return;
+            }
+
             Circle circle = _createBroadcastCircle(player->node->getPosition());
             _map.broadcastCircles.push_back(circle);
             _addLogMessage("Player " + std::to_string(id) + " broadcasted: " + message);
@@ -360,15 +369,19 @@ void Commands::playerLayingEgg(std::string &command) {
 void Commands::playerResourceDrop(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 3)
+    if (args.size() != 2)
         return;
     int player_id = std::stoi(args[0]);
-    std::string resource = args[1];
-    int quantity = std::stoi(args[2]);
+    std::string resource;
+    if (std::stoi(args[1]) == 0)
+        resource = "food";
+    else
+        resource = stonesNames[std::stoi(args[1]) - 1];
 
     for (auto &player: _map.players) {
         if (player->getId() == player_id) {
-            _map.tiles[player->position.x][player->position.y]->addItemEntity(resource, quantity, _scnMgr);
+            player->removeInventoryItem(resource, 1);
+            _map.tiles[player->position.x][player->position.y]->addItemEntity(resource, 1, _scnMgr);
             return;
         }
     }
@@ -377,15 +390,19 @@ void Commands::playerResourceDrop(std::string &command) {
 void Commands::playerResourceTake(std::string &command) {
     std::vector<std::string> args = Utils::StringUtils::split(command, ' ');
 
-    if (args.size() != 3)
+    if (args.size() != 2)
         return;
     int player_id = std::stoi(args[0]);
-    std::string resource = args[1];
-    int quantity = std::stoi(args[2]);
+    std::string resource;
+    if (std::stoi(args[1]) == 0)
+        resource = "food";
+    else
+        resource = stonesNames[std::stoi(args[1]) - 1];
 
     for (auto &player: _map.players) {
         if (player->getId() == player_id) {
-            _map.tiles[player->position.x][player->position.y]->removeItemEntity(resource, quantity, _scnMgr);
+            player->addInventoryItem(resource, 1);
+            _map.tiles[player->position.x][player->position.y]->removeItemEntity(resource, 1, _scnMgr);
             return;
         }
     }

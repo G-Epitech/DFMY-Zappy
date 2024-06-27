@@ -60,8 +60,14 @@ void Player::updateEntitySize(Ogre::Node *tileNode) const
 
 void Player::addInventoryItem(const std::string &item, int quantity) {
     if (_inventory.find(item) == _inventory.end())
-        _inventory[item] = 0;
+        _inventory[item] = quantity;
     _inventory[item] += quantity;
+}
+
+void Player::removeInventoryItem(const std::string &item, int quantity) {
+    if (_inventory.find(item) == _inventory.end())
+        _inventory[item] = 0;
+    _inventory[item] -= quantity;
 }
 
 int Player::getItemQuantity(const std::string &item) const {

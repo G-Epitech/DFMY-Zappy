@@ -143,6 +143,17 @@ private:
 
     OgreBites::ParamsPanel* _infosPanel;
 
+    OgreBites::Label* _mapLabel;
+
+    OgreBites::ParamsPanel* _mapPanel;
+
+    OgreBites::Label* _teamLabel;
+
+    OgreBites::ParamsPanel* _teamPanel;
+
+    /// @brief Last stats refresh
+    float _lastStatsRefresh = 0;
+
     OgreBites::Slider* _timeSlider;
 
     bool _timeSliderChanged;
@@ -183,6 +194,11 @@ private:
     void _setupInformations();
 
     /**
+     * @brief Setup the maps stats of the application
+     */
+    void _setupMapStats();
+
+    /**
      * @brief Setup the lights of the application
      */
     void _setupLights();
@@ -219,6 +235,12 @@ private:
      * @param evt Frame event
      */
     void _updateIncantationSpheres(const Ogre::FrameEvent &evt);
+
+    /**
+     * @brief Update the map stats
+     * @param evt Frame event
+     */
+    void _updateMapStats(const Ogre::FrameEvent &evt);
 
     /**
      * @brief Update the sphere
