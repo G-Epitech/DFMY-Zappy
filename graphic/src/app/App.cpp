@@ -24,7 +24,6 @@ App::App() :
         trayMgr(nullptr),
         _scnMgr(nullptr),
         _map(),
-        _commands(_client, _map, nullptr, nullptr, nullptr, _timeSliderChanged),
         _options(),
         _infosLabel(nullptr),
         _infosPanel(nullptr),
@@ -41,7 +40,6 @@ void App::setup() {
     _scnMgr->setAmbientLight(ColourValue(0.5f, 0.5f, 0.5f));
     _raySceneQuery = _scnMgr->createRayQuery(Ogre::Ray());
 
-    _commands.setScnMgr(_scnMgr);
     _scnMgr->setSkyBox(true, "skybox", 300, true);
 
     _loadResources();
@@ -170,12 +168,10 @@ void App::_setupAudio() {
 
 void App::_setupLogs() {
     _logs = trayMgr->createTextBox(TL_BOTTOMLEFT, "Logs", "Logs", 300, 200);
-    _commands.setLogs(_logs);
 }
 
 void App::_setupSliders() {
     _timeSlider = trayMgr->createLongSlider(TL_BOTTOMLEFT, "TimeSlider", "Time", 150, 100, 1, 500, 100);
-    _commands.setTimeSlider(_timeSlider);
 }
 
 void App::_setupCommands() {

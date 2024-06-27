@@ -19,7 +19,6 @@
 #include <SFML/Audio.hpp>
 #include "client/Client.hpp"
 #include "types/Map.hpp"
-#include "commands/Commands.hpp"
 #include "interfaces/ICommand.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener, public OgreBites::TrayListener {
@@ -116,9 +115,6 @@ private:
 
     /// @brief Map of the game with all the tiles, players...
     Map _map;
-
-    /// @brief Commands object used to execute commands
-    Commands _commands;
 
     /// @brief Options of the application
     Options _options;
