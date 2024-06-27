@@ -64,10 +64,10 @@ void Player::updateEntitySize(Ogre::SceneManager *scnMgr, Teams &teams, Ogre::No
 
     Ogre::AxisAlignedBox boundingBox = entity->getBoundingBox();
     Ogre::Vector3 size = boundingBox.getSize();
-    float playerScale = static_cast<float>(level) * PLAYER_SCALE;
+    float playerScale = static_cast<float>(level) * 0.5 * PLAYER_SCALE;
     auto final_orientation = orientationToRotation[orientation - 1];
 
-    node->setPosition(tileNode->getPosition().x, 0.0f, tileNode->getPosition().z);
+    node->setPosition(tileNode->getPosition().x, 0.1f, tileNode->getPosition().z);
     node->setScale(playerScale, playerScale, playerScale);
     node->setOrientation(Ogre::Quaternion(Ogre::Degree(final_orientation), Ogre::Vector3::UNIT_Y));
 }
