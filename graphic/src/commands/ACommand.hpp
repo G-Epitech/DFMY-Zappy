@@ -39,6 +39,8 @@ class ACommand : public ICommand {
 
         void setSlider(OgreBites::Slider* timeSlider) override;
 
+        void setDropdown(OgreBites::SelectMenu* dropdown) override;
+
     protected:
         Client &_client;
         Map &_map;
@@ -46,6 +48,7 @@ class ACommand : public ICommand {
         Ogre::SceneManager* _scnMgr;
         OgreBites::TextBox* _logs;
         OgreBites::Slider* _timeSlider;
+        OgreBites::SelectMenu* _dropdown;
 
         void _addLogMessage(const std::string &message);
 };

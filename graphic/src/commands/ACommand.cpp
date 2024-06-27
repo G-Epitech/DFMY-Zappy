@@ -32,3 +32,7 @@ void ACommand::_addLogMessage(const std::string &message) {
         previousText = previousText.substr(0, 1000);
     _logs->setText(message + "\n" + previousText);
 }
+
+void ACommand::setDropdown(OgreBites::SelectMenu *dropdown) {
+    _dropdown = dropdown;
+}

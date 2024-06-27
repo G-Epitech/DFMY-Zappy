@@ -42,4 +42,10 @@ class ICommand {
          * @param timeSlider The OgreBites::Slider object
          */
         virtual void setSlider(OgreBites::Slider* timeSlider) = 0;
+
+        /**
+         * @brief Set the OgreBites::SelectMenu object
+         * @param dropdown The OgreBites::SelectMenu object
+         */
+        virtual void setDropdown(OgreBites::SelectMenu* dropdown) = 0;
 };
