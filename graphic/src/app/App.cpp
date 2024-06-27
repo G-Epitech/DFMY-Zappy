@@ -193,7 +193,8 @@ void App::_setupCommands() {
         "pic",
         "pie",
         "pfk",
-        "pdr"
+        "pdr",
+        "pgt"
     };
 
     for (const auto &command: commands) {

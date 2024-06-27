@@ -27,6 +27,8 @@ target_sources(zappy_gui_src PRIVATE
         player/Fork.cpp
         player/Drop.hpp
         player/Drop.cpp
+        player/Take.hpp
+        player/Take.cpp
         incantation/Start.hpp
         incantation/Start.cpp
         incantation/End.hpp
