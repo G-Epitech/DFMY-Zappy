@@ -46,4 +46,6 @@ class ACommand : public ICommand {
         Ogre::SceneManager* _scnMgr;
         OgreBites::TextBox* _logs;
         OgreBites::Slider* _timeSlider;
+
+        void _addLogMessage(const std::string &message);
 };

@@ -23,3 +23,12 @@ void ACommand::setLogs(OgreBites::TextBox *logs) {
 void ACommand::setSlider(OgreBites::Slider *timeSlider) {
     _timeSlider = timeSlider;
 }
+
+void ACommand::_addLogMessage(const std::string &message) {
+    if (!_logs)
+        return;
+    auto previousText = _logs->getText();
+    if (previousText.size() > 1000)
+        previousText = previousText.substr(0, 1000);
+    _logs->setText(message + "\n" + previousText);
+}
