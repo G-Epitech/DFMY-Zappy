@@ -20,6 +20,7 @@
 #include "client/Client.hpp"
 #include "types/Map.hpp"
 #include "commands/Commands.hpp"
+#include "interfaces/ICommand.hpp"
 
 class App : public OgreBites::ApplicationContext, public OgreBites::InputListener, public OgreBites::TrayListener {
 public:
@@ -151,6 +152,8 @@ private:
 
     OgreBites::ParamsPanel* _teamPanel;
 
+    std::map<std::string, std::unique_ptr<ICommand>> _commandsMap;
+
     /// @brief Last stats refresh
     float _lastStatsRefresh = 0;
 
@@ -217,6 +220,11 @@ private:
      * @brief Setup the sliders of the application
      */
     void _setupSliders();
+
+    /**
+     * @brief Setup the commands of the application
+     */
+    void _setupCommands();
 
     /**
      * @brief Update the map

@@ -2,17 +2,15 @@
 ** EPITECH PROJECT, 2024
 ** zappy
 ** File description:
-** MapTileContentCommand
+** MapTileCommand
 */
 
-#include "TileContent.hpp"
+#include "Tile.hpp"
 
-std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
-
-MapTileContentCommand::MapTileContentCommand(Client &client, Map &map, bool &sliderChanged)
+MapTileCommand::MapTileCommand(Client &client, Map &map, bool &sliderChanged)
     : ACommand(client, map, sliderChanged) {}
 
-void MapTileContentCommand::execute(std::string &params) {
+void MapTileCommand::execute(std::string &params) {
     std::vector<std::string> args = Utils::StringUtils::split(params, ' ');
 
     if (args.size() != 2)

@@ -33,35 +33,11 @@ class ACommand : public ICommand {
          */
         ~ACommand();
 
-        /**
-         * @brief Execute a command
-         * @param params The parameters of the command
-         */
-        virtual void execute(std::string &params) = 0;
+        void setScnMgr(Ogre::SceneManager* scnMgr) override;
 
-        /**
-         * @brief Set the Ogre::SceneManager object
-         * @param scnMgr The Ogre::SceneManager object
-         */
-        void setScnMgr(Ogre::SceneManager* scnMgr);
+        void setLogs(OgreBites::TextBox* logs) override;
 
-        /**
-         * @brief Set the OgreBites::TextBox object
-         * @param logs The OgreBites::TextBox object
-         */
-        void setLogs(OgreBites::TextBox* logs);
-
-        /**
-         * @brief Set the OgreBites::Slider object
-         * @param timeSlider The OgreBites::Slider object
-         */
-        void setSlider(OgreBites::Slider* timeSlider);
-
-        /**
-         * @brief Set the sliderChanged boolean
-         * @param sliderChanged The boolean to set
-         */
-        void setSliderChanged(bool &sliderChanged);
+        void setSlider(OgreBites::Slider* timeSlider) override;
 
     protected:
         Client &_client;

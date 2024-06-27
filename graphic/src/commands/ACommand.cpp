@@ -23,7 +23,3 @@ void ACommand::setLogs(OgreBites::TextBox *logs) {
 void ACommand::setSlider(OgreBites::Slider *timeSlider) {
     _timeSlider = timeSlider;
 }
-
-void ACommand::setSliderChanged(bool &sliderChanged) {
-    _sliderChanged = sliderChanged;
-}

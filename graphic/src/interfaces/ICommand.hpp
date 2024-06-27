@@ -42,10 +42,4 @@ class ICommand {
          * @param timeSlider The OgreBites::Slider object
          */
         virtual void setSlider(OgreBites::Slider* timeSlider) = 0;
-
-        /**
-         * @brief Set the sliderChanged boolean
-         * @param sliderChanged The boolean to set
-         */
-        virtual void setSliderChanged(bool &sliderChanged) = 0;
 };

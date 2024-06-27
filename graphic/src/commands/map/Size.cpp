@@ -6,8 +6,7 @@
 */
 
 #include "Size.hpp"
-
-std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
+#include "constants/Resources.hpp"
 
 MapSizeCommand::MapSizeCommand(Client &client, Map &map, bool &sliderChanged)
     : ACommand(client, map, sliderChanged) {}

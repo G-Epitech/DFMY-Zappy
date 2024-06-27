@@ -4,4 +4,8 @@ target_sources(zappy_gui_src PRIVATE
         ACommand.hpp
         ACommand.cpp
         CommandFactory.hpp
-        CommandFactory.cpp)
+        CommandFactory.cpp
+        map/Size.hpp
+        map/Size.cpp
+        map/Tile.hpp
+        map/Tile.cpp)

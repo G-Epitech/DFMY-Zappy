@@ -13,6 +13,7 @@
 #include <OgreBorderPanelOverlayElement.h>
 #include <getopt.h>
 #include "App.hpp"
+#include "commands/CommandFactory.hpp"
 
 using namespace Ogre;
 using namespace OgreBites;
@@ -92,6 +93,7 @@ void App::_setupUI() {
     _setupMapStats();
     _setupLogs();
     _setupSliders();
+    _setupCommands();
 }
 
 void App::_setupInformations() {
@@ -173,8 +175,22 @@ void App::_setupLogs() {
 
 void App::_setupSliders() {
     _timeSlider = trayMgr->createLongSlider(TL_BOTTOMLEFT, "TimeSlider", "Time", 150, 100, 1, 500, 100);
-    _timeSlider->setValue(100);
     _commands.setTimeSlider(_timeSlider);
+}
+
+void App::_setupCommands() {
+    CommandFactory commandFactory(_client, _map, _timeSliderChanged);
+
+    _commandsMap["msz"] = commandFactory.createCommand("msz");
+    _commandsMap["bct"] = commandFactory.createCommand("bct");
+
+    for (auto &command: _commandsMap) {
+        if (command.second) {
+            command.second->setLogs(_logs);
+            command.second->setScnMgr(_scnMgr);
+            command.second->setSlider(_timeSlider);
+        }
+    }
 }
 
 bool App::frameRenderingQueued(const Ogre::FrameEvent &evt) {
@@ -540,7 +556,12 @@ void App::_updateMap(std::string &command) {
     }
 
     try {
-        _commands.execute(commandName, params);
+        for (auto &command: _commandsMap) {
+            if (command.first == commandName) {
+                command.second->execute(params);
+                break;
+            }
+        }
     } catch (const std::exception &e) {
         std::cerr << "[ERROR] On command " << commandName << " with paramters " << params << ": " << e.what() << '\n';
     }

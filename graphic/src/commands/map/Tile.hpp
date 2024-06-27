@@ -9,10 +9,10 @@
 
 #include "commands/ACommand.hpp"
 
-class MapTileContentCommand : public ACommand {
+class MapTileCommand : public ACommand {
     public:
-        MapTileContentCommand(Client &client, Map &map, bool &sliderChanged);
-        ~MapTileContentCommand() = default;
+        MapTileCommand(Client &client, Map &map, bool &sliderChanged);
+        ~MapTileCommand() = default;
 
         void execute(std::string &params) override;
 };
