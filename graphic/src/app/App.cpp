@@ -197,7 +197,8 @@ void App::_setupCommands() {
         "pgt",
         "pdi",
         "enw",
-        "edi"
+        "edi",
+        "eht"
     };
 
     for (const auto &command: commands) {
