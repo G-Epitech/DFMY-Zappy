@@ -15,6 +15,7 @@
 #include "commands/player/Connect.hpp"
 #include "commands/player/Position.hpp"
 #include "commands/player/Level.hpp"
+#include "commands/player/Inventory.hpp"
 
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
@@ -23,6 +24,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pnw", [&](){ return std::make_unique<PlayerConnectCommand>(client, map, sliderChanged); });
     commandRegister("ppo", [&](){ return std::make_unique<PlayerPositionCommand>(client, map, sliderChanged); });
     commandRegister("plv", [&](){ return std::make_unique<PlayerLevelCommand>(client, map, sliderChanged); });
+    commandRegister("pin", [&](){ return std::make_unique<PlayerInventoryCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

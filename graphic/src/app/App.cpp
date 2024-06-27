@@ -186,7 +186,8 @@ void App::_setupCommands() {
         "tna",
         "pnw",
         "ppo",
-        "plv"
+        "plv",
+        "pin"
     };
 
     for (const auto &command: commands) {
