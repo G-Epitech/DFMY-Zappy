@@ -22,4 +22,6 @@ target_sources(zappy_gui_src PRIVATE
         player/Eject.hpp
         player/Eject.cpp
         player/Broadcast.hpp
-        player/Broadcast.cpp)
+        player/Broadcast.cpp
+        incantation/Start.hpp
+        incantation/Start.cpp)

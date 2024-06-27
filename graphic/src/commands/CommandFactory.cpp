@@ -19,6 +19,8 @@
 #include "commands/player/Eject.hpp"
 #include "commands/player/Broadcast.hpp"
 
+#include "commands/incantation/Start.hpp"
+
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
@@ -29,6 +31,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pin", [&](){ return std::make_unique<PlayerInventoryCommand>(client, map, sliderChanged); });
     commandRegister("pex", [&](){ return std::make_unique<PlayerEjectCommand>(client, map, sliderChanged); });
     commandRegister("pbc", [&](){ return std::make_unique<PlayerBroadcastCommand>(client, map, sliderChanged); });
+    commandRegister("pic", [&](){ return std::make_unique<IncantationStartCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;
