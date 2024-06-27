@@ -201,7 +201,10 @@ void App::_setupCommands() {
         "eht",
         "sgt",
         "sst",
-        "seg"
+        "seg",
+        "smg",
+        "suc",
+        "sbp"
     };
 
     for (const auto &command: commands) {

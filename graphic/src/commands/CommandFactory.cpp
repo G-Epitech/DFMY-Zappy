@@ -34,6 +34,10 @@
 #include "commands/time/Modification.hpp"
 
 #include "commands/game/End.hpp"
+#include "commands/game/Message.hpp"
+
+#include "commands/bad/Command.hpp"
+#include "commands/bad/Parameters.hpp"
 
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
@@ -57,6 +61,9 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("sgt", [&](){ return std::make_unique<TimeRequestCommand>(client, map, sliderChanged); });
     commandRegister("sst", [&](){ return std::make_unique<TimeModificationCommand>(client, map, sliderChanged); });
     commandRegister("seg", [&](){ return std::make_unique<GameEndCommand>(client, map, sliderChanged); });
+    commandRegister("smg", [&](){ return std::make_unique<GameMessageCommand>(client, map, sliderChanged); });
+    commandRegister("suc", [&](){ return std::make_unique<BadCommandCommand>(client, map, sliderChanged); });
+    commandRegister("sbp", [&](){ return std::make_unique<BadParametersCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

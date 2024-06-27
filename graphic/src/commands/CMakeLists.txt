@@ -46,4 +46,10 @@ target_sources(zappy_gui_src PRIVATE
         time/Modification.hpp
         time/Modification.cpp
         game/End.hpp
-        game/End.cpp)
+        game/End.cpp
+        game/Message.hpp
+        game/Message.cpp
+        bad/Command.hpp
+        bad/Command.cpp
+        bad/Parameters.hpp
+        bad/Parameters.cpp)

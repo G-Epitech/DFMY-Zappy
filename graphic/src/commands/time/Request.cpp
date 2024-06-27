@@ -17,6 +17,6 @@ void TimeRequestCommand::execute(std::string &params) {
         return;
 
     _map.timeUnit = std::stoi(args[0]);
-    _timeSlider->setValue(_map.timeUnit);
     _timeSliderChanged = true;
+    _timeSlider->setValue(_map.timeUnit);
 }
