@@ -41,9 +41,11 @@ public:
     /**
      * @brief Update the size of the entity of the player
      * This function is usefully to see the player grow when he levels up
+     * @param scnMgr Scene manager of the GUI
+     * @param teams List of teams
      * @param tileNode Node of the tile
      */
-    void updateEntitySize(Ogre::Node *tileNode) const;
+    void updateEntitySize(Ogre::SceneManager *scnMgr, Teams &teams, Ogre::Node *tileNode);
 
     /**
      * @brief Add an item to the inventory of the player
@@ -87,4 +89,7 @@ private:
 
     /// Inventory of the player
     std::map<std::string, int> _inventory;
+
+    /// Load good player model
+    bool _playerModelLoad = true;
 };
