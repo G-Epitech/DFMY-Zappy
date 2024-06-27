@@ -10,7 +10,7 @@
 timeval_t *app_get_timeout(app_t *app, timeval_t *timeout)
 {
     if (app->server->controllers->len == 0 ||
-        app->world->next_event_delay < 0 || app->world->paused) {
+        app->world->next_event_delay < 0) {
         return NULL;
     }
     chrono_units_to_timeval(&app->world->chrono,
