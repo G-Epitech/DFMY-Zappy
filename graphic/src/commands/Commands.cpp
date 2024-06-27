@@ -12,7 +12,11 @@
 
 std::vector<std::string> stonesNames = {"linemate", "deraumere", "sibur", "mendiane", "phiras", "thystame"};
 
-Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log, OgreBites::Slider *timeSlider, bool &timeSliderChanged) : _client(client), _map(map), _scnMgr(scnMgr), _logs(log), _timeSlider(timeSlider), _timeSliderChanged(timeSliderChanged) {
+Commands::Commands(Client &client, Map &map, Ogre::SceneManager *scnMgr, OgreBites::TextBox *log,
+                   OgreBites::Slider *timeSlider, bool &timeSliderChanged) : _client(client), _map(map),
+                                                                             _scnMgr(scnMgr), _logs(log),
+                                                                             _timeSlider(timeSlider),
+                                                                             _timeSliderChanged(timeSliderChanged) {
     _commands["msz"] = [this](std::string &params) { mapSize(params); };
     _commands["bct"] = [this](std::string &params) { tileContent(params); };
     _commands["tna"] = [this](std::string &params) { teamsNames(params); };
@@ -88,7 +92,7 @@ Sphere Commands::_createIncantationSphere(const Ogre::Vector3 &position) {
     return sphere;
 }
 
-void Commands::_addLogMessage(const std::string& message) {
+void Commands::_addLogMessage(const std::string &message) {
     if (!_logs)
         return;
     auto previousText = _logs->getText();
@@ -235,7 +239,7 @@ void Commands::playerPosition(std::string &command) {
             if (!player->node)
                 player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             else
-                player->updateEntitySize(_map.tiles[x][y]->getNode());
+                player->updateEntitySize(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             return;
         }
     }
@@ -252,7 +256,8 @@ void Commands::playerLevel(std::string &command) {
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->level = level;
-            player->updateEntitySize(_map.tiles[player->position.x][player->position.y]->getNode());
+            player->updateEntitySize(_scnMgr, _map.teams,
+                                     _map.tiles[player->position.x][player->position.y]->getNode());
             return;
         }
     }
