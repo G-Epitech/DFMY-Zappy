@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad899b63555e6f02a600fe0870a68ab3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ad899b63555e6f02a600fe0870a68ab3f">addInventoryItem</a> (const std::string &amp;item, int quantity)</td></tr>
 <tr class="memdesc:ad899b63555e6f02a600fe0870a68ab3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an item to the inventory of the player.  <a href="classPlayer.html#ad899b63555e6f02a600fe0870a68ab3f">More...</a><br /></td></tr>
 <tr class="separator:ad899b63555e6f02a600fe0870a68ab3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a813b5d81a8149204f84900b13597d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a8a813b5d81a8149204f84900b13597d5">removeInventoryItem</a> (const std::string &amp;item, int quantity)</td></tr>
+<tr class="memdesc:a8a813b5d81a8149204f84900b13597d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove an item from the inventory of the player.  <a href="classPlayer.html#a8a813b5d81a8149204f84900b13597d5">More...</a><br /></td></tr>
+<tr class="separator:a8a813b5d81a8149204f84900b13597d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abae987d94f99d09dc3f3ce13bec088c1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#abae987d94f99d09dc3f3ce13bec088c1">getItemQuantity</a> (const std::string &amp;item) const</td></tr>
 <tr class="memdesc:abae987d94f99d09dc3f3ce13bec088c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the quantity of an item in the inventory of the player.  <a href="classPlayer.html#abae987d94f99d09dc3f3ce13bec088c1">More...</a><br /></td></tr>
 <tr class="separator:abae987d94f99d09dc3f3ce13bec088c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -321,6 +324,43 @@ Public Attributes</h2></td></tr>
 
 <p>Get the team of the player. </p>
 <dl class="section return"><dt>Returns</dt><dd>The team of the player </dd></dl>
+
+</div>
+</div>
+<a id="a8a813b5d81a8149204f84900b13597d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a813b5d81a8149204f84900b13597d5">&#9670;&nbsp;</a></span>removeInventoryItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::removeInventoryItem </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>item</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>quantity</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Remove an item from the inventory of the player. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">item</td><td>Item to remove </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Quantity of the item removed </dd></dl>
 
 </div>
 </div>
