@@ -73,10 +73,16 @@ $(function() {
 , <a class="el" href="classhamster_1_1Hamster.html#a41d1154fbf2cbee64ca35421b74578d9">hamster.Hamster</a>
 , <a class="el" href="classthread_1_1Thread.html#a9d3b3debd3bc2b53c519548267dfd1e2">thread.Thread</a>
 </li>
+<li>_addLogMessage()
+: <a class="el" href="classACommand.html#a7d236586b1cd1299f64e4799c43c16d1">ACommand</a>
+</li>
 </ul>
 
 
 <h3><a id="index_a"></a>- a -</h3><ul>
+<li>ACommand()
+: <a class="el" href="classACommand.html#a5d23c6036e44b461c33c9ae168f2e80f">ACommand</a>
+</li>
 <li>add_thread()
 : <a class="el" href="classapp_1_1App.html#a9b3826290bfff855c345666663b092aa">app.App</a>
 </li>
@@ -96,8 +102,11 @@ $(function() {
 
 
 <h3><a id="index_b"></a>- b -</h3><ul>
-<li>broadcast()
-: <a class="el" href="classCommands.html#a24aa2855c66af66571859338bdb44387">Commands</a>
+<li>BadCommandCommand()
+: <a class="el" href="classBadCommandCommand.html#a9f4cfc84fffc6318ab6e3925a624525d">BadCommandCommand</a>
+</li>
+<li>BadParametersCommand()
+: <a class="el" href="classBadParametersCommand.html#afbfeab82666d05cbfd81e60191fa4966">BadParametersCommand</a>
 </li>
 <li>buttonHit()
 : <a class="el" href="group__graphic__app.html#ga21582e25d2e2b07a62cab3af17e71b4f">App</a>
@@ -127,17 +136,20 @@ $(function() {
 <li>close()
 : <a class="el" href="classclient_1_1SocketClient.html#ae65d18574f7e00beca0d14aebaa69e45">client.SocketClient</a>
 </li>
-<li>commandParameters()
-: <a class="el" href="classCommands.html#a1595262753c23ec7c4689d557ec7508d">Commands</a>
+<li>CommandFactory()
+: <a class="el" href="classCommandFactory.html#ad3840321e9ead8e5258dc4db72aa746a">CommandFactory</a>
 </li>
-<li>Commands()
-: <a class="el" href="classCommands.html#a89d99de60c2db4b5fb3d9f3117c7d1d2">Commands</a>
+<li>commandRegister()
+: <a class="el" href="classCommandFactory.html#a845076fb0627bcca9836193417c96e2f">CommandFactory</a>
 </li>
 <li>connect()
 : <a class="el" href="classclient_1_1SocketClient.html#a0d75d670fa05cdfbac1868a4366aa521">client.SocketClient</a>
 </li>
 <li>create_broadcast_message()
 : <a class="el" href="classhamster_1_1Hamster.html#ab86534c980d5af8a6a0069bedd645bb6">hamster.Hamster</a>
+</li>
+<li>createCommand()
+: <a class="el" href="classCommandFactory.html#a1f32b36d914a00918a04c52b9cb8eee2">CommandFactory</a>
 </li>
 <li>createEntity()
 : <a class="el" href="classPlayer.html#aba3ce4a0195c182c0c059df61375ad65">Player</a>
@@ -157,11 +169,14 @@ $(function() {
 
 
 <h3><a id="index_e"></a>- e -</h3><ul>
-<li>eggDeath()
-: <a class="el" href="classCommands.html#aac980e420a97fef29525f3a6394c45c9">Commands</a>
+<li>EggDeathCommand()
+: <a class="el" href="classEggDeathCommand.html#aa399ff7ce22e81f3cd854ee220986fb4">EggDeathCommand</a>
 </li>
-<li>eggHatching()
-: <a class="el" href="classCommands.html#a6c06dab7205b3f353bbe7357115ed1cd">Commands</a>
+<li>EggHatchCommand()
+: <a class="el" href="classEggHatchCommand.html#adc2f6e23972aee55a9317d201160a52c">EggHatchCommand</a>
+</li>
+<li>EggLaidCommand()
+: <a class="el" href="classEggLaidCommand.html#a08c0ccc71961857b1db36cc0f312afe5">EggLaidCommand</a>
 </li>
 <li>elevation()
 : <a class="el" href="classhamster_1_1Hamster.html#afc5e89c244cf46d9784b55c91318a484">hamster.Hamster</a>
@@ -175,9 +190,6 @@ $(function() {
 <li>encrypt_message()
 : <a class="el" href="classhamster_1_1Hamster.html#a56cf12370b2c38081a9e6a7f246b7e5d">hamster.Hamster</a>
 </li>
-<li>endGame()
-: <a class="el" href="classCommands.html#a0d8f2666ff723573de0b06aaf31da975">Commands</a>
-</li>
 <li>error()
 : <a class="el" href="classhamster_1_1Hamster.html#a695e55d115031d4d0753b2a06ae0f555">hamster.Hamster</a>
 </li>
@@ -189,7 +201,31 @@ $(function() {
 : <a class="el" href="classClient_1_1Exception.html#a7b8f8627c40ace4abaf4d8b6c872c93c">Client::Exception</a>
 </li>
 <li>execute()
-: <a class="el" href="classCommands.html#a17880e83e65ba865d40515e73ac88c6b">Commands</a>
+: <a class="el" href="classBadCommandCommand.html#a53b4be7448437e8caf5d887c953487a9">BadCommandCommand</a>
+, <a class="el" href="classBadParametersCommand.html#a3e49df86fc289aa1b0bc41dacd2f48fc">BadParametersCommand</a>
+, <a class="el" href="classEggDeathCommand.html#a27ff721433345269bceffa993a489134">EggDeathCommand</a>
+, <a class="el" href="classEggHatchCommand.html#a4baaffd507d2340ec9b8a872ae3326c0">EggHatchCommand</a>
+, <a class="el" href="classEggLaidCommand.html#a3bd121eb7046aefee95460e3e6c62678">EggLaidCommand</a>
+, <a class="el" href="classGameEndCommand.html#ae406c4aa5ec043c7b02eddd99b8b9f74">GameEndCommand</a>
+, <a class="el" href="classGameMessageCommand.html#ad8a3014b23ffdcb30f4ad49e0f5537bc">GameMessageCommand</a>
+, <a class="el" href="classICommand.html#a3b185e90e0598e43d3f2917ec37ffa41">ICommand</a>
+, <a class="el" href="classIncantationEndCommand.html#a1764f30329f26485f548e06421558eba">IncantationEndCommand</a>
+, <a class="el" href="classIncantationStartCommand.html#abadbdd184e3a46afbb98d07fbb0ebe86">IncantationStartCommand</a>
+, <a class="el" href="classMapSizeCommand.html#a4f728651891d225da6f855085a346c6d">MapSizeCommand</a>
+, <a class="el" href="classMapTileCommand.html#ab2660537f6e5d6e8f0303ff904413b83">MapTileCommand</a>
+, <a class="el" href="classPlayerBroadcastCommand.html#af7ae56747801aa9b6617157d71d8ce7b">PlayerBroadcastCommand</a>
+, <a class="el" href="classPlayerConnectCommand.html#ae714a053d55b3a9bd65ee74f0f3c438f">PlayerConnectCommand</a>
+, <a class="el" href="classPlayerDeathCommand.html#abbfa880b8a127f22ebc2ea2a57e6e123">PlayerDeathCommand</a>
+, <a class="el" href="classPlayerDropCommand.html#ab2f1a0599eb02a0e8345146c12289c60">PlayerDropCommand</a>
+, <a class="el" href="classPlayerEjectCommand.html#a3e8f3b890bf86ab0dc73c1c8e88710a9">PlayerEjectCommand</a>
+, <a class="el" href="classPlayerForkCommand.html#aae09407c607044d8ec7c42a4d3673ced">PlayerForkCommand</a>
+, <a class="el" href="classPlayerInventoryCommand.html#a2d303001d11092ea4a7fb4b1dfe49c05">PlayerInventoryCommand</a>
+, <a class="el" href="classPlayerLevelCommand.html#a732444bd2919469e30c38bb4f40bea4b">PlayerLevelCommand</a>
+, <a class="el" href="classPlayerPositionCommand.html#a9fc1d1a03229fb8553aca406f1f0158b">PlayerPositionCommand</a>
+, <a class="el" href="classPlayerTakeCommand.html#a9681ca3e4a1214a3883047e765a8417d">PlayerTakeCommand</a>
+, <a class="el" href="classTeamsNamesCommand.html#adf6ca4cbf9efc56ba9af8e1281ad8383">TeamsNamesCommand</a>
+, <a class="el" href="classTimeModificationCommand.html#ad5cddcfdbe0164be50f753cb7ddc7410">TimeModificationCommand</a>
+, <a class="el" href="classTimeRequestCommand.html#afd8bd11f73c9383bef044ab8c5253b8c">TimeRequestCommand</a>
 </li>
 </ul>
 
@@ -211,6 +247,12 @@ $(function() {
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
+<li>GameEndCommand()
+: <a class="el" href="classGameEndCommand.html#acd7f36731c8f3c28920dbeaf37f97b32">GameEndCommand</a>
+</li>
+<li>GameMessageCommand()
+: <a class="el" href="classGameMessageCommand.html#ad77be1666995f0fcfab3876b087c2dd5">GameMessageCommand</a>
+</li>
 <li>get_current_time_nano()
 : <a class="el" href="classhamster_1_1Hamster.html#a9b96e810194001cf4fe4c69e5e28b108">hamster.Hamster</a>
 </li>
@@ -267,11 +309,11 @@ $(function() {
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
-<li>incantationEnd()
-: <a class="el" href="classCommands.html#a41afc13a7e68b19d43b5f2f47a9dd4cd">Commands</a>
+<li>IncantationEndCommand()
+: <a class="el" href="classIncantationEndCommand.html#ab56a4dac2625213259068b813060cb6e">IncantationEndCommand</a>
 </li>
-<li>incantationStart()
-: <a class="el" href="classCommands.html#a1b40ccf4148da19f8138d933ad154cfa">Commands</a>
+<li>IncantationStartCommand()
+: <a class="el" href="classIncantationStartCommand.html#ab4a25e1af55211a6449bc5552b1b84c0">IncantationStartCommand</a>
 </li>
 <li>init_hamster()
 : <a class="el" href="classhamster_1_1Hamster.html#a46d564906672a0e40fd4969a3a7f4d13">hamster.Hamster</a>
@@ -312,8 +354,11 @@ $(function() {
 <li>manage_broadcast_message()
 : <a class="el" href="classhamster_1_1Hamster.html#a146cda86a4ece489530819d985f4ebcc">hamster.Hamster</a>
 </li>
-<li>mapSize()
-: <a class="el" href="classCommands.html#a558a99d2dcaf3ff7ed42e142c1344c35">Commands</a>
+<li>MapSizeCommand()
+: <a class="el" href="classMapSizeCommand.html#a2222dc6a18a6cf52e0b211d81d8b1fd6">MapSizeCommand</a>
+</li>
+<li>MapTileCommand()
+: <a class="el" href="classMapTileCommand.html#a27235a582f68b29dff747cdc956aecdc">MapTileCommand</a>
 </li>
 <li>message_get_json()
 : <a class="el" href="classhamster_1_1Hamster.html#a4cbc4240af867bdde0ba67c6ff172e1d">hamster.Hamster</a>
@@ -334,35 +379,35 @@ $(function() {
 <li>Player()
 : <a class="el" href="classPlayer.html#ab927be273c95486f98d4adcd5447dd35">Player</a>
 </li>
-<li>playerConnect()
-: <a class="el" href="classCommands.html#aa978a4ddd9399fca4ff2344084c7d5f7">Commands</a>
+<li>PlayerBroadcastCommand()
+: <a class="el" href="classPlayerBroadcastCommand.html#ab2d3c29db30faf79556c943a8c945a54">PlayerBroadcastCommand</a>
 </li>
-<li>playerDeath()
-: <a class="el" href="classCommands.html#a10e5ff450e8c547fb61023768ff023a0">Commands</a>
+<li>PlayerConnectCommand()
+: <a class="el" href="classPlayerConnectCommand.html#a7bbf1564082180d80cd70b6acad67b3a">PlayerConnectCommand</a>
 </li>
-<li>playerEggLaid()
-: <a class="el" href="classCommands.html#a0b16e341a2957454ffa1c7282e127dcd">Commands</a>
+<li>PlayerDeathCommand()
+: <a class="el" href="classPlayerDeathCommand.html#a132b3a3220adaef7106d4286aee64cc1">PlayerDeathCommand</a>
 </li>
-<li>playerEject()
-: <a class="el" href="classCommands.html#a885005f3217774597fb1e87298c31749">Commands</a>
+<li>PlayerDropCommand()
+: <a class="el" href="classPlayerDropCommand.html#a5f555d221fd81e4c70b1870347973f7c">PlayerDropCommand</a>
 </li>
-<li>playerInventory()
-: <a class="el" href="classCommands.html#ae8f2951f8885b0780a7b0a27ffd104db">Commands</a>
+<li>PlayerEjectCommand()
+: <a class="el" href="classPlayerEjectCommand.html#ab5e372cfef4a4ca8b5d0bb0ae9c30c34">PlayerEjectCommand</a>
 </li>
-<li>playerLayingEgg()
-: <a class="el" href="classCommands.html#acf174c1d679669371ee2d38426d424de">Commands</a>
+<li>PlayerForkCommand()
+: <a class="el" href="classPlayerForkCommand.html#ac15bd7e53397fdfb541bdd7658559ef8">PlayerForkCommand</a>
 </li>
-<li>playerLevel()
-: <a class="el" href="classCommands.html#aabdc6be8130363e9aaac0f8c9aef43b4">Commands</a>
+<li>PlayerInventoryCommand()
+: <a class="el" href="classPlayerInventoryCommand.html#a59c2b6e916b84cb42061a1d39590a01d">PlayerInventoryCommand</a>
 </li>
-<li>playerPosition()
-: <a class="el" href="classCommands.html#a018e087255f8cdb8e5d2def0d592c873">Commands</a>
+<li>PlayerLevelCommand()
+: <a class="el" href="classPlayerLevelCommand.html#aeb53e6a05b3a29115db805c62eed2feb">PlayerLevelCommand</a>
 </li>
-<li>playerResourceDrop()
-: <a class="el" href="classCommands.html#a8751ae79e24f9359561d0f1cbdd93f79">Commands</a>
+<li>PlayerPositionCommand()
+: <a class="el" href="classPlayerPositionCommand.html#a58c7ebc83ee77c1b4779bb7f3ba0896c">PlayerPositionCommand</a>
 </li>
-<li>playerResourceTake()
-: <a class="el" href="classCommands.html#a3392ffe5b3f01e6323962c474edc0186">Commands</a>
+<li>PlayerTakeCommand()
+: <a class="el" href="classPlayerTakeCommand.html#abb6e96cfc9b7dac69af78e6b8b64f61e">PlayerTakeCommand</a>
 </li>
 <li>poll()
 : <a class="el" href="classClient.html#a8d652001639f4205326cfe2c30e90cf4">Client</a>
@@ -408,13 +453,16 @@ $(function() {
 : <a class="el" href="classhamster_1_1Hamster.html#a5c3cbd3333a4153a1151ef517c6d749f">hamster.Hamster</a>
 </li>
 <li>setLogs()
-: <a class="el" href="classCommands.html#a7d1617961a8ebb240ce6fee9d6efb614">Commands</a>
+: <a class="el" href="classACommand.html#af4354ef1c7f66acfe92b87f5d4c99201">ACommand</a>
+, <a class="el" href="classICommand.html#a2e68944f1a6e93ab032f6e2aacb4d86f">ICommand</a>
 </li>
 <li>setScnMgr()
-: <a class="el" href="classCommands.html#a771d4285bf1a24e86f6920625890a3dd">Commands</a>
+: <a class="el" href="classACommand.html#a4ff6ccde745b822eea103ea92f95b166">ACommand</a>
+, <a class="el" href="classICommand.html#ab8ec1fe7baffd0f524e8c909034e4ed9">ICommand</a>
 </li>
-<li>setTimeSlider()
-: <a class="el" href="classCommands.html#aa0c991662a2ce4b2529c2f503f444e78">Commands</a>
+<li>setSlider()
+: <a class="el" href="classACommand.html#aef21f26bc7cfbe5b54bfc2714c474561">ACommand</a>
+, <a class="el" href="classICommand.html#a0cc5a07a5bedcdefb776cd7525a48d5e">ICommand</a>
 </li>
 <li>setup()
 : <a class="el" href="group__graphic__app.html#gaf41416c277fed01fe9c96c437afd41dc">App</a>
@@ -441,28 +489,22 @@ $(function() {
 <li>Teams()
 : <a class="el" href="classTeams.html#a972b1280bf738769e4e3226f169b0f41">Teams</a>
 </li>
-<li>teamsNames()
-: <a class="el" href="classCommands.html#a5d2118d8c7d72abd0808f6846c8fcec8">Commands</a>
+<li>TeamsNamesCommand()
+: <a class="el" href="classTeamsNamesCommand.html#aa1ad47c863705a1d4c18cc0135c55511">TeamsNamesCommand</a>
 </li>
 <li>Tile()
 : <a class="el" href="classTile.html#a26854d8281bfe518372f09c8eae3fa12">Tile</a>
 </li>
-<li>tileContent()
-: <a class="el" href="classCommands.html#aa648f8779ab267a30d720138738f2716">Commands</a>
+<li>TimeModificationCommand()
+: <a class="el" href="classTimeModificationCommand.html#aa8f8d2c23223ff3038203b5d57f836f6">TimeModificationCommand</a>
 </li>
-<li>timeUnitModification()
-: <a class="el" href="classCommands.html#a3609fa75c4ae6e4f882eb23bf1843557">Commands</a>
-</li>
-<li>timeUnitRequest()
-: <a class="el" href="classCommands.html#aa6179b65eb564207f673a5e99cb414e2">Commands</a>
+<li>TimeRequestCommand()
+: <a class="el" href="classTimeRequestCommand.html#a6b931d954aec3472d07480e7ed4c5bd1">TimeRequestCommand</a>
 </li>
 </ul>
 
 
 <h3><a id="index_u"></a>- u -</h3><ul>
-<li>unknownCommand()
-: <a class="el" href="classCommands.html#a6fc38352b03f23451f01d956ae39e7f8">Commands</a>
-</li>
 <li>update_inventory()
 : <a class="el" href="classhamster_1_1Hamster.html#a2d529f783baf191e73d9d62948d89be2">hamster.Hamster</a>
 </li>
@@ -501,20 +543,98 @@ $(function() {
 
 
 <h3><a id="index__7E"></a>- ~ -</h3><ul>
+<li>~ACommand()
+: <a class="el" href="classACommand.html#ad3524e9baa45c87a08df34b50a236125">ACommand</a>
+</li>
+<li>~BadCommandCommand()
+: <a class="el" href="classBadCommandCommand.html#a381c4d2407e0b33c344905b9a60be29c">BadCommandCommand</a>
+</li>
+<li>~BadParametersCommand()
+: <a class="el" href="classBadParametersCommand.html#a851fc37de6ad570e820e9295ebece0f1">BadParametersCommand</a>
+</li>
 <li>~Client()
 : <a class="el" href="classClient.html#a840e519ca781888cbd54181572ebe3a7">Client</a>
 </li>
-<li>~Commands()
-: <a class="el" href="classCommands.html#a2bd49d7f6b31fc0f08751c8c0521155c">Commands</a>
+<li>~CommandFactory()
+: <a class="el" href="classCommandFactory.html#a7bb4a37a7903caf0e42207b7ec8a6ad6">CommandFactory</a>
+</li>
+<li>~EggDeathCommand()
+: <a class="el" href="classEggDeathCommand.html#a1121ded35cfad4aed3b7b3d1ad5f18d6">EggDeathCommand</a>
+</li>
+<li>~EggHatchCommand()
+: <a class="el" href="classEggHatchCommand.html#a10807a98845d39ceb2feb52c1e225d24">EggHatchCommand</a>
+</li>
+<li>~EggLaidCommand()
+: <a class="el" href="classEggLaidCommand.html#a2e7508e10bcbcf9730adf5ed50d1f4b3">EggLaidCommand</a>
+</li>
+<li>~GameEndCommand()
+: <a class="el" href="classGameEndCommand.html#af872849abfcf243184b9a4de26a92d67">GameEndCommand</a>
+</li>
+<li>~GameMessageCommand()
+: <a class="el" href="classGameMessageCommand.html#a7b63cecfd414db04c5847a0c21ae9aad">GameMessageCommand</a>
+</li>
+<li>~ICommand()
+: <a class="el" href="classICommand.html#aa8a6346c5a0dcfe7fd49413a69e854ef">ICommand</a>
+</li>
+<li>~IncantationEndCommand()
+: <a class="el" href="classIncantationEndCommand.html#a2b96c2dfc0a37702ccd74dc3594abc08">IncantationEndCommand</a>
+</li>
+<li>~IncantationStartCommand()
+: <a class="el" href="classIncantationStartCommand.html#a328cac30f65a1962deaba950e31122ea">IncantationStartCommand</a>
+</li>
+<li>~MapSizeCommand()
+: <a class="el" href="classMapSizeCommand.html#a09ee8d69f009d7a8a7a195911283503f">MapSizeCommand</a>
+</li>
+<li>~MapTileCommand()
+: <a class="el" href="classMapTileCommand.html#a0ca4818a2e0540055ad79c20c845cf79">MapTileCommand</a>
 </li>
 <li>~Player()
 : <a class="el" href="classPlayer.html#a40d3c47b65e9652c363a8fde41f7bbf5">Player</a>
 </li>
+<li>~PlayerBroadcastCommand()
+: <a class="el" href="classPlayerBroadcastCommand.html#a3599ac87cb7c29945d3d7dc253b614f3">PlayerBroadcastCommand</a>
+</li>
+<li>~PlayerConnectCommand()
+: <a class="el" href="classPlayerConnectCommand.html#a6d7d3313205a350ccb4173bc38c3ea7e">PlayerConnectCommand</a>
+</li>
+<li>~PlayerDeathCommand()
+: <a class="el" href="classPlayerDeathCommand.html#a58a3d8b916fc0297e08990c8d475ac04">PlayerDeathCommand</a>
+</li>
+<li>~PlayerDropCommand()
+: <a class="el" href="classPlayerDropCommand.html#a30b578ae9c2c9b25a9f1db017969a4f1">PlayerDropCommand</a>
+</li>
+<li>~PlayerEjectCommand()
+: <a class="el" href="classPlayerEjectCommand.html#a7341cfdc93bb545223b14c8c8df2e950">PlayerEjectCommand</a>
+</li>
+<li>~PlayerForkCommand()
+: <a class="el" href="classPlayerForkCommand.html#a17ab9f3f57d92994181789c727ffceae">PlayerForkCommand</a>
+</li>
+<li>~PlayerInventoryCommand()
+: <a class="el" href="classPlayerInventoryCommand.html#a667092ae854b344927845997d23b857e">PlayerInventoryCommand</a>
+</li>
+<li>~PlayerLevelCommand()
+: <a class="el" href="classPlayerLevelCommand.html#a4102793215c9b5d2936226b8bb579b70">PlayerLevelCommand</a>
+</li>
+<li>~PlayerPositionCommand()
+: <a class="el" href="classPlayerPositionCommand.html#a449de00921645a72ce7b3aae396169df">PlayerPositionCommand</a>
+</li>
+<li>~PlayerTakeCommand()
+: <a class="el" href="classPlayerTakeCommand.html#ac19bd5a349d38a49a56c506da8ecb46b">PlayerTakeCommand</a>
+</li>
 <li>~Teams()
 : <a class="el" href="classTeams.html#a2e39849a3ae1ae537c8e4b67c162d929">Teams</a>
 </li>
+<li>~TeamsNamesCommand()
+: <a class="el" href="classTeamsNamesCommand.html#a883b086d86e4eb0192cb251472948dcb">TeamsNamesCommand</a>
+</li>
 <li>~Tile()
 : <a class="el" href="classTile.html#a227102d4a689745589e198209bffa04e">Tile</a>
+</li>
+<li>~TimeModificationCommand()
+: <a class="el" href="classTimeModificationCommand.html#a643933d01e6da4e0fbd04aa8a7987788">TimeModificationCommand</a>
+</li>
+<li>~TimeRequestCommand()
+: <a class="el" href="classTimeRequestCommand.html#ac4104aa786ebc4ec312aa3b93b4c238e">TimeRequestCommand</a>
 </li>
 </ul>
 </div><!-- contents -->

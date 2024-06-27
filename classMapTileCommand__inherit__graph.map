@@ -1,0 +1,5 @@
+<map id="MapTileCommand" name="MapTileCommand">
+<area shape="rect" id="node1" title=" " alt="" coords="5,155,147,181"/>
+<area shape="rect" id="node2" href="$classACommand.html" title=" " alt="" coords="27,80,125,107"/>
+<area shape="rect" id="node3" href="$classICommand.html" title=" " alt="" coords="29,5,123,32"/>
+</map>

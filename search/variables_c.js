@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['onfinish_1698',['onfinish',['../structplayer__request__handler__s.html#af4123ea3f7da56100021e044dff68d32',1,'player_request_handler_s']]],
-  ['onstart_1699',['onstart',['../structplayer__request__handler__s.html#ae5a61c35c6546b22ccd6534555acb0ae',1,'player_request_handler_s']]],
-  ['orientation_1700',['orientation',['../classPlayer.html#a967935f454736c04a9fd27d1f68cee97',1,'Player']]],
-  ['orientationtorotation_1701',['orientationToRotation',['../Player_8cpp.html#a647a3f25eed0b7261cef4711049e9be2',1,'Player.cpp']]]
+  ['name_1879',['name',['../structteam__s.html#a0ea1036c6435af9d6e362ddb5df64977',1,'team_s']]],
+  ['nb_5fplayers_1880',['nb_players',['../structincantation__requirements__s.html#a096f6ba8f31a455fd155a38a82857358',1,'incantation_requirements_s']]],
+  ['next_1881',['next',['../structs__node.html#aa9bf971138ed9a6aad064423795b6351',1,'s_node']]],
+  ['next_5fegg_5fid_1882',['next_egg_id',['../structworld__s.html#adfaa41a5a622ed32a96c476e0dfdbca8',1,'world_s']]],
+  ['next_5fevent_5fdelay_1883',['next_event_delay',['../structworld__s.html#a25e804f575df74fbd508ec0292cf965b',1,'world_s']]],
+  ['next_5fgeneration_1884',['next_generation',['../structresources__manager__s.html#a5e47d110402e18dc2cf0c5e66bd3110f',1,'resources_manager_s']]],
+  ['next_5fplayer_5fid_1885',['next_player_id',['../structworld__s.html#a4625dc6e905d3d977f8bb24195125b81',1,'world_s']]],
+  ['node_1886',['node',['../structEgg.html#a78b7c9eb7861fe6c5621194697c99cd8',1,'Egg::node()'],['../structCircle.html#aaca74eb81aed2ec7cf4a031522bcc0de',1,'Circle::node()'],['../structSphere.html#a363856501085441304c921a048e6bee5',1,'Sphere::node()'],['../classPlayer.html#a26a6a4814a450422cf783575fb3a741d',1,'Player::node()']]]
 ];
