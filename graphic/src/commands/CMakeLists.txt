@@ -12,4 +12,6 @@ target_sources(zappy_gui_src PRIVATE
         teams/Names.hpp
         teams/Names.cpp
         player/Connect.hpp
-        player/Connect.cpp)
+        player/Connect.cpp
+        player/Position.hpp
+        player/Position.cpp)

@@ -13,12 +13,14 @@
 #include "commands/teams/Names.hpp"
 
 #include "commands/player/Connect.hpp"
+#include "commands/player/Position.hpp"
 
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
     commandRegister("tna", [&](){ return std::make_unique<TeamsNamesCommand>(client, map, sliderChanged); });
     commandRegister("pnw", [&](){ return std::make_unique<PlayerConnectCommand>(client, map, sliderChanged); });
+    commandRegister("ppo", [&](){ return std::make_unique<PlayerPositionCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;
