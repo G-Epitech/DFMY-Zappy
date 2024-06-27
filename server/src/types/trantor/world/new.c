@@ -7,9 +7,14 @@
 
 #include "types/trantor/world.h"
 #include "types/trantor/team.h"
+#include "types/args.h"
 
 void world_init(world_t *world, size_t frequency)
 {
+    if (frequency == 0) {
+        world->paused = true;
+        frequency = ARGS_DEFAULT_FREQ;
+    }
     chrono_init(&world->chrono, frequency);
     map_refill_resources(world->map);
     world->next_event_delay = -1;
