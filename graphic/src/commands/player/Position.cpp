@@ -31,7 +31,7 @@ void PlayerPositionCommand::execute(std::string &params) {
             if (!player->node)
                 player->createEntity(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             else
-                player->updateEntitySize(_map.tiles[x][y]->getNode());
+                player->updateEntitySize(_scnMgr, _map.teams, _map.tiles[x][y]->getNode());
             return;
         }
     }

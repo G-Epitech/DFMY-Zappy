@@ -21,7 +21,7 @@ void PlayerLevelCommand::execute(std::string &params) {
     for (auto &player: _map.players) {
         if (player->getId() == id) {
             player->level = level;
-            player->updateEntitySize(_map.tiles[player->position.x][player->position.y]->getNode());
+            player->updateEntitySize(_scnMgr, _map.teams, _map.tiles[player->position.x][player->position.y]->getNode());
             return;
         }
     }
