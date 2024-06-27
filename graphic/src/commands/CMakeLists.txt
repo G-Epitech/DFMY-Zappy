@@ -18,4 +18,6 @@ target_sources(zappy_gui_src PRIVATE
         player/Level.hpp
         player/Level.cpp
         player/Inventory.hpp
-        player/Inventory.cpp)
+        player/Inventory.cpp
+        player/Eject.hpp
+        player/Eject.cpp)
