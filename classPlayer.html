@@ -96,9 +96,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba3ce4a0195c182c0c059df61375ad65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#aba3ce4a0195c182c0c059df61375ad65">createEntity</a> (Ogre::SceneManager *scnMgr, <a class="el" href="classTeams.html">Teams</a> &amp;teams, Ogre::Node *tileNode)</td></tr>
 <tr class="memdesc:aba3ce4a0195c182c0c059df61375ad65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the entity of the player.  <a href="classPlayer.html#aba3ce4a0195c182c0c059df61375ad65">More...</a><br /></td></tr>
 <tr class="separator:aba3ce4a0195c182c0c059df61375ad65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77def7b0df55a77e4b10ce0e14bdeca7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a77def7b0df55a77e4b10ce0e14bdeca7">updateEntitySize</a> (Ogre::Node *tileNode) const</td></tr>
-<tr class="memdesc:a77def7b0df55a77e4b10ce0e14bdeca7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the size of the entity of the player This function is usefully to see the player grow when he levels up.  <a href="classPlayer.html#a77def7b0df55a77e4b10ce0e14bdeca7">More...</a><br /></td></tr>
-<tr class="separator:a77def7b0df55a77e4b10ce0e14bdeca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33629002196d1f21b1cd6c71c9ffccfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a33629002196d1f21b1cd6c71c9ffccfd">updateEntitySize</a> (Ogre::SceneManager *scnMgr, <a class="el" href="classTeams.html">Teams</a> &amp;teams, Ogre::Node *tileNode)</td></tr>
+<tr class="memdesc:a33629002196d1f21b1cd6c71c9ffccfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the size of the entity of the player This function is usefully to see the player grow when he levels up.  <a href="classPlayer.html#a33629002196d1f21b1cd6c71c9ffccfd">More...</a><br /></td></tr>
+<tr class="separator:a33629002196d1f21b1cd6c71c9ffccfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad899b63555e6f02a600fe0870a68ab3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ad899b63555e6f02a600fe0870a68ab3f">addInventoryItem</a> (const std::string &amp;item, int quantity)</td></tr>
 <tr class="memdesc:ad899b63555e6f02a600fe0870a68ab3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an item to the inventory of the player.  <a href="classPlayer.html#ad899b63555e6f02a600fe0870a68ab3f">More...</a><br /></td></tr>
 <tr class="separator:ad899b63555e6f02a600fe0870a68ab3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -364,8 +364,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a77def7b0df55a77e4b10ce0e14bdeca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a77def7b0df55a77e4b10ce0e14bdeca7">&#9670;&nbsp;</a></span>updateEntitySize()</h2>
+<a id="a33629002196d1f21b1cd6c71c9ffccfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33629002196d1f21b1cd6c71c9ffccfd">&#9670;&nbsp;</a></span>updateEntitySize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -373,9 +373,25 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Player::updateEntitySize </td>
           <td>(</td>
+          <td class="paramtype">Ogre::SceneManager *&#160;</td>
+          <td class="paramname"><em>scnMgr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classTeams.html">Teams</a> &amp;&#160;</td>
+          <td class="paramname"><em>teams</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">Ogre::Node *&#160;</td>
-          <td class="paramname"><em>tileNode</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>tileNode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -383,6 +399,8 @@ Public Attributes</h2></td></tr>
 <p>Update the size of the entity of the player This function is usefully to see the player grow when he levels up. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">scnMgr</td><td>Scene manager of the GUI </td></tr>
+    <tr><td class="paramname">teams</td><td>List of teams </td></tr>
     <tr><td class="paramname">tileNode</td><td>Node of the tile </td></tr>
   </table>
   </dd>
