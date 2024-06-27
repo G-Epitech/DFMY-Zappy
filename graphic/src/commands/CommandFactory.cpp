@@ -27,6 +27,7 @@
 #include "commands/incantation/End.hpp"
 
 #include "commands/egg/Laid.hpp"
+#include "commands/egg/Death.hpp"
 
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
@@ -45,6 +46,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pgt", [&](){ return std::make_unique<PlayerTakeCommand>(client, map, sliderChanged); });
     commandRegister("pdi", [&](){ return std::make_unique<PlayerDeathCommand>(client, map, sliderChanged); });
     commandRegister("enw", [&](){ return std::make_unique<EggLaidCommand>(client, map, sliderChanged); });
+    commandRegister("edi", [&](){ return std::make_unique<EggDeathCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

@@ -196,7 +196,8 @@ void App::_setupCommands() {
         "pdr",
         "pgt",
         "pdi",
-        "enw"
+        "enw",
+        "edi"
     };
 
     for (const auto &command: commands) {

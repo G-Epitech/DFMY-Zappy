@@ -36,4 +36,6 @@ target_sources(zappy_gui_src PRIVATE
         incantation/End.hpp
         incantation/End.cpp
         egg/Laid.hpp
-        egg/Laid.cpp)
+        egg/Laid.cpp
+        egg/Death.hpp
+        egg/Death.cpp)
