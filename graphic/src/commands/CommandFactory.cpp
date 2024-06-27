@@ -10,9 +10,12 @@
 #include "commands/map/Size.hpp"
 #include "commands/map/Tile.hpp"
 
+#include "commands/teams/Names.hpp"
+
 CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("msz", [&](){ return std::make_unique<MapSizeCommand>(client, map, sliderChanged); });
     commandRegister("bct", [&](){ return std::make_unique<MapTileCommand>(client, map, sliderChanged); });
+    commandRegister("tna", [&](){ return std::make_unique<TeamsNamesCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;

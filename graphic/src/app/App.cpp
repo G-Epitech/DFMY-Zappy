@@ -180,9 +180,15 @@ void App::_setupSliders() {
 
 void App::_setupCommands() {
     CommandFactory commandFactory(_client, _map, _timeSliderChanged);
+    std::vector<std::string> commands = {
+        "msz",
+        "bct",
+        "tna"
+    };
 
-    _commandsMap["msz"] = commandFactory.createCommand("msz");
-    _commandsMap["bct"] = commandFactory.createCommand("bct");
+    for (const auto &command: commands) {
+        _commandsMap[command] = commandFactory.createCommand(command);
+    }
 
     for (auto &command: _commandsMap) {
         if (command.second) {

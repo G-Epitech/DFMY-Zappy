@@ -8,4 +8,6 @@ target_sources(zappy_gui_src PRIVATE
         map/Size.hpp
         map/Size.cpp
         map/Tile.hpp
-        map/Tile.cpp)
+        map/Tile.cpp
+        teams/Names.hpp
+        teams/Names.cpp)
