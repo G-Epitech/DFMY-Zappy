@@ -21,6 +21,7 @@
 #include "commands/player/Fork.hpp"
 #include "commands/player/Drop.hpp"
 #include "commands/player/Take.hpp"
+#include "commands/player/Death.hpp"
 
 #include "commands/incantation/Start.hpp"
 #include "commands/incantation/End.hpp"
@@ -40,6 +41,7 @@ CommandFactory::CommandFactory(Client &client, Map &map, bool &sliderChanged) {
     commandRegister("pfk", [&](){ return std::make_unique<PlayerForkCommand>(client, map, sliderChanged); });
     commandRegister("pdr", [&](){ return std::make_unique<PlayerDropCommand>(client, map, sliderChanged); });
     commandRegister("pgt", [&](){ return std::make_unique<PlayerTakeCommand>(client, map, sliderChanged); });
+    commandRegister("pdi", [&](){ return std::make_unique<PlayerDeathCommand>(client, map, sliderChanged); });
 }
 
 CommandFactory::~CommandFactory() = default;
